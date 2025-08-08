@@ -1,15 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import About from "../pages/About";
-import Contact from "../pages/Contact";
-import NotFound from "../pages/NotFound";
 import Home from "../pages/Home";
-import AdminRoute from "./AdminRoutes";
-import AdminDashboard from "@/pages/Admin/AdminDashboard";
+import NotFound from "../pages/NotFound";
+
+import { UserDashboardLayout } from "@/Layout/UserLayout";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
-import Form from "@/pages/Form";
-import Services from "@/pages/Services";
+import NewCampaign from "@/pages/UserDashboard/NewCampaign";
+import UserDashboard from "@/pages/UserDashboard/UserDashboard";
+import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
 
 const routes = createBrowserRouter([
   {
@@ -20,38 +19,33 @@ const routes = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+    ],
+  },
+  {
+    path: "/user-dashboard",
+    element: <UserDashboardLayout />,
+    children: [
       {
-        path: "/about",
-        element: <About />,
+        index: true,
+        element: <UserDashboard />,
       },
       {
-        path: "/contact",
-        element: <Contact />,
+        path: "metrics",
+        element: <UserDashboardMetrics />,
       },
       {
-        path: "/services",
-        element: <Services />,
-      },
-      {
-        path: "/form",
-        element: <Form />,
-      },
-      {
-        path: "/login",
-        element: <Login />,
-      },
-      {
-        path: "/signup",
-        element: <Signup />,
-      },
-      {
-        path: "/admin",
-        element: <AdminRoute />, // This will check if the user is an admin
-        children: [
-          { path: "", element: <AdminDashboard /> }, // Admin Dashboard
-        ],
+        path: "new-campaign",
+        element: <NewCampaign />,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/signup",
+    element: <Signup />,
   },
   {
     path: "*",

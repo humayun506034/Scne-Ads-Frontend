@@ -1,44 +1,38 @@
+import Banner from "@/components/Modules/Home/Banner";
+
+import CommonGlowingHeader from "@/common/CommonGlowingHeader";
+import DynamicPricing from "@/components/Modules/DynamicPricing/DynamicPricing";
+import AnalyticsSection from "@/components/Modules/Home/Analytics";
+import { FeaturedLocationsCarousel } from "@/components/Modules/Home/FeaturedLocation";
+
+import ContactSection from "@/components/Modules/Contact/Contact";
+import FaqSection from "@/components/Modules/FAQ/FAQ";
+import HowItWorksSection from "@/components/Modules/HowItWorks/HowItWorks";
+import Testimonial from "@/components/Modules/Testimonial/Testimonial";
 import CommonWrapper from "../common/CommonWrapper";
-import {
-  decrement,
-  increment,
-  reset,
-} from "@/store/Slices/counterSlice/counterSlice";
-import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 
 const Home = () => {
-  const count = useAppSelector((state) => state.counter.value);
-  const dispatch = useAppDispatch();
-
   return (
-    <CommonWrapper>
-      <div className="h-screen bg-website-color-lightGreen">
-        <div className="flex flex-col items-center justify-center min-h-screen ">
-          <h1 className="text-2xl font-bold mb-4">Home Page</h1>
-          <h2 className="text-xl font-bold">Counter: {count}</h2>
-          <div className="mt-4 space-x-2">
-            <button
-              className="bg-blue-500 text-white px-4 py-2 rounded"
-              onClick={() => dispatch(increment())}
-            >
-              Increment
-            </button>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={() => dispatch(decrement())}
-            >
-              Decrement
-            </button>
-            <button
-              className="bg-gray-500 text-white px-4 py-2 rounded"
-              onClick={() => dispatch(reset())}
-            >
-              Reset
-            </button>
-          </div>
-        </div>
+    <div className="overflow-hidden">
+      <CommonWrapper>
+        <Banner />
+      </CommonWrapper>
+      <div className=" ">
+        <h1 className="text-white text-center text-2xl md:text-5xl leading-[60px]  md:mb-10">
+          Featured
+          <CommonGlowingHeader glowingTitle="Locations " />
+        </h1>
+        <FeaturedLocationsCarousel />
       </div>
-    </CommonWrapper>
+      <CommonWrapper>
+        <AnalyticsSection />
+        <HowItWorksSection />
+        <DynamicPricing />
+        <Testimonial />
+        <FaqSection />
+        <ContactSection />
+      </CommonWrapper>
+    </div>
   );
 };
 
