@@ -8,6 +8,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.png";
 import { navItems, sidebarItems } from "./Home";
+import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
 const UserDashboardMobileNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -94,13 +95,9 @@ const UserDashboardMobileNavbar = () => {
                   </>
                 );
               })}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="  w-full items-center gap-3 text-nowrap cursor-pointer  rounded-lg px-2 py-2 text-sm  align-center transition-colors bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-white mt-2 mb-4"
-              >
-                Live Chat
-              </motion.button>
+              <motion.div className="px-1 ">
+                <LiveChatSystem userName={"Danaj"} />
+              </motion.div>
             </div>
 
             <div className="px-3 py-4">
