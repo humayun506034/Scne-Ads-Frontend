@@ -9,6 +9,7 @@ import {
 import { motion } from "framer-motion";
 import { ChevronDown, LogOut, User } from "lucide-react";
 import { navItems } from "./Home";
+import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
 export function UserDashboardNavbar() {
   const userName = "Danaj";
@@ -40,12 +41,7 @@ export function UserDashboardNavbar() {
             );
           })}
           <motion.div>
-            <button
-              type="submit"
-              className={`bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-white text-sm md:w-fit w-full px-4 py-3 rounded-full cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex   justify-center items-center gap-2 `}
-            >
-              Live Chat
-            </button>
+            <LiveChatSystem userName={userName} />
           </motion.div>
           <div className="flex items-center">
             <DropdownMenu>
