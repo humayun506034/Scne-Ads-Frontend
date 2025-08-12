@@ -5,7 +5,7 @@ interface ChatHeaderProps {
   agentName: string;
   agentRole: string;
   agentAvatar: string;
-  onClose: () => void;
+
   onBack?: () => void;
   showBackButton?: boolean;
 }
@@ -14,7 +14,7 @@ export function ChatHeader({
   agentName,
   agentRole,
   agentAvatar,
-  onClose,
+
   onBack,
   showBackButton = false,
 }: ChatHeaderProps) {

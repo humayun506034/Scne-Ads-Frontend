@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 export function AddCampaignSection() {
   return (
-    <div className="bg-dashboard-card-bg rounded-2xl p-6 border border-none  text-center md:h-[480px] flex flex-col items-center justify-center">
+    <div className="bg-dashboard-card-bg rounded-2xl p-6 border border-none  text-center md:h-[520px] flex flex-col items-center justify-center">
       {/* Large Plus Button */}
       <div className="flex flex-col items-center">
         <Link to="/user-dashboard/new-campaign">

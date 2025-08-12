@@ -1,16 +1,17 @@
-import LiveChatDemo from "@/components/Modules/UserDashboard/LiveChat/LiveChatDemo";
+import CampaignNameSection from "@/components/Modules/UserDashboard/NewCampaign/CampaignNameSection";
+
 import { motion } from "framer-motion";
 
 const NewCampaign = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="">
       <motion.div
-        className="flex flex-col justify-center items-center"
+        className=""
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <LiveChatDemo />
+        <CampaignNameSection />
       </motion.div>
     </div>
   );
