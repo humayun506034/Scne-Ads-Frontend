@@ -2,7 +2,7 @@ import { Play } from "lucide-react";
 import img from "../../../../../assets/Dashboard/metrics.png";
 export function RecommendedVideosSection() {
   return (
-    <div className="bg-dashboard-card-bg rounded-2xl p-6 text-title-color border border-none relative overflow-hidden">
+    <div className="bg-dashboard-card-bg rounded-2xl p-2 py-6 md:p-6 text-title-color border border-none relative overflow-hidden">
       {/* Header */}
       <h3 className="text-title-color text-lg  text-center mb-5">
         Recommended Videos to watch
@@ -36,16 +36,16 @@ export function RecommendedVideosSection() {
             <path
               d="M27 3.92857L18.7273 10L27 16.0714V3.92857Z"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
             <path
               d="M16.3636 1.5H3.36364C2.05824 1.5 1 2.58731 1 3.92857V16.0714C1 17.4127 2.05824 18.5 3.36364 18.5H16.3636C17.669 18.5 18.7273 17.4127 18.7273 16.0714V3.92857C18.7273 2.58731 17.669 1.5 16.3636 1.5Z"
               stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             />
           </svg>
           <div>

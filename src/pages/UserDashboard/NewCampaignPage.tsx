@@ -1,8 +1,10 @@
 import CampaignNameSection from "@/components/Modules/UserDashboard/NewCampaign/CampaignNameSection";
+import { SelectBoard } from "@/components/Modules/UserDashboard/NewCampaign/SelectBoard";
+import SelectLocations from "@/components/Modules/UserDashboard/NewCampaign/SelectLocations";
 
 import { motion } from "framer-motion";
 
-const NewCampaign = () => {
+const NewCampaignPage = () => {
   return (
     <div className="">
       <motion.div
@@ -12,9 +14,11 @@ const NewCampaign = () => {
         transition={{ duration: 1 }}
       >
         <CampaignNameSection />
+        <SelectBoard />
+        <SelectLocations />
       </motion.div>
     </div>
   );
 };
 
-export default NewCampaign;
+export default NewCampaignPage;
