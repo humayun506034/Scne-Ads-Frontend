@@ -78,7 +78,6 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
             {currentView === "home" && (
               <ChatHome
                 userName={userName}
-                onClose={() => setIsOpen(false)}
                 onStartChat={handleStartChat}
                 onViewMessages={handleViewMessages}
               />
@@ -122,7 +121,6 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
                   agentName={selectedAgent.name}
                   agentRole={selectedAgent.role}
                   agentAvatar={selectedAgent.avatar}
-                  onClose={() => setIsOpen(false)}
                   onBack={() => {
                     setCurrentView("messages");
                     setActiveTab("messages");
