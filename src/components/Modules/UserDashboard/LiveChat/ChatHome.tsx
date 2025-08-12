@@ -6,14 +6,14 @@ import p3 from "../../../../assets/Dashboard/person3.png";
 import logo from "../../../../assets/logo.png";
 interface ChatHomeProps {
   userName: string;
-  onClose: () => void;
+
   onStartChat: () => void;
   onViewMessages: () => void;
 }
 
 export function ChatHome({
   userName,
-  onClose,
+
   onStartChat,
   onViewMessages,
 }: ChatHomeProps) {

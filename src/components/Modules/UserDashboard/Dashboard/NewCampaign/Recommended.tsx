@@ -13,7 +13,7 @@ export function RecommendedVideosSection() {
         {/* Mock Dashboard Content */}
         <img
           src={img}
-          className="w-full md:h-[400px] border-2 border-secondary-color object-fill rounded-xl"
+          className="w-full   border-2 border-secondary-color object-fill rounded-xl"
           alt="Dashboard Preview"
         />
         {/* Play Button Overlay */}
