@@ -41,10 +41,10 @@ const CampaignNameSection = () => {
     <div className="flex w-full mt-10 flex-col xl:flex-row  justify-center gap-8  ">
       <section className="xl:w-[65%] p-8 border border-dashboard-border bg-dashboard-card-bg text-white rounded-xl shadow-lg">
         <div className="mb-16 ">
-          <h1 className="text-lg md:text-4xl  font-semibold">Campaign Name</h1>
+          <h1 className="text-2xl md:text-4xl  font-semibold">Campaign Name</h1>
           <input
             type="text"
-            className="w-full  mt-16 p-4 rounded-md bg-transparent text-white border border-dashed border-dashboard-border text-base focus:outline-none  placeholder:text-[#6371A3] focus:ring-0 focus:border-1 focus:border-dashed"
+            className="w-full  mt-16 p-4 rounded-md bg-transparent text-white border  border-dashboard-border text-base focus:outline-none  placeholder:text-[#6371A3] focus:ring-0 focus:border-1 focus:"
             placeholder="Enter your campaign name"
           />
           <p className="text-red-500 text-sm mt-4">
@@ -57,7 +57,7 @@ const CampaignNameSection = () => {
           <h1 className="text-lg md:text-2xl  font-semibold mb-6">Industry</h1>
           <Select onValueChange={(value) => setValue(value)}>
             <SelectTrigger
-              className={` cursor-pointer  text-base text-white  border border-dashed border-dashboard-border  w-full  rounded-md   focus:ring-0  focus:border-none focus:outline-none   px-4 py-6  `}
+              className={` cursor-pointer  text-base text-white  border  border-dashboard-border  w-full  rounded-md   focus:ring-0 focus:  focus:outline-none   px-4 py-6  `}
             >
               <SelectValue placeholder={Value} />
             </SelectTrigger>

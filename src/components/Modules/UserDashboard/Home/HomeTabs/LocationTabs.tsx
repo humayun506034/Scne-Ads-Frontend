@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
 import { locationData } from "@/lib/Data";
-import { LocationCard } from "./LocationCard";
+import LocationCard from "./LocationCard";
 
 export default function LocationTabs() {
   const [fav, setFav] = useState<Set<string>>(new Set());
@@ -15,62 +15,40 @@ export default function LocationTabs() {
         : new Set(prev).add(id)
     );
   }
-
+  const TabName = [
+    { tab: "new", label: "NEW ARRIVALS" },
+    { tab: "top", label: "TOP SELLERS" },
+    { tab: "fav", label: "FAVOURITES" },
+  ];
   return (
     <Tabs value={tab} onValueChange={setTab} className="w-full mt-20">
       <TabsList className="bg-transparent mb-8">
-        <TabsTrigger
-          value="new"
-          className={`text-white cursor-pointer text-sm font-semibold ${
-            tab === "new" ? "font-semibold" : "font-normal"
-          }`}
-        >
-          NEW ARRIVALS
-        </TabsTrigger>
-        <TabsTrigger
-          value="top"
-          className={`text-white cursor-pointer text-sm font-semibold ${
-            tab === "top" ? "font-semibold" : "font-normal"
-          }`}
-        >
-          TOP SELLERS
-        </TabsTrigger>
-        <TabsTrigger
-          value="fav"
-          className={`text-white cursor-pointer text-sm font-semibold ${
-            tab === "fav" ? "font-semibold" : "font-normal"
-          }`}
-        >
-          FAVOURITES
-        </TabsTrigger>
+        {TabName.map((item) => (
+          <TabsTrigger
+            key={item.tab}
+            value={item.tab}
+            className={`text-white cursor-pointer text-sm font-semibold ${
+              tab === item.tab ? "font-semibold" : "font-normal"
+            }`}
+          >
+            {item.label}
+          </TabsTrigger>
+        ))}
       </TabsList>
 
-      <TabsContent value="new">
-        <LocationCard
-          locations={locationData.filter(
-            (location) => location.category === "new"
-          )}
-          fav={fav}
-          onToggleFav={toggleFav}
-        />
-      </TabsContent>
-      <TabsContent value="top">
-        <LocationCard
-          locations={locationData.filter(
-            (location) => location.category === "top"
-          )}
-          fav={fav}
-          onToggleFav={toggleFav}
-        />
-      </TabsContent>
-      <TabsContent value="fav">
-        <LocationCard
-          locations={locationData.filter(
-            (location) => location.category === "fav"
-          )}
-          fav={fav}
-          onToggleFav={toggleFav}
-        />
+      <TabsContent value={tab}>
+        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+          {locationData
+            .filter((location) => location.category === tab)
+            .map((location) => (
+              <LocationCard
+                location={location}
+                bookmark={true}
+                fav={fav}
+                onToggleFav={toggleFav}
+              />
+            ))}
+        </div>
       </TabsContent>
     </Tabs>
   );
