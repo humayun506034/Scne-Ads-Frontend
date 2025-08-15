@@ -5,7 +5,7 @@ import FAQCard from "./FAQCard";
 
 export default function FaqSection() {
   return (
-    <section className="w-full mt-20 md:mt-40 ">
+    <section className="w-full relative mt-20 md:mt-40 ">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -37,6 +37,10 @@ export default function FaqSection() {
           />
         ))}
       </div>
+      <div
+        className="absolute  top-60 -left-12   h-60
+            0 w-70 -z-10  blur-[60px] opacity-60 rounded-[90%] bg-[#38B6FF]"
+      />
     </section>
   );
 }

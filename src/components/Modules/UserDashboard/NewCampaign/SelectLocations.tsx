@@ -100,7 +100,7 @@ export default function SelectLocations() {
           className="mySwiper w-full  mx-auto"
         >
           {filteredLocations.map((location) => (
-            <SwiperSlide className=" pt-6 pb-20 " key={location.id}>
+            <SwiperSlide className="px-2 pt-6 pb-20 " key={location.id}>
               <LocationCard
                 location={location}
                 fav={selected}

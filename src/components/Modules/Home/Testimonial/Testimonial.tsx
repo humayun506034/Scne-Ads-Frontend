@@ -17,7 +17,7 @@ export default function Testimonial() {
   };
 
   return (
-    <section className="w-full mt-16 md:mt-40 ">
+    <section className="w-full  mt-16 md:mt-40 ">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -25,7 +25,7 @@ export default function Testimonial() {
         viewport={{ once: true }}
         className="text-center "
       >
-        <h2 className="text-2xl md:text-5xl text-white">
+        <h2 className="text-2xl relative md:text-5xl text-white">
           What Our <CommonGlowingHeader glowingTitle="Clients" /> Say
         </h2>
       </motion.div>

@@ -7,7 +7,7 @@ import vdo from "../../../assets/Home/video.mp4";
 import BlurText from "./BlurText";
 export default function Banner() {
   return (
-    <section className="w-full mt-24 md:mt-36 lg:mt-40 relative z-0">
+    <section className="w-full  mt-24 md:mt-36 lg:mt-40 relative z-0">
       <motion.div
         className="text-center mb-16"
         initial="hidden"
@@ -85,33 +85,47 @@ export default function Banner() {
       </motion.div>
 
       <section className="relative w-full pt-12 md:pt-25 ">
-        {/* <div
-          style={{
-            background:
-              "linear-gradient(180deg, #1e3a8a 0%, #1e40af 20%, #2563eb 80%)",
-          }}
-          className="absolute w-[500px] bg-blend-overlay mix-blend-overlay h-[691px] overflow-hidden rounded-full border-0"
-        >
-          <div className="p-0 relative w-full h-full">
-            <div className="absolute inset-0 bg-[#38B6FF] rounded-[450.71px/345.48px]" />
-          </div>
-        </div>
         <div
-          className="absolute inset-0 z-0"
-          style={{
-            background: `
-            radial-gradient(circle at 20% 80%, #1e3a8a 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, #2563eb 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, #1e40af 0%, transparent 50%),
-            radial-gradient(circle at 60% 80%, #3b82f6 0%, transparent 50%),
-            radial-gradient(circle at 90% 60%, #1d4ed8 0%, transparent 50%),
-            linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%)
-          `,
-            backgroundSize:
-              "100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%",
-            animation: "meshMove 20s ease-in-out infinite alternate",
-          }}
+          className="absolute  top-60 -left-40  h-60
+            0 w-180 -z-10  blur-[60px] opacity-40 rounded-[10%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  top-10 left-0  h-60
+            0 w-100 -z-10  blur-[90px] opacity-40 rounded-[10%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-60 left-20  h-60
+            0 w-140 -z-10  blur-[90px] opacity-40 rounded-[0%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-40 left-1/2  h-60
+            0 w-140 -z-10  blur-[90px] opacity-40 rounded-[0%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-20 -left-20  h-80
+            0 w-140 -z-10  blur-[90px] opacity-40 rounded-[0%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-50 left-80  h-80
+            0 w-140 -z-10  blur-[90px] opacity-40 rounded-[90%] bg-[#38B6FF]"
+        />
+
+        {/* <div
+          className="absolute  -top-0 left-80  h-60
+            0 w-140 -z-10  blur-[90px] opacity-10 rounded-[90%] bg-[#38B6FF]"
         /> */}
+        <div
+          className="absolute  top-60 right-40   h-100
+            0 w-60 -z-10  blur-[90px] opacity-40 rounded-[10%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-12  -right-0   h-100
+            0 w-60 -z-10  blur-[90px] opacity-40 rounded-[10%] bg-[#38B6FF]"
+        />
+        <div
+          className="absolute  -top-40  -right-60   h-60
+            0 w-160 -z-10  blur-[90px] opacity-40 rounded-[10%] bg-[#38B6FF]"
+        />
 
         <div className="relative flex justify-center items-center w-full mx-auto">
           <div className="relative mx-auto xl:h-auto xl:w-auto lg:w-[944px] lg:h-[580px] md:w-[690px] md:h-[422px] w-[289px] h-[177px]">
