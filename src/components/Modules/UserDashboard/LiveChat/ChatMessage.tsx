@@ -40,7 +40,7 @@ export function ChatMessageComponent({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-gray-400 hover:text-gray-600"
+              className="h-8 w-8 text-title-color hover:text-gray-600"
             >
               <Smile className="h-4 w-4" />
             </Button>
@@ -48,7 +48,7 @@ export function ChatMessageComponent({
               type="button"
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-gray-400 hover:text-gray-600"
+              className="h-8 w-8 text-title-color hover:text-gray-600"
             >
               <Paperclip className="h-4 w-4" />
             </Button>

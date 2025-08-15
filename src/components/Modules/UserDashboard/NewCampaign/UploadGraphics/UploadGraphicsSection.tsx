@@ -37,7 +37,7 @@ export function UploadGraphicsSection() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 mt-12 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 mt-12 xl:grid-cols-3 gap-4">
         <div className="lg:col-span-1">
           <div className="bg-dashboard-card-bg rounded-xl p-4 mb-6">
             <div className="flex bg-[#16294E] p-4 rounded-xl items-center gap-2 mb-4">

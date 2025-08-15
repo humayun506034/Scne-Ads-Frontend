@@ -54,7 +54,7 @@ export function ConversationList({
               {conversation.lastMessage}
             </p>
           </div>
-          <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0" />
+          <ChevronRight className="h-4 w-4 text-title-color flex-shrink-0" />
         </div>
       ))}
     </div>

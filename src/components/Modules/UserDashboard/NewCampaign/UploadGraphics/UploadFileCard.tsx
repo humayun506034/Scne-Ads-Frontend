@@ -35,7 +35,7 @@ export function UploadedFileCard({ file }: UploadedFileCardProps) {
           <h3 className="text-white font-medium text-sm mb-1">
             {file.dimensions}
           </h3>
-          <p className="text-gray-400 text-xs">{file.name}</p>
+          <p className="text-title-color text-xs">{file.name}</p>
           <p className="text-gray-500 text-xs mt-4">{file.fileType}</p>
         </div>
       </div>

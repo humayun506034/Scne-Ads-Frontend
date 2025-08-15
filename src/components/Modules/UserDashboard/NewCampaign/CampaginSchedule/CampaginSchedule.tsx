@@ -14,20 +14,20 @@ export function CampaignSchedule() {
 
   return (
     <div className=" ">
-      <h1 className="text-3xl font-bold text-white mb-4">
+      <h1 className="text-2xl md:text-4xl font-medium  mb-4">
         Set Campaign Schedule
       </h1>
       <div className="flex flex-col gap-4">
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           {["All Days", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
             (day) => (
               <button
                 key={day}
                 onClick={() => handleDayChange(day)}
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-4 py-2 md:px-6 md:py-3 rounded-lg cursor-pointer text-sm md:text-base bg-dashboard-card-bg ${
                   selectedDay === day
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-700 text-gray-300"
+                    ? " text-white border border-dashboard-border "
+                    : "border border-bg-dashboard text-title-color"
                 }`}
               >
                 {day}

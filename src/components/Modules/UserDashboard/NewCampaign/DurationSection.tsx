@@ -115,12 +115,12 @@ export default function DurationSection() {
         </svg>
         Set Dates{" "}
       </h1>
-      <div className="flex flex-col justify-between  md:flex-row gap-3 mt-12">
+      <div className="flex flex-col justify-between  md:flex-row gap-3 mt-12 w-full">
         <Popover open={openStart} onOpenChange={setOpenStart}>
           <PopoverTrigger asChild>
             <button
               id="start-date"
-              className="w-48 p-6 bg-dashboard-card-bg rounded-full   font-normal text-lg md:w-72 lg:w-96 flex justify-between cursor-pointer items-center"
+              className=" p-6 bg-dashboard-card-bg rounded-full   font-normal text-lg gap-4 xl:w-96 flex justify-between cursor-pointer items-center"
             >
               {startDate ? startDate.toLocaleDateString() : "Select Start Date"}
               <svg
@@ -190,7 +190,7 @@ export default function DurationSection() {
           <PopoverTrigger asChild>
             <button
               id="finish-date"
-              className="w-48 p-6 bg-dashboard-card-bg rounded-full  font-normal text-lg md:w-72 lg:w-96 flex justify-between cursor-pointer items-center"
+              className=" p-6 bg-dashboard-card-bg rounded-full  font-normal text-lg gap-4 xl:w-96 flex justify-between cursor-pointer items-center"
             >
               {finishDate
                 ? finishDate.toLocaleDateString()
@@ -241,7 +241,6 @@ export default function DurationSection() {
                 }}
               />
             </div>
-            <Calendar mode="single" captionLayout="dropdown" />
           </PopoverContent>
         </Popover>
       </div>

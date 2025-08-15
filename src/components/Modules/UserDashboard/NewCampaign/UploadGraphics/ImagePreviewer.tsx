@@ -41,14 +41,16 @@ export function LocationTemplateCard({
   return (
     <Card className=" border-[#203265] p-8 rounded-xl flex justify-between flex-col md:flex-row">
       <div className="flex justify-between items-center mb-4">
-        <div className="">
-          <h3 className="text-white font-medium text-xl mb-2">
+        <div className="text-center md:text-left">
+          <h3 className="text-white md:font-medium text-lg md:text-xl mb-2">
             {template.selectionNumber}/3 Selected: {template.name}
           </h3>
-          <p className="text-title-color">Screen Size {template.screenSize}</p>
+          <p className="text-title-color text-sm md:text-base">
+            Screen Size {template.screenSize}
+          </p>
           <Button
             variant="link"
-            className="text-[#1CA9FB] cursor-pointer hover:text-cyan-300 text-base p-0 h-auto mt-1"
+            className="text-[#1CA9FB] cursor-pointer hover:text-cyan-300 text-base p-0 h-auto mt-2"
             onClick={handleDownloadTemplate}
           >
             Download Template

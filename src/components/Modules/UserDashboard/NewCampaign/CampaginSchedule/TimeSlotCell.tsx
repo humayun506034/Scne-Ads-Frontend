@@ -39,7 +39,7 @@ const TimeSlotCell = ({
 
   return (
     <div
-      onClick={() => onClick(day, hour)} // Pass day and hour to onClick
+      onClick={() => onClick(day, hour)}
       className={`h-12 cursor-pointer border border-[#1D2E46] rounded-lg transition-all duration-200 ${
         isInSelection || isSelecting
           ? "bg-dashboard-card-bg border-dashboard-border"
@@ -47,7 +47,7 @@ const TimeSlotCell = ({
       }`}
     >
       {timeSlot ? (
-        <div className="text-xs text-center text-white">
+        <div className="md:px-2 md:py-2  text-xs text-center text-white">
           {formatTimeRange(timeSlot.startHour, timeSlot.endHour)}
           <button
             onClick={(e) => {

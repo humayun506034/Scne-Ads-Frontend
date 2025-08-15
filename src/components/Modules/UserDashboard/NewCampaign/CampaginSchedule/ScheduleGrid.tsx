@@ -71,13 +71,13 @@ const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
   return (
     <div className="space-y-1">
       <div className="grid grid-cols-8 gap-2">
-        <div className="text-sm font-medium text-gray-400 text-center py-2">
-          Duration
+        <div className="text-xs md:text-sm font-medium text-title-color text-right pr-2 py-2">
+          Hour
         </div>
         {daysToShow.map((day) => (
           <div
             key={day}
-            className="text-sm font-medium text-white text-center py-2 bg-[#1a2332] rounded-lg"
+            className="text-xs md:text-sm md:font-medium text-white text-center py-2 bg-dashboard-card-bg md:px-2 rounded-lg"
           >
             {day.toUpperCase()}
           </div>
@@ -85,8 +85,8 @@ const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
       </div>
 
       {TIME_SLOTS.map((timeSlot, hour) => (
-        <div key={timeSlot} className="grid grid-cols-8 gap-2 items-start">
-          <div className="text-xs py-3 text-right pr-2">{timeSlot}</div>
+        <div key={timeSlot} className="grid mt-4 grid-cols-8 gap-2 items-start">
+          <div className="text-xs py-2 md:py-4 text-right pr-2">{timeSlot}</div>
 
           {daysToShow.map((day) => {
             if (selectedDay === "All Days" || day === selectedDay) {
@@ -113,7 +113,7 @@ const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
               );
             }
 
-            return <div key={day} className="h-12"></div>;
+            return <div key={day} className="h-12 bg-bg-dashboard"></div>;
           })}
         </div>
       ))}
