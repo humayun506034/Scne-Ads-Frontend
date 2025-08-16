@@ -5,7 +5,7 @@ import StepCard from "./StepsCard";
 
 export default function HowItWorksSection() {
   return (
-    <section className="w-full pt-20 md:pt-40 ">
+    <section className="w-full relative pt-20 md:pt-40 ">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -46,6 +46,14 @@ export default function HowItWorksSection() {
           />
         ))}
       </div>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 0.5, y: 0 }}
+        transition={{ duration: 2 }}
+        viewport={{ once: true }}
+        className="absolute -bottom-0 -right-40  h-72 rotate-45 
+      0 w-60 -z-10  blur-[60px]  rounded-[10%] bg-[#38B6FF]"
+      />
     </section>
   );
 }

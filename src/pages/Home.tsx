@@ -1,14 +1,14 @@
 import Banner from "@/components/Modules/Home/Banner";
 
 import CommonGlowingHeader from "@/common/CommonGlowingHeader";
-import DynamicPricing from "@/components/Modules/DynamicPricing/DynamicPricing";
 import AnalyticsSection from "@/components/Modules/Home/Analytics";
+import DynamicPricing from "@/components/Modules/Home/DynamicPricing/DynamicPricing";
 import { FeaturedLocationsCarousel } from "@/components/Modules/Home/FeaturedLocation";
 
-import ContactSection from "@/components/Modules/Contact/Contact";
-import FaqSection from "@/components/Modules/FAQ/FAQ";
-import HowItWorksSection from "@/components/Modules/HowItWorks/HowItWorks";
-import Testimonial from "@/components/Modules/Testimonial/Testimonial";
+import ContactSection from "@/components/Modules/Home/Contact/Contact";
+import FaqSection from "@/components/Modules/Home/FAQ/FAQ";
+import HowItWorksSection from "@/components/Modules/Home/HowItWorks/HowItWorks";
+import Testimonial from "@/components/Modules/Home/Testimonial/Testimonial";
 import CommonWrapper from "../common/CommonWrapper";
 
 const Home = () => {

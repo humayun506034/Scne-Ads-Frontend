@@ -6,7 +6,7 @@ import { UserDashboardNavbar } from "../../components/Modules/UserDashboard/User
 
 const UserDashboard = () => {
   return (
-    <div className="mb-20">
+    <div className="mb-20 px-5 md:px-10">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

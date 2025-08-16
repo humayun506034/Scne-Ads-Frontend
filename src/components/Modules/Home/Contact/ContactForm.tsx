@@ -1,7 +1,7 @@
 import CommonHomeInput from "@/common/CommonHomeInput";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import img from "../../../assets/Home/rocket.png";
+import img from "../../../../assets/Home/rocket.png";
 interface ContactFormData {
   firstName: string;
   lastName: string;

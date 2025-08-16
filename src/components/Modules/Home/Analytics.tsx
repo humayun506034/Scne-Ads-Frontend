@@ -2,13 +2,27 @@ import CommonGlowingHeader from "@/common/CommonGlowingHeader";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import img from "../../../assets/Home/Analytics.png";
+
 function AnalyticsSection() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
 
   return (
-    <section ref={ref} className="w-full mt-20 md:mt-60 ">
-      <div className="grid grid-cols-1 lg:grid-cols-12  gap-6 lg:gap-16 items-center w-full">
+    <section ref={ref} className="w-full mt-20 md:mt-60 relative">
+      {/* Background Gradient Ellipse under the Image */}
+      <div
+        className="absolute inset-x-0 bottom-0 z-0"
+        style={{
+          background:
+            "linear-gradient(291deg, #38B6FF -45.64%, #09489D 69.04%)",
+          width: "300px", // Adjust width to fit under the image
+          height: "300px", // Adjust height to match the ellipse shape
+          borderRadius: "50%", // Make the background ellipse
+          filter: "blur(30px)", // Add a blur effect for the gradient
+        }}
+      ></div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 items-center w-full">
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
@@ -43,21 +57,14 @@ function AnalyticsSection() {
                   }}
                 />
 
-                <div className="relative rounded-[30px] overflow-hidden border-2 border-[#2FABF9] bg-gray-900/50 backdrop-blur-sm">
+                <div className=" rounded-[30px] overflow-hidden border-2 border-[#2FABF9]  backdrop-blur-sm">
                   <img
                     src={img}
                     alt="Analytics Dashboard"
                     className="w-full md:h-[450px] cursor-pointer object-cover"
                   />
-
-                  <div
-                    className="absolute inset-0 rounded-[28px] pointer-events-none"
-                    style={{
-                      background:
-                        "linear-gradient(45deg, rgba(47, 171, 249, 0.1), rgba(59, 130, 246, 0.05))",
-                    }}
-                  />
                 </div>
+                <div className="absolute hidden md:block -bottom-40 -left-32  h-120 w-80 -z-10  blur-[80px] opacity-70 rounded-[60%] bg-[#38B6FF]" />
               </motion.div>
             </div>
           </div>

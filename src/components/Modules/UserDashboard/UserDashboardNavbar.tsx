@@ -14,7 +14,7 @@ import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 export function UserDashboardNavbar() {
   const userName = "Danaj";
   return (
-    <header className="hidden lg:block sticky mt-0 md:mt-6 lg:mt-10 xl:mt-6 top-0 z-50 w-full text-white">
+    <header className="hidden px-5 md:px-10 lg:block sticky mt-0 md:mt-6 lg:mt-10 xl:mt-6 top-0 z-50 w-full text-white">
       <div className="flex  h-20 items-center justify-between border-none border-b border-[#283F81] ">
         <div className="flex items-center">
           <h1 className="text-lg md:text-[38px] ">

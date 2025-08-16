@@ -1,5 +1,3 @@
-"use client";
-
 import { LiveChatSystem } from "./LiveChatSystem";
 
 export default function LiveChatDemo() {

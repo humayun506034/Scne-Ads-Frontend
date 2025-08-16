@@ -14,7 +14,7 @@ const UserDashboardMobileNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/user-dashboard");
   return (
-    <div className="lg:hidden flex items-center  mt-4  border-border border-b-1 pb-4 justify-between gap-4 w-full">
+    <div className="lg:hidden px-5 md:px-10 flex items-center  mt-4  border-border border-b-1 pb-4 justify-between gap-4 w-full">
       <div className="flex h-12 px-6  lg:mt-8   lg:items-center  ">
         <div className="w-fit h-12   ">
           <Link to="/">
