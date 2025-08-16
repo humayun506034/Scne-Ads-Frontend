@@ -12,12 +12,11 @@ export function UserDashboardLayout() {
 
       <div className="flex flex-col flex-1 overflow-hidden ">
         <main className="flex-1 ">
-          <div className="px-5 md:px-10 ">
+          <div className="relative ">
             <UserDashboardMobileNavbar />
-            <div className="">
-              <Outlet />
-              <CustomToaster />
-            </div>
+
+            <Outlet />
+            <CustomToaster />
           </div>
         </main>
       </div>

@@ -192,7 +192,7 @@ export function SelectBoard() {
   ];
 
   return (
-    <div className="flex flex-col  mt-10 md:mt-20 w-full p-6  rounded-lg">
+    <div className="flex flex-col  mt-10 md:mt-20 w-full md:p-6  rounded-lg">
       <Tabs defaultValue="map">
         <h2 className="text-2xl md:text-4xl text-nowrap font-medium text-white mb-4 block md:hidden">
           Select your Boards

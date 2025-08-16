@@ -9,17 +9,19 @@ const UserDashboardMetrics = () => {
   return (
     <div>
       <UserDashboardNavbar />
-      <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full">
-        <div className="xl:w-[60%]  w-full">
-          <StatsSection />
+      <div className="px-5 md:px-10">
+        <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full ">
+          <div className="xl:w-[60%]  w-full">
+            <StatsSection />
+          </div>
+          <div className="xl:w-[40%] w-full">
+            <ResponsiveBillboardMap />
+          </div>
         </div>
-        <div className="xl:w-[40%] w-full">
-          <ResponsiveBillboardMap />
-        </div>
+        <AnalyticsSection />
+        <NewCampaignSection />
+        <RecentCampaignsSection />
       </div>
-      <AnalyticsSection />
-      <NewCampaignSection />
-      <RecentCampaignsSection />
     </div>
   );
 };

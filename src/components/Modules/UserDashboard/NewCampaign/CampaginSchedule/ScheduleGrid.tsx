@@ -86,7 +86,9 @@ const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
 
       {TIME_SLOTS.map((timeSlot, hour) => (
         <div key={timeSlot} className="grid mt-4 grid-cols-8 gap-2 items-start">
-          <div className="text-xs py-2 md:py-4 text-right pr-2">{timeSlot}</div>
+          <div className="md:text-base  text-xs py-2  text-right pr-2">
+            {timeSlot}
+          </div>
 
           {daysToShow.map((day) => {
             if (selectedDay === "All Days" || day === selectedDay) {

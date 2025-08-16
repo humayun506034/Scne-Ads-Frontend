@@ -47,7 +47,7 @@ const TimeSlotCell = ({
       }`}
     >
       {timeSlot ? (
-        <div className="md:px-2 md:py-2  text-xs text-center text-white">
+        <div className=" flex justify-center items-center py-3 md:text-base  text-xs text-center text-white">
           {formatTimeRange(timeSlot.startHour, timeSlot.endHour)}
           <button
             onClick={(e) => {
