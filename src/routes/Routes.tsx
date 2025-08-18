@@ -10,6 +10,7 @@ import Signup from "@/pages/Signup";
 import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
 import UserDashboard from "@/pages/UserDashboard/UserDashboard";
 import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
+import UserPanel from "@/pages/UserDashboard/UserPanel";
 
 const routes = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
     ],
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
       {
         path: "new-campaign",
         element: <NewCampaignPage />,
+      },
+      {
+        path: "userPanel",
+        element: <UserPanel />,
       },
     ],
   },

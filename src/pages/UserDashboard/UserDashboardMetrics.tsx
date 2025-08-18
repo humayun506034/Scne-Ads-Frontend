@@ -1,3 +1,4 @@
+
 import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analytics/AnalyticsSection";
 import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard/BillboardMap/ResponsiveBillboard";
 import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
@@ -14,6 +15,7 @@ const UserDashboardMetrics = () => {
           <div className="xl:w-[60%]  w-full">
             <StatsSection />
           </div>
+          
           <div className="xl:w-[40%] w-full">
             <ResponsiveBillboardMap />
           </div>
