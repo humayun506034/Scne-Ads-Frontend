@@ -1,15 +1,20 @@
+import logo from "@/assets/logo.png";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import {
+  adminSidebarItems,
+  userSidebarItems,
+} from "@/components/Modules/UserDashboard/Home";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import logo from "../../../assets/logo.png";
-import { sidebarItems } from "./Home";
 
-export function UserDashboardSidebar() {
-  const [activeItem, setActiveItem] = useState("/user-dashboard");
-
+export function DashboardSidebar({ user }: { user: string }) {
+  const [activeItem, setActiveItem] = useState(
+    user === "admin" ? "/admin-dashboard" : "/user-dashboard"
+  );
+  const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
     <div
       className={cn(

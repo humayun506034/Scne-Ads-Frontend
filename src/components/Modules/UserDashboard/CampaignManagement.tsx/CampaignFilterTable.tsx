@@ -90,9 +90,9 @@ export function CampaignFilterTable({
               <path
                 d="M13.8333 1.66602V4.99935M7.16667 1.66602V4.99935M3 8.33268H18M4.66667 3.33268H16.3333C17.2538 3.33268 18 4.07887 18 4.99935V16.666C18 17.5865 17.2538 18.3327 16.3333 18.3327H4.66667C3.74619 18.3327 3 17.5865 3 16.666V4.99935C3 4.07887 3.74619 3.33268 4.66667 3.33268Z"
                 stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </span>

@@ -1,5 +1,5 @@
-import { campaignTableData } from "@/components/Modules/UserDashboard/NewCampaign/CampaignManagement.tsx";
-import { CampaignTable } from "@/components/Modules/UserDashboard/NewCampaign/CampaignManagement.tsx/CampaignTable";
+import { campaignTableData } from "@/components/Modules/UserDashboard/CampaignManagement.tsx";
+import CampaignTable from "@/components/Modules/UserDashboard/CampaignManagement.tsx/CampaignTable";
 
 export default function CampaignTablePage() {
   return (

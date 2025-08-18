@@ -1,3 +1,4 @@
+import { StatusBadge } from "@/components/Modules/UserDashboard/Dashboard/RecentCampaigns/StatusBadge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Switch } from "@/components/ui/switch";
@@ -5,10 +6,9 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { CampaignTableProps } from ".";
-import { StatusBadge } from "../../Dashboard/RecentCampaigns/StatusBadge";
 import { CampaignFilterTable } from "./CampaignFilterTable";
 
-export function CampaignTable({ campaigns }: CampaignTableProps) {
+export default function CampaignTable({ campaigns }: CampaignTableProps) {
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(20);
