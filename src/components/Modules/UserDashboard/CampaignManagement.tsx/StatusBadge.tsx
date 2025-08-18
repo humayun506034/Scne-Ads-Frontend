@@ -18,7 +18,7 @@ import {
 import { ChevronLeft, ChevronRight, Copy, Table } from "lucide-react";
 import { useState } from "react";
 import { Campaign } from ".";
-import { StatusBadge } from "../../Dashboard/RecentCampaigns/StatusBadge";
+import { StatusBadge } from "../Dashboard/RecentCampaigns/StatusBadge";
 
 interface CampaignTableProps {
   campaigns: Campaign[];

@@ -1,6 +1,6 @@
 
 export interface Campaign {
-    id: stableIdtring
+    id: string
     name: string
     status: "Draft" | "Active" | "Paused" | "Completed"
     budget: number
