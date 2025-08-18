@@ -7,6 +7,7 @@ import { UserDashboardLayout } from "@/Layout/UserLayout";
 import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 
+import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
 import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
 import UserDashboard from "@/pages/UserDashboard/UserDashboard";
 import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
@@ -37,6 +38,10 @@ const routes = createBrowserRouter([
       {
         path: "new-campaign",
         element: <NewCampaignPage />,
+      },
+      {
+        path: "campaigns",
+        element: <CampaignTablePage />,
       },
     ],
   },
