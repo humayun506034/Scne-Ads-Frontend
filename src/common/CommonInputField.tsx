@@ -8,6 +8,7 @@ interface CommonInputFieldProps {
   onChange?: (value: string) => void;
   required?: boolean;
   className?: string;
+   icon?: React.ReactNode;
 }
 
 const CommonInputField: React.FC<CommonInputFieldProps> = ({
@@ -18,6 +19,7 @@ const CommonInputField: React.FC<CommonInputFieldProps> = ({
   onChange,
   required = true,
   className = "",
+  icon,
 }) => {
   if (type === "select") {
     return (
@@ -53,6 +55,13 @@ const CommonInputField: React.FC<CommonInputFieldProps> = ({
         required={required}
       />
       <label className="form__label">{label}</label>
+       {icon && (
+        <span
+          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+        >
+          {icon}
+        </span>
+      )}
     </div>
   );
 };

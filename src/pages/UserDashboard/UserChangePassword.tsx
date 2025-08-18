@@ -3,10 +3,12 @@ import profileImage from "../..//assets/UserPanel/profileImage.jpg"
 import UserPanelNavbar from "./UserPanelNavbar";
 import CommonInputField from "@/common/CommonInputField";
 
-import { Pencil } from "lucide-react";
+import { Eye, EyeOff, Pencil } from "lucide-react";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 
 const UserPanel: React.FC = () => {
+   const [showNewPassword, setShowNewPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
    newPassword: "",
   confirmPassword: "",
@@ -50,17 +52,32 @@ const UserPanel: React.FC = () => {
         >
           <CommonInputField
             label="New Password"
-            type="password"
+            type={showNewPassword ? "text" : "password"}
             value={formData.newPassword}
              
             onChange={(val) => handleChange("newPassword", val)}
+                    icon={
+          showNewPassword ? (
+            <EyeOff onClick={() => setShowNewPassword(false)} />
+          ) : (
+            <Eye onClick={() => setShowNewPassword(true)} />
+          )
+        }
+
           />
 
           <CommonInputField
             label="Confirm Password"
-            type="password"
+            type={showConfirmPassword ? "text" : "password"}
             value={formData.confirmPassword}
             onChange={(val) => handleChange("confirmPassword", val)}
+             icon={
+          showConfirmPassword ? (
+            <EyeOff onClick={() => setShowConfirmPassword(false)} />
+          ) : (
+            <Eye onClick={() => setShowConfirmPassword(true)} />
+          )
+        }
           />
 
           {/* Submit Button */}
