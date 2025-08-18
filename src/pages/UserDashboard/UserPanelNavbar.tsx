@@ -10,13 +10,13 @@ type TabKey =
   | "ads-credits"
   | "invoice";
 
-const tabs: { key: TabKey; label: string }[] = [
-  { key: "basic-info", label: "Basic Info" },
-  { key: "change-password", label: "Change Password" },
-  { key: "billing-info", label: "Billing Info" },
-  { key: "payment-method", label: "Payment method" },
-  { key: "ads-credits", label: "SCNE Ads Credits" },
-  { key: "invoice", label: "Invoice" },
+const tabs: { key: TabKey; label: string; path :string }[] = [
+  { key: "basic-info", label: "Basic Info" , path:"/user-dashboard/userPanel"},
+  { key: "change-password", label: "Change Password", path:"/user-dashboard/change-password" },
+  { key: "billing-info", label: "Billing Info" , path:"/user-dashboard/"},
+  { key: "payment-method", label: "Payment method", path:"/user-dashboard/" },
+  { key: "ads-credits", label: "SCNE Ads Credits", path:"/user-dashboard/" },
+  { key: "invoice", label: "Invoice", path:"/user-dashboard/" },
 ];
 
 const UserPanelNavbar: React.FC = () => {

@@ -11,6 +11,7 @@ import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
 import UserDashboard from "@/pages/UserDashboard/UserDashboard";
 import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
 import UserPanel from "@/pages/UserDashboard/UserPanel";
+import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
 
 const routes = createBrowserRouter([
   {
@@ -43,6 +44,9 @@ const routes = createBrowserRouter([
         path: "userPanel",
         element: <UserPanel />,
       },
+      {path: "change-password",
+        element : <UserChangePassword />
+      }
     ],
   },
   {

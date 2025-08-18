@@ -8,13 +8,8 @@ import CommonDashboardButton from "@/common/CommonDashBoardButton";
 
 const UserPanel: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName : "",
-    email: "",
-    password: "",
-    phone: "",
-    city: "",
-    country: "",
+   newPassword: "",
+  confirmPassword: "",
   });
 
   const handleChange = (field: string, value: string) => {
@@ -54,39 +49,25 @@ const UserPanel: React.FC = () => {
           className="grid grid-cols-1 md:grid-cols-2 gap-16 w-full"
         >
           <CommonInputField
-            label="First Name"
-            type="text"
-            value={formData.firstName}
+            label="New Password"
+            type="password"
+            value={formData.newPassword}
              
-            onChange={(val) => handleChange("firstName", val)}
+            onChange={(val) => handleChange("newPassword", val)}
           />
 
           <CommonInputField
-            label="Last Name"
-            type="text"
-            value={formData.lastName}
-            onChange={(val) => handleChange("lastName", val)}
-          />
-
-          <CommonInputField
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(val) => handleChange("email", val)}
-          />
-
-          <CommonInputField
-            label="Phone"
-            type="phone"
-            value={formData.phone}
-            onChange={(val) => handleChange("phone", val)}
+            label="Confirm Password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={(val) => handleChange("confirmPassword", val)}
           />
 
           {/* Submit Button */}
           <div className="col-span-1 md:col-span-2 flex justify-center">
             <button
             >
-              <CommonDashboardButton title="Save"
+              <CommonDashboardButton title="Change Password"
               className="px-14 py-2 mt-4 rounded-full text-xl text-white font-semibold transition"/>
             </button>
           </div>
