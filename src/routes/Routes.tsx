@@ -17,6 +17,7 @@ import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
 import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
 import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
+import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod"
 import  UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
 const routes = createBrowserRouter([
   {
@@ -65,6 +66,10 @@ const routes = createBrowserRouter([
       {
         path: "userBillingBusinessAcc",
         element: <UserBillingBusinessAcc/>
+      },
+      {
+        path: "userPaymentMethod",
+        element: <UserPaymentMethod/>
       },
     ],
   },

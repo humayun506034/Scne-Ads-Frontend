@@ -7,7 +7,7 @@ type TabKey =
   | "basic-info"
   | "change-password"
   | "userBillingInfo"
-  | "payment-method"
+  | "userPaymentMethod"
   | "ads-credits"
   | "invoice";
 
@@ -15,7 +15,7 @@ const tabs: { key: TabKey; label: string; path: string }[] = [
   { key: "basic-info", label: "Basic Info", path: "/user-dashboard/userPanel" },
   { key: "change-password", label: "Change Password", path: "/user-dashboard/change-password" },
   { key: "userBillingInfo", label: "Billing Info", path: "/user-dashboard/userBillingInfo" },
-  { key: "payment-method", label: "Payment method", path: "/user-dashboard/payment-method" },
+  { key: "userPaymentMethod", label: "Payment method", path: "/user-dashboard/userPaymentMethod" },
   { key: "ads-credits", label: "SCNE Ads Credits", path: "/user-dashboard/ads-credits" },
   { key: "invoice", label: "Invoice", path: "/user-dashboard/invoice" },
 ];
@@ -33,7 +33,7 @@ const tabRouteMap: Record<string, TabKey> = {
   userBillingInfo: "userBillingInfo",
   "basic-info": "basic-info",
   "change-password": "change-password",
-  "payment-method": "payment-method",
+  "userPaymentMethod": "userPaymentMethod",
   "ads-credits": "ads-credits",
   invoice: "invoice",
 };
