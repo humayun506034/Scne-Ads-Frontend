@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 type TabKey =
   | "basic-info"
   | "change-password"
-  | "billing-info"
+  | "userBillingInfo"
   | "payment-method"
   | "ads-credits"
   | "invoice";
@@ -14,7 +14,7 @@ type TabKey =
 const tabs: { key: TabKey; label: string; path: string }[] = [
   { key: "basic-info", label: "Basic Info", path: "/user-dashboard/userPanel" },
   { key: "change-password", label: "Change Password", path: "/user-dashboard/change-password" },
-  { key: "billing-info", label: "Billing Info", path: "/user-dashboard/billing-info" },
+  { key: "userBillingInfo", label: "Billing Info", path: "/user-dashboard/userBillingInfo" },
   { key: "payment-method", label: "Payment method", path: "/user-dashboard/payment-method" },
   { key: "ads-credits", label: "SCNE Ads Credits", path: "/user-dashboard/ads-credits" },
   { key: "invoice", label: "Invoice", path: "/user-dashboard/invoice" },
@@ -23,22 +23,39 @@ const tabs: { key: TabKey; label: string; path: string }[] = [
 const UserPanelNavbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-
-  // set activeTab based on current URL
-  const [activeTab, setActiveTab] = useState<TabKey>(() => {
-    const current = tabs.find((tab) => location.pathname.includes(tab.key));
-    return current ? current.key : "basic-info";
-  });
-
   const [underlineProps, setUnderlineProps] = useState({ left: 0, width: 0 });
   const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
 
-  useEffect(() => {
-    const current = tabs.find((tab) => location.pathname.includes(tab.key));
-    if (current) {
-      setActiveTab(current.key);
+  // Map multiple route segments to a single tab
+const tabRouteMap: Record<string, TabKey> = {
+  userBillingPersonalAcc: "userBillingInfo",
+  userBillingBusinessAcc:"userBillingInfo",
+  userBillingInfo: "userBillingInfo",
+  "basic-info": "basic-info",
+  "change-password": "change-password",
+  "payment-method": "payment-method",
+  "ads-credits": "ads-credits",
+  invoice: "invoice",
+};
+
+const getActiveTab = (pathname: string): TabKey => {
+  for (const key in tabRouteMap) {
+    if (pathname.includes(key)) {
+      return tabRouteMap[key];
     }
-  }, [location.pathname]);
+  }
+  return "basic-info";
+};
+
+const [activeTab, setActiveTab] = useState<TabKey>(() =>
+  getActiveTab(location.pathname)
+);
+
+useEffect(() => {
+  setActiveTab(getActiveTab(location.pathname));
+}, [location.pathname]);
+
+ 
 
   useEffect(() => {
     const index = tabs.findIndex((tab) => tab.key === activeTab);

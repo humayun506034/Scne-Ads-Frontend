@@ -3,7 +3,7 @@ import React from "react";
 
 interface CommonInputFieldProps {
   label: string;
-  type?: "text" | "name" | "password" | "email" | "phone" | "select";
+  type?: "text" | "name" | "password" | "email" | "phone" | "select" | "address" | "ID" ;
   options?: string[]; // only for select type
   value?: string;
   onChange?: (value: string) => void;

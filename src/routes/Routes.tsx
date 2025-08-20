@@ -15,7 +15,9 @@ import UserDashboard from "@/pages/UserDashboard/UserDashboard";
 import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
 import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
-
+import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
+import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
+import  UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -52,6 +54,17 @@ const routes = createBrowserRouter([
       },
        { path: "campaigns",
         element: <CampaignTablePage />,
+      },
+      { path: "userBillingPersonalAcc",
+        element: <UserBillingPersonalAcc />,
+      },
+      { path: "userBillingInfo",
+        element: <UserBillingInfo />,
+      },
+
+      {
+        path: "userBillingBusinessAcc",
+        element: <UserBillingBusinessAcc/>
       },
     ],
   },
