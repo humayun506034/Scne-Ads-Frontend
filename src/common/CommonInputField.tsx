@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import React from "react";
 
 interface CommonInputFieldProps {
@@ -23,9 +24,10 @@ const CommonInputField: React.FC<CommonInputFieldProps> = ({
 }) => {
   if (type === "select") {
     return (
-      <div className={`form__group field ${className}`}>
+      <div className={cn("form__group", "field", className)} >
+
         <select
-          className="form__field"
+          className="form__field w-full px-3 py-2"
           value={value}
           onChange={(e) => onChange && onChange(e.target.value)}
           required={required}
@@ -45,10 +47,10 @@ const CommonInputField: React.FC<CommonInputFieldProps> = ({
   }
 
   return (
-    <div className={`form__group field ${className}`}>
+<div className={cn("form__group", "field", className)} >
       <input
         type={type === "name" ? "text" : type}
-        className="form__field"
+        className="form__field w-full "
         placeholder={label}
         value={value}
         onChange={(e) => onChange && onChange(e.target.value)}

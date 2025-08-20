@@ -26,12 +26,10 @@ const UserPanel: React.FC = () => {
   return (
     <div className=" bg-bg-dashboard ">
       <UserPanelNavbar />
-      <div className="flex mx-auto items-center justify-center">
-        <main >
+      <div >
+        <main className="flex mx-auto items-center justify-center">
  {/* Form Section */} 
-          <div className="flex pt-20 justify-center">
-            <div className="flex items-center justify-center">
-              <div className="w-full max-w-4xl rounded-lg p-6 flex flex-col items-center">
+          <div className="w-full max-w-5xl p-6 flex flex-col items-center justify-center">
         {/* Profile Image */}
         <div className="relative w-56 h-56 mb-20">
           <img
@@ -54,7 +52,6 @@ const UserPanel: React.FC = () => {
             label="New Password"
             type={showNewPassword ? "text" : "password"}
             value={formData.newPassword}
-             
             onChange={(val) => handleChange("newPassword", val)}
                     icon={
           showNewPassword ? (
@@ -90,8 +87,7 @@ const UserPanel: React.FC = () => {
           </div>
         </form>
               </div>
-            </div>
-          </div>
+            
         </main>
       </div>
     </div>

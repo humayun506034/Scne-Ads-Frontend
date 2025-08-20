@@ -4,22 +4,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import img1 from "../../../../assets/Dashboard/board1.jpg";
-import img2 from "../../../../assets/Dashboard/board2.jpg";
-import img3 from "../../../../assets/Dashboard/board3.jpg";
-import img4 from "../../../../assets/Dashboard/board4.jpg";
-import img5 from "../../../../assets/Dashboard/board5.jpg";
 import logo from "../../../../assets/logo.png";
-
-export const slidesData = [
-  { img: img1, alt: "Billboard 1" },
-  { img: img2, alt: "Billboard 2" },
-  { img: img3, alt: "Billboard 3" },
-  { img: img4, alt: "Billboard 4" },
-  { img: img5, alt: "Billboard 5" },
-];
-
-const DashboardBanner = () => {
+import { slidesData } from "../../UserDashboard/Home/DashboardBanner";
+const AdminDashboardBanner = () => {
   const [activeSlide, setActiveSlide] = useState(1);
 
   return (
@@ -83,4 +70,4 @@ const DashboardBanner = () => {
   );
 };
 
-export default DashboardBanner;
+export default AdminDashboardBanner;
