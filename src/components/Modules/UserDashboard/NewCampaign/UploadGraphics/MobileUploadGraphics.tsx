@@ -17,6 +17,7 @@ export default function MobileUploadGraphics() {
   const [templates] = useState<LocationTemplate[]>(locationTemplates);
 
   const handleBulkUpload = (files: FileList) => {
+    console.log(setUploadedFiles);
     console.log("Bulk uploading files:", files);
   };
 
