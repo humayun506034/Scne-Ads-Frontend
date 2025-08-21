@@ -1,14 +1,5 @@
+import { CardProps } from "@/components/Modules/UserDashboard/Home/SpecialSection/SpecialCard";
 import { motion } from "framer-motion";
-
-export interface CardProps {
-  title: string;
-  bundleTitle: string;
-  bundleIcon: string;
-  image: string;
-  description: string[];
-  price: string;
-  id: string;
-}
 
 const SpecialCard = ({
   title,

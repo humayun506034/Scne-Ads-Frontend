@@ -39,6 +39,7 @@ const CampaignNameSection = () => {
 
   return (
     <div className="flex w-full mt-10 flex-col xl:flex-row  justify-center gap-8  ">
+      {" "}
       <section className="xl:w-[65%] p-8 border border-dashboard-border bg-dashboard-card-bg text-white rounded-xl shadow-lg">
         <div className="mb-16 ">
           <h1 className="text-2xl md:text-4xl  font-semibold">Campaign Name</h1>

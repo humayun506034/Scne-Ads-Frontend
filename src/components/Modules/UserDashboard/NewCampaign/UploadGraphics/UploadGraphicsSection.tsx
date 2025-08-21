@@ -15,7 +15,7 @@ export function UploadGraphicsSection() {
   const [templates] = useState<LocationTemplate[]>(locationTemplates);
 
   const handleBulkUpload = (files: FileList) => {
-    console.log("Bulk uploading files:", files);
+    console.log("Bulk uploading files:", files, setUploadedFiles);
     // Handle bulk file upload logic here
   };
 

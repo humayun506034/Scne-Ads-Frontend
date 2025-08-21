@@ -5,7 +5,7 @@ import { StatusBadge } from "./StatusBadge";
 export interface ICampaign {
   id: string;
   type: "Fixed-Duration";
-  status: "Active" | "Paused" | "Completed";
+  status: "Draft" | "Active" | "Paused" | "Completed";
   brand: string;
   title: string;
   totalSpent: number;

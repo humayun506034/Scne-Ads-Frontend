@@ -10,7 +10,7 @@ import img2 from "../../../../../assets/Dashboard/card2.jpg";
 import img3 from "../../../../../assets/Dashboard/card3.jpg";
 import SpecialCard from "./SpecialCard";
 
-const cardData = [
+export const cardData = [
   {
     title: "Digital Billboard near SpaceX 1, PxAdkom-zyyg7hts-048",
     bundleTitle: "Power 5 Bundle",

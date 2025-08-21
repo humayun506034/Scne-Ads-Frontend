@@ -30,6 +30,7 @@ export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
+    console.log(setUploadStatus);
     if (files && onFileUpload) {
       onFileUpload(files);
     }

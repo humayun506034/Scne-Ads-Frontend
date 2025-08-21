@@ -7,7 +7,7 @@ import { LogOut, Menu, Plus } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/logo.png";
-import { navItems, sidebarItems } from "./Home";
+import { navItems, userSidebarItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
 const UserDashboardMobileNavbar = () => {
@@ -42,7 +42,7 @@ const UserDashboardMobileNavbar = () => {
             </div>
 
             <div className="flex-1 mt-6 mb-0 ">
-              {sidebarItems.map((section) => (
+              {userSidebarItems.map((section) => (
                 <div key={section.title} className="mb-6">
                   <h3 className="mb-2 px-2 text-[#C3CEE9] text-sm font-semibold uppercase tracking-wider">
                     {section.title}
