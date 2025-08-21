@@ -18,7 +18,7 @@ const MetricCard = ({ title, subtitle, value, className = "" }) => (
         <CardDescription className="text-sm md:text-md font-normal text-[#ffffff]">{subtitle}</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-3xl md:text-5xl font-medium text-[#ffffff]">{value}</div>
+        <div className="text-2xl md:text-4xl font-medium text-[#ffffff]">{value}</div>
       </CardContent>
     </Card>
   </motion.div>
@@ -57,13 +57,13 @@ const AdminCampaignData: React.FC = () => {
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
         >
           <h1 className="text-3xl sm:text-4xl font-semibold text-white">
-            Hey, <span className="text-[#38B6FF]">Admin</span>
+            Hey, <span className="text-secondary-color">Admin</span>
           </h1>
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="hidden sm:flex items-center gap-3 sm:gap-4">
               <Button
                 variant="outline"
-                className="text-[#AEB9E1] text-sm sm:text-lg font-normal sm:mr-10 rounded-xl border-none w-full sm:w-54 h-10 sm:h-12 bg-[#0B1739] hover:bg-slate-800 flex justify-center"
+                className="text-title-color text-sm sm:text-lg font-normal sm:mr-10 rounded-xl border-none w-full sm:w-54 h-10 sm:h-12 bg-[#0B1739] hover:bg-slate-800 flex justify-center"
               >
                 <Calendar className="w-4 h-4 mx-2" />
                 Current Month
