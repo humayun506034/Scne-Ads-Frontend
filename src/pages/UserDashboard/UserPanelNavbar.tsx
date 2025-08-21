@@ -88,7 +88,7 @@ const UserPanelNavbar: React.FC = () => {
         {tabs.map((tab, idx) => (
           <button
             key={tab.key}
-            ref={(el) => (tabsRef.current[idx] = el)}
+            ref={(el) => {tabsRef.current[idx] = el}}
             onClick={() => navigate(tab.path)} // navigate to route
             className={`relative pb-2 transition-colors cursor-pointer duration-200 ${
               activeTab === tab.key

@@ -41,10 +41,6 @@ const PaymentMethodModal = ({
     return cleaned;
   };
 
-  const handleSavePayment = () => {
-    console.log("Saving payment method:", formData);
-    onClose();
-  };
 
   if (!isOpen) return null;
 

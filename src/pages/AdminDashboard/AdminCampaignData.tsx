@@ -5,7 +5,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, Calendar, Menu } from "lucide-react";
 import React from "react";
@@ -28,21 +27,6 @@ const MetricCard = ({ title, subtitle, value, className = "" }) => (
     </CardContent>
   </Card>
 );
-
-// Status Badge Component
-const StatusBadge = ({ status }) => {
-  const variants = {
-    Completed: "bg-blue-600 hover:bg-blue-600 text-white",
-    Pending: "bg-yellow-600 hover:bg-yellow-600 text-white",
-    Active: "bg-green-600 hover:bg-green-600 text-white",
-  };
-
-  return (
-    <Badge className={`${variants[status]} text-xs px-3 py-1 rounded-full`}>
-      {status}
-    </Badge>
-  );
-};
 
 const AdminCampaignData: React.FC = () => {
   const metricsData = [
