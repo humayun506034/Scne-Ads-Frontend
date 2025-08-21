@@ -24,6 +24,7 @@ import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
+import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 
 const routes = createBrowserRouter([
   {
@@ -97,6 +98,9 @@ const routes = createBrowserRouter([
       {
         path :"adminCampaignData",
         element:<AdminCampaignData/>
+      },
+      {path:"campaigns",
+        element: <AdminCampaignManagement/>
       }
     ],
   },
