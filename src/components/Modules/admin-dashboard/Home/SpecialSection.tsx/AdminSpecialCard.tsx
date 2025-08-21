@@ -11,7 +11,7 @@ const SpecialCard = ({
 }: CardProps) => {
   return (
     <motion.div
-      className="rounded-lg m-6 cursor-pointer h-[300px] xl:h-[280px]  w-full  overflow-hidden flex flex-col"
+      className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[280px]  w-full  overflow-hidden flex flex-col"
       whileHover={{ scale: 1.04 }}
       whileTap={{ scale: 0.98 }}
     >
