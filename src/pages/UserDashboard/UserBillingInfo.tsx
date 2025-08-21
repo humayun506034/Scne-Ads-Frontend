@@ -15,7 +15,7 @@ const UserPanel: React.FC = () => {
       <div>
         <main className="flex flex-col mx-auto items-center justify-center">
           {/* Card Section */}
-          <div className="w-full mt-24 p-6 flex flex-col items-center justify-center">
+          <div className="w-full p-6 flex flex-col items-center justify-center">
             <h1 className="text-[#E4E7EC] text-4xl pb-20">
               Choose what type of account do you want:
             </h1>

@@ -29,7 +29,7 @@ const UserPanel: React.FC = () => {
       <UserPanelNavbar />
       <div>
         <main className="flex flex-col mx-auto items-center justify-center">
-          <div className="w-full max-w-5xl mt-14 p-6 flex flex-col items-center justify-center">
+          <div className="w-full max-w-5xl p-6 flex flex-col items-center justify-center">
             <h1 className="text-[#E4E7EC] text-4xl pb-20">
               Please enter your Business Account details
             </h1>
@@ -81,12 +81,25 @@ const UserPanel: React.FC = () => {
                   onChange={(val) => handleChange("address", val)}
                 />
               </div>
-              {/* <div className="flex flex-col">
-                <p className="text-xs pt-2 text-[#5E657B]">
+              {/* pay VAT buttons */}
+              <div className="w-min">
+                <div className="flex gap-4">
+                  <div className="button">
+                    <div className="icon2"></div>
+                    <div className="text">Yes, we pay VAT</div>
+                  </div>
+                  <div className="button">
+                    <div className="icon"></div>
+                    <div className="text">No, we pay don't VAT</div>
+                  </div>
+                </div>
+                <p className="text-xs pt-4 text-[#5E657B]">
                   If you're an European company and do not pay VAT, select NO.
                   Otherwise, select YES.
                 </p>
-              </div> */}
+              </div>
+              {/* ------ */}
+              <br/>
               <div className="flex flex-col">
                 <CommonInputField
                   label="Tax Identification Number"

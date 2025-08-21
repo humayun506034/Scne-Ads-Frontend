@@ -54,7 +54,7 @@ const PaymentMethodModal = ({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-[#9CA3AF] hover:text-[#E4E7EC] transition-colors"
+          className="absolute cursor-pointer top-4 right-4 text-[#9CA3AF] hover:text-[#E4E7EC] transition-colors"
         >
           <svg
             className="w-6 h-6"
@@ -172,7 +172,7 @@ const UserPanel: React.FC = () => {
     <div className="bg-bg-dashboard">
       <UserPanelNavbar />
 
-      <div className="w-full mt-20 p-6 flex items-center justify-center">
+      <div className="w-full p-6 flex items-center justify-center">
         <div className="w-md rounded-3xl bg-[#0B1739] px-14 py-8 flex flex-col items-center hover:shadow-lg transition-shadow duration-300">
           <div className="p-1 gap-4">
             <h3 className="text-xl mb-3 text-center font-normal text-[#E4E7EC]">
