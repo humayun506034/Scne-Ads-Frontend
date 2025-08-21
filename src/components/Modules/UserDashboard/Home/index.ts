@@ -69,7 +69,7 @@ export const adminSidebarItems = [
             {
                 title: "Dashboard",
                 icon: LayoutDashboard,
-                href: "/admin-dashboard/metrics",
+                href: "/admin-dashboard/adminCampaignData",
             },
 
         ],

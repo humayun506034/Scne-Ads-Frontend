@@ -13,6 +13,18 @@ import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
 import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
 import UserDashboard from "@/pages/UserDashboard/UserDashboard";
 import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
+import UserPanel from "@/pages/UserDashboard/UserPanel";
+import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
+import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
+import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
+import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
+import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
+import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
+import UserInvoice from "@/pages/UserDashboard/UserInvoice";
+import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
+import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
+import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
+import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 
 const routes = createBrowserRouter([
   {
@@ -20,7 +32,7 @@ const routes = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: "/",
+        index: true,
         element: <Home />,
       },
     ],
@@ -42,8 +54,29 @@ const routes = createBrowserRouter([
         element: <NewCampaignPage />,
       },
       {
-        path: "campaigns",
-        element: <CampaignTablePage />,
+        path: "userPanel",
+        element: <UserPanel />,
+      },
+      { path: "change-password", element: <UserChangePassword /> },
+      { path: "campaigns", element: <CampaignTablePage /> },
+      { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
+      { path: "userBillingInfo", element: <UserBillingInfo /> },
+
+      {
+        path: "userBillingBusinessAcc",
+        element: <UserBillingBusinessAcc />,
+      },
+      {
+        path: "userPaymentMethod",
+        element: <UserPaymentMethod />,
+      },
+      {
+        path: "userAdsCredit",
+        element: <UserAdsCredit />,
+      },
+      {
+        path: "userInvoice",
+        element: <UserInvoice />,
       },
     ],
   },
@@ -55,6 +88,20 @@ const routes = createBrowserRouter([
         index: true,
         element: <AdminDashboardHomePage />,
       },
+      {
+        path: "adminBasicInfo",
+        element: <AdminBasicInfo />,
+      },
+      {path : "adminChangePassword",
+        element: <AdminChangePassword/>
+      },
+      {
+        path :"adminCampaignData",
+        element:<AdminCampaignData/>
+      },
+      {path:"campaigns",
+        element: <AdminCampaignManagement/>
+      }
     ],
   },
   {
