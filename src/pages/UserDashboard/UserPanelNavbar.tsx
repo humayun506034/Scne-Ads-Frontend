@@ -7,8 +7,8 @@ type TabKey =
   | "change-password"
   | "userBillingInfo"
   | "userPaymentMethod"
-  | "ads-credits"
-  | "invoice";
+  | "userAdsCredit"
+  | "userInvoice";
 
 const tabs: { key: TabKey; label: string; path: string }[] = [
   { key: "basic-info", label: "Basic Info", path: "/user-dashboard/userPanel" },
@@ -28,11 +28,11 @@ const tabs: { key: TabKey; label: string; path: string }[] = [
     path: "/user-dashboard/userPaymentMethod",
   },
   {
-    key: "ads-credits",
+    key: "userAdsCredit",
     label: "SCNE Ads Credits",
-    path: "/user-dashboard/ads-credits",
+    path: "/user-dashboard/userAdsCredit",
   },
-  { key: "invoice", label: "Invoice", path: "/user-dashboard/invoice" },
+  { key: "userInvoice", label: "Invoice", path: "/user-dashboard/userInvoice" },
 ];
 
 const UserPanelNavbar: React.FC = () => {
@@ -49,8 +49,8 @@ const UserPanelNavbar: React.FC = () => {
     "basic-info": "basic-info",
     "change-password": "change-password",
     userPaymentMethod: "userPaymentMethod",
-    "ads-credits": "ads-credits",
-    invoice: "invoice",
+    userAdsCredit: "userAdsCredit",
+    userInvoice: "userInvoice",
   };
 
   const getActiveTab = (pathname: string): TabKey => {

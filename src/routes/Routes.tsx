@@ -18,7 +18,9 @@ import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
 import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
 import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
 import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
+import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
 import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
+import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -62,6 +64,14 @@ const routes = createBrowserRouter([
       {
         path: "userPaymentMethod",
         element: <UserPaymentMethod />,
+      },
+      {
+        path: "userAdsCredit",
+        element: <UserAdsCredit />,
+      },
+      {
+        path: "userInvoice",
+        element: <UserInvoice />,
       },
     ],
   },
