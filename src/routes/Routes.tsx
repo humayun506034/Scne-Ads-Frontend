@@ -23,6 +23,7 @@ import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc
 import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
+import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 
 const routes = createBrowserRouter([
   {
@@ -92,6 +93,10 @@ const routes = createBrowserRouter([
       },
       {path : "adminChangePassword",
         element: <AdminChangePassword/>
+      },
+      {
+        path :"adminCampaignData",
+        element:<AdminCampaignData/>
       }
     ],
   },
