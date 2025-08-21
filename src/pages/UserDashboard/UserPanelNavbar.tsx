@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,10 +12,26 @@ type TabKey =
 
 const tabs: { key: TabKey; label: string; path: string }[] = [
   { key: "basic-info", label: "Basic Info", path: "/user-dashboard/userPanel" },
-  { key: "change-password", label: "Change Password", path: "/user-dashboard/change-password" },
-  { key: "userBillingInfo", label: "Billing Info", path: "/user-dashboard/userBillingInfo" },
-  { key: "userPaymentMethod", label: "Payment method", path: "/user-dashboard/userPaymentMethod" },
-  { key: "ads-credits", label: "SCNE Ads Credits", path: "/user-dashboard/ads-credits" },
+  {
+    key: "change-password",
+    label: "Change Password",
+    path: "/user-dashboard/change-password",
+  },
+  {
+    key: "userBillingInfo",
+    label: "Billing Info",
+    path: "/user-dashboard/userBillingInfo",
+  },
+  {
+    key: "userPaymentMethod",
+    label: "Payment method",
+    path: "/user-dashboard/userPaymentMethod",
+  },
+  {
+    key: "ads-credits",
+    label: "SCNE Ads Credits",
+    path: "/user-dashboard/ads-credits",
+  },
   { key: "invoice", label: "Invoice", path: "/user-dashboard/invoice" },
 ];
 
@@ -27,35 +42,33 @@ const UserPanelNavbar: React.FC = () => {
   const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
 
   // Map multiple route segments to a single tab
-const tabRouteMap: Record<string, TabKey> = {
-  userBillingPersonalAcc: "userBillingInfo",
-  userBillingBusinessAcc:"userBillingInfo",
-  userBillingInfo: "userBillingInfo",
-  "basic-info": "basic-info",
-  "change-password": "change-password",
-  "userPaymentMethod": "userPaymentMethod",
-  "ads-credits": "ads-credits",
-  invoice: "invoice",
-};
+  const tabRouteMap: Record<string, TabKey> = {
+    userBillingPersonalAcc: "userBillingInfo",
+    userBillingBusinessAcc: "userBillingInfo",
+    userBillingInfo: "userBillingInfo",
+    "basic-info": "basic-info",
+    "change-password": "change-password",
+    userPaymentMethod: "userPaymentMethod",
+    "ads-credits": "ads-credits",
+    invoice: "invoice",
+  };
 
-const getActiveTab = (pathname: string): TabKey => {
-  for (const key in tabRouteMap) {
-    if (pathname.includes(key)) {
-      return tabRouteMap[key];
+  const getActiveTab = (pathname: string): TabKey => {
+    for (const key in tabRouteMap) {
+      if (pathname.includes(key)) {
+        return tabRouteMap[key];
+      }
     }
-  }
-  return "basic-info";
-};
+    return "basic-info";
+  };
 
-const [activeTab, setActiveTab] = useState<TabKey>(() =>
-  getActiveTab(location.pathname)
-);
+  const [activeTab, setActiveTab] = useState<TabKey>(() =>
+    getActiveTab(location.pathname)
+  );
 
-useEffect(() => {
-  setActiveTab(getActiveTab(location.pathname));
-}, [location.pathname]);
-
- 
+  useEffect(() => {
+    setActiveTab(getActiveTab(location.pathname));
+  }, [location.pathname]);
 
   useEffect(() => {
     const index = tabs.findIndex((tab) => tab.key === activeTab);

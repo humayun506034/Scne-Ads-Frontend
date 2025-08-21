@@ -190,7 +190,7 @@ select {
 }
 
 /* user panel navbar button style */
-/* From Uiverse.io by alexmaracinaru */ 
+/* From Uiverse.io by alexmaracinaru */
 .cta {
   border: none;
   background: none;
@@ -243,12 +243,11 @@ select {
 }
 
 /* common input field */
-/* From Uiverse.io by mrhyddenn */ 
+/* From Uiverse.io by mrhyddenn */
 .form__group {
   position: relative;
   padding: 20px 0 0;
   width: 100%;
-  
 }
 
 .form__field {
@@ -303,6 +302,7 @@ select {
 }
 
 /* reset input */
-.form__field:required, .form__field:invalid {
+.form__field:required,
+.form__field:invalid {
   box-shadow: none;
 }

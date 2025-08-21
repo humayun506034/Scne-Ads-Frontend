@@ -17,8 +17,8 @@ import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
 import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
 import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
-import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod"
-import  UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
+import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
+import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -50,26 +50,18 @@ const routes = createBrowserRouter([
         path: "userPanel",
         element: <UserPanel />,
       },
-      {path: "change-password",
-        element : <UserChangePassword />
-      },
-       { path: "campaigns",
-        element: <CampaignTablePage />,
-      },
-      { path: "userBillingPersonalAcc",
-        element: <UserBillingPersonalAcc />,
-      },
-      { path: "userBillingInfo",
-        element: <UserBillingInfo />,
-      },
+      { path: "change-password", element: <UserChangePassword /> },
+      { path: "campaigns", element: <CampaignTablePage /> },
+      { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
+      { path: "userBillingInfo", element: <UserBillingInfo /> },
 
       {
         path: "userBillingBusinessAcc",
-        element: <UserBillingBusinessAcc/>
+        element: <UserBillingBusinessAcc />,
       },
       {
         path: "userPaymentMethod",
-        element: <UserPaymentMethod/>
+        element: <UserPaymentMethod />,
       },
     ],
   },
