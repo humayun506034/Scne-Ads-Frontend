@@ -21,6 +21,9 @@ import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
 import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
 import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
 import UserInvoice from "@/pages/UserDashboard/UserInvoice";
+import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
+import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
+
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -83,6 +86,13 @@ const routes = createBrowserRouter([
         index: true,
         element: <AdminDashboardHomePage />,
       },
+      {
+        path: "adminBasicInfo",
+        element: <AdminBasicInfo />,
+      },
+      {path : "adminChangePassword",
+        element: <AdminChangePassword/>
+      }
     ],
   },
   {
