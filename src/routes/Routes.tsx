@@ -25,6 +25,7 @@ import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
+import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 
 const routes = createBrowserRouter([
   {
@@ -101,6 +102,9 @@ const routes = createBrowserRouter([
       },
       {path:"campaigns",
         element: <AdminCampaignManagement/>
+      },
+      {path: "screen-scheduling",
+        element: <ScreenScheduleManagement/> ,
       }
     ],
   },
