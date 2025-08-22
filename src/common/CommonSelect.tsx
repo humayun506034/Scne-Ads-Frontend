@@ -13,7 +13,7 @@ interface Option {
 interface CommonSelectProps {
   setValue: (value: string) => void;
   options: Option[];
-  Icon: any;
+  Icon?: any;
   Value: string;
   bgColor?: string;
 }

@@ -26,6 +26,7 @@ import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
+import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
 
 const routes = createBrowserRouter([
   {
@@ -93,19 +94,14 @@ const routes = createBrowserRouter([
         path: "adminBasicInfo",
         element: <AdminBasicInfo />,
       },
-      {path : "adminChangePassword",
-        element: <AdminChangePassword/>
-      },
+      { path: "adminChangePassword", element: <AdminChangePassword /> },
       {
-        path :"adminCampaignData",
-        element:<AdminCampaignData/>
+        path: "adminCampaignData",
+        element: <AdminCampaignData />,
       },
-      {path:"campaigns",
-        element: <AdminCampaignManagement/>
-      },
-      {path: "screen-scheduling",
-        element: <ScreenScheduleManagement/> ,
-      }
+      { path: "campaigns", element: <AdminCampaignManagement /> },
+      { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
+      { path: "pricing-management", element: <DynamicPricingManagement /> },
     ],
   },
   {

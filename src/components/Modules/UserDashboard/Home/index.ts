@@ -1,4 +1,4 @@
-import { Calculator, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+import { Calculator, ChartBar, ChartBarIncreasing, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
     {
@@ -91,6 +91,16 @@ export const adminSidebarItems = [
                 title: "Screen Scheduling",
                 icon: MonitorCog,
                 href: "/admin-dashboard/screen-scheduling",
+            },
+            {
+                title: "Pricing",
+                icon: DollarSign,
+                href: "/admin-dashboard/pricing-management",
+            },
+            {
+                title: "Analytics",
+                icon: ChartLineIcon,
+                href: "/admin-dashboard/performance-analytics",
             },
         ],
     },
