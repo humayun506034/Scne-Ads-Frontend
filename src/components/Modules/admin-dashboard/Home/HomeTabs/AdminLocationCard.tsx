@@ -28,7 +28,7 @@ const AdminLocationCard = ({ location, edit }: LocationCardProps) => {
     formState: { errors },
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
-
+  const [open, setOpen] = useState(false);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files);
@@ -65,7 +65,7 @@ const AdminLocationCard = ({ location, edit }: LocationCardProps) => {
 
           {edit && (
             <div>
-              <Dialog>
+              <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <div className="w-10 h-10 bg-[#033579] absolute -right-4 shadow-lg -top-3 flex items-center justify-center rounded-full">
                     <button className=" cursor-pointer flex items-center justify-center rounded-full">
@@ -269,7 +269,10 @@ const AdminLocationCard = ({ location, edit }: LocationCardProps) => {
                     <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
                       <CommonDashboardButton title="Edit Screen" Icon={Plus} />
                       <button
-                        onClick={() => reset()}
+                        onClick={() => {
+                          reset();
+                          setOpen(false);
+                        }}
                         className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
                       >
                         Cancel

@@ -18,7 +18,7 @@ import AdminLocationCard from "./AdminLocationCard";
 
 export default function AdminLocationTabs() {
   const [tab, setTab] = useState("new");
-
+  const [open, setOpen] = useState(false);
   const TabName = [
     { tab: "new", label: "NEW ARRIVALS" },
     { tab: "top", label: "TOP SELLERS" },
@@ -74,7 +74,7 @@ export default function AdminLocationTabs() {
               <>
                 {" "}
                 {index === 0 && (
-                  <Dialog>
+                  <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                       <div className="w-full  h-full rounded-lg shadow-lg flex items-center justify-center ">
                         <div className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center cursor-pointer">
@@ -249,11 +249,20 @@ export default function AdminLocationTabs() {
                           />
                         </div>
 
-                        <div className="flex  mt-12 justify-end">
+                        <div className="flex gap-4  mt-12 justify-end">
                           <CommonDashboardButton
                             title="Add Screen"
                             Icon={Plus}
                           />
+                          <button
+                            onClick={() => {
+                              reset();
+                              setOpen(false);
+                            }}
+                            className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
+                          >
+                            Cancel
+                          </button>
                         </div>
                       </form>
                     </DialogContent>
