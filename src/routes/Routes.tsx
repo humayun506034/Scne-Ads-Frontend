@@ -27,6 +27,7 @@ import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
+import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
 
 const routes = createBrowserRouter([
   {
@@ -98,6 +99,10 @@ const routes = createBrowserRouter([
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,
+      },
+      {
+        path: "adminAnalytics",
+        element: <CampaignPerformanceAnalytics />,
       },
       { path: "campaigns", element: <AdminCampaignManagement /> },
       { path: "screen-scheduling", element: <ScreenScheduleManagement /> },

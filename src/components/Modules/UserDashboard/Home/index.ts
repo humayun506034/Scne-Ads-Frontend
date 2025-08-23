@@ -100,7 +100,7 @@ export const adminSidebarItems = [
             {
                 title: "Analytics",
                 icon: ChartLineIcon,
-                href: "/admin-dashboard/performance-analytics",
+                href: "/admin-dashboard/adminAnalytics",
             },
         ],
     },
