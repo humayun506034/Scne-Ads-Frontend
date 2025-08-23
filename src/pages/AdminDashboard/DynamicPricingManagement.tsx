@@ -17,7 +17,7 @@ const CustomDropdown = ({ value, onChange, options, className = "" }) => {
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-3 py-2 bg-[#1a2847] border border-[#2a3a57] rounded text-white text-xs text-left focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all flex justify-between items-center min-w-16"
+        className="w-full px-3 py-2 bg-[#1a2847] border border-[#2a3a57] rounded text-white text-xs text-left flex justify-between items-center"
       >
         <span>{value}</span>
         <motion.div
@@ -35,14 +35,14 @@ const CustomDropdown = ({ value, onChange, options, className = "" }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.15 }}
-            className="absolute top-full left-0 right-0 mt-1 bg-[#1a2847] border border-[#2a3a57] rounded shadow-lg z-50 overflow-hidden"
+            className="absolute top-full left-0 right-0 mt-1 bg-[#1a2847] border border-[#2a3a57] rounded shadow-lg z-50"
           >
             {options.map((option, index) => (
               <button
                 key={index}
                 type="button"
                 onClick={() => handleSelect(option)}
-                className="w-full px-3 py-2 text-xs text-left text-gray-200 hover:bg-[#2a3a57] hover:text-white transition-colors"
+                className="w-full px-3 py-2 text-xs text-left text-gray-200 hover:bg-[#2a3a57] hover:text-white"
               >
                 {option}
               </button>
@@ -54,103 +54,43 @@ const CustomDropdown = ({ value, onChange, options, className = "" }) => {
   );
 };
 
-// Input Component for CPP values
+// Input Component
 const CppInput = ({ value, onChange }) => (
   <input
-   type="number"
-      step="0.05"
-      min="0"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-16 px-2 py-1 text-xs text-white bg-[#1a2847] border border-[#2a3a57] rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+    type="number"
+    step="0.05"
+    min="0"
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    className="w-20 sm:w-24 px-2 py-1 text-sm text-[#AEB9E1] bg-[#16234A] border border-[#2a3a57] rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
   />
 );
 
 // Section Header Component
 const SectionHeader = ({ title, subtitle }) => (
-  <div className="space-y-3 mb-6">
-    <div className="flex justify-between items-start">
-      <div>
-        <h2 className="text-white text-lg font-medium">{title}</h2>
-        <p className="text-gray-400 text-xs mt-1">{subtitle}</p>
-      </div>
-    </div>
-  </div>
-);
-
-// Table Row Components
-const TierPricingRow = ({ tier, cpp, onCppChange }) => (
-  <div className="grid grid-cols-2 gap-4 py-2 border-b border-[#394E88] last:border-b-0">
-    <div className="text-gray-300 text-xs">{tier}</div>
-    <div className="flex items-center gap-2">
-      <CppInput value={cpp} onChange={onCppChange} />
-      
-    </div>
-  </div>
-);
-
-const TimePricingRow = ({ timeCategory, timeBlocks, cpp, onCppChange }) => (
-  <div className="grid grid-cols-3 gap-4 py-2 border-b border-gray-700/30 last:border-b-0">
-    <div className="text-gray-300 text-xs">{timeCategory}</div>
-    <div className="text-gray-300 text-xs">{timeBlocks}</div>
-    <div className="flex items-center gap-2">
-      <CppInput value={cpp} onChange={onCppChange} />
-      <CustomDropdown
-        value="$"
-        onChange={() => {}}
-        options={["$", "€", "£"]}
-        className="w-12"
-      />
-    </div>
-  </div>
-);
-
-const ScreenConfigRow = ({
-  screenName,
-  location,
-  assignedTier,
-  baseCpp,
-  currentCpp,
-  onTierChange,
-  onBaseCppChange,
-}) => (
-  <div className="grid grid-cols-5 gap-3 py-3 border-b border-gray-700/30 last:border-b-0 items-center">
-    <div className="text-gray-300 text-xs">{screenName}</div>
-    <div className="text-gray-300 text-xs">{location}</div>
-    <CustomDropdown
-      value={assignedTier}
-      onChange={onTierChange}
-      options={["Tier 1", "Tier 2", "Tier 3", "Tier 4"]}
-    />
-    <div className="flex items-center gap-2">
-      <CppInput value={baseCpp} onChange={onBaseCppChange} />
-      <CustomDropdown
-        value="$"
-        onChange={() => {}}
-        options={["$", "€", "£"]}
-        className="w-12"
-      />
-    </div>
-    <div className="text-gray-300 text-xs">{currentCpp}</div>
+  <div>
+    <h2 className="text-xl sm:text-2xl px-4 sm:px-7 py-4 font-medium text-[#AEB9E1]">
+      {title}
+    </h2>
+    {subtitle && <p className="text-gray-400 text-xs mt-1">{subtitle}</p>}
   </div>
 );
 
 // Main Component
 const DynamicPricingManagement: React.FC = () => {
-  // Screen Tier Pricing State
+  // Screen Tier Pricing
   const [tierPricing, setTierPricing] = useState([
     { id: 1, tier: "Tier 1: High-Traffic", cpp: "0.75" },
     { id: 2, tier: "Tier 2: Medium-Traffic", cpp: "0.75" },
     { id: 3, tier: "Tier 3: Low-Traffic", cpp: "0.75" },
   ]);
 
-  // Time of Day Pricing State
+  // Time of Day Pricing
   const [timePricing, setTimePricing] = useState([
     {
       id: 1,
       timeCategory: "Peak Hours",
-      timeBlocks:
-        "7:00 AM - 9:00 AM 5:00 PM - 7:00 PM 4:00 PM 4:00 PM - 7:00 PM",
+      timeBlocks: "7:00 AM - 9:00 AM, 12:00 PM - 2:00 PM, 4:00 PM - 7:00 PM",
       cpp: "0.75",
     },
     {
@@ -161,7 +101,7 @@ const DynamicPricingManagement: React.FC = () => {
     },
   ]);
 
-  // Screen Configuration State
+  // Screen Configuration
   const [screenConfig, setScreenConfig] = useState([
     {
       id: 1,
@@ -169,7 +109,7 @@ const DynamicPricingManagement: React.FC = () => {
       location: "Main St.",
       assignedTier: "Tier 1",
       baseCpp: "0.80",
-      currentCpp: "$1.25 - $1.50",
+      currentCpp: "$1.05 - $1.50",
     },
     {
       id: 2,
@@ -197,165 +137,244 @@ const DynamicPricingManagement: React.FC = () => {
     },
   ]);
 
-  const updateTierCpp = (id, newCpp) => {
+  // Update Handlers
+  const updateTierCpp = (id, newCpp) =>
     setTierPricing((prev) =>
       prev.map((item) => (item.id === id ? { ...item, cpp: newCpp } : item))
     );
+
+  const updateTimeCpp = (id, newCpp) =>
+    setTimePricing((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, cpp: newCpp } : item))
+    );
+
+  const updateScreenTier = (id, newTier) =>
+    setScreenConfig((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, assignedTier: newTier } : item
+      )
+    );
+
+  const updateScreenBaseCpp = (id, newBaseCpp) =>
+    setScreenConfig((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, baseCpp: newBaseCpp } : item
+      )
+    );
+
+  const handleSaveChanges = () => {
+    console.log("Saving changes...", {
+      tierPricing,
+      timePricing,
+      screenConfig,
+    });
+  };
+  // cancel button
+  const CancelButton = ({
+    title,
+    Icon,
+    onClick,
+    className = "",
+  }: {
+    title: string;
+    Icon?: any;
+    className?: string;
+    onClick?: () => void;
+  }) => {
+    return (
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.95 }}
+        type="submit"
+        onClick={onClick}
+        className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
+      >
+        {title}
+        {Icon && <Icon className="w-4 h-4 text-white" />}
+      </motion.button>
+    );
   };
 
-//   const updateTimeCpp = (id, newCpp) => {
-//     setTimePricing((prev) =>
-//       prev.map((item) => (item.id === id ? { ...item, cpp: newCpp } : item))
-//     );
-//   };
-
-//   const updateScreenTier = (id, newTier) => {
-//     setScreenConfig((prev) =>
-//       prev.map((item) =>
-//         item.id === id ? { ...item, assignedTier: newTier } : item
-//       )
-//     );
-//   };
-
-//   const updateScreenBaseCpp = (id, newBaseCpp) => {
-//     setScreenConfig((prev) =>
-//       prev.map((item) =>
-//         item.id === id ? { ...item, baseCpp: newBaseCpp } : item
-//       )
-//     );
-//   };
-
-//   const handleSaveChanges = () => {
-//     console.log("Saving changes...", {
-//       tierPricing,
-//       timePricing,
-//       screenConfig,
-//     });
-//   };
-
-//   const handleCancel = () => {
-//     console.log("Cancelled");
-//   };
-  
-
   return (
-    <div className="min-h-screen bg-bg-dashboard lg:px-6 lg:py-14">
-      <div className=" mx-auto">
+    <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-14">
+      <div className="mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-start mb-10">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
           <div>
-            <h1 className="text-white lg:text-4xl text-xl sm:text-2xl font-medium mb-1">
+            <h1 className="text-white text-2xl sm:text-4xl font-medium mb-1">
               Dynamic Pricing Management
             </h1>
-            <p className="text-[#B1C0D5] text-base">
-              Set dynamic CPP pricing for every screen and time of day per
-              screen.
+            <p className="text-[#B1C0D5] text-sm sm:text-base">
+              Set dynamic CPP based on Screen Tier and Time of Day per Screen.
             </p>
           </div>
           <CommonDashboardButton
             title="Manage Sections"
-            className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded transition-colors"
+            className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
         </div>
 
-        {/* Screen Tier Pricing Section */}
-        <div className="flex flex-col mb-11">
-          <div className="bg-[#091331] rounded-lg p-6 mb-6 ]">
+        {/* Screen Tier Pricing */}
+        <div className="mb-16 md:w-3xl">
+          <div className="bg-[#0B1739] rounded-lg overflow-hidden">
             <SectionHeader title="Screen Tier Pricing" subtitle="" />
-            <div className="space-y-2">
-              <div className="grid grid-cols-2 gap-4 py-2 bg-[#0B1739] text-gray-400 text-xs font-medium ">
-                <div>Tier Category</div>
-                <div>CPP Adjustment (BGD)</div>
-              </div>
-              {tierPricing.map((tier) => (
-                <TierPricingRow
-                  key={tier.id}
-                  tier={tier.tier}
-                  cpp={tier.cpp}
-                  onCppChange={(newCpp) => updateTierCpp(tier.id, newCpp)}
-                />
-              ))}
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm sm:text-base border-collapse">
+                <thead>
+                  <tr className="text-[#E6EBF2] bg-[#0B1739]">
+                    <th className="text-left py-3 px-7">Tier Category</th>
+                    <th className="text-left py-3 px-7">
+                      CPP Adjustment (BSD)
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tierPricing.map((tier) => (
+                    <tr
+                      key={tier.id}
+                      className="bg-[#091331] border-b border-[#394E88]"
+                    >
+                      <td className="text-[#AEB9E1] py-3 px-7">{tier.tier}</td>
+                      <td className="py-3 px-7">
+                        <CppInput
+                          value={tier.cpp}
+                          onChange={(newCpp) => updateTierCpp(tier.id, newCpp)}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
+
           <CommonDashboardButton
             title="Add New Tier"
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded transition-colors flex items-center gap-1"
+            className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
         </div>
 
-        {/* Time of Day Pricing Section */}
-        {/* <div className="bg-[#1a2847] rounded-lg p-6 mb-6 border border-[#2a3a57]">
-          <SectionHeader
-            title="Time of Day Pricing"
-            subtitle="Adjustments to base CPP for specific time blocks."
-            // buttonText="Add Custom Time Block"
-          />
-
-          <div className="space-y-2">
-            <div className="grid grid-cols-3 gap-4 py-2 text-gray-400 text-xs font-medium border-b border-gray-600">
-              <div>Time Category</div>
-              <div>Time Blocks</div>
-              <div>CPP Adjustment (SGD)</div>
-            </div>
-            {timePricing.map((time) => (
-              <TimePricingRow
-                key={time.id}
-                timeCategory={time.timeCategory}
-                timeBlocks={time.timeBlocks}
-                cpp={time.cpp}
-                onCppChange={(newCpp) => updateTimeCpp(time.id, newCpp)}
-              />
-            ))}
+        {/* Time of Day Pricing */}
+        <div className="mb-16">
+          <div className="my-10">
+            <h3 className="text-xl sm:text-2xl mb-2 text-[#C3CEE9] font-semibold">
+              Time of Day Pricing
+            </h3>
+            <p className="text-[#AEB9E1] text-sm sm:text-base">
+              Adjustments to base CPP for specific time blocks.
+            </p>
           </div>
-        </div> */}
-
-        {/* Screen Configuration Section */}
-        {/* <div className="bg-[#1a2847] rounded-lg p-6 mb-8 border border-[#2a3a57]">
-          <SectionHeader
-            title="Screen Configuration"
-            subtitle="Configure each individual screen. CPP will be calculated dynamically."
-          />
-
-          <div className="space-y-2">
-            <div className="grid grid-cols-5 gap-3 py-2 text-gray-400 text-xs font-medium border-b border-gray-600">
-              <div>Screen Name</div>
-              <div>Location</div>
-              <div>Assigned Tier</div>
-              <div>Base CPP ($)</div>
-              <div>Current Calculated CPP Range (SGD)</div>
-            </div>
-            {screenConfig.map((screen) => (
-              <ScreenConfigRow
-                key={screen.id}
-                screenName={screen.screenName}
-                location={screen.location}
-                assignedTier={screen.assignedTier}
-                baseCpp={screen.baseCpp}
-                currentCpp={screen.currentCpp}
-                onTierChange={(newTier) => updateScreenTier(screen.id, newTier)}
-                onBaseCppChange={(newBaseCpp) =>
-                  updateScreenBaseCpp(screen.id, newBaseCpp)
-                }
-              />
-            ))}
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm sm:text-base border-collapse">
+              <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
+                <tr>
+                  <th className="text-left py-3 px-7">Time Category</th>
+                  <th className="text-left py-3 px-7">Time Blocks</th>
+                  <th className="text-left py-3 px-7">CPP Adjustment (BSD)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {timePricing.map((time) => (
+                  <tr
+                    key={time.id}
+                    className="bg-[#091331] text-[#AEB9E1] border-b border-gray-700/30"
+                  >
+                    <td className="py-3 px-7">{time.timeCategory}</td>
+                    <td className="py-3 px-7">{time.timeBlocks}</td>
+                    <td className="py-3 px-7">
+                      <CppInput
+                        value={time.cpp}
+                        onChange={(newCpp) => updateTimeCpp(time.id, newCpp)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div> */}
 
-        {/* Footer Buttons */}
-        {/* <div className="flex justify-end gap-3">
-          <button
-            onClick={handleCancel}
-            className="px-6 py-2.5 text-gray-300 hover:text-white transition-colors font-medium text-sm"
-          >
-            Cancel
-          </button>
-          <button
+          <CommonDashboardButton
+            title="Add Custom Time Block"
+            className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+          />
+        </div>
+
+        {/* Screen Configuration */}
+        <div className="my-10">
+          <h3 className="text-xl sm:text-2xl mb-2 text-[#C3CEE9] font-semibold">
+            Screen Configuration
+          </h3>
+          <p className="text-[#AEB9E1] text-sm sm:text-base">
+            Assign tiers to individual screens. CPP will be calculated
+            dynamically.
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm sm:text-base border-collapse">
+            <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
+              <tr>
+                <th className="text-left py-3 px-7">Screen Name</th>
+                <th className="text-left py-3 px-7">Location</th>
+                <th className="text-left py-3 px-7">Assigned Tier</th>
+                <th className="text-left py-3 px-7">Base CPP ($)</th>
+                <th className="text-left py-3 px-7">
+                  Current Calculated CPP Range (BSD)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {screenConfig.map((screen) => (
+                <tr
+                  key={screen.id}
+                  className="bg-[#091331] border-b border-gray-700/30"
+                >
+                  <td className="text-[#AEB9E1] py-3 px-7">
+                    {screen.screenName}
+                  </td>
+                  <td className="text-[#AEB9E1] py-3 px-7">
+                    {screen.location}
+                  </td>
+                  <td className="py-3 px-7">
+                    <CustomDropdown
+                      value={screen.assignedTier}
+                      onChange={(newTier) =>
+                        updateScreenTier(screen.id, newTier)
+                      }
+                      options={["Tier 1", "Tier 2", "Tier 3", "Tier 4"]}
+                    />
+                  </td>
+                  <td className="py-3 px-7">
+                    <CppInput
+                      value={screen.baseCpp}
+                      onChange={(newBaseCpp) =>
+                        updateScreenBaseCpp(screen.id, newBaseCpp)
+                      }
+                    />
+                  </td>
+                  <td className="text-[#AEB9E1] py-3 px-7">
+                    {screen.currentCpp}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <CommonDashboardButton
+          title="Add New Screen"
+          className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+        />
+
+        {/* footer buttons */}
+        <div className="flex justify-end gap-4 mt-10">
+          <CommonDashboardButton
+            title="Save Changes"
             onClick={handleSaveChanges}
-            className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium text-sm"
-          >
-            Save Changes
-          </button>
-        </div> */}
+            className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
+          />
+          <CancelButton title="Cancel" />
+        </div>
       </div>
     </div>
   );
