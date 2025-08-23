@@ -6,100 +6,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ChevronDown, Calendar, Menu } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import React, { useState, useRef, useEffect } from "react";
+import { motion} from "framer-motion";
+import React, { useState } from "react";
 import CommonStatus from "@/common/CommonStatus";
-import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonSelect from "@/common/CommonSelect";
 
 // Month Dropdown Button Component
-const MonthDropdownButton = ({
-  className = "",
-  defaultSelected = "Current Month",
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedPeriod, setSelectedPeriod] = useState(defaultSelected);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+const MonthDropdownButton = ({ className = "" }) => {
+  const [selectedPeriod, setSelectedPeriod] = useState("Current Month");
 
-  const periods = ["Current Year", "Current Month", "Current Week"];
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const selectPeriod = (period) => {
-    setSelectedPeriod(period);
-    setIsOpen(false);
-  };
+  const periods = [
+    { value: "year", label: "Current Year" },
+    { value: "month", label: "Current Month" },
+    { value: "week", label: "Current Week" },
+  ];
 
   return (
-    <div className={`relative ${className}`} ref={dropdownRef}>
-      {/* Regular Button */}
-      <button
-        onClick={toggleDropdown}
-        className="text-title-color cursor-pointer sm:text-lg font-normal rounded-xl border-none w-full sm:w-54 h-10 sm:h-12 bg-[#0B1739] hover:bg-slate-800 flex justify-center items-center gap-2 px-4 transition-colors"
-      >
-        <Calendar className="w-4 h-4" />
-        {selectedPeriod}
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          <ChevronDown className="w-4 h-4" />
-        </motion.div>
-      </button>
-
-      {/* Dropdown Menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.15 }}
-            className="absolute left-0 mt-2 w-full bg-[#0B1739] rounded-lg shadow-2xl border border-slate-600/50 overflow-hidden z-50"
-          >
-            {periods.map((period) => (
-              <div key={period} className="w-full">
-                {period === selectedPeriod ? (
-                  <div className="p-5">
-                    <CommonDashboardButton
-                      title={period}
-                      onClick={() => selectPeriod(period)}
-                      className="w-full rounded-md text-sm"
-                    />
-                  </div>
-                ) : (
-                  <motion.button
-                    onClick={() => selectPeriod(period)}
-                    className="w-full px-4 py-3 text-left text-gray-200 hover:bg-[#38B6FF]/30 hover:text-white transition-colors duration-200"
-                    whileHover={{ x: 4 }}
-                    transition={{ duration: 0.15 }}
-                  >
-                    {period}
-                  </motion.button>
-                )}
-              </div>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className={className}>
+      <CommonSelect
+        Value={selectedPeriod}
+        setValue={(val) => {
+          const selected = periods.find((p) => p.value === val);
+          if (selected) setSelectedPeriod(selected.label);
+        }}
+        options={periods}
+        Icon={Calendar}
+        bgColor="bg-[#0B1739]"
+      />
     </div>
   );
 };

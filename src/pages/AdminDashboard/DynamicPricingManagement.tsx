@@ -1,7 +1,12 @@
+
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import ManageSectionModal from "./ManageSectionModal";
+import AddNewTierModal from "./AddNewTierModal";
+import AddCustomTimeBlockModal from "./AddCustomTimeBlockModal";
+import AddNewScreenModal from "./AddNewScreenModal";
 
 // Dropdown Component
 const CustomDropdown = ({ value, onChange, options, className = "" }) => {
@@ -78,6 +83,11 @@ const SectionHeader = ({ title, subtitle }) => (
 
 // Main Component
 const DynamicPricingManagement: React.FC = () => {
+  const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+  const [isAddTierModalOpen, setIsAddTierModalOpen] = useState(false);
+  const [isAddCustomTimeBlockModalOpen, setIsAddCustomTimeBlockModalOpen] = useState(false);
+const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
+
   // Screen Tier Pricing
   const [tierPricing, setTierPricing] = useState([
     { id: 1, tier: "Tier 1: High-Traffic", cpp: "0.75" },
@@ -169,31 +179,31 @@ const DynamicPricingManagement: React.FC = () => {
       screenConfig,
     });
   };
-  // cancel button
-  const CancelButton = ({
-    title,
-    Icon,
-    onClick,
-    className = "",
-  }: {
-    title: string;
-    Icon?: any;
-    className?: string;
-    onClick?: () => void;
-  }) => {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        onClick={onClick}
-        className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
-      >
-        {title}
-        {Icon && <Icon className="w-4 h-4 text-white" />}
-      </motion.button>
-    );
-  };
+    // cancel button
+    const CancelButton = ({
+      title,
+      Icon,
+      onClick,
+      className = "",
+    }: {
+      title: string;
+      Icon?: any;
+      className?: string;
+      onClick?: () => void;
+    }) => {
+      return (
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.95 }}
+          type="submit"
+          onClick={onClick}
+          className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
+        >
+          {title}
+          {Icon && <Icon className="w-4 h-4 text-white" />}
+        </motion.button>
+      );
+    };
 
   return (
     <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-14">
@@ -208,9 +218,10 @@ const DynamicPricingManagement: React.FC = () => {
               Set dynamic CPP based on Screen Tier and Time of Day per Screen.
             </p>
           </div>
-          <CommonDashboardButton
+           <CommonDashboardButton
             title="Manage Sections"
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
+            onClick={() => setIsManageModalOpen(true)}
           />
         </div>
 
@@ -250,7 +261,8 @@ const DynamicPricingManagement: React.FC = () => {
           </div>
 
           <CommonDashboardButton
-            title="Add New Tier"
+            title="Add New Tier" 
+            onClick={() => setIsAddTierModalOpen(true)}
             className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
         </div>
@@ -269,16 +281,16 @@ const DynamicPricingManagement: React.FC = () => {
             <table className="w-full text-sm sm:text-base border-collapse">
               <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
                 <tr>
-                  <th className="text-left py-3 px-7">Time Category</th>
-                  <th className="text-left py-3 px-7">Time Blocks</th>
-                  <th className="text-left py-3 px-7">CPP Adjustment (BSD)</th>
+                  <th className="text-left py-5 px-7">Time Category</th>
+                  <th className="text-left py-5 px-7">Time Blocks</th>
+                  <th className="text-left py-5 px-7">CPP Adjustment (BSD)</th>
                 </tr>
               </thead>
               <tbody>
                 {timePricing.map((time) => (
                   <tr
                     key={time.id}
-                    className="bg-[#091331] text-[#AEB9E1] border-b border-gray-700/30"
+                    className="bg-[#091331] text-[#AEB9E1] border-b border-[#394E88]"
                   >
                     <td className="py-3 px-7">{time.timeCategory}</td>
                     <td className="py-3 px-7">{time.timeBlocks}</td>
@@ -296,6 +308,7 @@ const DynamicPricingManagement: React.FC = () => {
 
           <CommonDashboardButton
             title="Add Custom Time Block"
+            onClick={() => setIsAddCustomTimeBlockModalOpen(true)}
             className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
         </div>
@@ -314,11 +327,11 @@ const DynamicPricingManagement: React.FC = () => {
           <table className="w-full text-sm sm:text-base border-collapse">
             <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
               <tr>
-                <th className="text-left py-3 px-7">Screen Name</th>
-                <th className="text-left py-3 px-7">Location</th>
-                <th className="text-left py-3 px-7">Assigned Tier</th>
-                <th className="text-left py-3 px-7">Base CPP ($)</th>
-                <th className="text-left py-3 px-7">
+                <th className="text-left py-5 px-7">Screen Name</th>
+                <th className="text-left py-5 px-7">Location</th>
+                <th className="text-left py-5 px-7">Assigned Tier</th>
+                <th className="text-left py-5 px-7">Base CPP ($)</th>
+                <th className="text-left py-5 px-7">
                   Current Calculated CPP Range (BSD)
                 </th>
               </tr>
@@ -327,7 +340,7 @@ const DynamicPricingManagement: React.FC = () => {
               {screenConfig.map((screen) => (
                 <tr
                   key={screen.id}
-                  className="bg-[#091331] border-b border-gray-700/30"
+                  className="bg-[#091331] border-b border-[#394E88]"
                 >
                   <td className="text-[#AEB9E1] py-3 px-7">
                     {screen.screenName}
@@ -363,6 +376,7 @@ const DynamicPricingManagement: React.FC = () => {
 
         <CommonDashboardButton
           title="Add New Screen"
+          onClick={() => setIsAddNewScreenModalOpen(true)}
           className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
         />
 
@@ -373,8 +387,33 @@ const DynamicPricingManagement: React.FC = () => {
             onClick={handleSaveChanges}
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
-          <CancelButton title="Cancel" />
+          <CancelButton title="Cancel"/>
         </div>
+        {/* Manage Section Modal */}
+        {isManageModalOpen && (
+          <ManageSectionModal
+            onClose={() => setIsManageModalOpen(false)} // pass close handler
+          />
+        )}
+        {/* Add Tier Modal */}
+        {isAddTierModalOpen && (
+          <AddNewTierModal
+          isOpen={isAddTierModalOpen}
+            onClose={() => setIsAddTierModalOpen(false)} // pass close handler
+          />
+        )}
+        {/* Add Custom Time Block Modal */}
+        {isAddCustomTimeBlockModalOpen && (
+          <AddCustomTimeBlockModal
+            onClose={() => setIsAddCustomTimeBlockModalOpen(false)} // pass close handler
+          />
+        )}
+        {/* Add New Sceen Modal */}
+        {isAddNewScreenModalOpen && (
+          <AddNewScreenModal
+            onClose={() => setIsAddNewScreenModalOpen(false)} // pass close handler
+          />
+        )}
       </div>
     </div>
   );

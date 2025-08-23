@@ -29,12 +29,7 @@ const FormInput = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className={`w-full px-4 py-3 bg-[#1A274C] text-white text-sm rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all ${className}`}
-      style={{
-        border: "2px solid",
-        borderImage:
-          "linear-gradient(291deg, #38B6FF -45.64%, #09489D 69.04%) 1",
-      }}
+      className={`w-full px-4 py-3 bg-[#1A274C] text-white text-sm rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${className}`}
     />
   </div>
 );
@@ -143,17 +138,19 @@ type CommonModalFormProps = {
   fields: Field[];
   saveButtonText?: string;
   cancelButtonText?: string;
+  children?: React.ReactNode;
 };
 
 const CommonModalForm: React.FC<CommonModalFormProps> = ({
   isOpen,
   onClose,
+  onCancel,
   title,
   formData,
   onSave,
-  onCancel,
   fields,
   saveButtonText = "Save Changes",
+  children,
 }) => {
   const [formState, setFormState] = useState(formData);
 
@@ -162,9 +159,36 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
   };
 
   const handleSave = () => onSave(formState);
-
+  const handleCancel = () => {
+    onCancel?.();
+    onClose();
+  };
   if (!isOpen) return null;
-
+  // cancel button
+  const CancelButton = ({
+    title,
+    Icon,
+    onClick,
+    className = "",
+  }: {
+    title: string;
+    Icon?: any;
+    className?: string;
+    onClick?: () => void;
+  }) => {
+    return (
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.95 }}
+        type="submit"
+        onClick={onClick}
+        className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
+      >
+        {title}
+        {Icon && <Icon className="w-4 h-4 text-white" />}
+      </motion.button>
+    );
+  };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <motion.div
@@ -172,7 +196,7 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 40 }}
         transition={{ duration: 0.25 }}
-        className="bg-[#0B1739] rounded-2xl w-full max-w-md mx-4 shadow-2xl border border-[#1c2c55] overflow-hidden"
+        className="bg-[#0B1739] rounded-2xl w-full lg:w-2xl md:w-xl sm:w-md mx-4 shadow-2xl border border-[#1c2c55] overflow-hidden"
       >
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-5 border-b border-[#1c2c55]">
@@ -205,27 +229,17 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
               />
             )
           )}
+          {children}
         </div>
 
         {/* buttons */}
-        <div className="px-6 pb-6 flex justify-end gap-3">
-          <motion.button
-            onClick={onCancel}
-            className=" bg-[#222E51] 
-    cursor-pointer 
-    rounded-xl 
-    text-white 
-    px-6 py-2.5 
-     "
-          >
-            Cancel
-          </motion.button>
-
+        <div className="px-6 pb-6 flex justify-end gap-5">
           <CommonDashboardButton
             title={saveButtonText}
             onClick={handleSave}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5"
           />
+          <CancelButton onClick={handleCancel} title="Cancel" />
         </div>
       </motion.div>
     </div>
