@@ -65,10 +65,13 @@ export function UserDashboardNavbar() {
                 className="w-fit bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center flex-col"
               >
                 <DropdownMenuItem className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white w-full">
-                   <Link to="/user-dashboard/userPanel" className="flex items-center w-full">
-    <User className="h-4 w-4 mr-2" />
-    Profile
-  </Link>
+                  <Link
+                    to="/user-dashboard/userPanel"
+                    className="flex items-center w-full"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600">
