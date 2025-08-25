@@ -1,4 +1,6 @@
-import { Calculator, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+
+import { Calculator, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
     {
@@ -9,7 +11,7 @@ export const navItems = [
     {
         title: "Cost Estimator",
         icon: Calculator,
-        href: "/dashboard/estimator",
+        href: "/user-dashboard/costEstimator",
     },
     {
         title: "Map of Boards",
@@ -51,7 +53,7 @@ export const userSidebarItems = [
             {
                 title: "My Uploads",
                 icon: Upload,
-                href: "/user-dashboard//uploads",
+                href: "/user-dashboard/uploads",
             },
         ],
     },
@@ -92,10 +94,21 @@ export const adminSidebarItems = [
                 icon: MonitorCog,
                 href: "/admin-dashboard/screen-scheduling",
             },
+            {
+                title: "Pricing",
+                icon: DollarSign,
+                href: "/admin-dashboard/pricing-management",
+            },
+            {
+                title: "Analytics",
+                icon: ChartLineIcon,
+                href: "/admin-dashboard/adminAnalytics",
+            },
         ],
     },
 
 ];
+
 export interface LocationCard {
     id: string
     title: string

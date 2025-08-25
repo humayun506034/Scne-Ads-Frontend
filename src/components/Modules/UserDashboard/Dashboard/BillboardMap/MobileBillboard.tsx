@@ -4,22 +4,24 @@ import { useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import { locationData } from "@/lib/Data";
 import "leaflet/dist/leaflet.css";
-import { BillboardLocation, billboardLocations, mapConfig } from ".";
+import { mapConfig } from ".";
+import { ILocation } from "../../Home/HomeTabs/LocationCard";
 import { BillboardMarker } from "./BillBoardMarker";
 
 export default function MobileBillboardMap() {
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
 
-  const handleViewCampaigns = (location: BillboardLocation) => {
-    console.log("View campaigns for:", location.name);
+  const handleViewCampaigns = (location: ILocation) => {
+    console.log("View campaigns for:", location.title);
   };
 
   const handleSeeAllCampaigns = () => {
     console.log("Navigate to all campaigns");
   };
 
-  const getStatusColor = (status: BillboardLocation["status"]) => {
+  const getStatusColor = (status: ILocation["status"]) => {
     switch (status) {
       case "active":
         return "bg-green-500";
@@ -80,7 +82,7 @@ export default function MobileBillboardMap() {
               attribution="&copy; OpenStreetMap contributors &copy; CARTO"
             />
 
-            {billboardLocations.map((location) => (
+            {locationData.map((location) => (
               <BillboardMarker
                 key={location.id}
                 location={location}
@@ -90,7 +92,7 @@ export default function MobileBillboardMap() {
           </MapContainer>
         ) : (
           <div className="h-full overflow-y-auto px-4 space-y-3">
-            {billboardLocations.map((location) => (
+            {locationData.map((location) => (
               <div
                 key={location.id}
                 className=" backdrop-blur rounded-lg p-4 border border-white/20"
@@ -104,11 +106,11 @@ export default function MobileBillboardMap() {
                         )}`}
                       />
                       <h3 className="text-white font-medium text-sm">
-                        {location.name}
+                        {location.title}
                       </h3>
                     </div>
                     <p className="text-white/70 text-xs mb-2">
-                      {location.city}, {location.country}
+                      {location.location},
                     </p>
                     <p className="text-white/60 text-xs">
                       {location.campaigns} active campaigns

@@ -15,8 +15,8 @@ import { Link } from "react-router-dom";
 export function UserDashboardNavbar() {
   const userName = "Danaj";
   return (
-    <header className="hidden px-5 md:px-10 lg:block sticky mt-0 md:mt-6 lg:mt-10 xl:mt-6 top-0 z-50 w-full text-white">
-      <div className="flex  h-20 items-center justify-between border-none border-b border-[#283F81] ">
+    <header className="hidden lg:block sticky mt-0 md:mt-6 lg:mt-10 xl:mt-6 top-0 z-50 w-full text-white">
+      <div className="flex items-center justify-between border-none border-b border-[#283F81] ">
         <div className="flex items-center">
           <h1 className="text-lg md:text-[38px] ">
             Hey, <span className="text-[#47B5FF]">{userName}</span>.
@@ -27,14 +27,17 @@ export function UserDashboardNavbar() {
             const Icon = item.icon;
             return (
               <>
-                <motion.button
-                  whileTap={{ scale: 0.9 }}
-                  whileHover={{ scale: 1.03 }}
-                  key={item.title}
-                  className="text-white hover:text-white bg-[#1A2342] flex justify-center cursor-pointer items-center rounded-full py-2.5 gap-2 text-sm px-4 border-[#38B6FF] border "
-                >
-                  {item.title} <Icon className="h-4 block lg:hidden w-4 mr-2" />
-                </motion.button>
+                <Link to={item.href}>
+                  <motion.button
+                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.03 }}
+                    key={item.title}
+                    className="text-white hover:text-white bg-[#1A2342] flex justify-center cursor-pointer items-center rounded-full py-2.5 gap-2 text-sm px-4 border-[#38B6FF] border "
+                  >
+                    {item.title}{" "}
+                    <Icon className="h-4 block lg:hidden w-4 mr-2" />
+                  </motion.button>
+                </Link>
                 {idx == 1 && (
                   <div className="h-8 hidden xl:block border-l border-white"></div>
                 )}
@@ -65,10 +68,13 @@ export function UserDashboardNavbar() {
                 className="w-fit bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center flex-col"
               >
                 <DropdownMenuItem className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white w-full">
-                   <Link to="/user-dashboard/userPanel" className="flex items-center w-full">
-    <User className="h-4 w-4 mr-2" />
-    Profile
-  </Link>
+                  <Link
+                    to="/user-dashboard/userPanel"
+                    className="flex items-center w-full"
+                  >
+                    <User className="h-4 w-4 mr-2" />
+                    Profile
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600">
