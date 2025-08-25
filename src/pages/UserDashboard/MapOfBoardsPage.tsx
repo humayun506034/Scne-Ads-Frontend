@@ -3,11 +3,9 @@ import { useMemo, useState } from "react";
 import {
   defaultFilters,
   FilterOptions,
-  SelectionSummary,
 } from "@/components/Modules/UserDashboard/MapOfBoards";
 import { FilterSidebar } from "@/components/Modules/UserDashboard/MapOfBoards/FilterSidebar";
 import { MapOfBoards } from "@/components/Modules/UserDashboard/MapOfBoards/MapOfBoards";
-import { SelectionSummaryComponent } from "@/components/Modules/UserDashboard/MapOfBoards/SelectionSummary";
 import { locationData } from "@/lib/Data";
 
 export function MapOfBoardPage() {
@@ -74,28 +72,28 @@ export function MapOfBoardPage() {
     });
   }, [filters]);
 
-  // Calculate selection summary
-  const selectionSummary = useMemo((): SelectionSummary => {
-    const selected = locationData.filter((location) =>
-      selectedLocations.includes(location.id)
-    );
-    const totalReach = selected.reduce(
-      (sum, location) => sum + location.reach,
-      0
-    );
-    const averagePrice =
-      selected.length > 0
-        ? selected.reduce((sum, location) => sum + location.price, 0) /
-          selected.length
-        : 0;
+  // // Calculate selection summary
+  // const selectionSummary = useMemo((): SelectionSummary => {
+  //   const selected = locationData.filter((location) =>
+  //     selectedLocations.includes(location.id)
+  //   );
+  //   const totalReach = selected.reduce(
+  //     (sum, location) => sum + location.reach,
+  //     0
+  //   );
+  //   const averagePrice =
+  //     selected.length > 0
+  //       ? selected.reduce((sum, location) => sum + location.price, 0) /
+  //         selected.length
+  //       : 0;
 
-    return {
-      selectedCount: selected.length,
-      totalReach,
-      averagePrice: Math.round(averagePrice),
-      radius: 32, // Mock radius calculation
-    };
-  }, [selectedLocations]);
+  //   return {
+  //     selectedCount: selected.length,
+  //     totalReach,
+  //     averagePrice: Math.round(averagePrice),
+  //     radius: 32, // Mock radius calculation
+  //   };
+  // }, [selectedLocations]);
 
   const handleLocationSelect = (locationId: string) => {
     setSelectedLocations((prev) =>
@@ -124,10 +122,10 @@ export function MapOfBoardPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 p-4">
+      <div className="bg-bg-dashboard border-b mb-12 border-gray-200 p-4">
         <div className="max-w-7xl mx-auto">
-          <h1 className="text-2xl font-bold text-gray-900">Target Location</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl font-bold ">Target Location</h1>
+          <p className="text-title-color mt-1">
             Select billboard locations for your campaign
           </p>
         </div>
@@ -135,7 +133,7 @@ export function MapOfBoardPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto p-4">
-        <div className="flex gap-6 h-[calc(100vh-200px)]">
+        <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-200px)]">
           {/* Filter Sidebar */}
           <FilterSidebar
             filters={filters}
@@ -146,7 +144,7 @@ export function MapOfBoardPage() {
 
           {/* Map Container */}
           <div className="flex-1 relative rounded-lg overflow-hidden shadow-lg">
-            <SelectionSummaryComponent summary={selectionSummary} />
+            {/* <SelectionSummaryComponent summary={selectionSummary} /> */}
             <MapOfBoards
               locations={filteredLocations}
               selectedLocations={selectedLocations}
