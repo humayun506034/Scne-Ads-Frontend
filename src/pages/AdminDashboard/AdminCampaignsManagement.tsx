@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Eye, Trash2 } from "lucide-react";
 import { motion } from "framer-motion";
+import CommonStatus from "@/common/CommonStatus";
+import ApproveCampaignDetailsModal from "./ApproveCampaignDetailsModal";
+import DeleteCampaignModal from "./DeleteCampaignModal";
+
 const campaignsData = [
   {
     name: "New Product Launch",
@@ -499,6 +503,29 @@ const ITEMS_PER_PAGE = 20;
 
 const AdminCampaignManagement: React.FC = () => {
   const [page, setPage] = useState(1);
+  const [selectedCampaign, setSelectedCampaign] = useState<any | null>(null);
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+  const openApproveModal = (campaign: any) => {
+    setSelectedCampaign(campaign);
+    setIsApproveModalOpen(true);
+  };
+
+  const closeApproveModal = () => {
+    setIsApproveModalOpen(false);
+    setSelectedCampaign(null);
+  };
+
+  const openDeleteModal = (campaign: any) => {
+    setSelectedCampaign(campaign);
+    setIsDeleteModalOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsDeleteModalOpen(false);
+    setSelectedCampaign(null);
+  };
 
   const startIndex = (page - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
@@ -506,6 +533,7 @@ const AdminCampaignManagement: React.FC = () => {
 
   const hasNextPage = endIndex < campaignsData.length;
   const hasPrevPage = page > 1;
+
   return (
     <div className="p-4 sm:p-6 lg:py-16 lg:px-6 bg-bg-dashboard">
       <h2 className="text-xl sm:text-2xl lg:text-4xl font-normal text-[#AEB9E1] mb-6 lg:mb-8">
@@ -539,17 +567,7 @@ const AdminCampaignManagement: React.FC = () => {
                     <td className="py-3 px-4">{campaign.name}</td>
                     <td className="py-3 px-4">{campaign.advertiser}</td>
                     <td className="py-3 px-4">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-medium ${
-                          campaign.status === "Approved"
-                            ? "bg-green-500/20 text-green-400"
-                            : campaign.status === "Pending"
-                            ? "bg-yellow-500/20 text-yellow-400"
-                            : "bg-red-500/20 text-red-400"
-                        }`}
-                      >
-                        {campaign.status}
-                      </span>
+                      <CommonStatus status={campaign.status} />
                     </td>
                     <td className="py-3 px-4">{campaign.actionedBy}</td>
                     <td className="py-3 px-4">{campaign.budget}</td>
@@ -557,15 +575,22 @@ const AdminCampaignManagement: React.FC = () => {
                     <td className="py-3 px-4">{campaign.startDate}</td>
                     <td className="py-3 px-4">{campaign.endDate}</td>
                     <td className="py-3 px-4 flex items-center gap-3">
-                      <Eye className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-blue-500" />
-                      <p> | </p>
-
+                      <Eye
+                        className="w-4 h-4 text-[#38B6FF] cursor-pointer inline-block
+                        transform transition-transform duration-200 ease-in-out
+                        hover:scale-125 hover:text-blue-500"
+                        onClick={() => openApproveModal(campaign)}
+                      />
+                      <p>|</p>
                       <motion.div
                         whileHover={{ scale: 1.2 }}
                         whileTap={{ scale: 0.9 }}
                         className="cursor-pointer"
                       >
-                        <Trash2 className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-red-500" />
+                        <Trash2
+                          onClick={() => openDeleteModal(campaign)}
+                          className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-red-500"
+                        />
                       </motion.div>
                     </td>
                   </tr>
@@ -578,7 +603,7 @@ const AdminCampaignManagement: React.FC = () => {
 
       {/* Mobile View - Card Layout */}
       <div className="sm:hidden space-y-4">
-        {campaignsData.map((campaign, index) => (
+        {currentData.map((campaign, index) => (
           <Card key={index} className="bg-bg-dashboard border-[#11214D]">
             <CardContent className="p-4">
               <div className="space-y-3">
@@ -640,9 +665,17 @@ const AdminCampaignManagement: React.FC = () => {
 
                 <div className="flex items-center justify-center gap-4 pt-2 border-t border-slate-800/40">
                   <div className="flex items-center gap-3">
-                    <Eye className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-blue-500" />
+                    <Eye
+                      onClick={() => openApproveModal(campaign)}
+                      className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-blue-600"
+                    />
                     <p className="text-[#AEB9E1]/50">|</p>
-                    <Trash2 className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-red-500" />
+                    <Trash2
+                      onClick={() => openDeleteModal(campaign)}
+                      className="w-4 h-4 text-[#38B6FF] cursor-pointer inline-block
+                      transform transition-transform duration-200 ease-in-out
+                      hover:scale-125 hover:text-blue-500"
+                    />
                   </div>
                 </div>
               </div>
@@ -650,6 +683,7 @@ const AdminCampaignManagement: React.FC = () => {
           </Card>
         ))}
       </div>
+
       {/* Pagination Controls */}
       <div className="flex justify-center items-center gap-4 mt-6">
         {hasPrevPage && (
@@ -661,7 +695,6 @@ const AdminCampaignManagement: React.FC = () => {
           </button>
         )}
 
-        {/* Page Indicator */}
         <span className="text-[#AEB9E1] text-sm">
           Page {page} of {Math.ceil(campaignsData.length / ITEMS_PER_PAGE)}
         </span>
@@ -675,6 +708,18 @@ const AdminCampaignManagement: React.FC = () => {
           </button>
         )}
       </div>
+
+      {/* Modals */}
+      <ApproveCampaignDetailsModal
+        isOpen={isApproveModalOpen}
+        onClose={closeApproveModal}
+        campaign={selectedCampaign}
+      />
+      <DeleteCampaignModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        campaign={selectedCampaign}
+      />
     </div>
   );
 };

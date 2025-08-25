@@ -17,7 +17,7 @@ const AdminSpecialSection = () => {
           {cardData.map((card, index) => (
             <CarouselItem
               key={index}
-              className="md:basis-1/2 p-0 m-0  lg:basis-1/2 xl:basis-1/4  "
+              className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4  "
             >
               {index === 0 && (
                 <div className="w-full h-full rounded-lg shadow-lg flex items-center justify-center ">
@@ -39,6 +39,7 @@ const AdminSpecialSection = () => {
                   </div>
                 </div>
               )}
+
               <SpecialCard {...card} />
             </CarouselItem>
           ))}

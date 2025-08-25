@@ -2,8 +2,15 @@ import CommonGlowingHeader from "@/common/CommonGlowingHeader";
 import { FaqData } from "@/lib/Data";
 import { motion } from "framer-motion";
 import FAQCard from "./FAQCard";
+import { useState } from "react";
 
 export default function FaqSection() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const handleToggle = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <section className="w-full relative mt-20 md:mt-40 ">
       <motion.div
@@ -33,7 +40,8 @@ export default function FaqSection() {
             question={faq.question}
             answer={faq.answer}
             index={index}
-            isInitiallyOpen={index === 0}
+            isOpen={openIndex === index}
+            onToggle={() => handleToggle(index)}
           />
         ))}
       </div>

@@ -11,6 +11,7 @@ import { AdminDashboardLayout } from "@/Layout/AdminLayout";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
+
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
 import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
@@ -27,6 +28,11 @@ import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
 import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
+
+import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
+import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
+import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
+import CostEstimator from "@/pages/UserDashboard/CostEstimator";
 
 const routes = createBrowserRouter([
   {
@@ -52,7 +58,7 @@ const routes = createBrowserRouter([
         element: <UserDashboardMetrics />,
       },
       {
-        path: "mapOfBoard",
+        path: "map",
         element: <MapOfBoardPage />,
       },
       {
@@ -84,6 +90,9 @@ const routes = createBrowserRouter([
         path: "userInvoice",
         element: <UserInvoice />,
       },
+      { path: "costEstimator", element: <CostEstimator /> },
+
+      { path: "campaigns", element: <CampaignTablePage /> },
     ],
   },
   {
@@ -94,6 +103,7 @@ const routes = createBrowserRouter([
         index: true,
         element: <AdminDashboardHomePage />,
       },
+
       {
         path: "adminBasicInfo",
         element: <AdminBasicInfo />,
@@ -104,6 +114,17 @@ const routes = createBrowserRouter([
         element: <AdminCampaignData />,
       },
       { path: "campaigns", element: <AdminCampaignManagement /> },
+      {
+        path: "adminCampaignData",
+        element: <AdminCampaignData />,
+      },
+      {
+        path: "adminAnalytics",
+        element: <CampaignPerformanceAnalytics />,
+      },
+      { path: "campaigns", element: <AdminCampaignManagement /> },
+      { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
+      { path: "pricing-management", element: <DynamicPricingManagement /> },
     ],
   },
   {

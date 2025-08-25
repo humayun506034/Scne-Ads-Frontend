@@ -1,27 +1,21 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { useState } from "react";
 
 interface FaqItemProps {
   question: string;
   answer: string;
   index: number;
-  isInitiallyOpen?: boolean;
+  isOpen: boolean;
+  onToggle: () => void;
 }
 
 export default function FAQCard({
   question,
   answer,
   index,
-  isInitiallyOpen = true,
+  isOpen,
+  onToggle,
 }: FaqItemProps) {
-  const [isOpen, setIsOpen] = useState(isInitiallyOpen);
-
-  const toggleOpen = () => {
-    setIsOpen(!isOpen);
-    console.log(isOpen);
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
@@ -31,7 +25,7 @@ export default function FAQCard({
       className="rounded-[20px] border border-[#2FABF9] overflow-hidden cursor-pointer card"
     >
       <motion.div
-        onClick={toggleOpen}
+        onClick={onToggle}
         className="flex items-center justify-between p-8 transition-colors duration-200"
       >
         <h3 className="text-white text-base md:text-lg font-medium pr-4 leading-relaxed">
