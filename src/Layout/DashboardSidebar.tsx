@@ -7,10 +7,20 @@ import {
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
+import { useState } from "react";
+
+
 import { Link, useLocation } from "react-router-dom";
 
 export function DashboardSidebar({ user }: { user: string }) {
   const location = useLocation();
+
+
+
+  const [activeItem, setActiveItem] = useState(
+    user === "admin" ? "/admin-dashboard" : "/user-dashboard"
+  );
+
   const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
     <div
@@ -36,13 +46,18 @@ export function DashboardSidebar({ user }: { user: string }) {
               <ul className="space-y-4">
                 {section.items.map((item) => {
                   const Icon = item.icon;
+
                   const isActive = location.pathname === item.href;
+
                   return (
                     <li key={item.title}>
                       <Link to={item.href}>
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.9 }}
+
+                          onClick={() => setActiveItem(item.href)}
+
                           className={cn(
                             "flex w-full items-center gap-3 text-nowrap hover:text-[#38B6FF] cursor-pointer text-left rounded-lg px-3  text-base  transition-colors",
                             isActive ? "text-[#38B6FF]" : " text-[#AEB9E1] "

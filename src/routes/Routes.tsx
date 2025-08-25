@@ -83,6 +83,11 @@ const routes = createBrowserRouter([
         element: <UserInvoice />,
       },
       { path: "costEstimator", element: <CostEstimator /> },
+
+        path: "campaigns",
+        element: <CampaignTablePage />,
+      },
+
     ],
   },
   {
@@ -93,6 +98,7 @@ const routes = createBrowserRouter([
         index: true,
         element: <AdminDashboardHomePage />,
       },
+
       {
         path: "adminBasicInfo",
         element: <AdminBasicInfo />,
@@ -109,6 +115,7 @@ const routes = createBrowserRouter([
       { path: "campaigns", element: <AdminCampaignManagement /> },
       { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
       { path: "pricing-management", element: <DynamicPricingManagement /> },
+
     ],
   },
   {

@@ -17,8 +17,28 @@ const AdminSpecialSection = () => {
           {cardData.map((card, index) => (
             <CarouselItem
               key={index}
-              className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4 "
+
+              className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4  "
             >
+              {index === 0 && (
+                <div className="w-80 h-full  bg-white rounded-lg shadow-lg flex items-center justify-center mb-8">
+                  <div className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="45"
+                      height="45"
+                      viewBox="0 0 45 45"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.4665 26.4165H0V18.4665H18.4665V0H26.4165V18.4665H44.883V26.4165H26.4165V44.883H18.4665V26.4165Z"
+                        fill="#033579"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              )}
+
               <SpecialCard {...card} />
             </CarouselItem>
           ))}

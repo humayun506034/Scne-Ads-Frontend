@@ -1,4 +1,6 @@
+
 import { Calculator, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
     {
@@ -101,6 +103,45 @@ export const adminSidebarItems = [
                 title: "Analytics",
                 icon: ChartLineIcon,
                 href: "/admin-dashboard/adminAnalytics",
+            },
+        ],
+    },
+
+];
+export const adminSidebarItems = [
+    {
+        title: "MY SCNE",
+        items: [
+            {
+                title: "Home",
+                icon: Home,
+                href: "/admin-dashboard",
+            },
+            {
+                title: "Dashboard",
+                icon: LayoutDashboard,
+                href: "/admin-dashboard/metrics",
+            },
+
+        ],
+    },
+    {
+        title: "Management",
+        items: [
+            {
+                title: "Campaign Management",
+                icon: Settings,
+                href: "/admin-dashboard/campaigns",
+            },
+        ],
+    },
+    {
+        title: "General",
+        items: [
+            {
+                title: "Screen Scheduling",
+                icon: MonitorCog,
+                href: "/admin-dashboard/screen-scheduling",
             },
         ],
     },
