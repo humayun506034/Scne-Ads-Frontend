@@ -8,26 +8,30 @@ import Login from "@/pages/Login";
 import Signup from "@/pages/Signup";
 
 import { AdminDashboardLayout } from "@/Layout/AdminLayout";
-import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
-import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
-import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
-import UserDashboard from "@/pages/UserDashboard/UserDashboard";
-import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
-import UserPanel from "@/pages/UserDashboard/UserPanel";
-import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
-import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
-import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
-import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
-import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
-import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
-import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
-import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
 import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
-import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
-import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
+
+import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
+import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
+import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
+
+import { MapOfBoardPage } from "@/pages/UserDashboard/MapOfBoardsPage";
+import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
+import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
+import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
+import UserBillingInfo from "@/pages/UserDashboard/UserBillingInfo";
+import UserBillingPersonalAcc from "@/pages/UserDashboard/UserBillingPersonalAcc";
+import UserChangePassword from "@/pages/UserDashboard/UserChangePassword";
+import UserDashboard from "@/pages/UserDashboard/UserDashboard";
+import UserDashboardMetrics from "@/pages/UserDashboard/UserDashboardMetrics";
+import UserInvoice from "@/pages/UserDashboard/UserInvoice";
+import UserPanel from "@/pages/UserDashboard/UserPanel";
+import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
+
 import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
+import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
+import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 import CostEstimator from "@/pages/UserDashboard/CostEstimator";
 
 const routes = createBrowserRouter([
@@ -52,6 +56,10 @@ const routes = createBrowserRouter([
       {
         path: "metrics",
         element: <UserDashboardMetrics />,
+      },
+      {
+        path: "map",
+        element: <MapOfBoardPage />,
       },
       {
         path: "new-campaign",
@@ -83,6 +91,8 @@ const routes = createBrowserRouter([
         element: <UserInvoice />,
       },
       { path: "costEstimator", element: <CostEstimator /> },
+
+      { path: "campaigns", element: <CampaignTablePage /> },
     ],
   },
   {
@@ -93,11 +103,17 @@ const routes = createBrowserRouter([
         index: true,
         element: <AdminDashboardHomePage />,
       },
+
       {
         path: "adminBasicInfo",
         element: <AdminBasicInfo />,
       },
       { path: "adminChangePassword", element: <AdminChangePassword /> },
+      {
+        path: "adminCampaignData",
+        element: <AdminCampaignData />,
+      },
+      { path: "campaigns", element: <AdminCampaignManagement /> },
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,

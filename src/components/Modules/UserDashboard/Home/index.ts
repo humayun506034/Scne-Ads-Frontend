@@ -1,4 +1,6 @@
+
 import { Calculator, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
     {
@@ -106,6 +108,7 @@ export const adminSidebarItems = [
     },
 
 ];
+
 export interface LocationCard {
     id: string
     title: string
