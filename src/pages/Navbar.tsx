@@ -13,6 +13,7 @@ const navigationLinks = [
   { label: "Billboards", href: "/billboards" },
   { label: "Help Centre", href: "/help" },
   { label: "User Dashboard", href: "/user-dashboard" },
+  { label: "Admin Dashboard", href: "/admin-dashboard" },
 ];
 
 export default function Navbar() {
