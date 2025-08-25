@@ -28,6 +28,7 @@ import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManage
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
 import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
+import CostEstimator from "@/pages/UserDashboard/CostEstimator";
 
 const routes = createBrowserRouter([
   {
@@ -81,6 +82,7 @@ const routes = createBrowserRouter([
         path: "userInvoice",
         element: <UserInvoice />,
       },
+      { path: "costEstimator", element: <CostEstimator /> },
     ],
   },
   {

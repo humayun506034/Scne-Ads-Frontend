@@ -5,11 +5,6 @@ import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
 const CampaignPerformanceAnalytics: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  // Campaign Performance Chart
   const campaignData = [
     { month: "Jan", active: 10, completed: 6 },
     { month: "Feb", active: 13, completed: 8 },
@@ -18,6 +13,27 @@ const CampaignPerformanceAnalytics: React.FC = () => {
     { month: "May", active: 17, completed: 10 },
     { month: "Jun", active: 9, completed: 6 },
   ];
+
+  const revenueData = [
+    { month: "Jan", revenue: 23000 },
+    { month: "Feb", revenue: 27000 },
+    { month: "Mar", revenue: 37000 },
+    { month: "Apr", revenue: 29000 },
+    { month: "May", revenue: 43000 },
+    { month: "Jun", revenue: 46000 },
+  ];
+
+  const uptimeData = [
+    { screen: "Downtown Billboard", uptime: 90 },
+    { screen: "Mall Entrance Display", uptime: 97 },
+    { screen: "Airport Lounge Screen", uptime: 85 },
+    { screen: "Sports Arena Jumbotron", uptime: 100 },
+  ];
+
+  useEffect(() => {
+    setIsClient(true);
+    // fetch the API here
+  }, []);
 
   const campaignOptions: ApexCharts.ApexOptions = {
     chart: {
@@ -59,7 +75,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
         width: 1, // line width
       },
       axisTicks: {
-        show: true, // optionally show ticks
+        show: true,
         color: "#9CA3AF",
         width: 1,
       },
@@ -81,7 +97,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
   const revenueOptions: ApexCharts.ApexOptions = {
     chart: {
       type: "line",
-      height: 300,
+      height: 470,
       background: "transparent",
       toolbar: { show: false },
       zoom: { enabled: false },
@@ -131,14 +147,14 @@ const CampaignPerformanceAnalytics: React.FC = () => {
   };
 
   const revenueSeries = [
-    { name: "Revenue", data: [23000, 27000, 37000, 29000, 43000, 46000] },
+    { name: "Revenue", data: revenueData.map((d) => d.revenue) },
   ];
 
   // Uptime Chart
   const uptimeOptions: ApexCharts.ApexOptions = {
     chart: {
       type: "bar",
-      height: 450,
+      height: 470,
       background: "transparent",
       toolbar: { show: false },
     },
@@ -202,7 +218,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
   };
 
   const uptimeSeries = [
-    { name: "Screen Uptime Analytics", data: [90, 97, 85, 100] },
+    { name: "Screen Uptime Analytics", data: uptimeData.map((d) => d.uptime) },
   ];
 
   if (!isClient) return <div className="text-white">Loading charts...</div>;
@@ -224,7 +240,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
                 options={campaignOptions}
                 series={campaignSeries}
                 type="bar"
-                height={500}
+                height={470}
               />
             </div>
           </div>
@@ -233,7 +249,6 @@ const CampaignPerformanceAnalytics: React.FC = () => {
               <img src={activeCampaign} alt="" />
               <p>Active Campaigns</p>
             </div>
-
             <div className="flex items-center gap-2">
               <img src={completedCampaign} alt="" />
               <p>Completed Campaigns</p>
@@ -255,7 +270,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
               options={revenueOptions}
               series={revenueSeries}
               type="line"
-              height={300}
+              height={470}
             />
           </div>
         </div>
@@ -274,7 +289,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
             options={uptimeOptions}
             series={uptimeSeries}
             type="bar"
-            height={300}
+            height={470}
           />
         </div>
       </div>

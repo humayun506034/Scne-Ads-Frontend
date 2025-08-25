@@ -1,4 +1,4 @@
-import { Calculator, ChartBar, ChartBarIncreasing, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+import { Calculator, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
     {
@@ -9,7 +9,7 @@ export const navItems = [
     {
         title: "Cost Estimator",
         icon: Calculator,
-        href: "/dashboard/estimator",
+        href: "/dashboard/costEstimator",
     },
     {
         title: "Map of Boards",
