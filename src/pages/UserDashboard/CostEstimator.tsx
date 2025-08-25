@@ -11,11 +11,11 @@ const CostEstimator: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#081028] px-8 py-12 text-white relative">
+    <div className="min-h-screen bg-[#081028] px-4 sm:px-6 md:px-8 py-8 md:py-12 text-white relative">
       {/* Heading */}
       <div>
         <p className="text-lg text-gray-300">Get calculating</p>
-        <h1 className="text-4xl font-semibold mt-1">
+        <h1 className="text-3xl sm:text-4xl font-semibold mt-1">
           Let’s <span className="text-[#ADC1FF] font-bold">guesstimate</span>{" "}
           <br />
           Costs.
@@ -23,34 +23,34 @@ const CostEstimator: React.FC = () => {
       </div>
 
       {/* Info Note */}
-      <div className="flex items-start justify-between mt-6 bg-[#0B1739] text-gray-300 px-5 py-3 rounded-md">
+      <div className="flex flex-col md:flex-row items-start md:justify-between mt-6 bg-[#0B1739] text-gray-300 px-4 sm:px-5 py-3 rounded-md">
         <p>
           By the way – You’re not creating a campaign here. This is purely to
           help you get a ballpark figure of budget required for a given
           selection of boards.
         </p>
-        <HelpCircle className="ml-3 mt-1 w-5 h-5 text-gray-400 cursor-pointer hover:text-[#fff] shrink-0" />
+        <HelpCircle className="ml-0 md:ml-3 mt-1 w-5 h-5 text-gray-400 cursor-pointer hover:text-[#fff] shrink-0" />
       </div>
 
       {/* Right Side Note */}
-      <div className="flex justify-between mt-10">
+      <div className="flex flex-col md:flex-row justify-between mt-10 gap-8 md:gap-6">
         {/* Step One */}
-        <div className="mt-12">
-          <h2 className="text-xl  font-bold mb-4">Step One :</h2>
+        <div className="mt-8 md:md-12">
+          <h2 className="text-xl font-bold mb-4">Step One :</h2>
           <p className="text-[#fff] text-xl mb-6">Pick your currency</p>
 
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             {currencies.map((c, i) => (
               <button
                 key={i}
-                className="bg-[#0B1739] hover:bg-[#243056] px-6 py-3 cursor-pointer rounded-md text-white font-medium flex justify-between  gap-4 transition"
+                className="bg-[#0B1739] hover:bg-[#243056] px-6 sm:px-6 py-3 cursor-pointer rounded-md text-white font-medium flex justify-between sm:gap-4 transition"
               >
                 <span>{c.symbol}</span> {c.code}
               </button>
             ))}
           </div>
         </div>
-        <div className="  max-w-sm bg-[#0B1739] rounded-md p-6 text-gray-300">
+        <div className="md:max-w-sm max-w-full bg-[#0B1739] rounded-md p-6 text-gray-300">
           <h3 className="font-semibold mb-5 text-white">
             The cost estimate here…is just an estimate.
           </h3>

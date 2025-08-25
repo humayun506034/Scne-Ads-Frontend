@@ -125,7 +125,7 @@ const AdminCampaignData: React.FC = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen bg-bg-dashboard lg:py-16 sm:py-14"
+      className="min-h-screen bg-bg-dashboard lg:py-8 sm:py-14"
     >
       <div className="px-4 sm:px-8 lg:px-6 mx-auto">
         {/* Header */}

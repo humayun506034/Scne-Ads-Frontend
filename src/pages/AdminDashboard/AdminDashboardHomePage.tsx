@@ -21,7 +21,7 @@ const AdminDashboardHomePage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 pt-16 gap-4"
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-8 gap-4"
       >
         <h1 className="text-3xl sm:text-4xl font-semibold text-white">
           Hey, <span className="text-secondary-color">Admin</span>

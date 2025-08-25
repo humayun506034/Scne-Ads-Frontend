@@ -9,7 +9,7 @@ export const navItems = [
     {
         title: "Cost Estimator",
         icon: Calculator,
-        href: "/dashboard/costEstimator",
+        href: "/user-dashboard/costEstimator",
     },
     {
         title: "Map of Boards",
@@ -51,7 +51,7 @@ export const userSidebarItems = [
             {
                 title: "My Uploads",
                 icon: Upload,
-                href: "/user-dashboard//uploads",
+                href: "/user-dashboard/uploads",
             },
         ],
     },
