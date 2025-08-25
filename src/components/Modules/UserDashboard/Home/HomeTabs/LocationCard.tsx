@@ -14,9 +14,20 @@ export interface ILocation {
   id: string;
   image: string;
   title: string;
+  lat: number;
+  availability: "available" | "booked" | "maintenance";
+  lng: number;
+  reach: number;
+
+  price: number;
+  campaigns: number;
   category: "new" | "fav" | "top";
   screenSize: string;
   description: string;
+  status: "active" | "inactive" | "maintenance";
+  location: string;
+  tierLevel: "Basic" | "Standard" | "Premium";
+  costPerPlay: number;
 }
 
 export interface LocationCardProps {
@@ -30,6 +41,7 @@ export interface LocationCardProps {
 const LocationCard = ({
   location,
   fav,
+
   bookmark,
   select,
   onToggleFav,
@@ -87,28 +99,29 @@ const LocationCard = ({
               <p className="text-white/80 text-base lg:text-[14px] px-4">
                 {location.description}
               </p>
-              {bookmark && (
-                <div
-                  onClick={(e) => handleBookmark(e, location.id)}
-                  tabIndex={-1}
-                  className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
-                >
-                  <motion.button
-                    className="bg-transparent"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.8 }}
-                    type="button"
+              {bookmark ||
+                (fav && (
+                  <div
+                    onClick={(e) => handleBookmark(e, location.id)}
+                    tabIndex={-1}
+                    className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
                   >
-                    <Heart
-                      className={`h-7 w-7 cursor-pointer ${
-                        fav?.has(location.id)
-                          ? "fill-white stroke-white"
-                          : "stroke-white"
-                      }`}
-                    />
-                  </motion.button>
-                </div>
-              )}
+                    <motion.button
+                      className="bg-transparent"
+                      whileHover={{ scale: 1.2 }}
+                      whileTap={{ scale: 0.8 }}
+                      type="button"
+                    >
+                      <Heart
+                        className={`h-7 w-7 cursor-pointer ${
+                          fav?.has(location.id)
+                            ? "fill-white stroke-white"
+                            : "stroke-white"
+                        }`}
+                      />
+                    </motion.button>
+                  </div>
+                ))}
               {select && (
                 <div
                   onClick={(e) => handleBookmark(e, location.id)}
@@ -135,7 +148,6 @@ const LocationCard = ({
           </Card>
         </DialogTrigger>
 
-        {/* Dialog Content */}
         <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto max-h-[80vh]">
           <DialogHeader className="text-white font-semibold text-2xl">
             Screen Details

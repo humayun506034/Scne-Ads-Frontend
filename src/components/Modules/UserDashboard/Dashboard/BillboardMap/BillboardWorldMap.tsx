@@ -1,16 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import { locationData } from "@/lib/Data";
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { BillboardLocation, billboardLocations, mapConfig } from ".";
+import { mapConfig } from ".";
+import { ILocation } from "../../Home/HomeTabs/LocationCard";
 import { BillboardMarker } from "./BillBoardMarker";
 
 function BillboardWorldMap() {
   const mapRef = useRef<any>(null);
 
-  const handleViewCampaigns = (location: BillboardLocation) => {
-    console.log("View campaigns for:", location.name);
+  const handleViewCampaigns = (location: ILocation) => {
+    console.log("View campaigns for:", location.title);
     // Implement navigation to campaigns page
   };
 
@@ -43,7 +45,7 @@ function BillboardWorldMap() {
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">Scene ADS</a>'
           />
-          {billboardLocations.map((location) => (
+          {locationData.map((location) => (
             <BillboardMarker
               key={location.id}
               location={location}

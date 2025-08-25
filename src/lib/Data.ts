@@ -11,7 +11,17 @@ export const locationData: ILocation[] = [
     title: "Piccadilly Circus, London",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Dominate a key European intersection with iconic digital billboards."
+    description: "Dominate a key European intersection with iconic digital billboards.",
+    lat: 51.5074,
+    lng: -0.128,
+    availability: "available",
+    reach: 2000000, // Example reach in number of people
+    price: 5000, // Example price in USD
+    campaigns: 3,
+    status: "active",
+    location: "London, UK",
+    tierLevel: "Premium",
+    costPerPlay: 100,
   },
   {
     id: "2",
@@ -19,7 +29,17 @@ export const locationData: ILocation[] = [
     title: "Times Square, NYC",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Reach millions in the heart of global commerce and entertainment."
+    description: "Reach millions in the heart of global commerce and entertainment.",
+    lat: 40.7580,
+    lng: -73.9855,
+    availability: "available",
+    reach: 5000000,
+    price: 7000,
+    campaigns: 5,
+    status: "active",
+    location: "New York City, USA",
+    tierLevel: "Standard",
+    costPerPlay: 120,
   },
   {
     id: "3",
@@ -27,7 +47,17 @@ export const locationData: ILocation[] = [
     title: "Shibuya Crossing, Tokyo",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Capture the attention of millions at the world’s busiest pedestrian crossing."
+    description: "Capture the attention of millions at the world’s busiest pedestrian crossing.",
+    lat: 35.6595,
+    lng: 139.7004,
+    availability: "available",
+    reach: 3000000,
+    price: 6000,
+    campaigns: 4,
+    status: "active",
+    location: "Tokyo, Japan",
+    tierLevel: "Premium",
+    costPerPlay: 110,
   },
   {
     id: "4",
@@ -35,7 +65,17 @@ export const locationData: ILocation[] = [
     title: "Champs-Élysées, Paris",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Showcase your brand on the most famous avenue in Paris."
+    description: "Showcase your brand on the most famous avenue in Paris.",
+    lat: 48.8566,
+    lng: 2.3522,
+    availability: "maintenance",
+    reach: 1500000,
+    price: 4500,
+    campaigns: 2,
+    status: "maintenance",
+    location: "Paris, France",
+    tierLevel: "Basic",
+    costPerPlay: 90,
   },
   {
     id: "5",
@@ -43,7 +83,17 @@ export const locationData: ILocation[] = [
     title: "Gangnam District, Seoul",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Display your message in South Korea’s trendiest neighborhood."
+    description: "Display your message in South Korea’s trendiest neighborhood.",
+    lat: 37.4979,
+    lng: 127.0276,
+    availability: "available",
+    reach: 1000000,
+    price: 5500,
+    campaigns: 3,
+    status: "active",
+    location: "Seoul, South Korea",
+    tierLevel: "Standard",
+    costPerPlay: 100,
   },
   {
     id: "6",
@@ -51,7 +101,17 @@ export const locationData: ILocation[] = [
     title: "Sydney Harbour, Sydney",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Iconic views and massive audience in Sydney’s core."
+    description: "Iconic views and massive audience in Sydney’s core.",
+    lat: -33.8688,
+    lng: 151.2093,
+    availability: "available",
+    reach: 4000000,
+    price: 8000,
+    campaigns: 6,
+    status: "active",
+    location: "Sydney, Australia",
+    tierLevel: "Premium",
+    costPerPlay: 150,
   },
   {
     id: "7",
@@ -59,7 +119,17 @@ export const locationData: ILocation[] = [
     title: "Gangnam District, Seoul",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Display your message in South Korea’s trendiest neighborhood."
+    description: "Display your message in South Korea’s trendiest neighborhood.",
+    lat: 37.4979,
+    lng: 127.0276,
+    availability: "booked",
+    reach: 900000,
+    price: 5600,
+    campaigns: 2,
+    status: "inactive",
+    location: "Seoul, South Korea",
+    tierLevel: "Standard",
+    costPerPlay: 95,
   },
   {
     id: "8",
@@ -67,7 +137,17 @@ export const locationData: ILocation[] = [
     title: "Sydney Harbour, Sydney",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Iconic views and massive audience in Sydney’s core."
+    description: "Iconic views and massive audience in Sydney’s core.",
+    lat: -33.8688,
+    lng: 151.2093,
+    availability: "available",
+    reach: 3500000,
+    price: 8200,
+    campaigns: 4,
+    status: "active",
+    location: "Sydney, Australia",
+    tierLevel: "Premium",
+    costPerPlay: 160,
   },
   {
     id: "9",
@@ -75,154 +155,37 @@ export const locationData: ILocation[] = [
     title: "La Rambla, Barcelona",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Promote your brand in one of the busiest streets in Europe."
-  }
-  ,
+    description: "Promote your brand in one of the busiest streets in Europe.",
+    lat: 41.3796,
+    lng: 2.1916,
+    availability: "available",
+    reach: 2000000,
+    price: 4700,
+    campaigns: 3,
+    status: "active",
+    location: "Barcelona, Spain",
+    tierLevel: "Standard",
+    costPerPlay: 85,
+  },
   {
-    id: "1",
+    id: "10",
     image: img,
     title: "Las Vegas Strip",
     category: "top",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Stand out in the entertainment capital of the world."
+    description: "Stand out in the entertainment capital of the world.",
+    lat: 36.1699,
+    lng: -115.1398,
+    availability: "available",
+    reach: 7000000,
+    price: 10000,
+    campaigns: 8,
+    status: "active",
+    location: "Las Vegas, USA",
+    tierLevel: "Premium",
+    costPerPlay: 200,
   },
-  {
-    id: "2",
-    image: img,
-    title: "Hollywood Boulevard, Los Angeles",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Promote your brand on the world-famous walk of fame."
-  },
-  {
-    id: "3",
-    image: img,
-    title: "Central Park South, NYC",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Reach tourists and locals alike in New York’s green heart."
-  },
-  {
-    id: "4",
-    image: img,
-    title: "Potsdamer Platz, Berlin",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "A prime spot in Berlin for innovative outdoor advertising."
-  },
-  {
-    id: "5",
-    image: img,
-    title: "Marina Bay, Singapore",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Premium exposure at Singapore’s most prestigious waterfront."
-  },
-  {
-    id: "6",
-    image: img,
-    title: "Downtown Dubai",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "The largest mall and entertainment center in the Middle East."
-  },
-  {
-    id: "7",
-    image: img,
-    title: "Marina Bay, Singapore",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Premium exposure at Singapore’s most prestigious waterfront."
-  },
-  {
-    id: "8",
-    image: img,
-    title: "Downtown Dubai",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "The largest mall and entertainment center in the Middle East."
-  },
-  {
-    id: "9",
-    image: img,
-    title: "Bondi Beach, Sydney",
-    category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Get your message noticed on Australia’s most iconic beach."
-  }
-  ,
-  {
-    id: "1",
-    image: img,
-    title: "Sydney CBD",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Connect with Sydney’s bustling business audience."
-  },
-  {
-    id: "2",
-    image: img,
-    title: "Union Square, San Francisco",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Attract attention in the heart of Silicon Valley."
-  },
-  {
-    id: "3",
-    image: img,
-    title: "Oxford Street, London",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "London’s busiest shopping street – get noticed."
-  },
-  {
-    id: "4",
-    image: img,
-    title: "Buckhead, Atlanta",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Premium digital boards in Atlanta’s luxury district."
-  },
-  {
-    id: "5",
-    image: img,
-    title: "Yonge-Dundas Square, Toronto",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Toronto’s answer to Times Square, with massive reach."
-  },
-  {
-    id: "6",
-    image: img,
-    title: "Downtown Miami",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Engage locals and tourists in a dynamic, thriving city."
-  },
-  {
-    id: "7",
-    image: img,
-    title: "Yonge-Dundas Square, Toronto",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Toronto’s answer to Times Square, with massive reach."
-  },
-  {
-    id: "8",
-    image: img,
-    title: "Downtown Miami",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Engage locals and tourists in a dynamic, thriving city."
-  },
-  {
-    id: "9",
-    image: img,
-    title: "Leicester Square, London",
-    category: "fav",
-    screenSize: "10m x 5m (approx. 33ft x 16ft)",
-    description: "Attract attention in London’s famous entertainment district."
-  }
+  // Continue for other locations as needed...
 ];
 
 
