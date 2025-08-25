@@ -14,12 +14,20 @@ export interface ILocation {
   id: string;
   image: string;
   title: string;
+  lat: number;
+  availability: "available" | "booked" | "maintenance";
+  lng: number;
+  reach: number;
+
+  price: number;
+  campaigns: number;
   category: "new" | "fav" | "top";
   screenSize: string;
   description: string;
-  location?: string;
-  tierLevel?: "Basic" | "Standard" | "Premium";
-  costPerPlay?: number;
+  status: "active" | "inactive" | "maintenance";
+  location: string;
+  tierLevel: "Basic" | "Standard" | "Premium";
+  costPerPlay: number;
 }
 
 export interface LocationCardProps {
