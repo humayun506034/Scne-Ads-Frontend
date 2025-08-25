@@ -224,7 +224,7 @@ const CampaignPerformanceAnalytics: React.FC = () => {
   if (!isClient) return <div className="text-white">Loading charts...</div>;
 
   return (
-    <div className="bg-[#081028] sm:px-6 sm:py-14">
+    <div className="bg-[#081028] sm:px-6 sm:py-16">
       <div className=" mx-auto ">
         {/* Campaign Performance */}
         <div className="mb-20">

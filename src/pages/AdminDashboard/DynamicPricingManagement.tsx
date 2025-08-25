@@ -206,7 +206,7 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
     };
 
   return (
-    <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-14">
+    <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-16">
       <div className="mx-auto">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">

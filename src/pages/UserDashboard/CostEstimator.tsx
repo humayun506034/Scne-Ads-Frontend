@@ -29,7 +29,7 @@ const CostEstimator: React.FC = () => {
           help you get a ballpark figure of budget required for a given
           selection of boards.
         </p>
-        <HelpCircle className="ml-3 mt-1 w-5 h-5 text-gray-400 shrink-0" />
+        <HelpCircle className="ml-3 mt-1 w-5 h-5 text-gray-400 cursor-pointer hover:text-[#fff] shrink-0" />
       </div>
 
       {/* Right Side Note */}

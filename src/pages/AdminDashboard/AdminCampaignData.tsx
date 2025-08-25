@@ -118,7 +118,7 @@ const AdminCampaignData: React.FC = () => {
       transition={{ duration: 0.6 }}
       className="min-h-screen bg-bg-dashboard lg:py-16 sm:py-14"
     >
-      <div className="px-4 sm:px-8 lg:px-14 mx-auto">
+      <div className="px-4 sm:px-8 lg:px-6 mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -138,7 +138,7 @@ const AdminCampaignData: React.FC = () => {
               <div className="w-9 h-9 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-[#1A2342] border border-[#38B6FF] md:text-base rounded-full flex items-center justify-center text-white text-xs sm:text-sm font-medium">
                 SS
               </div>
-              <ChevronDown className="w-4 h-4 text-slate-400" />
+              <ChevronDown className="w-4 h-4 text-slate-400 cursor-pointer hover:text-[#fff]" />
             </div>
             <div className="sm:hidden flex items-center">
               <Menu className="w-7 h-7 text-white cursor-pointer" />

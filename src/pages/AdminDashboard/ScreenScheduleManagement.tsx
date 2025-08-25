@@ -93,7 +93,7 @@ const ScreenScheduleManagement: React.FC = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:py-16 lg:px-6 bg-bg-dashboard">
-      <h2 className="text-xl sm:text-2xl lg:text-4xl font-normal text-[#AEB9E1] mb-6 lg:mb-8">
+      <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8">
         Screen Schedule Management
       </h2>
 
