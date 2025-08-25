@@ -18,6 +18,7 @@ export function DashboardSidebar({ user }: { user: string }) {
     user === "admin" ? "/admin-dashboard" : "/user-dashboard"
   );
   console.log("🚀 ~ DashboardSidebar ~ activeItem:", activeItem);
+  if (activeItem) return null;
 
   const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
