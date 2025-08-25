@@ -79,9 +79,7 @@ export function MapOfBoards({
 
   return (
     <div className="relative w-full h-full">
-      <LoadScript
-        googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ""}
-      >
+      <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
@@ -180,11 +178,11 @@ export function MapOfBoards({
 
       {/* Preview Banner */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
-        <Card className="bg-[#2B4C7E] text-white p-4 shadow-lg">
+        <Card className="bg-bg-dashboard text-white p-4 shadow-lg">
           <div className="text-center">
             <p className="text-sm">This is a preview of all my boards</p>
             <div className="flex items-center gap-2 mt-2">
-              <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+              <Button size="sm" className="bg-secondary-color">
                 Sign up
               </Button>
               <Button

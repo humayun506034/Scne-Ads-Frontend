@@ -58,7 +58,7 @@ const routes = createBrowserRouter([
         element: <UserDashboardMetrics />,
       },
       {
-        path: "map",
+        path: "mapOfBoard",
         element: <MapOfBoardPage />,
       },
       {
