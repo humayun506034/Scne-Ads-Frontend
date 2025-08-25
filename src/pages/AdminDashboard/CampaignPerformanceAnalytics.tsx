@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
-
+import activeCampaign from "@/assets/AdminPanel/active-campaigns.png";
+import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
 const CampaignPerformanceAnalytics: React.FC = () => {
   const [isClient, setIsClient] = useState(false);
 
@@ -41,8 +42,11 @@ const CampaignPerformanceAnalytics: React.FC = () => {
       axisBorder: { show: true },
       axisTicks: { show: false },
     },
-    
+
     yaxis: {
+      min: 0,
+      max: 20,
+      tickAmount: 4,
       title: { style: { color: "#9CA3AF" } },
       labels: {
         style: { colors: "#9CA3AF", fontSize: "12px" },
@@ -87,7 +91,16 @@ const CampaignPerformanceAnalytics: React.FC = () => {
     grid: {
       borderColor: "#374151",
       strokeDashArray: 3,
-      xaxis: { lines: { show: false } },
+      xaxis: {
+        lines: {
+          show: true, // vertical grid lines
+        },
+      },
+      yaxis: {
+        lines: {
+          show: true, // horizontal grid lines
+        },
+      },
     },
     xaxis: {
       categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -96,6 +109,9 @@ const CampaignPerformanceAnalytics: React.FC = () => {
       axisTicks: { show: false },
     },
     yaxis: {
+      min: 0,
+      max: 60000,
+      tickAmount: 4,
       labels: {
         style: { colors: "#9CA3AF", fontSize: "12px" },
         formatter: (val) => "$" + val + "K",
@@ -115,16 +131,21 @@ const CampaignPerformanceAnalytics: React.FC = () => {
   };
 
   const revenueSeries = [
-    { name: "Revenue", data: [25000, 27000, 37000, 29000, 43000, 46000] },
+    { name: "Revenue", data: [23000, 27000, 37000, 29000, 43000, 46000] },
   ];
 
   // Uptime Chart
   const uptimeOptions: ApexCharts.ApexOptions = {
     chart: {
       type: "bar",
-      height: 300,
+      height: 450,
       background: "transparent",
       toolbar: { show: false },
+    },
+    grid: {
+      show: true,
+      borderColor: "#374151",
+      strokeDashArray: 3,
     },
     plotOptions: {
       bar: {
@@ -145,21 +166,18 @@ const CampaignPerformanceAnalytics: React.FC = () => {
       ],
       labels: {
         style: { colors: "#9CA3AF", fontSize: "16px" },
-        rotate: -45,
-        rotateAlways: true,
+        rotate: 0,
+        rotateAlways: false,
+        offsetY: 3,
       },
+
       axisBorder: { show: true },
       axisTicks: { show: false },
     },
-    // yaxis: {
-    //   title: { text: "%", style: { color: "#9CA3AF" } },
-    //   labels: {
-    //     style: { colors: "#9CA3AF", fontSize: "12px" },
-    //     formatter: (val) => val + "%",
-    //   },
-    // },
-    
-     yaxis: {
+    yaxis: {
+      min: 0,
+      max: 100,
+      tickAmount: 4,
       title: { style: { color: "#9CA3AF" } },
       labels: {
         style: { colors: "#9CA3AF", fontSize: "12px" },
@@ -177,9 +195,9 @@ const CampaignPerformanceAnalytics: React.FC = () => {
         width: 1,
       },
     },
-    colors: ["#3B82F6"],
+    colors: ["#033579"],
     fill: { opacity: 1 },
-    grid: { show: false },
+
     tooltip: { theme: "dark", y: { formatter: (val) => val + "%" } },
   };
 
@@ -193,38 +211,53 @@ const CampaignPerformanceAnalytics: React.FC = () => {
     <div className="bg-[#081028] sm:px-6 sm:py-14">
       <div className=" mx-auto ">
         {/* Campaign Performance */}
-        <div>
-          <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
-            Campaign Performance Overview
-          </h2>
-          <p className="text-[#AEB9E1] text-base mb-4">
-            Active vs. Completed Campaigns (Monthly)
-          </p>
-          <div className=" rounded-lg p-6 ">
-            <Chart
-              options={campaignOptions}
-              series={campaignSeries}
-              type="bar"
-              height={450}
-            />
+        <div className="mb-20">
+          <div>
+            <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
+              Campaign Performance Overview
+            </h2>
+            <p className="text-[#AEB9E1] text-base mb-4">
+              Active vs. Completed Campaigns (Monthly)
+            </p>
+            <div className=" rounded-lg p-6 ">
+              <Chart
+                options={campaignOptions}
+                series={campaignSeries}
+                type="bar"
+                height={500}
+              />
+            </div>
+          </div>
+          <div className="flex justify-center gap-6 items-center">
+            <div className="flex items-center gap-2">
+              <img src={activeCampaign} alt="" />
+              <p>Active Campaigns</p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <img src={completedCampaign} alt="" />
+              <p>Completed Campaigns</p>
+            </div>
           </div>
         </div>
 
         {/* Revenue Trends */}
-        <div>
+        <div className="mb-20">
           {" "}
-          <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
-            Revenue Trends
-          </h2>
-          <p className="text-[#AEB9E1] text-base mb-4">Monthly Revenue</p>
-        </div>
-        <div className=" rounded-lg p-6 ">
-          <Chart
-            options={revenueOptions}
-            series={revenueSeries}
-            type="line"
-            height={300}
-          />
+          <div>
+            <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
+              Revenue Trends
+            </h2>
+            <p className="text-[#AEB9E1] text-base mb-4">Monthly Revenue</p>
+          </div>
+          <div className=" rounded-lg p-6 ">
+            <Chart
+              options={revenueOptions}
+              series={revenueSeries}
+              type="line"
+              height={300}
+            />
+          </div>
         </div>
 
         {/* Screen Uptime */}
