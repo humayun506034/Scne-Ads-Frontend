@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ChevronDown, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonCancelButton from "./CommonCancelButton";
 
 // Reusable Input Field
 const FormInput = ({
@@ -137,7 +138,7 @@ type CommonModalFormProps = {
   onCancel: () => void;
   fields: Field[];
   saveButtonText?: string;
-  cancelButtonText?: string;
+
   children?: React.ReactNode;
 };
 
@@ -164,31 +165,7 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
     onClose();
   };
   if (!isOpen) return null;
-  // cancel button
-  const CancelButton = ({
-    title,
-    Icon,
-    onClick,
-    className = "",
-  }: {
-    title: string;
-    Icon?: any;
-    className?: string;
-    onClick?: () => void;
-  }) => {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        onClick={onClick}
-        className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
-      >
-        {title}
-        {Icon && <Icon className="w-4 h-4 text-white" />}
-      </motion.button>
-    );
-  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
       <motion.div
@@ -239,7 +216,7 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
             onClick={handleSave}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5"
           />
-          <CancelButton onClick={handleCancel} title="Cancel" />
+          <CommonCancelButton onClick={handleCancel} title="Cancel" />
         </div>
       </motion.div>
     </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,6 +6,7 @@ import ManageSectionModal from "./ManageSectionModal";
 import AddNewTierModal from "./AddNewTierModal";
 import AddCustomTimeBlockModal from "./AddCustomTimeBlockModal";
 import AddNewScreenModal from "./AddNewScreenModal";
+import CommonCancelButton from "@/common/CommonCancelButton";
 
 // Dropdown Component
 const CustomDropdown = ({ value, onChange, options, className = "" }) => {
@@ -85,8 +85,9 @@ const SectionHeader = ({ title, subtitle }) => (
 const DynamicPricingManagement: React.FC = () => {
   const [isManageModalOpen, setIsManageModalOpen] = useState(false);
   const [isAddTierModalOpen, setIsAddTierModalOpen] = useState(false);
-  const [isAddCustomTimeBlockModalOpen, setIsAddCustomTimeBlockModalOpen] = useState(false);
-const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
+  const [isAddCustomTimeBlockModalOpen, setIsAddCustomTimeBlockModalOpen] =
+    useState(false);
+  const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
 
   // Screen Tier Pricing
   const [tierPricing, setTierPricing] = useState([
@@ -179,31 +180,6 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
       screenConfig,
     });
   };
-    // cancel button
-    const CancelButton = ({
-      title,
-      Icon,
-      onClick,
-      className = "",
-    }: {
-      title: string;
-      Icon?: any;
-      className?: string;
-      onClick?: () => void;
-    }) => {
-      return (
-        <motion.button
-          whileHover={{ scale: 1.03 }}
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          onClick={onClick}
-          className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
-        >
-          {title}
-          {Icon && <Icon className="w-4 h-4 text-white" />}
-        </motion.button>
-      );
-    };
 
   return (
     <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-16">
@@ -218,7 +194,7 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
               Set dynamic CPP based on Screen Tier and Time of Day per Screen.
             </p>
           </div>
-           <CommonDashboardButton
+          <CommonDashboardButton
             title="Manage Sections"
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
             onClick={() => setIsManageModalOpen(true)}
@@ -261,7 +237,7 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
           </div>
 
           <CommonDashboardButton
-            title="Add New Tier" 
+            title="Add New Tier"
             onClick={() => setIsAddTierModalOpen(true)}
             className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
@@ -387,7 +363,7 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
             onClick={handleSaveChanges}
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
-          <CancelButton title="Cancel"/>
+          <CommonCancelButton title="Cancel" />
         </div>
         {/* Manage Section Modal */}
         {isManageModalOpen && (
@@ -398,7 +374,7 @@ const [isAddNewScreenModalOpen, setIsAddNewScreenModalOpen] = useState(false);
         {/* Add Tier Modal */}
         {isAddTierModalOpen && (
           <AddNewTierModal
-          isOpen={isAddTierModalOpen}
+            isOpen={isAddTierModalOpen}
             onClose={() => setIsAddTierModalOpen(false)} // pass close handler
           />
         )}
