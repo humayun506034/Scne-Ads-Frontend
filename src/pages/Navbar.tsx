@@ -97,7 +97,7 @@ export default function Navbar() {
                 variant="ghost"
                 className="text-white text-base cursor-pointer font-medium px-4 py-2 rounded-full"
               >
-                Login
+                <Link to="/login">Login</Link>
               </Button>
             </motion.div>
             <motion.div

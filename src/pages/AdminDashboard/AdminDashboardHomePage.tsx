@@ -31,7 +31,7 @@ const AdminDashboardHomePage = () => {
           <div className="hidden sm:flex items-center gap-3 sm:gap-4">
             {/* Profile section */}
 
-            <div className="">
+            <div >
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -49,7 +49,7 @@ const AdminDashboardHomePage = () => {
                   align="end"
                   className="w-full bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center flex-col"
                 >
-                  <DropdownMenuItem className="cursor-pointer py-1 hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white px-5 w-full">
+                  <DropdownMenuItem className="cursor-pointer py-2 hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white px-5 w-full">
                     <Link
                       to="/admin-dashboard/adminBasicInfo"
                       className="flex items-center w-full"
