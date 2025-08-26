@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import profileImage from "../..//assets/UserPanel/profileImage.jpg";
+import profileImage from "@/assets/UserPanel/profileImage.png";
 import UserPanelNavbar from "./UserPanelNavbar";
 import CommonInputField from "@/common/CommonInputField";
 
