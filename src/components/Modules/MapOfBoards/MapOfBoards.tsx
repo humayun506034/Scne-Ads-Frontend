@@ -9,11 +9,18 @@ import {
 } from "@react-google-maps/api";
 
 import { useCallback, useState } from "react";
-import { ILocation } from "../Home/HomeTabs/LocationCard";
+
+import { FilterOptions } from ".";
+import { ILocation } from "../UserDashboard/Home/HomeTabs/LocationCard";
+import { FilterSidebar } from "./FilterSidebar";
 
 interface BillboardMapProps {
   locations: ILocation[];
+  filters: FilterOptions;
+  onFiltersChange: (filters: FilterOptions) => void;
   selectedLocations: string[];
+  onClearFilters: () => void;
+  selectedCount: number;
   onLocationSelect: (locationId: string) => void;
   center: { lat: number; lng: number };
 }
@@ -29,35 +36,20 @@ const mapOptions = {
   streetViewControl: true,
   mapTypeControl: true,
   fullscreenControl: true,
+  // mapTypeId: google.maps.MapTypeId.SATELLITE,
 };
 
 export function MapOfBoards({
   locations,
+  onClearFilters,
+  selectedCount,
+  onFiltersChange,
+  filters,
   selectedLocations,
   onLocationSelect,
   center,
 }: BillboardMapProps) {
   const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
-
-  const getMarkerIcon = (location: ILocation) => {
-    const isSelected = selectedLocations.includes(location.id);
-    const color = isSelected
-      ? "#3B82F6"
-      : location.availability === "available"
-      ? "#10B981"
-      : location.availability === "booked"
-      ? "#EF4444"
-      : "#F59E0B";
-
-    return {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: color,
-      fillOpacity: 1,
-      strokeColor: "#FFFFFF",
-      strokeWeight: 2,
-      scale: isSelected ? 12 : 8,
-    };
-  };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
@@ -83,19 +75,18 @@ export function MapOfBoards({
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
-          zoom={11}
+          zoom={13}
           onLoad={onLoad}
           options={mapOptions}
         >
           {locations.map((location) => (
             <Marker
               key={location.id}
-              position={{ lat: location.lat, lng: location.lng }}
-              icon={getMarkerIcon(location)}
+              position={{ lat: center.lat, lng: center.lng }}
               onClick={() => setSelectedMarker(location.id)}
             />
           ))}
-
+          <Marker position={{ lat: center.lat, lng: center.lng }} />
           {selectedMarker && (
             <InfoWindow
               position={{
@@ -175,8 +166,15 @@ export function MapOfBoards({
           )}
         </GoogleMap>
       </LoadScript>
+      <div className="absolute top-20 left-10 transform  z-10">
+        <FilterSidebar
+          filters={filters}
+          onFiltersChange={onFiltersChange}
+          selectedCount={selectedCount}
+          onClearFilters={onClearFilters}
+        />
+      </div>
 
-      {/* Preview Banner */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
         <Card className="bg-bg-dashboard text-white p-4 shadow-lg">
           <div className="text-center">

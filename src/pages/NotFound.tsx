@@ -1,7 +1,7 @@
 import CommonHomeButton from "@/common/CommonHomeButton";
-import { Link } from "react-router-dom";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const NotFoundPage = () => {
   return (
@@ -32,7 +32,7 @@ const NotFoundPage = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
         >
-          Oops! The page is under construction.
+          Oops! The page you are looking for doesn&apos;t exist.
         </motion.p>
 
         {/* Animated button */}
