@@ -97,7 +97,7 @@ export default function Navbar() {
                 variant="ghost"
                 className="text-white text-base cursor-pointer font-medium px-4 py-2 rounded-full"
               >
-                Login
+                <Link to="/login">Login</Link>
               </Button>
             </motion.div>
             <motion.div
@@ -178,10 +178,10 @@ export default function Navbar() {
                         transition={{ delay: 0.5, duration: 0.3 }}
                       >
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           className="w-full border-gray-300 text-white py-3 rounded-full bg-transparent"
                         >
-                          Login
+                          <Link to="/login">Login</Link>
                         </Button>
                       </motion.div>
 

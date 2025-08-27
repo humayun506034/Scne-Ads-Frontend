@@ -95,9 +95,9 @@ html {
   height: 35px;
   background: linear-gradient(145deg, #38b6ff, #033579);
   border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 228, 255, 0.6),
-    inset 0 0 8px rgba(0, 228, 255, 0.8),
-    inset 3px 3px 8px rgba(0, 50, 120, 0.4);
+  box-shadow: 0 0 12px #00e4ff99,
+    inset 0 0 8px #00e4ffcc,
+    inset 3px 3px 8px #00327866;
   animation: pulse 1.6s ease-in-out infinite;
   transition: transform 0.4s ease;
 }

@@ -33,7 +33,6 @@ const AddNewTierModal: React.FC<AddTierModalProps> = ({ isOpen, onClose }) => {
 
   // Save handler
   const handleSave = (data: typeof formData) => {
- 
     setFormData(data); // update local state if needed
     onClose();
   };
@@ -56,7 +55,6 @@ const AddNewTierModal: React.FC<AddTierModalProps> = ({ isOpen, onClose }) => {
       onCancel={handleCancel}
       fields={fields}
       saveButtonText="Add Tier"
-      cancelButtonText="Cancel"
     />
   );
 };

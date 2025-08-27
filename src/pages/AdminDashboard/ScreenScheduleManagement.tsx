@@ -228,7 +228,6 @@ const ScreenScheduleManagement: React.FC = () => {
         onCancel={() => setIsModalOpen(false)}
         fields={modalFields}
         saveButtonText="Save Changes"
-        cancelButtonText="Cancel"
       />
     </div>
   );
