@@ -144,7 +144,6 @@ const AdminCampaignData: React.FC = () => {
               <MonthDropdownButton className="sm:mr-10" />
 
               {/* Profile section */}
-
               <div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -189,12 +188,9 @@ const AdminCampaignData: React.FC = () => {
 
         {/* Metrics Grid */}
         <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.1 } },
-          }}
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7 }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10"
         >
           {metricsData.map((metric, index) => (
