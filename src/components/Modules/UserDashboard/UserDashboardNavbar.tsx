@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { motion } from "framer-motion";
 import { ChevronDown, LogOut, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { navItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
-import { Link } from "react-router-dom";
 
 export function UserDashboardNavbar() {
   const userName = "Danaj";
@@ -22,7 +22,7 @@ export function UserDashboardNavbar() {
             Hey, <span className="text-[#47B5FF]">{userName}</span>.
           </h1>
         </div>
-        <div className="  justify-center flex xl:gap-0  gap-4 items-center flex-wrap space-x-4">
+        <div className="  justify-center flex xl:gap-0  gap-4 items-center flex-wrap space-x-4 my-2">
           {navItems.map((item, idx) => {
             const Icon = item.icon;
             return (

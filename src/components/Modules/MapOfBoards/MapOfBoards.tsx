@@ -36,7 +36,62 @@ const mapOptions = {
   streetViewControl: true,
   mapTypeControl: true,
   fullscreenControl: true,
-  // mapTypeId: google.maps.MapTypeId.SATELLITE,
+  styles: [
+    {
+      featureType: "all",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "on", // Hide all labels
+        },
+      ],
+    },
+    {
+      featureType: "poi.business",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off", // Hide business labels
+        },
+      ],
+    },
+    {
+      featureType: "transit",
+      elementType: "labels.icon",
+      stylers: [
+        {
+          visibility: "off", // Hide transit icons
+        },
+      ],
+    },
+    {
+      featureType: "poi",
+      elementType: "labels.icon",
+      stylers: [
+        {
+          visibility: "off", // Hide POI icons
+        },
+      ],
+    },
+    {
+      featureType: "road",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off", // Hide road labels
+        },
+      ],
+    },
+    {
+      featureType: "water",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off", // Hide water labels
+        },
+      ],
+    },
+  ],
 };
 
 export function MapOfBoards({
@@ -66,7 +121,6 @@ export function MapOfBoards({
 
   const onLoad = useCallback((map: google.maps.Map) => {
     console.log("🚀 ~ MapOfBoards ~ map:", map);
-    // Optional: You can store the map instance if needed
   }, []);
 
   return (
@@ -82,7 +136,7 @@ export function MapOfBoards({
           {locations.map((location) => (
             <Marker
               key={location.id}
-              position={{ lat: center.lat, lng: center.lng }}
+              position={{ lat: location.lat, lng: location.lng }}
               onClick={() => setSelectedMarker(location.id)}
             />
           ))}
@@ -105,10 +159,8 @@ export function MapOfBoards({
                   return (
                     <div className="space-y-3">
                       <div>
-                        <h3 className="font-semibold text-gray-900">
-                          {location.title}
-                        </h3>
-                        <p className="text-sm text-gray-600">
+                        <h3 className="font-semibold ">{location.title}</h3>
+                        <p className="text-sm text-title-color">
                           {location.location}
                         </p>
                       </div>
@@ -124,19 +176,19 @@ export function MapOfBoards({
 
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div>
-                          <span className="text-gray-600">Size:</span>
+                          <span className="text-title-color">Size:</span>
                           <span className="ml-1 font-medium">
                             {location.screenSize} ft
                           </span>
                         </div>
                         <div>
-                          <span className="text-gray-600">Price:</span>
+                          <span className="text-title-color">Price:</span>
                           <span className="ml-1 font-medium">
                             ${location.price}/day
                           </span>
                         </div>
                         <div className="col-span-2">
-                          <span className="text-gray-600">Daily Reach:</span>
+                          <span className="text-title-color">Daily Reach:</span>
                           <span className="ml-1 font-medium">
                             {(location.reach / 1000).toFixed(0)}k
                           </span>
@@ -166,6 +218,7 @@ export function MapOfBoards({
           )}
         </GoogleMap>
       </LoadScript>
+
       <div className="absolute top-20 left-10 transform  z-10">
         <FilterSidebar
           filters={filters}
