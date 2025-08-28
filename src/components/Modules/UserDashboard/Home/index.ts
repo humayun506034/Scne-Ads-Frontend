@@ -6,7 +6,7 @@ export const navItems = [
     {
         title: "See Locations",
         icon: MapPin,
-        href: "/user-dashboard/locations",
+        href: "mapOfBoard",
     },
     {
         title: "Cost Estimator",
@@ -16,7 +16,7 @@ export const navItems = [
     {
         title: "Map of Boards",
         icon: Eye,
-        href: "/user-dashboard/mapOfBoard",
+        href: "mapOfBoard",
     },
 ];
 
