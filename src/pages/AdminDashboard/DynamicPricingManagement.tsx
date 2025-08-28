@@ -73,12 +73,16 @@ const CppInput = ({ value, onChange }) => (
 
 // Section Header Component
 const SectionHeader = ({ title, subtitle }) => (
-  <div>
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.4 }}
+  >
     <h2 className="text-xl sm:text-2xl px-4 sm:px-7 py-4 font-medium text-[#AEB9E1]">
       {title}
     </h2>
     {subtitle && <p className="text-gray-400 text-xs mt-1">{subtitle}</p>}
-  </div>
+  </motion.div>
 );
 
 // Main Component
@@ -182,10 +186,20 @@ const DynamicPricingManagement: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-16">
+    <motion.div
+      className="min-h-screen bg-bg-dashboard px-4 sm:px-6 py-8 sm:py-16"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="mx-auto">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
+        <motion.div
+          initial={{ y: -30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10"
+        >
           <div>
             <h1 className="text-white text-2xl sm:text-4xl font-medium mb-1">
               Dynamic Pricing Management
@@ -199,10 +213,16 @@ const DynamicPricingManagement: React.FC = () => {
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
             onClick={() => setIsManageModalOpen(true)}
           />
-        </div>
+        </motion.div>
 
         {/* Screen Tier Pricing */}
-        <div className="mb-16 md:w-3xl">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="mb-16 md:w-3xl"
+        >
           <div className="bg-[#0B1739] rounded-lg overflow-hidden">
             <SectionHeader title="Screen Tier Pricing" subtitle="" />
 
@@ -241,10 +261,16 @@ const DynamicPricingManagement: React.FC = () => {
             onClick={() => setIsAddTierModalOpen(true)}
             className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
-        </div>
+        </motion.div>
 
         {/* Time of Day Pricing */}
-        <div className="mb-16">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="mb-16"
+        >
           <div className="my-10">
             <h3 className="text-xl sm:text-2xl mb-2 text-[#C3CEE9] font-semibold">
               Time of Day Pricing
@@ -287,111 +313,119 @@ const DynamicPricingManagement: React.FC = () => {
             onClick={() => setIsAddCustomTimeBlockModalOpen(true)}
             className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
           />
-        </div>
+        </motion.div>
 
         {/* Screen Configuration */}
-        <div className="my-10">
-          <h3 className="text-xl sm:text-2xl mb-2 text-[#C3CEE9] font-semibold">
-            Screen Configuration
-          </h3>
-          <p className="text-[#AEB9E1] text-sm sm:text-base">
-            Assign tiers to individual screens. CPP will be calculated
-            dynamically.
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm sm:text-base border-collapse">
-            <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
-              <tr>
-                <th className="text-left py-5 px-7">Screen Name</th>
-                <th className="text-left py-5 px-7">Location</th>
-                <th className="text-left py-5 px-7">Assigned Tier</th>
-                <th className="text-left py-5 px-7">Base CPP ($)</th>
-                <th className="text-left py-5 px-7">
-                  Current Calculated CPP Range (BSD)
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {screenConfig.map((screen) => (
-                <tr
-                  key={screen.id}
-                  className="bg-[#091331] border-b border-[#394E88]"
-                >
-                  <td className="text-[#AEB9E1] py-3 px-7">
-                    {screen.screenName}
-                  </td>
-                  <td className="text-[#AEB9E1] py-3 px-7">
-                    {screen.location}
-                  </td>
-                  <td className="py-3 px-7">
-                    <CustomDropdown
-                      value={screen.assignedTier}
-                      onChange={(newTier) =>
-                        updateScreenTier(screen.id, newTier)
-                      }
-                      options={["Tier 1", "Tier 2", "Tier 3", "Tier 4"]}
-                    />
-                  </td>
-                  <td className="py-3 px-7">
-                    <CppInput
-                      value={screen.baseCpp}
-                      onChange={(newBaseCpp) =>
-                        updateScreenBaseCpp(screen.id, newBaseCpp)
-                      }
-                    />
-                  </td>
-                  <td className="text-[#AEB9E1] py-3 px-7">
-                    {screen.currentCpp}
-                  </td>
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+        >
+          <div className="my-10">
+            <h3 className="text-xl sm:text-2xl mb-2 text-[#C3CEE9] font-semibold">
+              Screen Configuration
+            </h3>
+            <p className="text-[#AEB9E1] text-sm sm:text-base">
+              Assign tiers to individual screens. CPP will be calculated
+              dynamically.
+            </p>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm sm:text-base border-collapse">
+              <thead className="bg-[#0B1739] text-[#E6EBF2] font-medium">
+                <tr>
+                  <th className="text-left py-5 px-7">Screen Name</th>
+                  <th className="text-left py-5 px-7">Location</th>
+                  <th className="text-left py-5 px-7">Assigned Tier</th>
+                  <th className="text-left py-5 px-7">Base CPP ($)</th>
+                  <th className="text-left py-5 px-7">
+                    Current Calculated CPP Range (BSD)
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {screenConfig.map((screen) => (
+                  <tr
+                    key={screen.id}
+                    className="bg-[#091331] border-b border-[#394E88]"
+                  >
+                    <td className="text-[#AEB9E1] py-3 px-7">
+                      {screen.screenName}
+                    </td>
+                    <td className="text-[#AEB9E1] py-3 px-7">
+                      {screen.location}
+                    </td>
+                    <td className="py-3 px-7">
+                      <CustomDropdown
+                        value={screen.assignedTier}
+                        onChange={(newTier) =>
+                          updateScreenTier(screen.id, newTier)
+                        }
+                        options={["Tier 1", "Tier 2", "Tier 3", "Tier 4"]}
+                      />
+                    </td>
+                    <td className="py-3 px-7">
+                      <CppInput
+                        value={screen.baseCpp}
+                        onChange={(newBaseCpp) =>
+                          updateScreenBaseCpp(screen.id, newBaseCpp)
+                        }
+                      />
+                    </td>
+                    <td className="text-[#AEB9E1] py-3 px-7">
+                      {screen.currentCpp}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <CommonDashboardButton
-          title="Add New Screen"
-          onClick={() => setIsAddNewScreenModalOpen(true)}
-          className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
-        />
+          <CommonDashboardButton
+            title="Add New Screen"
+            onClick={() => setIsAddNewScreenModalOpen(true)}
+            className="px-3 py-1.5 mt-7 bg-blue-600 hover:bg-blue-700 text-white text-xs rounded"
+          />
+        </motion.div>
 
         {/* footer buttons */}
-        <div className="flex justify-end gap-4 mt-10">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="flex justify-end gap-4 mt-10"
+        >
           <CommonDashboardButton
             title="Save Changes"
             onClick={handleSaveChanges}
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
           <CommonCancelButton title="Cancel" />
-        </div>
-        {/* Manage Section Modal */}
+        </motion.div>
+
+        {/* Modals */}
         {isManageModalOpen && (
-          <ManageSectionModal
-            onClose={() => setIsManageModalOpen(false)} // pass close handler
-          />
+          <ManageSectionModal onClose={() => setIsManageModalOpen(false)} />
         )}
-        {/* Add Tier Modal */}
         {isAddTierModalOpen && (
           <AddNewTierModal
             isOpen={isAddTierModalOpen}
-            onClose={() => setIsAddTierModalOpen(false)} // pass close handler
+            onClose={() => setIsAddTierModalOpen(false)}
           />
         )}
-        {/* Add Custom Time Block Modal */}
         {isAddCustomTimeBlockModalOpen && (
           <AddCustomTimeBlockModal
-            onClose={() => setIsAddCustomTimeBlockModalOpen(false)} // pass close handler
+            onClose={() => setIsAddCustomTimeBlockModalOpen(false)}
           />
         )}
-        {/* Add New Sceen Modal */}
         {isAddNewScreenModalOpen && (
           <AddNewScreenModal
-            onClose={() => setIsAddNewScreenModalOpen(false)} // pass close handler
+            onClose={() => setIsAddNewScreenModalOpen(false)}
           />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

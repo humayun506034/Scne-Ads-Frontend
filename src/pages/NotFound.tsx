@@ -17,6 +17,7 @@ const NotFoundPage = () => {
           initial={{ y: -50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.6 }}
+          className=" flex justify-center items-center"
         >
           <DotLottieReact
             src="https://lottie.host/360b09c9-7286-4237-ba5d-d4d52d981ea7/5g8tb0J3Pp.lottie"
