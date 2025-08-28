@@ -3,6 +3,7 @@ import { HelpCircle } from "lucide-react";
 
 const CostEstimator: React.FC = () => {
   const [showHelp, setShowHelp] = useState(false);
+  const [activeColor, setActiveColor] = useState(false);
   const currencies = [
     { symbol: "A$", code: "AUD" },
     { symbol: "$", code: "USD" },
@@ -10,7 +11,9 @@ const CostEstimator: React.FC = () => {
     { symbol: "€", code: "EUR" },
     { symbol: "NZ$", code: "NZD" },
   ];
-
+  const getTooltipBg = () => {
+    return activeColor ? "blur-3xl max-w-5xl bg-[#0f2050]" : "bg-[#0B1739]";
+  };
   return (
     <div className="min-h-screen bg-[#081028] px-4 sm:px-6 md:px-8 py-8 md:py-12 text-white relative">
       {/* Heading */}
@@ -32,24 +35,37 @@ const CostEstimator: React.FC = () => {
         </p>
         {/* Help Button */}
         <div
-          className=""
-          onMouseEnter={() => setShowHelp(true)}
-          onMouseLeave={() => setShowHelp(false)}
+          onMouseEnter={() => {
+            setShowHelp(true);
+            setActiveColor(true);
+          }}
+          onMouseLeave={() => {
+            setShowHelp(false);
+            setActiveColor(false);
+          }}
         >
           <HelpCircle className="ml-0 md:ml-3 mt-1 w-5 h-5 text-gray-400 cursor-pointer hover:text-white shrink-0" />
 
           {/* Tooltip */}
           {showHelp && (
-            <div className="absolute top-65 right-70 md:max-w-md bg-[#0B1739] rounded-md p-6 text-gray-300 shadow-lg z-20">
-              <h3 className="font-semibold mb-5 text-white">
-                The cost estimate here…is just an estimate.
-              </h3>
-              <p className="text-sm leading-relaxed">
-                As you can imagine, the cost of an ad on a board depends on a
-                bunch of factors – like time of day, location, impact, and so
-                on. To make things faster, the cost estimator pretty much
-                ignores all of that.
-              </p>
+            <div className={`absolute`}>
+              {/*  Background layer */}
+              <div
+                className={`absolute top-10 -inset-20 rounded-full ${getTooltipBg()} transition-colors `}
+              ></div>
+              <div
+                className={`md:max-w-sm  relative top-12 right-0 bg-[#0B1739] rounded-md p-6 text-gray-300 shadow-lg z-20`}
+              >
+                <h3 className="font-semibold mb-5 text-white">
+                  The cost estimate here…is just an estimate.
+                </h3>
+                <p className="text-sm leading-relaxed">
+                  As you can imagine, the cost of an ad on a board depends on a
+                  bunch of factors – like time of day, location, impact, and so
+                  on. To make things faster, the cost estimator pretty much
+                  ignores all of that.
+                </p>
+              </div>
             </div>
           )}
         </div>
