@@ -5,8 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { mapConfig } from ".";
-import { ILocation } from "../../Home/HomeTabs/LocationCard";
+
 import { BillboardMarker } from "./BillBoardMarker";
+import { ILocation } from "@/common/CommonLocationCardModal";
 
 function BillboardWorldMap() {
   const mapRef = useRef<any>(null);

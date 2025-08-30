@@ -1,4 +1,5 @@
-import { ILocation } from '@/components/Modules/UserDashboard/Home/HomeTabs/LocationCard';
+
+import { ILocation } from '@/common/CommonLocationCardModal';
 import img from '../assets/featured.jpg';
 import rating from '../assets/Home/rating.png';
 

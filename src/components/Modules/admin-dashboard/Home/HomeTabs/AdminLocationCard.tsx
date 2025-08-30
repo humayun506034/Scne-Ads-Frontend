@@ -1,7 +1,8 @@
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import CustomInput from "@/common/CommonDashboardInput";
 import CustomTextarea from "@/common/CommonDashboardTextArea";
-import { ILocation } from "@/components/Modules/UserDashboard/Home/HomeTabs/LocationCard";
+import { ILocation } from "@/common/CommonLocationCardModal";
+
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
