@@ -122,7 +122,7 @@ const FormDropdown = ({
 
 export type Field = {
   name: string;
-  type: "input" | "dropdown";
+  type: "input" | "dropdown" | "textarea" | "radio" | "file";
   label: string;
   placeholder?: string;
   required?: boolean;

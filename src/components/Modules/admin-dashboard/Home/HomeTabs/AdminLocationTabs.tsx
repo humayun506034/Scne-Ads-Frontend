@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import CustomInput from "@/common/CommonDashboardInput";
 import CustomTextarea from "@/common/CommonDashboardTextArea";
@@ -148,7 +147,6 @@ export default function AdminLocationTabs() {
                     </DialogTrigger>
                     <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh] ">
                       <DialogHeader>
-                        {" "}
                         <DialogTitle className="flex justify-between items-center">
                           <p className=" md:text-2xl mb-4">Add Screen</p>
                           <div>
@@ -170,7 +168,7 @@ export default function AdminLocationTabs() {
                         </div>
 
                         <div className="mb-4">
-                          <label className="">Screen Location location</label>
+                          <label className="">Screen Location</label>
                           <CustomInput
                             register={register("location")}
                             placeholder={"Enter screen location"}
