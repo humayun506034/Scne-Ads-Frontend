@@ -168,7 +168,7 @@ const CommonLocationCardModal = ({
 
               <div>
                 <p className="text-[#c3cee9] text-base lg:text-lg lg:font-semibold mb-2">
-                  Statusd
+                  Status
                 </p>
                 <div
                   className="inline-block px-4 py-2 rounded-lg"
