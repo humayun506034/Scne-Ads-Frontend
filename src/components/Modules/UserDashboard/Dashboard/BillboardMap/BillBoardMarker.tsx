@@ -1,10 +1,11 @@
+import { ILocation } from "@/common/CommonLocationCardModal";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { divIcon } from "leaflet";
 import { Eye, MapPin } from "lucide-react";
 import { Marker, Popup } from "react-leaflet";
 import { toast } from "sonner";
-import { ILocation } from "../../Home/HomeTabs/LocationCard";
+
 
 const getMarkerIcon = (status: ILocation["status"]) => {
   const colors = {

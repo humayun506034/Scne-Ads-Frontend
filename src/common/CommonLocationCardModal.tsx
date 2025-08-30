@@ -1,3 +1,4 @@
+import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
@@ -8,6 +9,7 @@ import {
 import { Circle, Heart } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 export interface ILocation {
@@ -36,15 +38,16 @@ export interface LocationCardProps {
   bookmark?: boolean;
   select?: boolean;
   onToggleFav?: (id: string) => void;
+  showButton?: boolean;
 }
 
-const LocationCard = ({
+const CommonLocationCardModal = ({
   location,
   fav,
-
   bookmark,
   select,
   onToggleFav,
+  showButton = false,
 }: LocationCardProps) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
 
@@ -165,7 +168,7 @@ const LocationCard = ({
 
               <div>
                 <p className="text-[#c3cee9] text-base lg:text-lg lg:font-semibold mb-2">
-                  Status
+                  Statusd
                 </p>
                 <div
                   className="inline-block px-4 py-2 rounded-lg"
@@ -195,9 +198,16 @@ const LocationCard = ({
             <span className="font-semibold text-white"> Description :</span>{" "}
             {location.description}
           </p>
+          {showButton && (
+            <Link to="/user-dashboard/new-campaign">
+              <div className="mt-6 flex justify-start">
+                <CommonDashboardButton title="Add campaign" />
+              </div>
+            </Link>
+          )}
         </DialogContent>
       </Dialog>
     </div>
   );
 };
-export default LocationCard;
+export default CommonLocationCardModal;
