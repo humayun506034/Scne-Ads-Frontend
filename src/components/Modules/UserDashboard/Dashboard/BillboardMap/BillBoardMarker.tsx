@@ -1,12 +1,13 @@
+import { ILocation } from "@/common/CommonLocationCardModal";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { divIcon } from "leaflet";
 import { Eye, MapPin } from "lucide-react";
 import { Marker, Popup } from "react-leaflet";
 import { toast } from "sonner";
-import { BillboardLocation } from ".";
 
-const getMarkerIcon = (status: BillboardLocation["status"]) => {
+
+const getMarkerIcon = (status: ILocation["status"]) => {
   const colors = {
     active: "#10B981",
     inactive: "#6B7280",
@@ -41,7 +42,7 @@ const getMarkerIcon = (status: BillboardLocation["status"]) => {
   });
 };
 
-const getStatusBadgeStyle = (status: BillboardLocation["status"]) => {
+const getStatusBadgeStyle = (status: ILocation["status"]) => {
   switch (status) {
     case "active":
       return "bg-green-100 text-green-800 hover:bg-green-100";
@@ -55,8 +56,8 @@ const getStatusBadgeStyle = (status: BillboardLocation["status"]) => {
 };
 
 interface BillboardMarkerProps {
-  location: BillboardLocation;
-  onViewCampaigns?: (location: BillboardLocation) => void;
+  location: ILocation;
+  onViewCampaigns?: (location: ILocation) => void;
 }
 
 export function BillboardMarker({
@@ -64,7 +65,7 @@ export function BillboardMarker({
   onViewCampaigns,
 }: BillboardMarkerProps) {
   const handleViewCampaigns = () => {
-    toast.success("View campaigns for: " + location.name);
+    toast.success("View campaigns for: " + location.title);
   };
 
   return (
@@ -87,7 +88,7 @@ export function BillboardMarker({
           <div className="">
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-semibold text-gray-900">
-                {location.name}
+                {location.title}
               </h3>
               <Badge
                 className={`text-xs ${getStatusBadgeStyle(location.status)}`}
@@ -98,9 +99,7 @@ export function BillboardMarker({
 
             <div className="flex items-center gap-1 text-xs text-gray-600">
               <MapPin className="w-4 h-4" />
-              <span>
-                {location.city}, {location.country}
-              </span>
+              <span>{location.location}</span>
             </div>
           </div>
 

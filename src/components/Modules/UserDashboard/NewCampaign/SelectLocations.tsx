@@ -1,3 +1,4 @@
+import CommonLocationCardModal from "@/common/CommonLocationCardModal";
 import {
   Select,
   SelectContent,
@@ -9,7 +10,7 @@ import { locationData } from "@/lib/Data";
 import { useState } from "react";
 import { Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import LocationCard from "../Home/HomeTabs/LocationCard";
+
 
 export default function SelectLocations() {
   const [selectedCategory, setSelectedCategory] = useState("new");
@@ -101,7 +102,8 @@ export default function SelectLocations() {
         >
           {filteredLocations.map((location) => (
             <SwiperSlide className="px-2 pt-6 pb-20 " key={location.id}>
-              <LocationCard
+              <CommonLocationCardModal
+              showButton={false}
                 location={location}
                 fav={selected}
                 onToggleFav={toggleSelect}

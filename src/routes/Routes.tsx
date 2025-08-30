@@ -16,7 +16,7 @@ import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
 import CampaignTablePage from "@/pages/UserDashboard/CampaignTableSection";
 
-import { MapOfBoardPage } from "@/pages/UserDashboard/MapOfBoardsPage";
+import { MapOfBoardPage } from "@/pages/MapOfBoardsPage";
 import NewCampaignPage from "@/pages/UserDashboard/NewCampaignPage";
 import UserAdsCredit from "@/pages/UserDashboard/UserAdsCredit";
 import UserBillingBusinessAcc from "@/pages/UserDashboard/UserBillingBusinessAcc";
@@ -57,10 +57,7 @@ const routes = createBrowserRouter([
         path: "metrics",
         element: <UserDashboardMetrics />,
       },
-      {
-        path: "map",
-        element: <MapOfBoardPage />,
-      },
+
       {
         path: "new-campaign",
         element: <NewCampaignPage />,
@@ -131,6 +128,11 @@ const routes = createBrowserRouter([
     path: "/login",
     element: <Login />,
   },
+  {
+    path: "mapOfBoard",
+    element: <MapOfBoardPage />,
+  },
+
   {
     path: "/signup",
     element: <Signup />,

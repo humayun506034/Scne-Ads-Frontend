@@ -9,6 +9,7 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     screenName: "",
     location: "",
+    description:"",
     baseCpp: "",
     assignedTier: "",
   });
@@ -62,7 +63,7 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
       fields={fields}
       onSave={handleSave}
       onCancel={handleCancel}
-      saveButtonText="Add Screen"/>
+      saveButtonText="Add screen"/>
   );
 };
 

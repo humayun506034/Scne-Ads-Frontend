@@ -7,8 +7,9 @@ import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { locationData } from "@/lib/Data";
 import "leaflet/dist/leaflet.css";
 import { mapConfig } from ".";
-import { ILocation } from "../../Home/HomeTabs/LocationCard";
+
 import { BillboardMarker } from "./BillBoardMarker";
+import { ILocation } from "@/common/CommonLocationCardModal";
 
 export default function MobileBillboardMap() {
   const [viewMode, setViewMode] = useState<"map" | "list">("map");

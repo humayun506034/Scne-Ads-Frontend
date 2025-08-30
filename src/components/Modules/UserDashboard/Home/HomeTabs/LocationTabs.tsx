@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
 import { locationData } from "@/lib/Data";
-import LocationCard from "./LocationCard";
+import CommonLocationCardModal from "@/common/CommonLocationCardModal";
 
 export default function LocationTabs() {
   const [fav, setFav] = useState<Set<string>>(new Set());
@@ -41,7 +41,8 @@ export default function LocationTabs() {
           {locationData
             .filter((location) => location.category === tab)
             .map((location) => (
-              <LocationCard
+              <CommonLocationCardModal
+                showButton={false}
                 location={location}
                 bookmark={true}
                 fav={fav}

@@ -2,12 +2,12 @@ import CommonGlowingHeader from "@/common/CommonGlowingHeader";
 import CommonHomeButton from "@/common/CommonHomeButton";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import img from "../../../assets/Home/laptop2.png";
+import img from "../../../assets/Home/laptop3.png";
 import vdo from "../../../assets/Home/video.mp4";
 import BlurText from "./BlurText";
 export default function Banner() {
   return (
-    <section className="w-full  mt-24 md:mt-36 lg:mt-40 relative z-0">
+    <section className="w-full mt-24 md:mt-36 lg:mt-40 relative z-0">
       <motion.div
         className="text-center mb-16"
         initial="hidden"
@@ -127,15 +127,15 @@ export default function Banner() {
             0 w-160 -z-10  blur-[90px] opacity-40 rounded-[10%] bg-[#38B6FF]"
         />
 
-        <div className="relative flex justify-center items-center w-full mx-auto">
-          <div className="relative mx-auto xl:h-auto xl:w-auto lg:w-[944px] lg:h-[580px] md:w-[690px] md:h-[422px] w-[289px] h-[177px]">
+        <div className="relative mb-14 md:mb-32  flex justify-center items-center w-full mx-auto">
+          <div className="relative mx-auto xl:h-auto xl:w-auto lg:w-[944px] lg:h-[580px] md:w-[677px] md:h-[415px] w-[287px] h-[172px]">
             <img src={img} alt="Laptop  " className=" object-contain   " />
 
             <div
-              className="absolute xl:top-8 xl:w-[67%] xl:left-44  xl:h-[71%]
-            lg:left-32 lg:w-[68%] lg:h-[71%] lg:top-6 
-            md:left-24 md:w-[67%] md:h-[71%] md:top-4
-            top-2 w-[67%] h-[70%] left-10
+              className="absolute xl:top-3 xl:w-[82.5%] xl:left-29.5  xl:h-[88%]
+              lg:top-2 lg:w-[83%] lg:left-20 lg:h-[87%]
+             md:top-2 md:w-[82%] md:left-15 md:h-[87%]
+            top-1 w-[82%] h-[88.5%] left-6.5
             
             
             
@@ -148,7 +148,7 @@ export default function Banner() {
                 autoPlay
                 muted
                 loop
-                className="w-full h-full object-cover "
+                className="w-full h-full object-cover rounded-t-xs md:rounded-t-lg xl:rounded-t-3xl lg:rounded-t-xl"
               />
             </div>
           </div>
