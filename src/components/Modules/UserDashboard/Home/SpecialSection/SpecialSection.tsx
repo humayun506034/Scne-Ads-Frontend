@@ -97,7 +97,7 @@ export const cardData = [
 const SpecialSection = () => {
   return (
     <div className="mt-20 relative">
-      <h1 className="text-3xl font-semibold text-center">Special </h1>
+      <h1 className="text-3xl font-semibold text-center">Special</h1>
       <Carousel className="w-full mt-0">
         <CarouselContent>
           {cardData.map((card, index) => (

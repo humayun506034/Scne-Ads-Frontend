@@ -106,6 +106,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
               </CardContent>
             </Card>
           </DialogTrigger>
+          {/* Edit Modal */}
           <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh] ">
             <DialogHeader>
               <DialogTitle className="flex justify-between items-center">
