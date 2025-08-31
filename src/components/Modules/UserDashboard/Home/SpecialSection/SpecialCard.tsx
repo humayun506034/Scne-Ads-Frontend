@@ -5,7 +5,7 @@ export interface CardProps {
   bundleTitle: string;
   bundleIcon: string;
   image: string;
-  description: string[];
+  description?: string[];
   price: string;
   id: string;
 }
@@ -45,7 +45,7 @@ const SpecialCard = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/80 text-xs ml-4">
-              {description.map((desc, index) => (
+              {description?.map((desc, index) => (
                 <span key={index}>✔ {desc}</span>
               ))}
             </div>

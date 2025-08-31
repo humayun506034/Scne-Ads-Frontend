@@ -40,7 +40,7 @@ const AdminSpecialSection = () => {
                 </div>
               )}
 
-              <SpecialCard {...card} />
+              <SpecialCard card={card} />
             </CarouselItem>
           ))}
         </CarouselContent>
