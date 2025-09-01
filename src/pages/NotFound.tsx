@@ -19,8 +19,13 @@ const NotFoundPage = () => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className=" flex justify-center items-center"
         >
-          <DotLottieReact
+          {/* <DotLottieReact
             src="https://lottie.host/360b09c9-7286-4237-ba5d-d4d52d981ea7/5g8tb0J3Pp.lottie"
+            loop
+            autoplay
+          /> */}
+          <DotLottieReact
+            src="https://lottie.host/38ad3051-54ef-42f0-a526-277a1231ef8c/hq7nhKs0Ur.lottie"
             loop
             autoplay
           />
