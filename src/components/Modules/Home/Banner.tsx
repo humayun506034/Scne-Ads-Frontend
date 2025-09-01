@@ -136,10 +136,6 @@ export default function Banner() {
               lg:top-2 lg:w-[83%] lg:left-20 lg:h-[87%]
              md:top-2 md:w-[82%] md:left-15 md:h-[87%]
             top-1 w-[82%] h-[88.5%] left-6.5
-            
-            
-            
-            
             "
             >
               <video

@@ -16,7 +16,6 @@ import { Plus, X } from "lucide-react";
 
 interface AdminSpecialCardProps {
   card: CardProps;
-
   edit?: boolean;
 }
 
