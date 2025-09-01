@@ -28,7 +28,7 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
   const [features, setFeatures] = useState<string[]>(card.description || []);
-
+  const [open, setOpen] = useState(false);
   // file upload handler
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -70,7 +70,7 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
 
   return (
     <div className="w-full">
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <motion.div
             className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[280px] w-full overflow-hidden flex flex-col"
@@ -208,12 +208,12 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
 
             {/* Image Upload */}
             <div className="mb-4">
-              <label>Card Image</label>
-              <div className="flex items-start gap-4">
-                {files.length > 0 && (
+              <label className="">Screen Thumbnail</label>
+              <div className="flex items-start  gap-4">
+                {files && (
                   <div className="flex my-2 flex-wrap gap-2 w-1/2">
                     {files.map((file, index) => (
-                      <div key={index} className="relative">
+                      <div key={index} className=" relative">
                         <img
                           src={URL.createObjectURL(file)}
                           alt="preview"
@@ -223,8 +223,9 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
                     ))}
                   </div>
                 )}
+
                 <div
-                  className="border-dashed bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-32"
+                  className="border-dashed  bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-32"
                   onClick={handleClickUpload}
                 >
                   <input
@@ -236,20 +237,40 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
                     className="hidden"
                   />
                   <span className="text-sm md:text-base">
-                    {files.length > 0
-                      ? "Upload More Images"
-                      : "Click to Upload"}
+                    {files.length > 0 ? (
+                      "Upload More Images"
+                    ) : (
+                      <div className="flex flex-col items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="54"
+                          height="54"
+                          viewBox="0 0 54 54"
+                          fill="none"
+                        >
+                          <path
+                            d="M47.25 33.75V42.75C47.25 43.9435 46.7759 45.0881 45.932 45.932C45.0881 46.7759 43.9435 47.25 42.75 47.25H11.25C10.0565 47.25 8.91193 46.7759 8.06802 45.932C7.22411 45.0881 6.75 43.9435 6.75 42.75V33.75M38.25 18L27 6.75M27 6.75L15.75 18M27 6.75V33.75"
+                            stroke="white"
+                            strokeWidth="2.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      </div>
+                    )}
                   </span>
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
-              <CommonDashboardButton title="Edit Card" Icon={Plus} />
+              <CommonDashboardButton title="Edit Screen" Icon={Plus} />
               <button
-                type="button"
-                onClick={() => reset()}
-                className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border text-white"
+                onClick={() => {
+                  reset();
+                  setOpen(false);
+                }}
+                className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
               >
                 Cancel
               </button>

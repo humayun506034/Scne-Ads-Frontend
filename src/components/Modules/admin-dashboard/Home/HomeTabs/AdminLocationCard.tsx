@@ -192,7 +192,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
                   <p className="text-red-500 text-sm">Please select a tier</p>
                 )}
               </div>
-
+              {/* image upload */}
               <div className="mb-4">
                 <label className="">Screen Thumbnail</label>
                 <div className="flex items-start  gap-4">
