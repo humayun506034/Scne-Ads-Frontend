@@ -1,3 +1,4 @@
+import CommonCancelButton from "@/common/CommonCancelButton";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import DashboardDeleteButton from "@/common/DashboardDeleteButton";
 import {
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { motion } from "framer-motion";
 import { Plus, Trash, Upload } from "lucide-react";
 import { useState } from "react";
 import { EffectCoverflow, Pagination } from "swiper/modules";
@@ -21,10 +21,14 @@ const AdminDashboardBanner = () => {
   const [selectedSlideIndex, setSelectedSlideIndex] = useState<number | null>(
     null
   );
+  console.log(
+    "🚀 ~ AdminDashboardBanner ~ selectedSlideIndex:",
+    selectedSlideIndex
+  );
 
   const [newImage, setNewImage] = useState<string | null>(null);
   const [currentImage, setCurrentImage] = useState<string | null>(null);
-  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false); // To track delete confirmation
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   const handleModalOpen = (index: number) => {
     setSelectedSlideIndex(index);
@@ -51,10 +55,6 @@ const AdminDashboardBanner = () => {
     console.log("Image Deleted");
     setConfirmDeleteOpen(false);
     setOpenModal(false);
-  };
-
-  const handleCancelDelete = () => {
-    setConfirmDeleteOpen(false); // Close delete confirmation without deleting
   };
 
   return (
@@ -153,31 +153,29 @@ const AdminDashboardBanner = () => {
                 />
                 <label
                   htmlFor="upload-banner"
-                  className="cursor-pointer w-full h-full p-6 border-dashed border-2 rounded-md  flex justify-center items-center"
+                  className="cursor-pointer w-full h-full p-6 border-dashed border-2 rounded-md border-title-color  text-title-color flex justify-center items-center"
                 >
                   <div className="flex flex-col items-center gap-2">
                     <Upload
-                      className="group-hover:scale-110 transition-all duration-300"
+                      className="group-hover:scale-110  transition-all duration-300"
                       size={40}
                     />
                     Upload New Image{" "}
                   </div>
                 </label>
               </div>
-              <div className="w-full mt-4 flex flex-col md:flex-row justify-between gap-4">
+              <div className="w-full mt-8 flex flex-col md:flex-row justify-between gap-4">
                 <CommonDashboardButton
                   title={newImage ? "Upload this Image" : "Upload New Image"}
                   Icon={Plus}
                 />
-                <button
+                <CommonCancelButton
                   onClick={() => {
                     setOpenModal(false);
                     setNewImage(null);
                   }}
-                  className=" p-2 md:p-4 cursor-pointer bg-gray-400 text-white rounded-md"
-                >
-                  Cancel
-                </button>
+                  title="Cancel"
+                />
               </div>
             </div>
           </div>
@@ -198,14 +196,10 @@ const AdminDashboardBanner = () => {
               title="Delete"
               onClick={handleDeleteConfirmation}
             />
-            <motion.button
-              whileTap={{ scale: 0.8 }}
-              whileHover={{ scale: 1.03 }}
-              onClick={handleCancelDelete}
-              className="px-8 w-full md:w-fit py-4 cursor-pointer bg-gray-500 text-white rounded-md"
-            >
-              Cancel
-            </motion.button>
+            <CommonCancelButton
+              onClick={() => setConfirmDeleteOpen(false)}
+              title="Cancel"
+            />
           </div>
         </DialogContent>
       </Dialog>

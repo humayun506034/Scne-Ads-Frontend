@@ -11,10 +11,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { MapPin, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
+import CommonCancelButton from "@/common/CommonCancelButton";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import LocationMapModal from "./LocationMap";
 
 export interface LocationCardProps {
   location: ILocation;
@@ -30,6 +32,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
   const [open, setOpen] = useState(false);
+  const [openMap, setOpenMap] = useState(false);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files);
@@ -109,10 +112,15 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
           {/* Edit Modal */}
           <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh] ">
             <DialogHeader>
-              <DialogTitle className="flex justify-between items-center">
+              <DialogTitle className="flex justify-between w-full items-center">
                 <p className=" md:text-2xl mb-4">Edit Screen</p>
                 <div>
-                  <CommonDashboardButton title="Place on Map" Icon={MapPin} />
+                  <LocationMapModal
+                    lat={location.lat}
+                    lng={location.lng}
+                    open={openMap}
+                    setOpenMap={setOpenMap}
+                  />
                 </div>
               </DialogTitle>
             </DialogHeader>
@@ -262,15 +270,13 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
 
               <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
                 <CommonDashboardButton title="Edit Screen" Icon={Plus} />
-                <button
+                <CommonCancelButton
                   onClick={() => {
                     reset();
                     setOpen(false);
                   }}
-                  className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
-                >
-                  Cancel
-                </button>
+                  title="Cancel"
+                />
               </div>
             </form>
           </DialogContent>

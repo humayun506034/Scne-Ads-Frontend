@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 
+import CommonCancelButton from "@/common/CommonCancelButton";
+import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CustomInput from "@/common/CommonDashboardInput";
 import {
   Dialog,
   DialogContent,
@@ -10,8 +13,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import CustomInput from "@/common/CommonDashboardInput";
 import { Plus, X } from "lucide-react";
 
 interface AdminSpecialCardProps {
@@ -265,15 +266,13 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
 
             <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
               <CommonDashboardButton title="Edit Screen" Icon={Plus} />
-              <button
+              <CommonCancelButton
                 onClick={() => {
                   reset();
                   setOpen(false);
                 }}
-                className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
-              >
-                Cancel
-              </button>
+                title="Cancel"
+              />
             </div>
           </form>
         </DialogContent>
