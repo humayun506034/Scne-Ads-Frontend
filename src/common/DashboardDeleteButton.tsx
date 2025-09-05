@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { motion } from "framer-motion";
 
-const CommonCancelButton = ({
+const DashboardDeleteButton = ({
   title,
   Icon,
   onClick,
@@ -15,10 +15,10 @@ const CommonCancelButton = ({
   return (
     <motion.button
       whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{ scale: 0.8 }}
       type="submit"
       onClick={onClick}
-      className={`bg-transparent border-secondary-color border text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
+      className={`px-2 md:px-8 py-4 w-full  md:w-fit cursor-pointer flex justify-center items-center gap-2 bg-red-500 text-sm md:text-base text-white rounded-md bg-[linear-gradient(291deg,_#FF4C4C_-45.64%,_#B71C1C_69.04%)]  ${className}`}
     >
       {title}
       {Icon && <Icon className="w-4 h-4 text-white" />}
@@ -26,4 +26,4 @@ const CommonCancelButton = ({
   );
 };
 
-export default CommonCancelButton;
+export default DashboardDeleteButton;

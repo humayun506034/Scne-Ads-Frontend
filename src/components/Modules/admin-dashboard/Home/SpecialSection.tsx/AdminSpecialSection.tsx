@@ -1,3 +1,6 @@
+import CommonCancelButton from "@/common/CommonCancelButton";
+import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CustomInput from "@/common/CommonDashboardInput";
 import { cardData } from "@/components/Modules/UserDashboard/Home/SpecialSection/SpecialSection";
 import {
   Carousel,
@@ -6,7 +9,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import SpecialCard from "./AdminSpecialCard";
 import {
   Dialog,
   DialogContent,
@@ -14,11 +16,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import CustomInput from "@/common/CommonDashboardInput";
+import { motion } from "framer-motion";
 import { Plus, X } from "lucide-react";
+import { useState } from "react";
+import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import SpecialCard from "./AdminSpecialCard";
 
 const AdminSpecialSection = () => {
   const [open, setOpen] = useState(false);
@@ -32,7 +34,7 @@ const AdminSpecialSection = () => {
   } = useForm();
 
   // Submit handler
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log({
       ...data,
       features,
@@ -85,7 +87,11 @@ const AdminSpecialSection = () => {
                 <Dialog key={index} open={open} onOpenChange={setOpen}>
                   <DialogTrigger asChild>
                     <div className="w-full h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
-                      <div className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center">
+                      <motion.div
+                        whileTap={{ scale: 0.8 }}
+                        whileHover={{ scale: 1.1 }}
+                        className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center"
+                      >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="45"
@@ -98,7 +104,7 @@ const AdminSpecialSection = () => {
                             fill="#033579"
                           />
                         </svg>
-                      </div>
+                      </motion.div>
                     </div>
                   </DialogTrigger>
 
@@ -254,15 +260,13 @@ const AdminSpecialSection = () => {
 
                       <div className="flex gap-4  mt-12 justify-end">
                         <CommonDashboardButton title="Add Screen" Icon={Plus} />
-                        <button
+                        <CommonCancelButton
                           onClick={() => {
                             reset();
                             setOpen(false);
                           }}
-                          className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
-                        >
-                          Cancel
-                        </button>
+                          title="Cancel"
+                        />
                       </div>
                     </form>
                   </DialogContent>

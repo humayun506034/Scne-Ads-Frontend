@@ -1,5 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import CommonCancelButton from "@/common/CommonCancelButton";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import CustomInput from "@/common/CommonDashboardInput";
 import CustomTextarea from "@/common/CommonDashboardTextArea";
@@ -9,11 +8,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { locationData } from "@/lib/Data";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import { MapPin, Plus } from "lucide-react";
+import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
+import { useState } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import AdminLocationCard from "./AdminLocationCard";
+import LocationMapModal from "./LocationMap";
 
 export default function AdminLocationTabs() {
   const [tab, setTab] = useState("new");
@@ -30,7 +33,7 @@ export default function AdminLocationTabs() {
     formState: { errors },
   } = useForm();
   const [files, setFiles] = useState<File[]>([]);
-
+  const [openMap, setOpenMap] = useState(false);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const uploadedFiles = Array.from(e.target.files);
@@ -128,7 +131,11 @@ export default function AdminLocationTabs() {
                   <Dialog key={index} open={open} onOpenChange={setOpen}>
                     {" "}
                     <DialogTrigger asChild>
-                      <div className="w-full  h-full  flex items-center justify-center rounded-lg shadow-lg">
+                      <motion.div
+                        whileTap={{ scale: 0.8 }}
+                        whileHover={{ scale: 1.1 }}
+                        className="w-full  h-full  flex items-center justify-center rounded-lg shadow-lg"
+                      >
                         <div className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center cursor-pointer">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -143,16 +150,16 @@ export default function AdminLocationTabs() {
                             />
                           </svg>
                         </div>
-                      </div>
+                      </motion.div>
                     </DialogTrigger>
                     <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh] ">
                       <DialogHeader>
                         <DialogTitle className="flex justify-between items-center">
                           <p className=" md:text-2xl mb-4">Add Screen</p>
                           <div>
-                            <CommonDashboardButton
-                              title="Place on Map"
-                              Icon={MapPin}
+                            <LocationMapModal
+                              open={openMap}
+                              setOpenMap={setOpenMap}
                             />
                           </div>
                         </DialogTitle>
@@ -305,15 +312,13 @@ export default function AdminLocationTabs() {
                             title="Add Screen"
                             Icon={Plus}
                           />
-                          <button
+                          <CommonCancelButton
                             onClick={() => {
                               reset();
                               setOpen(false);
                             }}
-                            className="px-4 py-2 cursor-pointer rounded-md border-secondary-color border  text-white"
-                          >
-                            Cancel
-                          </button>
+                            title="Cancel"
+                          />
                         </div>
                       </form>
                     </DialogContent>
