@@ -12,8 +12,8 @@ import { useCallback, useState } from "react";
 
 import { FilterOptions } from ".";
 
-import { FilterSidebar } from "./FilterSidebar";
 import { ILocation } from "@/common/CommonLocationCardModal";
+import { FilterSidebar } from "./FilterSidebar";
 
 interface BillboardMapProps {
   locations: ILocation[];
