@@ -1,13 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonLoginButton from "@/common/CommonLoginButton";
 import CommonWrapper from "@/common/CommonWrapper";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useAppDispatch } from "@/store/hooks";
+import {
+  useLoginMutation,
+  useRequestResetPasswordMutation,
+  useResetPasswordMutation,
+} from "@/store/Slices/AuthSlice/authApi";
+import { setUser } from "@/store/Slices/AuthSlice/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
 import { ArrowRight, Eye, EyeOff } from "lucide-react"; // Importing eye icons from lucide-react
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -18,8 +33,18 @@ const loginSchema = z.object({
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
 const Login = () => {
-  // State for toggling password visibility
   const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+  const [otpCode, setOtpCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [requestReset, { isLoading: requesting }] =
+    useRequestResetPasswordMutation();
+  const [resetPassword, { isLoading: resetting }] = useResetPasswordMutation();
+  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -29,23 +54,40 @@ const Login = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleSignUp = () => {
-    console.log("Navigate to signup");
-  };
-
   const handleForgotPassword = () => {
-    console.log("Navigate to forgot password");
+    const currentEmail =
+      (document.querySelector('input[type="email"]') as HTMLInputElement)
+        ?.value || "";
+    setResetEmail(currentEmail);
+    setShowRequestModal(true);
   };
 
   const navigate = useNavigate();
 
-  const onSubmit = (data: LoginFormInputs) => {
-    console.log("Login Data:", data);
-    navigate("/");
+  const onSubmit = async (data: LoginFormInputs) => {
+    const toastId = toast.loading("Logging in...");
+    try {
+      const res = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      console.log("🚀 ~ onSubmit ~ res:", res);
+      if (res.success && res.data?.accessToken) {
+        const { user, accessToken } = res.data;
+        dispatch(setUser({ user, token: accessToken }));
+        toast.success(res.message || "Logged in successfully", { id: toastId });
+        // navigate(`${res.data.user.role}-dashboard`);
+      } else {
+        toast.error(res.message || "Login failed", { id: toastId });
+      }
+    } catch (err: any) {
+      const message = err?.data?.message || err?.error || "Login failed";
+      toast.error(message, { id: toastId });
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center my-10 md:my-0 ">
+    <div className=" flex items-center justify-center my-10 md:my-0 ">
       <CommonWrapper>
         <div className="w-full max-w-4xl mx-auto">
           <motion.div
@@ -138,7 +180,6 @@ const Login = () => {
                   <Button
                     type="button"
                     variant="link"
-                    onClick={handleSignUp}
                     className="text-[#14CA74] cursor-pointer hover:text-[#38A3E8] p-0 h-auto font-medium text-lg md:text-xl underline-offset-2"
                   >
                     Make one
@@ -158,7 +199,7 @@ const Login = () => {
                 <div className="w-full flex-1">
                   <CommonLoginButton
                     isInView={true}
-                    title="Log In"
+                    title={isLoggingIn ? "Logging in..." : "Log In"}
                     Icon={ArrowRight}
                   />
                 </div>
@@ -167,6 +208,122 @@ const Login = () => {
           </motion.form>
         </div>
       </CommonWrapper>
+
+      {/* Request Reset Password - Email Modal */}
+      <Dialog open={showRequestModal} onOpenChange={setShowRequestModal}>
+        <DialogContent className="bg-[#081028] border-none text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Forgot password</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-8">
+            <p className="text-title-color">
+              Enter your email to receive an OTP.
+            </p>
+            <Input
+              type="email"
+              placeholder="Email Address"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
+            />
+            <div className="flex justify-end pt-2">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                onClick={async () => {
+                  if (!resetEmail) {
+                    toast.error("Please enter your email.");
+                    return;
+                  }
+                  try {
+                    const res = await requestReset({
+                      email: resetEmail,
+                    }).unwrap();
+                    toast.success(res.message || "OTP sent to your email");
+                    setShowRequestModal(false);
+                    setShowResetModal(true);
+                  } catch (err: any) {
+                    const message =
+                      err?.data?.message || err?.error || "Failed to send OTP";
+                    toast.error(message);
+                  }
+                }}
+                disabled={requesting}
+                className="w-full md:w-fit px-5 py-3 rounded-lg bg-[#89AAD5] text-black font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 hover:bg-[#7E95C7]  hover:shadow-[0_0_20px_rgba(142,148,181,0.5)]"
+              >
+                {requesting ? "Sending..." : "Send OTP"}
+              </motion.button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showResetModal} onOpenChange={setShowResetModal}>
+        <DialogContent className="bg-[#081028] border-none text-white max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">Reset your password</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-8">
+            <p className="text-title-color text-sm">
+              Enter the OTP from your email and a new password.
+            </p>
+            <Input
+              type="email"
+              placeholder="Email Address"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
+            />
+            <Input
+              type="text"
+              placeholder="OTP"
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value)}
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
+            />
+            <Input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
+            />
+            <div className="flex justify-end pt-2">
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                whileHover={{ scale: 1.03 }}
+                onClick={async () => {
+                  if (!resetEmail || !otpCode || !newPassword) {
+                    toast.error("Please fill all fields.");
+                    return;
+                  }
+                  try {
+                    const res = await resetPassword({
+                      email: resetEmail,
+                      opt: otpCode,
+                      newPassword,
+                    }).unwrap();
+                    toast.success(res.message || "Password reset successful");
+                    setShowResetModal(false);
+                    setOtpCode("");
+                    setNewPassword("");
+                  } catch (err: any) {
+                    const message =
+                      err?.data?.message ||
+                      err?.error ||
+                      "Failed to reset password";
+                    toast.error(message);
+                  }
+                }}
+                disabled={resetting}
+                className="w-full md:w-fit px-5 py-3 rounded-lg bg-[#89AAD5] text-black font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 hover:bg-[#7E95C7]  hover:shadow-[0_0_20px_rgba(142,148,181,0.5)]"
+              >
+                {resetting ? "Resetting..." : "Reset Password"}
+              </motion.button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

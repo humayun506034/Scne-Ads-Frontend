@@ -15,7 +15,7 @@ export function DashboardSidebar({ user }: { user: string }) {
   const location = useLocation();
 
   const [activeItem, setActiveItem] = useState(
-    user === "admin" ? "/admin-dashboard" : "/user-dashboard"
+    user === "admin" ? "/admin-dashboard" : "/customer-dashboard"
   );
   console.log("🚀 ~ DashboardSidebar ~ activeItem:", activeItem);
   if (activeItem) {
