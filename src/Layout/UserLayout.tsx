@@ -7,7 +7,7 @@ export function UserDashboardLayout() {
   return (
     <div className=" flex bg-[#081028]  ">
       <aside className="hidden lg:flex lg:flex-shrink-0 min-h-screen">
-        <DashboardSidebar user="user" />
+        <DashboardSidebar user="customer" />
       </aside>
 
       <div className="flex flex-col flex-1 overflow-hidden ">

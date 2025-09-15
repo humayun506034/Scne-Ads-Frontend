@@ -15,7 +15,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser(state, action) {
-      // decode first 
+
       state.user = action.payload.user;
       state.token = action.payload.token;
     },

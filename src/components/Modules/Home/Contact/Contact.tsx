@@ -1,7 +1,12 @@
 import CommonGlowingHeader from "@/common/CommonGlowingHeader";
+import {
+  GoogleMap,
+  InfoWindow,
+  LoadScript,
+  Marker,
+} from "@react-google-maps/api";
 import { motion } from "framer-motion";
-import { Maximize2 } from "lucide-react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useState } from "react";
 import ContactForm from "./ContactForm";
 
 const locations = [
@@ -11,10 +16,41 @@ const locations = [
   { lat: 40.7484, lng: -73.9857, title: "Empire State Building" },
 ];
 
+const mapContainerStyle = {
+  width: "100%",
+  height: "100%",
+};
+
+const mapOptions = {
+  disableDefaultUI: false,
+  zoomControl: true,
+  streetViewControl: true,
+  mapTypeControl: true,
+  fullscreenControl: true,
+  styles: [
+    {
+      featureType: "all",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "on", // Hide all labels
+        },
+      ],
+    },
+    {
+      featureType: "poi.business",
+      elementType: "labels",
+      stylers: [
+        {
+          visibility: "off", // Hide business labels
+        },
+      ],
+    },
+  ],
+};
+
 export default function ContactSection() {
-  const handleViewLargerMap = () => {
-    // You can implement custom map actions here if needed
-  };
+  const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
 
   return (
     <section className="w-full md:my-40 my-20">
@@ -25,7 +61,7 @@ export default function ContactSection() {
         viewport={{ once: true }}
         className="text-center md:mb-16"
       >
-        <h2 className="text-2xl md:text-5xl    leading-tight">
+        <h2 className="text-2xl md:text-5xl leading-tight">
           Connect With & Ignite <br />
           The <CommonGlowingHeader glowingTitle="Conversation" />
         </h2>
@@ -40,38 +76,52 @@ export default function ContactSection() {
           className="relative lg:col-span-7"
         >
           <div
-            className="relative w-full h-[400px] lg:h-[700px]   rounded-[20px] overflow-hidden border border-[#2FABF9]"
+            className="relative w-full h-[400px] lg:h-[700px] rounded-[20px] overflow-hidden border border-[#2FABF9]"
             style={{
               background: "rgba(47, 171, 249, 0.12)",
               backdropFilter: "blur(30px)",
             }}
           >
-            <button
-              onClick={handleViewLargerMap}
-              className="absolute top-4 left-4   bg-white/90 hover:bg-white text-[#343B4F] text-sm font-medium px-3 py-2 rounded-lg shadow-md transition-all duration-200 flex items-center z-50 gap-2"
+            <LoadScript
+              googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
             >
-              <Maximize2 className="w-4 h-4" />
-              View Larger Map
-            </button>
+              <GoogleMap
+                mapContainerStyle={mapContainerStyle}
+                center={locations[0]} // Set default center
+                zoom={12} // Initial zoom
+                options={mapOptions}
+              >
+                {locations.map((location, index) => (
+                  <Marker
+                    key={index}
+                    position={{ lat: location.lat, lng: location.lng }}
+                    onClick={() => setSelectedMarker(location.title)} // Set the selected marker
+                  />
+                ))}
 
-            <MapContainer
-              center={locations[0]} // Set default center
-              zoom={12} // Initial zoom
-              scrollWheelZoom={false}
-              className="w-full h-full rounded-[20px]"
-            >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" // Use OpenStreetMap tiles
-              />
-
-              {locations.map((location, index) => (
-                <Marker key={index} position={[location.lat, location.lng]}>
-                  <Popup>{location.title}</Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+                {/* Show InfoWindow for the selected marker */}
+                {selectedMarker && (
+                  <InfoWindow
+                    position={{
+                      lat:
+                        locations.find((l) => l.title === selectedMarker)
+                          ?.lat || 0,
+                      lng:
+                        locations.find((l) => l.title === selectedMarker)
+                          ?.lng || 0,
+                    }}
+                    onCloseClick={() => setSelectedMarker(null)}
+                  >
+                    <div className="p-2">
+                      {locations.find((l) => l.title === selectedMarker)?.title}
+                    </div>
+                  </InfoWindow>
+                )}
+              </GoogleMap>
+            </LoadScript>
           </div>
         </motion.div>
+
         <ContactForm />
       </div>
     </section>

@@ -151,7 +151,7 @@ const CommonLocationCardModal = ({
           </Card>
         </DialogTrigger>
 
-        <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto max-h-[80vh]">
+        <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto border-none overflow-y-auto max-h-[80vh]">
           <DialogHeader className="text-white font-semibold text-2xl">
             Screen Details
           </DialogHeader>

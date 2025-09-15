@@ -1,14 +1,6 @@
-import CommonLoginButton from "@/common/CommonLoginButton";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { CircleChevronRight, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-
 import {
   Select,
   SelectContent,
@@ -16,102 +8,126 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { CountryCodes } from "@/lib/Data";
-import "react-phone-input-2/lib/style.css";
-interface SignupFormData {
-  firstName: string;
-  lastName: string;
-  countryCode: string;
-  phoneNumber: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  userType: "advertiser" | "agency" | "";
-  organizationName: string;
-  acceptTerms: boolean;
-}
+import { useSignupMutation } from "@/store/Slices/AuthSlice/authApi";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { motion } from "framer-motion";
+import { CircleChevronRight, Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
+import OtpVerificationModal from "@/pages/OtpVerificationModal";
+import type { IRegisterInput } from "@/types/auth";
+import { z } from "zod";
 
 const signupSchema = z.object({
   firstName: z.string().min(2, "First Name must be at least 2 characters"),
   lastName: z.string().min(2, "Last Name must be at least 2 characters"),
   email: z.string().email("Invalid email format"),
+  countryCode: z.string().min(1, "Country code is required"),
   phoneNumber: z.string().min(1, "Phone number is required"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z
     .string()
     .min(6, "Confirm Password must be at least 6 characters"),
-  userType: z.enum(["advertiser", "agency"], {
-    errorMap: () => ({ message: "Please select a user type" }),
-  }),
   organizationName: z.string().min(1, "Organization Name is required"),
-  acceptTerms: z.boolean().refine((val) => val === true, {
-    message: "You must accept the terms and conditions",
-  }),
 });
 
 type SignupFormInputs = z.infer<typeof signupSchema>;
 
+interface CountryCode {
+  code: string;
+  label: string;
+  value: string;
+}
+
+const CountryCodes: CountryCode[] = [
+  { code: "+1", label: "United States", value: "+1" },
+  { code: "+44", label: "United Kingdom", value: "+44" },
+  { code: "+61", label: "Australia", value: "+61" },
+  { code: "+91", label: "India", value: "+91" },
+  { code: "+81", label: "Japan", value: "+81" },
+  { code: "+49", label: "Germany", value: "+49" },
+  { code: "+33", label: "France", value: "+33" },
+  // Add more country codes here
+];
+
 const Signup = () => {
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-
-  const [countryCode, setCountryCode] = useState<string>("+61");
-  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhoneNumber(e.target.value);
-  };
-
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [formData, setFormData] = useState<SignupFormData>({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
-    countryCode: "+61",
-
-    email: "",
-    password: "",
-    confirmPassword: "",
-    userType: "",
-    organizationName: "",
-    acceptTerms: false,
-  });
-
+  const [accept, setAccept] = useState(false);
+  const [select, setSelect] = useState("");
+  const [countryCode, setCountryCode] = useState<string>("+61");
+  const [signup, { isLoading }] = useSignupMutation();
+  const navigate = useNavigate();
+  const [otpOpen, setOtpOpen] = useState(false);
+  const [otpEmail, setOtpEmail] = useState<string>("");
   const {
     register,
     handleSubmit,
-
     formState: { errors },
+    setValue,
+    reset,
   } = useForm<SignupFormInputs>({
     resolver: zodResolver(signupSchema),
+    defaultValues: { countryCode },
   });
 
-  const handleInputChange = (
-    field: keyof SignupFormData,
-    value: string | boolean
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
+  const handleSubmitForm = async (data: SignupFormInputs) => {
+    if (!accept) {
+      toast.error("You must accept the terms and conditions.");
+      return;
+    }
 
-  const handleUserTypeChange = (type: "advertiser" | "agency") => {
-    setFormData((prev) => ({
-      ...prev,
-      userType: type,
-    }));
-  };
+    if (!select) {
+      toast.error("Please select a user type.");
+      return;
+    }
 
-  const handleSubmitForm = (data: SignupFormInputs) => {
-    console.log("Signup Form Data:", data, countryCode, phoneNumber);
+    if (data.password !== data.confirmPassword) {
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    const formattedData: IRegisterInput = {
+      first_name: data.firstName,
+      last_name: data.lastName,
+      phone: `${data.countryCode || countryCode}${data.phoneNumber}`,
+      email: data.email,
+      password: data.password,
+      organisation_name: data.organizationName,
+      organisation_role: select,
+    };
+
+    try {
+      const res = await signup(formattedData).unwrap();
+      console.log("Signup success:", res);
+      toast.success(res.message || "Account created successfully!");
+      if (res.success && res.data && res.data.is_verified === false) {
+        setOtpEmail(res.data.email);
+        setOtpOpen(true);
+      } else {
+        navigate("/login");
+      }
+      // keep form values in case user needs to edit while verifying
+    } catch (err) {
+      const message =
+        (err as any)?.data?.message ||
+        (err as any)?.error ||
+        "Signup failed. Please try again.";
+      console.error("Signup error:", err);
+      toast.error(message);
+    }
   };
 
   return (
-    <div className="min-h-screen w-full my-20 flex justify-center items-center">
-      <div className="max-w-4xl mx-auto  px-4 lg:px-0">
+    <div className="w-full my-20 flex justify-center items-center">
+      <div className="max-w-4xl mx-auto px-4 lg:px-0">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className=" mb-20"
+          className="mb-20"
         >
           <h1 className="text-2xl md:text-5xl font-medium text-white mb-3">
             Don't have an account yet
@@ -126,10 +142,11 @@ const Signup = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          onSubmit={handleSubmit(handleSubmitForm)}
+          onSubmit={handleSubmit(handleSubmitForm)} // Use onSubmit on form tag
           className="space-y-20"
         >
-          <div className="">
+          {/* First Name and Last Name Section */}
+          <div className="space-y-6">
             <p className="font-light text-2xl">
               Let's start with a few details
               <span className="font-semibold pl-1">about you</span>.
@@ -162,18 +179,29 @@ const Signup = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="flex gap-4 md:gap-10  md:flex-row flex-col items-center ">
-              <Select onValueChange={(value) => setCountryCode(value)}>
+
+          {/* Phone Number Section */}
+          <div className="space-y-6">
+            <p className="text-white text-base md:text-2xl">
+              Now enter your phone number
+            </p>
+            <div className="flex gap-4 md:gap-10 md:flex-row flex-col items-center">
+              <Select
+                onValueChange={(value) => {
+                  setCountryCode(value);
+                  setValue("countryCode", value);
+                }}
+                value={countryCode}
+              >
                 <SelectTrigger className="w-fit cursor-pointer bg-[#89AAD5] text-white border-none rounded-xl px-4 py-3">
                   <SelectValue placeholder="AU" />
                 </SelectTrigger>
-                <SelectContent className=" bg-[#0B1739]  text-white border-none">
+                <SelectContent className="bg-[#0B1739] text-white border-none">
                   {CountryCodes.map((country) => (
                     <SelectItem
-                      key={country.code}
+                      key={`${country.code}-${country.label}`}
                       value={country.value}
-                      className="cursor-pointer  hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] hover:text-white"
+                      className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] hover:text-white"
                     >
                       {country.label} ({country.code})
                     </SelectItem>
@@ -182,19 +210,23 @@ const Signup = () => {
               </Select>
               <input
                 type="text"
-                value={phoneNumber}
-                onChange={handlePhoneNumberChange}
+                {...register("phoneNumber")}
                 className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
                 placeholder="Enter your phone number"
               />
             </div>
+            {errors.phoneNumber && (
+              <p className="text-red-500 text-sm mt-2">
+                {errors.phoneNumber.message}
+              </p>
+            )}
           </div>
 
-          <div className="space-y-8">
+          {/* Email Section */}
+          <div className="space-y-6">
             <p className="text-white text-base md:text-2xl">
-              Now, Let's give you a{" "}
-              <span className="font-semibold"> Login</span> . It will be your
-              email.
+              Now, Let's give you a <span className="font-semibold">Login</span>{" "}
+              . It will be your email.
             </p>
             <Input
               type="email"
@@ -209,6 +241,7 @@ const Signup = () => {
             )}
           </div>
 
+          {/* Password Section */}
           <div className="space-y-8">
             <p className="text-white text-base md:text-2xl">
               Set yourself a <span className="font-semibold">password</span>
@@ -246,6 +279,7 @@ const Signup = () => {
             </div>
           </div>
 
+          {/* User Type Section */}
           <div className="space-y-4">
             <p className="text-white text-base md:text-2xl">
               Will you use me for yourself, or on behalf of your clients?
@@ -254,44 +288,42 @@ const Signup = () => {
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => handleUserTypeChange("advertiser")}
-                className={`p-6 rounded-lg border cursor-pointer transition-all duration-200  ${
-                  formData.userType === "advertiser"
-                    ? "border-[#47B5FF] bg-[#47B5FF]/20"
-                    : "border-white/20 bg-white/5 hover:bg-white/10"
+                onClick={() => setSelect("advertiser")}
+                className={`p-6 rounded-lg border cursor-pointer transition-all duration-200 ${
+                  select === "advertiser"
+                    ? "border-[#47B5FF]"
+                    : "border-white/20"
                 }`}
               >
                 <h3 className="text-white font-medium text-base md:text-xl mb-5">
                   For Yourself (Advertiser)
                 </h3>
-                <p className="text-white/70 text-xs md:text-base leading-relaxed">
+                <p className="text-sm">
                   Choose this option if you want to create and manage
-                  advertising campaigns for your own business or personal use.
+                  advertising campaigns for your own business or personal use
                 </p>
               </motion.div>
 
               <motion.div
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={() => handleUserTypeChange("agency")}
+                onClick={() => setSelect("agency")}
                 className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
-                  formData.userType === "agency"
-                    ? "border-[#47B5FF] bg-[#47B5FF]/20"
-                    : "border-white/20 bg-white/5 hover:bg-white/10"
+                  select === "agency" ? "border-[#47B5FF]" : "border-white/20"
                 }`}
               >
                 <h3 className="text-white font-medium text-base md:text-xl mb-5">
                   For Your Clients (Agency)
                 </h3>
-                <p className="text-white/70 text-xs md:text-base leading-relaxed">
-                  Choose this option if you want to manage advertising campaigns
-                  on behalf of multiple clients as an agency.
+                <p className="text-sm">
+                  Choose this option if you are an agency or consultant looking
+                  to manage advertising campaigns on behalf of multiple clients
                 </p>
               </motion.div>
             </div>
-            {errors.userType && (
+            {select === "" && (
               <p className="text-red-500 text-sm mt-2">
-                {errors.userType?.message}
+                Please select a user type
               </p>
             )}
           </div>
@@ -299,19 +331,16 @@ const Signup = () => {
           <div className="space-y-8">
             <p className="text-white text-base md:text-2xl">
               Now give your organization a{" "}
-              <span className="font-semibold">name .</span>
+              <span className="font-semibold">name</span>
             </p>
             <Input
               placeholder="Organization name"
-              value={formData.organizationName}
-              onChange={(e) =>
-                handleInputChange("organizationName", e.target.value)
-              }
+              {...register("organizationName")}
               className="w-full px-0 py-4 bg-transparent border-0 border-b border-white/40 text-white md:text-lg text-base placeholder:text-[#5575C4] focus:outline-none focus:border-white focus-visible:ring-0 focus-visible:ring-offset-0 rounded-none transition-all duration-300"
             />
             {errors.organizationName && (
               <p className="text-red-500 text-sm mt-2">
-                {errors.organizationName?.message}
+                {errors.organizationName.message}
               </p>
             )}
           </div>
@@ -324,11 +353,9 @@ const Signup = () => {
               <div className="flex items-start gap-3">
                 <Checkbox
                   id="terms"
-                  checked={formData.acceptTerms}
-                  onCheckedChange={(checked) =>
-                    handleInputChange("acceptTerms", checked as boolean)
-                  }
-                  className="border-white/40 data-[state=checked]:bg-[#47B5FF] data-[state=checked]:border-[#47B5FF] mt-0.5"
+                  checked={accept}
+                  onCheckedChange={(checked) => setAccept(!!checked)}
+                  className="border-white/40 cursor-pointer data-[state=checked]:bg-[#47B5FF] data-[state=checked]:border-[#47B5FF] mt-0.5"
                 />
                 <label
                   htmlFor="terms"
@@ -338,17 +365,44 @@ const Signup = () => {
                   acknowledge the terms and conditions and privacy policy.
                 </label>
               </div>
+              {!accept && (
+                <p className="text-red-500 text-sm mt-2">
+                  You must accept the terms and conditions
+                </p>
+              )}
             </div>
-            <div className="w-full md:w-fit  ">
-              <CommonLoginButton
-                onClick={handleSubmit(handleSubmitForm)}
-                title="Create Account"
-                isInView={true}
-                Icon={CircleChevronRight}
-              />
+
+            <div className="w-full md:w-fit">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.9 }}
+                className="w-full lg:w-fit mx-auto"
+              >
+                <button
+                  type="submit"
+                  disabled={!accept || isLoading || !select}
+                  className="w-full px-5 py-3 rounded-lg bg-[#89AAD5] text-black font-semibold text-sm md:text-base cursor-pointer transition-all duration-300 hover:bg-[#7E95C7] hover:scale-105 hover:shadow-[0_0_20px_rgba(142,148,181,0.5)] flex justify-center items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? "Creating..." : "Create Account"}
+                  <CircleChevronRight className="w-4 h-4 text-black" />
+                </button>
+              </motion.div>
             </div>
           </div>
         </motion.form>
+        <OtpVerificationModal
+          open={otpOpen}
+          onOpenChange={setOtpOpen}
+          email={otpEmail}
+          onVerified={() => {
+            toast.success("Email verified. You can now log in.");
+            reset();
+            setSelect("");
+            setAccept(false);
+            navigate("/login");
+          }}
+        />
       </div>
     </div>
   );

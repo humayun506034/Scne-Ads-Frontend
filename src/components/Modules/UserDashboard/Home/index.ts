@@ -1,18 +1,18 @@
 
-import { Calculator, ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MapPin, MonitorCog, Settings, Upload } from "lucide-react";
+import { ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MonitorCog, Settings, Upload } from "lucide-react";
 
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
-    {
-        title: "See Locations",
-        icon: MapPin,
-        href: "/mapOfBoard",
-    },
-    {
-        title: "Cost Estimator",
-        icon: Calculator,
-        href: "/user-dashboard/costEstimator",
-    },
+    // {
+    //     title: "See Locations",
+    //     icon: MapPin,
+    //     href: "/mapOfBoard",
+    // },
+    // {
+    //     title: "Cost Estimator",
+    //     icon: Calculator,
+    //     href: "/customer-dashboard/costEstimator",
+    // },
     {
         title: "Map of Boards",
         icon: Eye,
@@ -27,12 +27,12 @@ export const userSidebarItems = [
             {
                 title: "Home",
                 icon: Home,
-                href: "/user-dashboard",
+                href: "/customer-dashboard",
             },
             {
                 title: "Dashboard",
                 icon: LayoutDashboard,
-                href: "/user-dashboard/metrics",
+                href: "/customer-dashboard/metrics",
             },
 
         ],
@@ -43,7 +43,7 @@ export const userSidebarItems = [
             {
                 title: "Campaign Management",
                 icon: Settings,
-                href: "/user-dashboard/campaigns",
+                href: "/customer-dashboard/campaigns",
             },
         ],
     },
@@ -53,7 +53,7 @@ export const userSidebarItems = [
             {
                 title: "My Uploads",
                 icon: Upload,
-                href: "/user-dashboard/uploads",
+                href: "/customer-dashboard/uploads",
             },
         ],
     },
