@@ -10,8 +10,8 @@ export function UserDashboardLayout() {
         <DashboardSidebar user="customer" />
       </aside>
 
-      <div className="flex flex-col flex-1 overflow-hidden ">
-        <main className="flex-1 ">
+      <div className="flex flex-col  overflow-hidden ">
+        <main className=" ">
           <div className="relative ">
             <UserDashboardMobileNavbar />
 

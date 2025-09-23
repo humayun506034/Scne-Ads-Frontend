@@ -1,38 +1,44 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { baseApi } from "./api/baseApi";
-
+import Cookies from 'js-cookie'; // Import js-cookie
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
-
-import storage from 'redux-persist/lib/storage';
+import { baseApi } from "./api/baseApi";
 import authSlice from './Slices/AuthSlice/authSlice';
 
+
+const cookieStorage = {
+  getItem: (key: string) => {
+    return Promise.resolve(Cookies.get(key));
+  },
+  setItem: (key: string, value: string) => {
+    return Promise.resolve(Cookies.set(key, value, { expires: 365, path: '' }));
+  },
+  removeItem: (key: string) => {
+    return Promise.resolve(Cookies.remove(key));
+  }
+};
 
 
 const persistConfig = {
   key: 'auth',
-  storage,
-}
+  storage: cookieStorage,
+};
 
-const persistedReducer = persistReducer(persistConfig, authSlice)
-
-
-
+const persistedReducer = persistReducer(persistConfig, authSlice);
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
-    auth: persistedReducer   // will save authSlice in local storage permanently , refresh a chole jabe na 
-    //  array notation a name peye jabe ar reducer export kora hoynai tai .reducer access kore dite hobe
-
+    auth: persistedReducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    serializableCheck: {
-
-      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-    },
-  }).concat(baseApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(baseApi.middleware),
 });
-export const persistor = persistStore(store)
+
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

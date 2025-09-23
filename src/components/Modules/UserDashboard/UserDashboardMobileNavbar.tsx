@@ -2,10 +2,13 @@ import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { logout } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from "framer-motion";
 import { LogOut, Menu, Plus } from "lucide-react";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import logo from "../../../assets/logo.png";
 import { navItems, userSidebarItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
@@ -13,6 +16,8 @@ import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 const UserDashboardMobileNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/customer-dashboard");
+  const dispatch = useDispatch();
+
   return (
     <div className="lg:hidden px-5 md:px-10 flex items-center  mt-4  border-border border-b-1 pb-4 justify-between gap-4 w-full">
       <div className="flex h-12 px-6  lg:mt-8   lg:items-center  ">
@@ -107,7 +112,13 @@ const UserDashboardMobileNavbar = () => {
             </div>
 
             <div className="px-3 pb-6">
-              <button className="flex border-red-500 border  text-red-500 w-full justify-center items-center gap-3 text-nowrap hover:text-white cursor-pointer  rounded-lg px-2 py-2 text-sm  align-center">
+              <button
+                onClick={() => {
+                  dispatch(logout());
+                  toast.success("Logout successful");
+                }}
+                className="flex border-red-500 border  text-red-500 w-full justify-center items-center gap-3 text-nowrap hover:text-white cursor-pointer  rounded-lg px-2 py-2 text-sm  align-center"
+              >
                 <LogOut className="h-4 w-4" />
                 Logout
               </button>

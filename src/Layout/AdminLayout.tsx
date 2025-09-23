@@ -1,6 +1,6 @@
-import { DashboardSidebar } from "@/Layout/DashboardSidebar";
 import CustomToaster from "@/pages/CustomToaster";
 import { Outlet } from "react-router-dom";
+import { DashboardSidebar } from "./DashboardSidebar";
 
 export function AdminDashboardLayout() {
   return (

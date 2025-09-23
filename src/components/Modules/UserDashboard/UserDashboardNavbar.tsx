@@ -6,14 +6,21 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAppSelector } from "@/store/hooks";
+import { logout, selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from "framer-motion";
 import { ChevronDown, LogOut, User } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { navItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
 export function UserDashboardNavbar() {
-  const userName = "Danaj";
+  const dispatch = useDispatch();
+  const user = useAppSelector(selectCurrentUser);
+
+  const userName = user?.first_name + " " + user?.last_name;
   return (
     <header className="hidden lg:block sticky mt-0 md:mt-6 lg:mt-10 xl:mt-6 top-0 z-50 w-full text-white">
       <div className="flex items-center justify-between border-none border-b border-[#283F81] ">
@@ -77,7 +84,13 @@ export function UserDashboardNavbar() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600">
+                <DropdownMenuItem
+                  onClick={() => {
+                    dispatch(logout());
+                    toast.success("Logout successful");
+                  }}
+                  className="cursor-pointer hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600"
+                >
                   <LogOut className="h-4 w-4 mr-2" />
                   Logout
                 </DropdownMenuItem>
