@@ -84,6 +84,12 @@ export const adminSidebarItems = [
                 icon: Settings,
                 href: "/admin-dashboard/campaigns",
             },
+            {
+                title: "Screen Management",
+                icon: Settings,
+                href: "/admin-dashboard/screen",
+            },
+          
         ],
     },
     {

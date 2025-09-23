@@ -13,6 +13,7 @@ import CommonStatus from "@/common/CommonStatus";
 import ApproveCampaignDetailsModal from "./ApproveCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
 import Pagination from "@/components/Pagination";
+import Loading from "@/common/MapLoading";
 
 export default function AdminCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -71,9 +72,7 @@ export default function AdminCampaignManagement() {
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6 text-center text-[#AEB9E1]">Loading campaigns...</div>
-    );
+    return <Loading/>
   }
 
   return (
