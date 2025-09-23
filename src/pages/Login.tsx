@@ -76,7 +76,8 @@ const Login = () => {
         const { user, accessToken } = res.data;
         dispatch(setUser({ user, token: accessToken }));
         toast.success(res.message || "Logged in successfully", { id: toastId });
-        // navigate(`${res.data.user.role}-dashboard`);
+
+        navigate(`${res.data.user.role}-dashboard`);
       } else {
         toast.error(res.message || "Login failed", { id: toastId });
       }
