@@ -32,6 +32,7 @@ import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
 import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
 import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
+import ProtectedRoute from "@/pages/ProtectedRoutes";
 import CostEstimator from "@/pages/UserDashboard/CostEstimator";
 import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement";
 
@@ -47,8 +48,12 @@ const routes = createBrowserRouter([
     ],
   },
   {
-    path: "/customer-dashboard",
-    element: <UserDashboardLayout />,
+    path: "/user-dashboard",
+    element: (
+      <ProtectedRoute allowedRoles={["customer"]}>
+        <UserDashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -95,7 +100,11 @@ const routes = createBrowserRouter([
   },
   {
     path: "/admin-dashboard",
-    element: <AdminDashboardLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminDashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,

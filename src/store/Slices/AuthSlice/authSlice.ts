@@ -1,7 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export interface IAuthState {
-  user: { role: string } | null;
+  user: {
+    role: 'customer' | 'admin'
+    email: string
+    first_name: string
+    id: string
+    is_verified: boolean
+    last_name: string
+    organisation_name: string
+    organisation_role: "advertiser" | "agency"
+    phone: string
+  } | null;
   token: string | null;
 }
 

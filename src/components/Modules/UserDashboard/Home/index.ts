@@ -11,7 +11,7 @@ export const navItems = [
     // {
     //     title: "Cost Estimator",
     //     icon: Calculator,
-    //     href: "/customer-dashboard/costEstimator",
+    //     href: "/user-dashboard/costEstimator",
     // },
     {
         title: "Map of Boards",
@@ -27,12 +27,12 @@ export const userSidebarItems = [
             {
                 title: "Home",
                 icon: Home,
-                href: "/customer-dashboard",
+                href: "/user-dashboard",
             },
             {
                 title: "Dashboard",
                 icon: LayoutDashboard,
-                href: "/customer-dashboard/metrics",
+                href: "/user-dashboard/metrics",
             },
 
         ],
@@ -43,7 +43,7 @@ export const userSidebarItems = [
             {
                 title: "Campaign Management",
                 icon: Settings,
-                href: "/customer-dashboard/campaigns",
+                href: "/user-dashboard/campaigns",
             },
         ],
     },
@@ -53,7 +53,7 @@ export const userSidebarItems = [
             {
                 title: "My Uploads",
                 icon: Upload,
-                href: "/customer-dashboard/uploads",
+                href: "/user-dashboard/uploads",
             },
         ],
     },
@@ -115,14 +115,7 @@ export const adminSidebarItems = [
 
 ];
 
-export interface LocationCard {
-    id: string
-    title: string
-    description: string
-    image: string
-    isFavorite?: boolean
-    category: "new-arrivals" | "top-sellers" | "favourites"
-}
+
 
 export type TabType = "new-arrivals" | "top-sellers" | "favourites"
 

@@ -3,6 +3,8 @@ import AdminLocationTabs from "@/components/Modules/admin-dashboard/Home/HomeTab
 import AdminSpecialSection from "@/components/Modules/admin-dashboard/Home/SpecialSection.tsx/AdminSpecialSection";
 
 import { Button } from "@/components/ui/button";
+import { useAppSelector } from "@/store/hooks";
+import { logout, selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,9 +14,14 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
 import { ChevronDown, LogOut, Menu, User } from "lucide-react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const AdminDashboardHomePage = () => {
+  const dispatch = useDispatch();
+  const user = useAppSelector(selectCurrentUser);
+  const userName = user?.first_name + " " + user?.last_name;
   return (
     <div>
       {/* header */}
@@ -25,13 +32,13 @@ const AdminDashboardHomePage = () => {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-8 gap-4"
       >
         <h1 className="text-3xl sm:text-4xl font-semibold text-white">
-          Hey, <span className="text-secondary-color">Admin</span>
+          Hey, <span className="text-secondary-color">{userName}</span>
         </h1>
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="hidden sm:flex items-center gap-3 sm:gap-4">
             {/* Profile section */}
 
-            <div >
+            <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
@@ -41,15 +48,17 @@ const AdminDashboardHomePage = () => {
                     <div className="w-8 h-8 bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] rounded-full flex items-center justify-center">
                       <User className="h-4 w-4" />
                     </div>
-                    <span className="hidden sm:inline font-medium">SS</span>
+                    <span className="hidden sm:inline font-medium">
+                      {userName}
+                    </span>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="w-full bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center flex-col"
+                  className="w-full bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center gap-1  flex-col"
                 >
-                  <DropdownMenuItem className="cursor-pointer py-2 px-5 hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white  w-full">
+                  <DropdownMenuItem className="cursor-pointer py-2 px-5 hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color rounded-md hover:text-white  w-full">
                     <Link
                       to="/admin-dashboard/adminBasicInfo"
                       className="flex items-center w-full"
@@ -59,7 +68,14 @@ const AdminDashboardHomePage = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="cursor-pointer py-2 px-5 flex items-center justify-between  hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600">
+                  <DropdownMenuItem
+                    onClick={() => {
+                      dispatch(logout());
+                      toast.success("Logout successful");
+                    }}
+                    className="cursor-pointer py-2 px-5 flex  hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)]  items-center justify-between   hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,
+                  _#09489D_69.04%)] w-full rounded-md text-red-600"
+                  >
                     <LogOut className="h-4 w-4 mr-2" />
                     Logout
                   </DropdownMenuItem>
