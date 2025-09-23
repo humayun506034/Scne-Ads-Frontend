@@ -71,13 +71,16 @@ const Login = () => {
         email: data.email,
         password: data.password,
       }).unwrap();
-      console.log("🚀 ~ onSubmit ~ res:", res);
+
       if (res.success && res.data?.accessToken) {
         const { user, accessToken } = res.data;
         dispatch(setUser({ user, token: accessToken }));
         toast.success(res.message || "Logged in successfully", { id: toastId });
-
-        navigate(`${res.data.user.role}-dashboard`);
+        if (res.data.user.role === "customer") {
+          navigate(`/${"user-dashboard"}`);
+        } else if (res.data.user.role === "admin") {
+          navigate(`/${"admin-dashboard"}`);
+        }
       } else {
         toast.error(res.message || "Login failed", { id: toastId });
       }
