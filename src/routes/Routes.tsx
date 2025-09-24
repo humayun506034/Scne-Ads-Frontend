@@ -35,6 +35,8 @@ import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManag
 import ProtectedRoute from "@/pages/ProtectedRoutes";
 import CostEstimator from "@/pages/UserDashboard/CostEstimator";
 import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement";
+import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCampaignManagement";
+import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
 
 const routes = createBrowserRouter([
   {
@@ -120,7 +122,8 @@ const routes = createBrowserRouter([
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },
-      { path: "campaigns", element: <AdminCampaignManagement /> },
+      { path: "bundle-campaigns", element: <AdminBundleCampaignManagement /> },
+      { path: "screen-campaigns", element: <AdminScreenCampaignManagement /> },
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,
