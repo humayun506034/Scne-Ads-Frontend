@@ -19,6 +19,12 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import {
+  useGetAllBundleCampaignQuery,
+  useGetAllCustomCampaignQuery,
+} from "@/store/api/Campaign/campaignApi";
+import Loading from "@/common/MapLoading";
+import { useGetAllUserQuery } from "@/store/api/User/useApi";
 
 // Month Dropdown Button Component
 const MonthDropdownButton = ({ className = "" }) => {
@@ -72,25 +78,59 @@ const MetricCard = ({ title, subtitle, value, className = "" }) => (
 );
 
 const AdminCampaignData: React.FC = () => {
+  const { data: BundleResponse, isLoading } = useGetAllBundleCampaignQuery({});
+  const { data: ScreenResponse } = useGetAllCustomCampaignQuery({});
+  const { data: UserResponse } = useGetAllUserQuery({});
+
+  // console.log(UserResponse)
+
+  const BundleCampaignMeta = BundleResponse?.data.meta;
+  const ScreenCampaignMeta = ScreenResponse?.data.meta;
+  const UserAnalytics = UserResponse?.data.analytics;
+  // console.log(BundleCampaignMeta);
+
+  // console.log(UserAnalytics)
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
   const metricsData = [
-    { title: "Total Campaigns", subtitle: "Active and Completed", value: "26" },
     {
-      title: "Ads Pending Review",
-      subtitle: "Requires your attention",
-      value: "20",
+      title: "Total Bundle Campaigns",
+      subtitle: "Pending, Running and Completed",
+      value: `${BundleCampaignMeta?.counts.totalCampaign}`,
     },
     {
-      title: "Total Revenue (YTD)",
+      title: "Total Screen Campaigns",
+      subtitle: "Pending, Running and Completed",
+      value: `${ScreenCampaignMeta?.counts.totalCampaign}`,
+    },
+
+    {
+      title: "Total Revenue",
       subtitle: "Year-to-Date Earnings",
-      value: "$203,000",
+      value: `$${
+        BundleCampaignMeta?.revenue.totalRevenue +
+        ScreenCampaignMeta?.revenue.totalRevenue
+      }`,
+    },
+
+    {
+      title: "Total Admin",
+      subtitle: "Admins",
+      value: `${UserAnalytics?.totalAdmins}`,
     },
     {
-      title: "Screen Uptime (Avg)",
-      subtitle: "Average across all screens",
-      value: "98.6%",
+      title: "Total Customers",
+      subtitle: "Customers",
+      value: `${UserAnalytics?.totalCustomers}`,
     },
-    { title: "Active Campaigns", subtitle: "Currently running", value: "18" },
-    { title: "New Signups", subtitle: "Last 30 Days", value: "25" },
+    {
+      title: "New Signups",
+      subtitle: "Last 15 Days",
+      value: `${UserAnalytics?.signUps15d}`,
+    },
   ];
 
   const campaignsData = [

@@ -13,6 +13,7 @@ import CommonStatus from "@/common/CommonStatus";
 import ApproveCampaignDetailsModal from "./ApproveCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
 import Pagination from "@/components/Pagination";
+import Loading from "@/common/MapLoading";
 
 export default function AdminCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,6 +38,7 @@ export default function AdminCampaignManagement() {
   // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
 
   const currentData = campaigns;
+  console.log("🚀 ~ AdminCampaignManagement ~ currentData:", currentData)
 
   // const hasNextPage = page < totalPages;
   // const hasPrevPage = page > 1;
@@ -60,10 +62,7 @@ export default function AdminCampaignManagement() {
     setSelectedCampaign(null);
   };
 
-  // const openDeleteModal = (campaign: any) => {
-  //   setSelectedCampaign(campaign);
-  //   setIsDeleteModalOpen(true);
-  // };
+
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -71,9 +70,7 @@ export default function AdminCampaignManagement() {
   };
 
   if (isLoading) {
-    return (
-      <div className="p-6 text-center text-[#AEB9E1]">Loading campaigns...</div>
-    );
+    return <Loading/>
   }
 
   return (
@@ -108,8 +105,8 @@ export default function AdminCampaignManagement() {
                       {campaign.bundle?.bundle_name}
                     </td>
                     <td className="py-3 px-4">
-                      {campaign.payment?.user?.first_name}{" "}
-                      {campaign.payment?.user?.last_name}
+                      {campaign.customer?.first_name}{" "}
+                      {campaign.customer?.last_name}
                     </td>
                     <td className="py-3 px-4">
                       <CommonStatus status={campaign.status} />

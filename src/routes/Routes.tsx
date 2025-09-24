@@ -34,6 +34,7 @@ import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManag
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 import ProtectedRoute from "@/pages/ProtectedRoutes";
 import CostEstimator from "@/pages/UserDashboard/CostEstimator";
+import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement";
 
 const routes = createBrowserRouter([
   {
@@ -124,6 +125,8 @@ const routes = createBrowserRouter([
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },
+            { path: "screen", element: <AdminScreenManagement /> },
+
       {
         path: "adminAnalytics",
         element: <CampaignPerformanceAnalytics />,
