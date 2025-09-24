@@ -38,6 +38,7 @@ export default function AdminCampaignManagement() {
   // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
 
   const currentData = campaigns;
+  console.log("🚀 ~ AdminCampaignManagement ~ currentData:", currentData)
 
   // const hasNextPage = page < totalPages;
   // const hasPrevPage = page > 1;
@@ -61,10 +62,7 @@ export default function AdminCampaignManagement() {
     setSelectedCampaign(null);
   };
 
-  // const openDeleteModal = (campaign: any) => {
-  //   setSelectedCampaign(campaign);
-  //   setIsDeleteModalOpen(true);
-  // };
+
 
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
@@ -107,8 +105,8 @@ export default function AdminCampaignManagement() {
                       {campaign.bundle?.bundle_name}
                     </td>
                     <td className="py-3 px-4">
-                      {campaign.payment?.user?.first_name}{" "}
-                      {campaign.payment?.user?.last_name}
+                      {campaign.customer?.first_name}{" "}
+                      {campaign.customer?.last_name}
                     </td>
                     <td className="py-3 px-4">
                       <CommonStatus status={campaign.status} />

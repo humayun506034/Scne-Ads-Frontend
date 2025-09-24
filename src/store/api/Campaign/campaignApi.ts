@@ -46,7 +46,7 @@ import { baseApi } from "@/store/api/baseApi";
 
 const campaignsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBundleCampaign: builder.query({
+    getAllBundleCampaign: builder.query<any,{ page?: string; searchTerm?: string }>({
       query: ({ page, searchTerm }) => ({
         url: "/campaign/get-all-bundle-campaign",
         method: "GET",
@@ -57,7 +57,7 @@ const campaignsApi = baseApi.injectEndpoints({
 
       }),
     }),
-    getAllCustomCampaign: builder.query({
+    getAllCustomCampaign: builder.query<any,{ page?: string; searchTerm?: string }>({
       query: ({ page, searchTerm }) => ({
         url: "/campaign/get-all-custom-campaign",
         method: "GET",
