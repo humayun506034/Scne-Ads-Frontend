@@ -86,8 +86,7 @@ function AdminScreenManagement() {
 
   const screens = data?.data?.data || [];
   const meta = data?.data?.meta;
-  const totalPages = meta?.totalPages ?? 1;
-
+const totalPages =( meta?.totalPages as number )- 1 || 1;
   return (
     <div className="min-h-screen  p-4 md:p-6 lg:p-8">
       <div className="max-w-7xl mx-auto">

@@ -80,12 +80,17 @@ export const adminSidebarItems = [
         title: "Management",
         items: [
             {
-                title: "Campaign Management",
+                title: "Bundle Campaign",
                 icon: Settings,
-                href: "/admin-dashboard/campaigns",
+                href: "/admin-dashboard/bundle-campaigns",
             },
             {
-                title: "Screen Management",
+                title: "Screen Campaign",
+                icon: Settings,
+                href: "/admin-dashboard/screen-campaigns",
+            },
+            {
+                title: "Screen",
                 icon: Settings,
                 href: "/admin-dashboard/screen",
             },
