@@ -13,12 +13,9 @@ const screenApi = baseApi.injectEndpoints({
           page,
           searchTerm,
         },
-        
       }),
     }),
-    
   }),
 });
 
-export const { useGetAllScreenQuery } =
-  screenApi;
+export const { useGetAllScreenQuery } = screenApi;

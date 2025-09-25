@@ -8,7 +8,7 @@ import CommonStatus from "@/common/CommonStatus";
 import ApproveCampaignDetailsModal from "./ApproveCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
 import Loading from "@/common/MapLoading";
-import ScreenCampaignDetailsModal from "./ScreenCampaignDetailsModal";
+import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 
 export default function AdminScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);

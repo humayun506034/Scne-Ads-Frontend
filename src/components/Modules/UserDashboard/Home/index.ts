@@ -45,6 +45,11 @@ export const userSidebarItems = [
                 icon: Settings,
                 href: "/user-dashboard/campaigns",
             },
+            {
+                title: "Bundle Campaign",
+                icon: Settings,
+                href: "/user-dashboard/bundle-campaigns",
+            },
         ],
     },
     {
