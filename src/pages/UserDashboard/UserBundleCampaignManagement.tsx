@@ -1,21 +1,20 @@
-"use client";
 
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 import {
-  useGetAllBundleCampaignQuery,
+  useGetMyselfAllBundleCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 import CommonStatus from "@/common/CommonStatus";
 import Pagination from "@/components/Pagination";
 import Loading from "@/common/MapLoading";
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
 
-export default function AdminBundleCampaignManagement() {
+export default function UserBundleCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isLoading } = useGetAllBundleCampaignQuery({
+  const { data, isLoading } = useGetMyselfAllBundleCampaignQuery({
     page: currentPage.toString(),
     searchTerm: searchTerm,
   });

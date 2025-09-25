@@ -212,9 +212,8 @@ const totalPages =( meta?.totalPages as number )- 1 || 1;
                           ${screen.price.toLocaleString()}
                         </span>
                       </td>
-                      <td className="py-4 px-6">
-                        <div className="flex flex-col gap-1 justify-center items-center">
-                          <span
+                      <td className="py-4 flex items-center justify-center">
+                        <span
                             className={`px-2 py-1 rounded-full text-xs font-medium w-fit ${
                               screen.availability === "available"
                                 ? "bg-green-500/20 text-green-300 border border-green-500/30"
@@ -223,16 +222,6 @@ const totalPages =( meta?.totalPages as number )- 1 || 1;
                           >
                             {screen.availability}
                           </span>
-                          <span
-                            className={`px-2 py-1 rounded-full text-xs font-medium w-fit ${
-                              screen.status === "active"
-                                ? "bg-blue-500/20 text-blue-300 border border-blue-500/30"
-                                : "bg-gray-500/20 text-gray-300 border border-gray-500/30"
-                            }`}
-                          >
-                            {screen.status}
-                          </span>
-                        </div>
                       </td>
                       <td className="py-4 px-6">
                         <div className="flex items-center gap-2">
