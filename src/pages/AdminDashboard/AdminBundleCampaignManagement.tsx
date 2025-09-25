@@ -8,9 +8,9 @@ import {
   useGetAllBundleCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 import CommonStatus from "@/common/CommonStatus";
-import ApproveCampaignDetailsModal from "./ApproveCampaignDetailsModal";
 import Pagination from "@/components/Pagination";
 import Loading from "@/common/MapLoading";
+import BundleCampaignDetailsModal from "./BundleCampaignDetailsModal";
 
 export default function AdminBundleCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,6 +23,7 @@ export default function AdminBundleCampaignManagement() {
 
 
   const campaigns = data?.data?.data || [];
+  console.log({campaigns})
   const meta = data?.data?.meta;
 const TotalPages = meta?.totalPages - 1 || 1;
   // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
@@ -184,7 +185,7 @@ const TotalPages = meta?.totalPages - 1 || 1;
         </div>
 
         {/* Approve Modal */}
-        <ApproveCampaignDetailsModal
+        <BundleCampaignDetailsModal
           isOpen={isApproveModalOpen}
           onClose={closeApproveModal}
           campaign={selectedCampaign}
