@@ -38,6 +38,7 @@ import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement"
 import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCampaignManagement";
 import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
 import UserBundleCampaignManagement from "@/pages/UserDashboard/UserBundleCampaignManagement";
+import UserScreenCampaignManagement from "@/pages/UserDashboard/UserScreenCampaignManagement";
 
 const routes = createBrowserRouter([
   {
@@ -79,6 +80,7 @@ const routes = createBrowserRouter([
       { path: "campaigns", element: <CampaignTablePage /> },
 
       { path: "bundle-campaigns", element: <UserBundleCampaignManagement /> },
+      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
       { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
       { path: "userBillingInfo", element: <UserBillingInfo /> },
 

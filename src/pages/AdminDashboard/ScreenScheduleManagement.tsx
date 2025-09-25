@@ -19,7 +19,7 @@ const ScreenScheduleManagement: React.FC = () => {
 
   const screens = data?.data?.data || [];
   const meta = data?.data?.meta || { page: 1, totalPages: 1 };
-const totalPages = meta?.totalPages - 1 || 1; 
+const totalPages = meta?.totalPages  || 1; 
   const modalFields: Field[] = [
     {
       name: "screen_name",

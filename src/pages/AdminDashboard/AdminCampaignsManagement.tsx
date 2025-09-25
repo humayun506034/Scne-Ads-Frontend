@@ -47,7 +47,7 @@ export default function AdminCampaignManagement() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
   const meta = data?.data?.meta;
-  const totalPages = meta?.totalPages - 1 || 1;
+  const totalPages = meta?.totalPages  || 1;
 
   const customCampaignMeta = customData?.data?.meta;
   const customTotalPages = customCampaignMeta?.totalPages - 1 || 1;
