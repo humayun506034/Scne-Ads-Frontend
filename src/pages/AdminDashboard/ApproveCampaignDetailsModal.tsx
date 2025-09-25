@@ -1,131 +1,516 @@
-import React from "react";
-import { X } from "lucide-react";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import CommonDashboardButton from "@/common/CommonDashBoardButton";
 
-interface CampaignDetailsModalProps {
+
+// import { X } from "lucide-react";
+
+// type ApproveCampaignDetailsModalProps = {
+//   isOpen: boolean;
+//   onClose: () => void;
+//   campaign: any;
+// };
+
+// export default function ApproveCampaignDetailsModal({
+//   isOpen,
+//   onClose,
+//   campaign,
+// }: ApproveCampaignDetailsModalProps) {
+//   if (!isOpen || !campaign) return null;
+
+//   const { customer, bundle, contents, startDate, endDate, status, payment } =
+//     campaign;
+
+//   const isVideo = (url: string) =>
+//     url?.endsWith(".mp4") || url?.includes("video");
+
+//   return (
+//     <div className="fixed inset-0 z-50 flex items-center justify-center">
+//       {/* Overlay */}
+//       <div
+//         className="fixed inset-0 bg-black/70"
+//         onClick={onClose}
+//       />
+
+//       {/* Modal */}
+//       <div className="relative bg-[#0B1120] text-white rounded-xl shadow-lg w-full max-w-5xl max-h-[90vh] overflow-y-auto p-6">
+//         {/* Header */}
+//         <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
+//           <h2 className="text-lg font-semibold">Campaign Details</h2>
+//           <button onClick={onClose}>
+//             <X className="w-5 h-5 text-slate-300 hover:text-red-400" />
+//           </button>
+//         </div>
+
+//         <div className="space-y-8">
+//           {/* Customer Info */}
+//           <section>
+//             <h3 className="text-md font-semibold text-[#38B6FF] mb-2">
+//               Customer Information
+//             </h3>
+//             <div className="space-y-1 text-sm">
+//               <p>
+//                 <span className="text-slate-400">Name:</span>{" "}
+//                 {customer?.first_name} {customer?.last_name}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Email:</span> {customer?.email}
+//               </p>
+//             </div>
+//           </section>
+
+//           {/* Bundle Info */}
+//           <section>
+//             <h3 className="text-md font-semibold text-[#38B6FF] mb-2">
+//               Bundle Information
+//             </h3>
+//             <div className="grid grid-cols-2 gap-4 text-sm">
+//               <p>
+//                 <span className="text-slate-400">Name:</span>{" "}
+//                 {bundle?.bundle_name}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Location:</span>{" "}
+//                 {bundle?.location}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Duration:</span>{" "}
+//                 {bundle?.duration}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Price:</span> ${bundle?.price}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Campaign Status:</span> {status}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Payment:</span> $
+//                 {payment?.amount} ({payment?.status})
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">Start Date:</span>{" "}
+//                 {new Date(startDate).toLocaleDateString()}
+//               </p>
+//               <p>
+//                 <span className="text-slate-400">End Date:</span>{" "}
+//                 {new Date(endDate).toLocaleDateString()}
+//               </p>
+//             </div>
+//           </section>
+
+//           {/* Contents Info */}
+//           <section>
+//             <h3 className="text-md font-semibold text-[#38B6FF] mb-2">
+//               Contents Information
+//             </h3>
+//             <div className="grid gap-6">
+//               {contents?.map((content: any, index: number) => (
+//                 <div
+//                   key={content.id}
+//                   className="p-4 border border-slate-700 rounded-lg"
+//                 >
+//                   <h4 className="text-sm font-semibold mb-3">
+//                     Content #{index + 1}
+//                   </h4>
+
+//                   {/* Media */}
+//                   <div className="mb-4">
+//                     {isVideo(content.url) ? (
+//                       <video
+//                         src={content.url}
+//                         controls
+//                         className="w-full max-h-64 rounded-lg"
+//                       />
+//                     ) : (
+//                       <img
+//                         src={content.url}
+//                         alt={`Content ${index + 1}`}
+//                         className="w-full max-h-64 object-cover rounded-lg"
+//                       />
+//                     )}
+//                   </div>
+
+//                   {/* Screen Info */}
+//                   <div className="grid grid-cols-2 gap-3 text-sm">
+//                     <p>
+//                       <span className="text-slate-400">Screen:</span>{" "}
+//                       {content.screen?.screen_name}
+//                     </p>
+//                     <p>
+//                       <span className="text-slate-400">Size:</span>{" "}
+//                       {content.screen?.screen_size}
+//                     </p>
+//                     <p>
+//                       <span className="text-slate-400">Resolution:</span>{" "}
+//                       {content.screen?.resolution}
+//                     </p>
+//                     <p>
+//                       <span className="text-slate-400">Location:</span>{" "}
+//                       {content.screen?.location}
+//                     </p>
+//                     <p>
+//                       <span className="text-slate-400">Price:</span> $
+//                       {content.screen?.price}
+//                     </p>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           </section>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// // 2nd
+
+
+// // interface ApproveCampaignDetailsModalProps {
+// //   isOpen: boolean;
+// //   onClose: () => void;
+// //   campaign: any;
+// // }
+
+// // export default function ApproveCampaignDetailsModal({
+// //   isOpen,
+// //   onClose,
+// //   campaign,
+// // }: ApproveCampaignDetailsModalProps) {
+// //   if (!isOpen || !campaign) return null;
+
+// //   return (
+// //     <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+// //       <div className="bg-bg-dashboard rounded-xl w-full max-w-3xl p-6 overflow-y-auto max-h-[90vh] border border-slate-700">
+// //         {/* Header */}
+// //         <div className="flex justify-between items-center mb-6">
+// //           <h2 className="text-lg font-semibold text-[#38B6FF]">
+// //             Campaign Details
+// //           </h2>
+// //           <button
+// //             onClick={onClose}
+// //             className="text-slate-400 hover:text-red-400 text-xl"
+// //           >
+// //             ✕
+// //           </button>
+// //         </div>
+
+// //         {/* Customer Info */}
+// //         <div className="mb-6">
+// //           <h3 className="text-sm font-medium text-slate-300 mb-2">
+// //             Customer Info
+// //           </h3>
+// //           <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+// //             <p>
+// //               <span className="text-slate-500">Name:</span>{" "}
+// //               {campaign.customer?.first_name} {campaign.customer?.last_name}
+// //             </p>
+// //             <p>
+// //               <span className="text-slate-500">Email:</span>{" "}
+// //               {campaign.customer?.email}
+// //             </p>
+// //           </div>
+// //         </div>
+
+// //         {/* Payment Info */}
+// //         <div className="mb-6">
+// //           <h3 className="text-sm font-medium text-slate-300 mb-2">
+// //             Payment Info
+// //           </h3>
+// //           <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+// //             <p>
+// //               <span className="text-slate-500">Amount:</span> $
+// //               {campaign.CustomPayment?.[0]?.amount ?? 0}
+// //             </p>
+// //             <p>
+// //               <span className="text-slate-500">Status:</span>{" "}
+// //               {campaign.CustomPayment?.[0]?.status ?? "Unpaid"}
+// //             </p>
+// //           </div>
+// //         </div>
+
+// //         {/* Campaign Info */}
+// //         <div className="mb-6">
+// //           <h3 className="text-sm font-medium text-slate-300 mb-2">
+// //             Campaign Info
+// //           </h3>
+// //           <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+// //             <p>
+// //               <span className="text-slate-500">Start Date:</span>{" "}
+// //               {new Date(campaign.startDate).toLocaleDateString()}
+// //             </p>
+// //             <p>
+// //               <span className="text-slate-500">End Date:</span>{" "}
+// //               {new Date(campaign.endDate).toLocaleDateString()}
+// //             </p>
+// //             <p>
+// //               <span className="text-slate-500">Status:</span>{" "}
+// //               {campaign.status}
+// //             </p>
+// //           </div>
+// //         </div>
+
+// //         {/* Screens Info */}
+// //         <div className="mb-6">
+// //           <h3 className="text-sm font-medium text-slate-300 mb-2">
+// //             Screens ({campaign.screens?.length ?? 0})
+// //           </h3>
+// //           <div className="space-y-3">
+// //             {campaign.screens?.map((screen: any) => (
+// //               <div
+// //                 key={screen.id}
+// //                 className="p-3 border border-slate-700 rounded-lg text-sm text-slate-400 flex justify-between"
+// //               >
+// //                 <div>
+// //                   <p className="text-slate-200 font-medium">
+// //                     {screen.screen_name}
+// //                   </p>
+// //                   <p className="text-slate-500 text-xs">{screen.location}</p>
+// //                 </div>
+// //                 <p className="text-slate-300">${screen.price}</p>
+// //               </div>
+// //             ))}
+// //           </div>
+// //         </div>
+
+// //        {/* Contents Info */}
+// // <div className="mb-6">
+// //   <h3 className="text-sm font-medium text-slate-300 mb-2">
+// //     Contents ({campaign.contents?.length ?? 0})
+// //   </h3>
+// //   <div className="space-y-3">
+// //     {campaign.contents?.map((content: any) => {
+// //       const fileUrl = content.url;
+// //       const fileName = fileUrl?.split("/").pop() ?? "Unknown File";
+// //       const fileExt = fileUrl?.split(".").pop()?.toLowerCase();
+
+// //       return (
+// //         <div
+// //           key={content.id}
+// //           className="p-3 border border-slate-700 rounded-lg text-sm text-slate-400 space-y-2"
+// //         >
+// //           <p className="text-slate-200 font-medium break-all">{fileName}</p>
+// //           <p className="text-slate-500 text-xs capitalize">{fileExt}</p>
+
+// //           {/* Preview */}
+// //           {fileExt === "mp4" ? (
+// //             <video
+// //               src={fileUrl}
+// //               controls
+// //               className="w-full h-auto rounded-lg border border-slate-600"
+// //             />
+// //           ) : fileExt === "jpg" ||
+// //             fileExt === "jpeg" ||
+// //             fileExt === "png" ||
+// //             fileExt === "gif" ? (
+// //             <img
+// //               src={fileUrl}
+// //               alt={fileName}
+// //               className="w-full h-auto rounded-lg border border-slate-600"
+// //             />
+// //           ) : (
+// //             <a
+// //               href={fileUrl}
+// //               target="_blank"
+// //               rel="noopener noreferrer"
+// //               className="text-blue-400 underline text-xs"
+// //             >
+// //               View File
+// //             </a>
+// //           )}
+// //         </div>
+// //       );
+// //     })}
+// //   </div>
+// // </div>
+
+
+// //         {/* Footer */}
+// //         <div className="flex justify-end mt-6">
+// //           <button
+// //             onClick={onClose}
+// //             className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600"
+// //           >
+// //             Close
+// //           </button>
+// //         </div>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
+
+
+interface ApproveCampaignDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  campaign: {
-    name: string;
-    advertiser: string;
-    status: string;
-    actionedBy: string;
-    budget: string;
-    spent: string;
-    startDate: string;
-    endDate: string;
-  } | null;
+  campaign: any;
 }
 
-const ApproveCampaignDetailsModal: React.FC<CampaignDetailsModalProps> = ({
+export default function ApproveCampaignDetailsModal({
   isOpen,
   onClose,
   campaign,
-}) => {
+}: ApproveCampaignDetailsModalProps) {
   if (!isOpen || !campaign) return null;
 
-  // reject button
-  const RejectButton = ({
-    title,
-    Icon,
-    onClick,
-    className = "",
-  }: {
-    title: string;
-    Icon?: any;
-    className?: string;
-    onClick?: () => void;
-  }) => {
-    return (
-      <motion.button
-        whileHover={{ scale: 1.03 }}
-        whileTap={{ scale: 0.95 }}
-        type="submit"
-        onClick={onClick}
-        className={`bg-[#16294E] text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
-      >
-        {title}
-        {Icon && <Icon className="w-4 h-4 text-white" />}
-      </motion.button>
-    );
-  };
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9, y: 40 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.9, y: 40 }}
-        transition={{ duration: 0.25 }}
-        className="bg-[#0B162E] rounded-2xl w-full max-w-3xl shadow-2xl border border-[#1c2c55] overflow-hidden"
-      >
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-bg-dashboard rounded-xl w-full max-w-3xl p-6 overflow-y-auto max-h-[90vh] border border-slate-700">
         {/* Header */}
-        <div className="flex justify-between items-center px-12 py-8 border-b border-[#1c2c55]">
-          <h1 className="font-normal text-3xl">Campaign Details</h1>
-          <button onClick={onClose}>
-            <X className="w-6 h-6 text-[#AEB9E1] hover:text-red-400 cursor-pointer transition" />
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-lg font-semibold text-[#38B6FF]">
+            Campaign Details
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-slate-400 hover:text-red-400 text-xl"
+          >
+            ✕
           </button>
         </div>
 
-        {/* Body */}
-        <Card className="bg-transparent border-0 shadow-none p-12">
-          <CardContent className="grid grid-cols-1 lg:grid-cols-2 p-0">
-            {/* Left Section */}
-            <div>
-              <div className="pb-4">
-                <h3 className="text-lg font-medium text-[#ffffff]">
-                  Campaign Name
-                </h3>
-                <p className="text-base text-[#AEB9E1]">{campaign.name}</p>
-              </div>
-              <div className="pb-4">
-                <p className="text-lg text-[#ffffff]">Advertiser:</p>
-                <p className="text-[#AEB9E1] text-base">
-                  {campaign.advertiser}
-                </p>
-              </div>
-              <div className="pb-4">
-                <p className="text-lg text-[#ffffff]">Status:</p>
-                <p className="text-[#AEB9E1] text-base">{campaign.status}</p>
-              </div>
-              <div className="pb-4">
-                <span className="text-[#ffffff] text-lg">Budget:</span>
-                <p className="text-[#AEB9E1] text-base">{campaign.budget}</p>
-              </div>
-              <div className="pb-4">
-                <span className="text-[#ffffff] text-lg">Spent:</span>
-                <p className="text-[#AEB9E1] text-base">{campaign.spent}</p>
-              </div>
-            </div>
-            {/* Right Section */}
-            <div>
-              <div className="pb-4">
-                <p className="text-[#ffffff] text-lg">Start Date:</p>
-                <p className="text-[#AEB9E1] text-base">{campaign.startDate}</p>
-              </div>
-              <div className="pb-4">
-                <p className="text-[#ffffff] text-lg">End Date:</p>
-                <p className="text-[#AEB9E1] text-base">{campaign.endDate}</p>
-              </div>
-              <div className="w-full my-2 flex justify-center items-center bg-[#11214D] rounded-xl overflow-hidden">
-                <img
-                  src="/src/assets/AdminPanel/campaign-details-card-details-image.png"
-                  alt={campaign.name}
-                  className="object-contain w-full h-full"
-                />
-              </div>
-            </div>
-          </CardContent>
-          <div className="flex justify-end gap-5">
-            <CommonDashboardButton title="Approve" />
-            <RejectButton title="Reject" />
+        {/* Customer Info */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-slate-300 mb-2">
+            Customer Info
+          </h3>
+          <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+            <p>
+              <span className="text-slate-500">Name:</span>{" "}
+              {campaign.customer?.first_name} {campaign.customer?.last_name}
+            </p>
+            <p>
+              <span className="text-slate-500">Email:</span>{" "}
+              {campaign.customer?.email}
+            </p>
           </div>
-        </Card>
-      </motion.div>
+        </div>
+
+        {/* Payment Info */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-slate-300 mb-2">
+            Payment Info
+          </h3>
+          <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+            <p>
+              <span className="text-slate-500">Amount:</span> $
+              {campaign.CustomPayment?.[0]?.amount ?? 0}
+            </p>
+            <p>
+              <span className="text-slate-500">Status:</span>{" "}
+              {campaign.CustomPayment?.[0]?.status ?? "Unpaid"}
+            </p>
+          </div>
+        </div>
+
+        {/* Campaign Info */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-slate-300 mb-2">
+            Campaign Info
+          </h3>
+          <div className="grid grid-cols-2 gap-4 text-sm text-slate-400">
+            <p>
+              <span className="text-slate-500">Start Date:</span>{" "}
+              {new Date(campaign.startDate).toLocaleDateString()}
+            </p>
+            <p>
+              <span className="text-slate-500">End Date:</span>{" "}
+              {new Date(campaign.endDate).toLocaleDateString()}
+            </p>
+            <p>
+              <span className="text-slate-500">Status:</span>{" "}
+              {campaign.status}
+            </p>
+          </div>
+        </div>
+
+        {/* Screens Info */}
+        <div className="mb-6">
+          <h3 className="text-sm font-medium text-slate-300 mb-2">
+            Screens ({campaign.screens?.length ?? 0})
+          </h3>
+          <div className="space-y-3">
+            {campaign.screens?.map((screen: any) => (
+              <div
+                key={screen.id}
+                className="p-3 border border-slate-700 rounded-lg text-sm text-slate-400 flex justify-between"
+              >
+                <div>
+                  <p className="text-slate-200 font-medium">
+                    {screen.screen_name}
+                  </p>
+                  <p className="text-slate-500 text-xs">{screen.location}</p>
+                </div>
+                <p className="text-slate-300">${screen.price}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+       {/* Contents Info */}
+<div className="mb-6">
+  <h3 className="text-sm font-medium text-slate-300 mb-2">
+    Contents ({campaign.contents?.length ?? 0})
+  </h3>
+  <div className="space-y-3">
+    {campaign.contents?.map((content: any) => {
+      const fileUrl = content.url;
+      const fileName = fileUrl?.split("/").pop() ?? "Unknown File";
+      const fileExt = fileUrl?.split(".").pop()?.toLowerCase();
+
+      return (
+        <div
+          key={content.id}
+          className="p-3 border border-slate-700 rounded-lg text-sm text-slate-400 space-y-2"
+        >
+          <p className="text-slate-200 font-medium break-all">{fileName}</p>
+          <p className="text-slate-500 text-xs capitalize">{fileExt}</p>
+
+          {/* Preview */}
+          {fileExt === "mp4" ? (
+            <video
+              src={fileUrl}
+              controls
+              className="w-full h-auto rounded-lg border border-slate-600"
+            />
+          ) : fileExt === "jpg" ||
+            fileExt === "jpeg" ||
+            fileExt === "png" ||
+            fileExt === "gif" ? (
+            <img
+              src={fileUrl}
+              alt={fileName}
+              className="w-full h-auto rounded-lg border border-slate-600"
+            />
+          ) : (
+            <a
+              href={fileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline text-xs"
+            >
+              View File
+            </a>
+          )}
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+
+        {/* Footer */}
+        <div className="flex justify-end mt-6">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-slate-700 text-white rounded-lg hover:bg-slate-600"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
-export default ApproveCampaignDetailsModal;
+
+
