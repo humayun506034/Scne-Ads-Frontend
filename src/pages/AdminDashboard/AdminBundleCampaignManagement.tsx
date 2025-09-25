@@ -25,7 +25,7 @@ export default function AdminBundleCampaignManagement() {
   const campaigns = data?.data?.data || [];
   console.log({campaigns})
   const meta = data?.data?.meta;
-const TotalPages = meta?.totalPages - 1 || 1;
+const TotalPages = meta?.totalPages  || 1;
   // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
  
   const currentData = campaigns;

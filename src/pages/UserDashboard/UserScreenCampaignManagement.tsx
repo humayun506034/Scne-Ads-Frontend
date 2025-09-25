@@ -2,19 +2,20 @@
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
+
+import { useGetMyselfAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
 import CommonStatus from "@/common/CommonStatus";
-import DeleteCampaignModal from "./DeleteCampaignModal";
 import Loading from "@/common/MapLoading";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
+import DeleteCampaignModal from "../AdminDashboard/DeleteCampaignModal";
 import Pagination from "@/components/Pagination";
 
-export default function AdminScreenCampaignManagement() {
+export default function UserScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { data: customData, isLoading: isCustomLoading } =
-    useGetAllCustomCampaignQuery({
+    useGetMyselfAllCustomCampaignQuery({
       page: currentPage.toString(),
       searchTerm: searchTerm,
     });
@@ -25,7 +26,8 @@ export default function AdminScreenCampaignManagement() {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
-
+  const meta = customData?.data?.meta;
+const TotalPages = meta?.totalPages  || 1;
   const openApproveModal = (campaign: any) => {
     setSelectedCampaign(campaign);
     setIsApproveModalOpen(true);
@@ -40,10 +42,6 @@ export default function AdminScreenCampaignManagement() {
     setIsDeleteModalOpen(false);
     setSelectedCampaign(null);
   };
-
-  const meta = customData?.data?.meta;
-  // console.log({ meta });
-  const TotalPages = meta?.totalPages || 1;
 
   if (isCustomLoading) {
     return <Loading />;
@@ -172,13 +170,13 @@ export default function AdminScreenCampaignManagement() {
         ))}
       </div>
 
-      <div className="flex justify-end mt-4">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={TotalPages}
-          onPageChange={setCurrentPage}
-        />
-      </div>
+       <div className="flex justify-end mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={TotalPages}
+            onPageChange={setCurrentPage}
+          />
+        </div>
 
       {/* Approve Modal */}
       <ScreenCampaignDetailsModal

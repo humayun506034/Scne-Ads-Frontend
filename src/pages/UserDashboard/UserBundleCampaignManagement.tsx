@@ -22,13 +22,14 @@ export default function UserBundleCampaignManagement() {
 
 
   const campaigns = data?.data?.data || [];
-  console.log({campaigns})
-  const meta = data?.data?.meta;
-const TotalPages = meta?.totalPages - 1 || 1;
+//   console.log({campaigns})
+  const meta = data?.data.meta;
+  console.log(data?.data.meta)
+const TotalPages = meta?.totalPages || 1;
   // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
  
   const currentData = campaigns;
-  console.log("🚀 ~ AdminCampaignManagement ~ currentData:", currentData);
+//   console.log("🚀 ~ AdminCampaignManagement ~ currentData:", currentData);
 
   // const hasNextPage = page < totalPages;
   // const hasPrevPage = page > 1;
