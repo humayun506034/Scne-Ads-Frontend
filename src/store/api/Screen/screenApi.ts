@@ -12,6 +12,7 @@ const screenApi = baseApi.injectEndpoints({
         params: {
           page,
           searchTerm,
+          // limit:"1"
         },
       }),
     }),
