@@ -97,10 +97,7 @@ export default function UserScreenCampaignManagement() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-white mb-6 border-b border-[#11214D] pb-2">
-         Screen Campaigns
-        </h1>
-
+     
       <div className="flex flex-wrap items-center gap-4 mb-4">
         {/* Dates Button */}
         <div className="flex items-center gap-2 px-5 py-2 bg-[#11214D] text-white rounded-md">
@@ -132,20 +129,7 @@ export default function UserScreenCampaignManagement() {
             onChange={handleStartDateChange}
             className="bg-transparent outline-none text-white placeholder:text-slate-400"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-[#38B6FF]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
+          
         </div>
 
         {/* End Date Input */}
@@ -159,20 +143,7 @@ export default function UserScreenCampaignManagement() {
             onChange={handleEndDateChange}
             className="bg-transparent outline-none text-white placeholder:text-slate-400"
           />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-[#38B6FF]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
+          
         </div>
 
         {/* Predefined Date Filters */}

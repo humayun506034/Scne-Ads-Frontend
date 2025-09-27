@@ -4,28 +4,46 @@ const campaignsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllBundleCampaign: builder.query<
       any,
-      { page?: string; searchTerm?: string }
+      {
+        page?: string;
+        searchTerm?: string;
+        startDate?: string;
+        endDate?: string;
+        dateFilter?: string;
+      }
     >({
-      query: ({ page, searchTerm }) => ({
+      query: ({ page, searchTerm, startDate, endDate, dateFilter }) => ({
         url: "/campaign/get-all-bundle-campaign",
         method: "GET",
         params: {
-          page,
+           page,
           searchTerm,
+          startDate,
+          endDate,
+          dateFilter,
           // limit:"1"
         },
       }),
     }),
     getAllCustomCampaign: builder.query<
       any,
-      { page?: string; searchTerm?: string }
+       {
+        page?: string;
+        searchTerm?: string;
+        startDate?: string;
+        endDate?: string;
+        dateFilter?: string;
+      }
     >({
-      query: ({ page, searchTerm }) => ({
+      query: ({ page, searchTerm, startDate, endDate, dateFilter }) => ({
         url: "/campaign/get-all-custom-campaign",
         method: "GET",
         params: {
           page,
           searchTerm,
+          startDate,
+          endDate,
+          dateFilter,
           // limit:"1"
         },
       }),

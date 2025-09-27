@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,21 +9,36 @@ import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal"
 import Pagination from "@/components/Pagination";
 
 export default function AdminScreenCampaignManagement() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const { data: customData, isLoading: isCustomLoading } =
-    useGetAllCustomCampaignQuery({
-      page: currentPage.toString(),
-      searchTerm: searchTerm,
-    });
-
-  const customCampaignData = customData?.data?.data || [];
-
   // Modal States
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [dateFilter, setDateFilter] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const queryParams: Record<string, string> = {
+    page: currentPage.toString(),
+    searchTerm,
+  };
+
+  if (startDate) {
+    queryParams.startDate = `${startDate}T00:00:00.000Z`;
+  }
+
+  if (endDate) {
+    queryParams.endDate = `${endDate}T00:00:00.000Z`;
+  }
+
+  if (dateFilter) {
+    queryParams.dateFilter = dateFilter;
+  }
+
+  const { data: customData, isLoading: isCustomLoading } =
+    useGetAllCustomCampaignQuery(queryParams);
+
+  const customCampaignData = customData?.data?.data || [];
 
   const openApproveModal = (campaign: any) => {
     setSelectedCampaign(campaign);
@@ -44,16 +58,121 @@ export default function AdminScreenCampaignManagement() {
   const meta = customData?.data?.meta;
   // console.log({ meta });
   const TotalPages = meta?.totalPages || 1;
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDate(e.target.value);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
+  const handleDateFilterClick = (filter: string) => {
+    setDateFilter(filter);
+    setStartDate(null);
+    setEndDate(null);
+    setCurrentPage(1);
+  };
 
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
+
+  // ✅ Clear button handler
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
   if (isCustomLoading) {
     return <Loading />;
   }
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-xl md:text-2xl font-semibold text-white my-3">
-        Screen Campaigns
-      </h1>
+     <h1 className="text-2xl font-bold text-white mb-6 border-b border-[#11214D] pb-2">
+        All Screen Campaigns
+        </h1>
+
+
+      <div className="flex flex-wrap items-center gap-4 mb-4">
+        {/* Dates Button */}
+        <div className="flex items-center gap-2 px-5 py-2 bg-[#11214D] text-white rounded-md">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 text-[#38B6FF]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            />
+          </svg>
+          <span className="text-sm font-medium">Dates</span>
+        </div>
+
+        {/* Start Date Input */}
+        <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
+          <span className="text-sm font-medium whitespace-nowrap">
+            Select Start Date
+          </span>
+          <input
+            type="date"
+            value={startDate || ""}
+            onChange={handleStartDateChange}
+            className="bg-transparent outline-none text-white placeholder:text-slate-400"
+          />
+          
+        </div>
+
+        {/* End Date Input */}
+        <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
+          <span className="text-sm font-medium whitespace-nowrap">
+            Optional - Set End Date
+          </span>
+          <input
+            type="date"
+            value={endDate || ""}
+            onChange={handleEndDateChange}
+            className="bg-transparent outline-none text-white placeholder:text-slate-400"
+          />
+         
+        </div>
+
+        {/* Predefined Date Filters */}
+        <div className="flex gap-2 flex-wrap">
+          {[
+            { label: "Today", value: "today" },
+            { label: "1D", value: "1d" },
+            { label: "7D", value: "7d" },
+            { label: "15D", value: "15d" },
+            { label: "1Mo", value: "30d" },
+          ].map(({ label, value }) => (
+            <button
+              key={value}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                dateFilter === value
+                  ? "bg-[#38B6FF] text-black"
+                  : "bg-[#11214D] text-white"
+              }`}
+              onClick={() => handleDateFilterClick(value)}
+            >
+              {label}
+            </button>
+          ))}
+
+          {/* Clear Button */}
+          <button
+            className="px-4 py-2 rounded-full text-sm font-medium bg-red-600 text-white"
+            onClick={handleClearFilters}
+          >
+            Clear
+          </button>
+        </div>
+      </div>
 
       {/* Desktop Table View */}
       <div className="hidden md:block">
