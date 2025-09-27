@@ -1,11 +1,10 @@
 
+
 import { useState } from "react";
 import { Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
-import {
-  useGetMyselfAllBundleCampaignQuery,
-} from "@/store/api/Campaign/campaignApi";
+import { useGetMyselfAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
 import CommonStatus from "@/common/CommonStatus";
 import Pagination from "@/components/Pagination";
 import Loading from "@/common/MapLoading";
@@ -14,29 +13,28 @@ import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal"
 export default function UserBundleCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isLoading } = useGetMyselfAllBundleCampaignQuery({
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+  const [dateFilter, setDateFilter] = useState<string | null>(null);
+
+  const queryParams: Record<string, string> = {
     page: currentPage.toString(),
-    searchTerm: searchTerm,
-  });
- 
+  };
 
+  if (searchTerm) queryParams.searchTerm = searchTerm;
+  if (startDate) queryParams.startDate = `${startDate}T00:00:00.000Z`;
+  if (endDate) queryParams.endDate = `${endDate}T00:00:00.000Z`;
+  if (dateFilter) queryParams.dateFilter = dateFilter;
 
+  console.log({ queryParams });
+
+  const { data, isLoading } = useGetMyselfAllBundleCampaignQuery(queryParams);
   const campaigns = data?.data?.data || [];
-//   console.log({campaigns})
   const meta = data?.data.meta;
-  console.log(data?.data.meta)
-const TotalPages = meta?.totalPages || 1;
-  // const totalPages = Math.ceil(campaigns.length / ITEMS_PER_PAGE);
- 
-  const currentData = campaigns;
-//   console.log("🚀 ~ AdminCampaignManagement ~ currentData:", currentData);
-
-  // const hasNextPage = page < totalPages;
-  // const hasPrevPage = page > 1;
+  const TotalPages = meta?.totalPages || 1;
 
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
-
 
   const openApproveModal = (campaign: any) => {
     setSelectedCampaign(campaign);
@@ -48,21 +46,119 @@ const TotalPages = meta?.totalPages || 1;
     setSelectedCampaign(null);
   };
 
+  const handleDateFilterClick = (filter: string) => {
+    setDateFilter(filter);
+    setStartDate(null);
+    setEndDate(null);
+    setCurrentPage(1);
+  };
 
+  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDate(e.target.value);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
 
+  // ✅ Clear button handler
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
 
-
+  if (isLoading) return <Loading />;
 
   return (
     <div>
-       <div className="p-6 space-y-6">
-        <h1 className="text-xl md:text-2xl font-semibold text-white my-3">
+      <div className="p-6 space-y-6">
+        {/* Updated Header */}
+        <h1 className="text-2xl font-bold text-white mb-6 border-b border-[#11214D] pb-2">
           Bundle Campaigns
         </h1>
+        <div className="flex flex-wrap items-center gap-4 mb-4">
+          {/* Dates Button */}
+          <div className="flex items-center gap-2 px-5 py-2 bg-[#11214D] text-white rounded-md">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 text-[#38B6FF]"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+            <span className="text-sm font-medium">Dates</span>
+          </div>
+
+          {/* Start Date Input */}
+          <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
+            <span className="text-sm font-medium whitespace-nowrap">
+              Select Start Date
+            </span>
+            <input
+              type="date"
+              value={startDate || ""}
+              onChange={handleStartDateChange}
+              className="bg-transparent outline-none text-white placeholder:text-slate-400"
+            />
+          </div>
+
+          {/* End Date Input */}
+          <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
+            <span className="text-sm font-medium whitespace-nowrap">
+              Optional - Set End Date
+            </span>
+            <input
+              type="date"
+              value={endDate || ""}
+              onChange={handleEndDateChange}
+              className="bg-transparent outline-none text-white placeholder:text-slate-400"
+            />
+          </div>
+
+          {/* Predefined Date Filters */}
+          <div className="flex gap-2 flex-wrap">
+            {[
+              { label: "Today", value: "today" },
+              { label: "1D", value: "1d" },
+              { label: "7D", value: "7d" },
+              { label: "15D", value: "15d" },
+              { label: "1Mo", value: "30d" },
+            ].map(({ label, value }) => (
+              <button
+                key={value}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
+                  dateFilter === value
+                    ? "bg-[#38B6FF] text-black"
+                    : "bg-[#11214D] text-white"
+                }`}
+                onClick={() => handleDateFilterClick(value)}
+              >
+                {label}
+              </button>
+            ))}
+
+            {/* Clear Button */}
+            <button
+              className="px-4 py-2 rounded-full text-sm font-medium bg-red-600 text-white"
+              onClick={handleClearFilters}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
 
         {/* Desktop Table View */}
         <div className="hidden md:block">
@@ -86,7 +182,9 @@ const TotalPages = meta?.totalPages || 1;
                     key={campaign.id}
                     className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
                   >
-                    <td className="py-3 px-4">{campaign?.bundle?.bundle_name}</td>
+                    <td className="py-3 px-4">
+                      {campaign?.bundle?.bundle_name}
+                    </td>
                     <td className="py-3 px-4">
                       {campaign.customer?.first_name}{" "}
                       {campaign.customer?.last_name}
@@ -95,9 +193,7 @@ const TotalPages = meta?.totalPages || 1;
                       <CommonStatus status={campaign.status} />
                     </td>
                     <td className="py-3 px-4">System Auto</td>
-                    <td className="py-3 px-4">
-                      ${campaign?.payment?.amount}
-                    </td>
+                    <td className="py-3 px-4">${campaign?.payment?.amount}</td>
                     <td className="py-3 px-4">
                       {new Date(campaign.startDate).toLocaleDateString()}
                     </td>
@@ -109,11 +205,6 @@ const TotalPages = meta?.totalPages || 1;
                         className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
                         onClick={() => openApproveModal(campaign)}
                       />
-                      {/* <p>|</p> */}
-                      {/* <Trash2
-                        className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:text-red-500"
-                        onClick={() => openDeleteModal(campaign)}
-                      /> */}
                     </td>
                   </tr>
                 ))}
@@ -124,7 +215,7 @@ const TotalPages = meta?.totalPages || 1;
 
         {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
-          {currentData.map((campaign: any) => (
+          {campaigns.map((campaign: any) => (
             <Card
               key={campaign.id}
               className="bg-bg-dashboard border-[#11214D]"
@@ -190,16 +281,7 @@ const TotalPages = meta?.totalPages || 1;
           onClose={closeApproveModal}
           campaign={selectedCampaign}
         />
-
-        {/* Delete Modal */}
-        {/* <DeleteCampaignModal
-          isOpen={isDeleteModalOpen}
-          onClose={closeDeleteModal}
-          campaign={selectedCampaign}
-        /> */}
-              </div>
-      
-         </div>
-         
+      </div>
+    </div>
   );
 }
