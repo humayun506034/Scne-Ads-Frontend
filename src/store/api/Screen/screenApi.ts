@@ -16,7 +16,19 @@ const screenApi = baseApi.injectEndpoints({
         },
       }),
     }),
+
+    getTopSalesScreen: builder.query<any, void>({
+      query: () => "/screen/top-sales-screen",
+    }),
+
+    getMySelfFavouriteScreens: builder.query<any, void>({
+      query: () => "/screen/myself-favourite-screen",
+    }),
   }),
 });
 
-export const { useGetAllScreenQuery } = screenApi;
+export const {
+  useGetAllScreenQuery,
+  useGetMySelfFavouriteScreensQuery,
+  useGetTopSalesScreenQuery,
+} = screenApi;

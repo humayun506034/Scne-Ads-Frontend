@@ -60,7 +60,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
               <CardContent className="flex flex-col items-center gap-4 text-center p-0">
                 <div className="w-full rounded-[15px] overflow-hidden p-6">
                   <img
-                    src={location.image}
+                    src={location.img_url}
                     alt={location.title}
                     className="object-cover rounded-xl w-full h-40"
                   />
@@ -287,3 +287,228 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
 };
 
 export default AdminLocationCard;
+
+
+// import CommonDashboardButton from "@/common/CommonDashBoardButton";
+// import CustomInput from "@/common/CommonDashboardInput";
+// import CustomTextarea from "@/common/CommonDashboardTextArea";
+// import { ILocation } from "@/common/CommonLocationCardModal";
+
+// import { Card, CardContent } from "@/components/ui/card";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+// import { Plus } from "lucide-react";
+
+// import CommonCancelButton from "@/common/CommonCancelButton";
+// import { useState } from "react";
+// import { FieldValues, useForm } from "react-hook-form";
+// import LocationMapModal from "./LocationMap";
+
+// export interface LocationCardProps {
+//   location: ILocation;
+//   edit?: boolean;
+// }
+
+// const AdminLocationCard = ({ location }: LocationCardProps) => {
+//   const {
+//     register,
+//     handleSubmit,
+//     reset,
+//     formState: { errors },
+//   } = useForm({
+//     defaultValues: {
+//       title: location.title,
+//       description: location.description,
+//       location: location.location,
+//       screenSize: location.screenSize,
+//       tierLevel: location.tierLevel || "Basic",
+//       costPerPlay: location.costPerPlay || 0,
+//     },
+//   });
+
+//   const [files, setFiles] = useState<File[]>([]);
+//   const [open, setOpen] = useState(false);
+//   const [openMap, setOpenMap] = useState(false);
+
+//   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     if (e.target.files) {
+//       const uploadedFiles = Array.from(e.target.files);
+//       setFiles((prev) => [...prev, ...uploadedFiles]);
+//     }
+//   };
+
+//   const handleClick = () => {
+//     const fileInput = document.getElementById(
+//       "file-upload"
+//     ) as HTMLInputElement;
+//     fileInput?.click();
+//   };
+
+//   const onSubmit = (data: FieldValues) => {
+//     console.log("Form Data:", data);
+//     reset();
+//     setOpen(false);
+//   };
+
+//   return (
+//     <div className="w-full">
+//       <Dialog open={open} onOpenChange={setOpen}>
+//         <DialogTrigger asChild>
+//           <Card className="lg:w-full relative border-none h-[380px] xl:h-[350px] card mx-0 p-0 rounded-[30px] transition-all duration-300 hover:shadow-[0px_0px_20px_0px_rgba(47,171,249,0.90)] bg-transparent ">
+//             <CardContent className="flex flex-col items-center gap-4 text-center p-0">
+//               <div className="w-full rounded-[15px] overflow-hidden p-6">
+//                 <img
+//                   src={location.img_url || "/placeholder.png"}
+//                   alt={location.title}
+//                   className="object-cover rounded-xl w-full h-40"
+//                 />
+//               </div>
+//               <h3 className=" text-xl lg:font-semibold px-4">
+//                 {location.title}
+//               </h3>
+//               <p className="text-base lg:text-[14px] px-4">
+//                 {location.description}
+//               </p>
+//             </CardContent>
+//           </Card>
+//         </DialogTrigger>
+
+//         {/* Edit Modal */}
+//         <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh] ">
+//           <DialogHeader>
+//             <DialogTitle className="flex justify-between w-full items-center">
+//               <p className="md:text-2xl mb-4">Edit Screen</p>
+//               <LocationMapModal
+//                 lat={location.lat}
+//                 lng={location.lng}
+//                 open={openMap}
+//                 setOpenMap={setOpenMap}
+//               />
+//             </DialogTitle>
+//           </DialogHeader>
+
+//           <form onSubmit={handleSubmit(onSubmit)}>
+//             <div className="mb-4">
+//               <label>Screen Name</label>
+//               <CustomInput
+//                 register={register("title", { required: true })}
+//                 placeholder="Enter screen name"
+//                 isError={!!errors.title}
+//               />
+//             </div>
+
+//             <div className="mb-4">
+//               <label>Screen Location</label>
+//               <CustomInput
+//                 register={register("location", { required: true })}
+//                 placeholder="Enter screen location"
+//                 isError={!!errors.location}
+//               />
+//             </div>
+
+//             <div className="mb-4">
+//               <label>Description</label>
+//               <CustomTextarea
+//                 register={register("description")}
+//                 placeholder="Enter screen description"
+//                 isError={!!errors.description}
+//               />
+//             </div>
+
+//             <div className="mb-4">
+//               <label>Screen Resolution</label>
+//               <CustomInput
+//                 register={register("screenSize")}
+//                 placeholder="Enter screen size"
+//                 isError={!!errors.screenSize}
+//               />
+//             </div>
+
+//             <div className="mb-4">
+//               <label className="mb-2">Tier Level</label>
+//               <div className="flex flex-row flex-wrap gap-4 my-2">
+//                 {["Basic", "Standard", "Premium"].map((tier) => (
+//                   <label key={tier} className="flex items-center gap-2">
+//                     <input
+//                       type="radio"
+//                       value={tier}
+//                       {...register("tierLevel", { required: true })}
+//                       className="accent-secondary-color cursor-pointer"
+//                     />
+//                     <span>{tier}</span>
+//                   </label>
+//                 ))}
+//               </div>
+//               {errors.tierLevel && (
+//                 <p className="text-red-500 text-sm">Please select a tier</p>
+//               )}
+//             </div>
+
+//             {/* Image Upload */}
+//             <div className="mb-4">
+//               <label>Screen Thumbnail</label>
+//               <div className="flex items-start gap-4">
+//                 {files.length > 0 && (
+//                   <div className="flex my-2 flex-wrap gap-2 w-1/2">
+//                     {files.map((file, index) => (
+//                       <div key={index} className="relative">
+//                         <img
+//                           src={URL.createObjectURL(file)}
+//                           alt="preview"
+//                           className="w-full max-h-40 h-full object-fill rounded-md"
+//                         />
+//                       </div>
+//                     ))}
+//                   </div>
+//                 )}
+//                 <div
+//                   className="border-dashed bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-32"
+//                   onClick={handleClick}
+//                 >
+//                   <input
+//                     id="file-upload"
+//                     type="file"
+//                     accept="image/*"
+//                     multiple
+//                     onChange={handleFileUpload}
+//                     className="hidden"
+//                   />
+//                   <span className="text-sm md:text-base">
+//                     {files.length > 0 ? "Upload More Images" : "Upload Images"}
+//                   </span>
+//                 </div>
+//               </div>
+//             </div>
+
+//             <div className="mb-4">
+//               <label>Cost Per Play</label>
+//               <CustomInput
+//                 type="number"
+//                 {...register("costPerPlay")}
+//                 placeholder="Enter cost per play"
+//               />
+//             </div>
+
+//             <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
+//               <CommonDashboardButton title="Edit Screen" Icon={Plus} />
+//               <CommonCancelButton
+//                 onClick={() => {
+//                   reset();
+//                   setOpen(false);
+//                 }}
+//                 title="Cancel"
+//               />
+//             </div>
+//           </form>
+//         </DialogContent>
+//       </Dialog>
+//     </div>
+//   );
+// };
+
+// export default AdminLocationCard;
