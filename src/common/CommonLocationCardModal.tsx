@@ -15,6 +15,7 @@ import { toast } from "sonner";
 export interface ILocation {
   id: string;
   image: string;
+  img_url:string
   title: string;
   lat: number;
   availability: "available" | "booked" | "maintenance";
