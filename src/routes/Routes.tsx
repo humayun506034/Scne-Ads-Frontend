@@ -43,6 +43,8 @@ import Billboard from "@/pages/Billboard";
 import PaymentSuccess from "@/pages/PaymentSuccess";
 import UserBundlePayments from "@/pages/UserDashboard/UserBundlePayments";
 import UserScreenPayments from "@/pages/UserDashboard/UserScreenPayments";
+import AllBundlePayments from "@/pages/AdminDashboard/AllBundlePayments";
+import AllScreenPayments from "@/pages/AdminDashboard/AllScreenPayments";
 
 const routes = createBrowserRouter([
   {
@@ -148,6 +150,8 @@ const routes = createBrowserRouter([
       },
       { path: "bundle-campaigns", element: <AdminBundleCampaignManagement /> },
       { path: "screen-campaigns", element: <AdminScreenCampaignManagement /> },
+      { path: "bundle-payments", element: <AllBundlePayments /> },
+      { path: "screen-payments", element: <AllScreenPayments /> },
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,

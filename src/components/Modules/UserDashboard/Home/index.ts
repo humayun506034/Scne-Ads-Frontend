@@ -124,6 +124,23 @@ export const adminSidebarItems = [
         ],
     },
     {
+        title: "Payments",
+        items: [
+            {
+                title: "All Bundle Payments",
+                icon: Settings,
+                href: "/admin-dashboard/bundle-payments",
+            },
+            {
+                title: "Screen Payments",
+                icon: Settings,
+                href: "/admin-dashboard/screen-payments",
+            },
+           
+          
+        ],
+    },
+    {
         title: "General",
         items: [
             {
