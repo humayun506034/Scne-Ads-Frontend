@@ -18,7 +18,38 @@ const paymentsApi = baseApi.injectEndpoints({
         // multipart/form-data automatically handled by fetch or axios inside baseApi
       }),
     }),
+
+    mySelfBundlePayment: builder.query<any,
+      {
+        page?: string        
+      }>({
+      query: ({ page}) => ({
+        url: "/payment/myself-bundle-payments",
+        method: "GET",
+        params: {
+          page, 
+          // limit:"1"
+        }
+      }),
+    }),
+    mySelfScreenPayment: builder.query<any,  {
+        page?: string        
+      }>({
+      query: ({ page}) => ({
+        url: "/payment/myself-custom-payments",
+        method: "GET",
+        params: {
+          page, 
+          // limit:"1"
+        }
+      }),
+    }),
   }),
 });
 
-export const { useMakeScreenPaymentMutation , useMakeBundlePaymentMutation} = paymentsApi;
+export const {
+  useMakeScreenPaymentMutation,
+  useMakeBundlePaymentMutation,
+  useMySelfBundlePaymentQuery,
+  useMySelfScreenPaymentQuery
+} = paymentsApi;

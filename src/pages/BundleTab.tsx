@@ -106,7 +106,7 @@ const BundleTab = () => {
                 Included Screens: {bundle.screens.length} Screen
               </p>
               <ul className="list-disc pl-4 space-y-1">
-                {bundle.screens.slice(0, 2).map((screen) => (
+                {bundle.screens.slice(0, 2).map((screen:any) => (
                   <li key={screen.id}>{screen.screen_name}</li>
                 ))}
               </ul>
