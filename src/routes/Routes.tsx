@@ -39,6 +39,8 @@ import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCam
 import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
 import UserBundleCampaignManagement from "@/pages/UserDashboard/UserBundleCampaignManagement";
 import UserScreenCampaignManagement from "@/pages/UserDashboard/UserScreenCampaignManagement";
+import Billboard from "@/pages/Billboard";
+import PaymentSuccess from "@/pages/PaymentSuccess";
 
 const routes = createBrowserRouter([
   {
@@ -50,6 +52,16 @@ const routes = createBrowserRouter([
         element: <Home />,
       },
     ],
+  },
+  {
+
+    path:"billboards",
+    element:<Billboard/>
+  },
+  {
+
+    path:"payment-success/:paymentId",
+    element:<PaymentSuccess/>
   },
   {
     path: "/user-dashboard",
