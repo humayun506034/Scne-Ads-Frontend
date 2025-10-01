@@ -58,6 +58,22 @@ export const userSidebarItems = [
         ],
     },
     {
+        title: "Payments",
+        items: [
+            {
+                title: "Bundle payments",
+                icon: Settings,
+                href: "/user-dashboard/bundle-payments",
+            },
+            {
+                title: "Screen payments",
+                icon: Settings,
+                href: "/user-dashboard/screen-payments",
+            },
+           
+        ],
+    },
+    {
         title: "Media",
         items: [
             {
