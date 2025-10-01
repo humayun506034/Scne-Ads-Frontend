@@ -44,6 +44,31 @@ const paymentsApi = baseApi.injectEndpoints({
         }
       }),
     }),
+    AllBundlePayment: builder.query<any,
+      {
+        page?: string        
+      }>({
+      query: ({ page}) => ({
+        url: "/payment/get-all-bundle-payments",
+        method: "GET",
+        params: {
+          page, 
+          // limit:"1"
+        }
+      }),
+    }),
+    AllScreenPayment: builder.query<any,  {
+        page?: string        
+      }>({
+      query: ({ page}) => ({
+        url: "/payment/get-all-custom-payments",
+        method: "GET",
+        params: {
+          page, 
+          // limit:"1"
+        }
+      }),
+    }),
   }),
 });
 
@@ -51,5 +76,7 @@ export const {
   useMakeScreenPaymentMutation,
   useMakeBundlePaymentMutation,
   useMySelfBundlePaymentQuery,
-  useMySelfScreenPaymentQuery
+  useMySelfScreenPaymentQuery,
+  useAllBundlePaymentQuery,
+  useAllScreenPaymentQuery
 } = paymentsApi;
