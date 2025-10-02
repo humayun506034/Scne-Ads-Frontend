@@ -3,6 +3,7 @@ import { useGetAllScreenQuery } from "@/store/api/Screen/screenApi";
 import { useState } from "react";
 import ScreenDetailsModal from "./ScreenDetailsModal";
 import Loading from "@/common/MapLoading";
+import AdminScreenDetails from "./AdminScreenDetails";
 
 interface Screen {
   id: string;
@@ -464,7 +465,7 @@ const totalPages =( meta?.totalPages as number )|| 1;
           </div>
         )}
 
-        <ScreenDetailsModal
+        <AdminScreenDetails
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           screen={selectedScreen}

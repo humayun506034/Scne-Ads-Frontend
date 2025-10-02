@@ -66,7 +66,7 @@ export const userSidebarItems = [
                 href: "/user-dashboard/bundle-payments",
             },
             {
-                title: "Screen payments",
+                title: " Screen payments",
                 icon: Settings,
                 href: "/user-dashboard/screen-payments",
             },
@@ -132,7 +132,7 @@ export const adminSidebarItems = [
                 href: "/admin-dashboard/bundle-payments",
             },
             {
-                title: "Screen Payments",
+                title: "All Screen Payments",
                 icon: Settings,
                 href: "/admin-dashboard/screen-payments",
             },
