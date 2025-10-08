@@ -15,6 +15,7 @@ const screenApi = baseApi.injectEndpoints({
           // limit:"1"
         },
       }),
+      providesTags:['Screen']
     }),
 
     getTopSalesScreen: builder.query<any, void>({
@@ -24,6 +25,14 @@ const screenApi = baseApi.injectEndpoints({
     getMySelfFavouriteScreens: builder.query<any, void>({
       query: () => "/screen/myself-favourite-screen",
     }),
+
+    deleteScreen: builder.mutation<any, number>({
+      query: (id) => ({
+        url: `/screen/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags:['Screen']
+    })
   }),
 });
 
@@ -31,4 +40,5 @@ export const {
   useGetAllScreenQuery,
   useGetMySelfFavouriteScreensQuery,
   useGetTopSalesScreenQuery,
+  useDeleteScreenMutation
 } = screenApi;
