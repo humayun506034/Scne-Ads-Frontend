@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { motion } from "framer-motion";
-import { ChevronDown, LogOut, Menu, User } from "lucide-react";
+import { ChevronDown, LogOut, User } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -23,27 +23,25 @@ const AdminDashboardHomePage = () => {
   const user = useAppSelector(selectCurrentUser);
   const userName = user?.first_name + " " + user?.last_name;
   return (
-    <div>
+    <div className="mb-20 px-5 md:px-10">
       {/* header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-6 py-8 gap-4"
+        className="flex  justify-between items-start sm:items-center  py-8 "
       >
         <h1 className="text-3xl sm:text-4xl font-semibold text-white">
           Hey, <span className="text-secondary-color">{userName}</span>
         </h1>
         <div className="flex items-center gap-3 sm:gap-4">
-          <div className="hidden sm:flex items-center gap-3 sm:gap-4">
-            {/* Profile section */}
-
+          <div className="flex items-center gap-3 sm:gap-4">
             <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center gap-2 text-white px-4 py-3 focus:ring-0 focus:outline-none focus:border-none border-none ring-0 rounded-full cursor-pointer transition-all duration-300"
+                    className="flex items-center gap-2 text-white px-4 py-3 focus:ring-0 focus:outline-none focus:border-none border-none ring-0 rounded-full  cursor-pointer transition-all duration-300"
                   >
                     <div className="w-8 h-8 bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] rounded-full flex items-center justify-center">
                       <User className="h-4 w-4" />
@@ -82,9 +80,6 @@ const AdminDashboardHomePage = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-          </div>
-          <div className="sm:hidden flex items-center">
-            <Menu className="w-7 h-7 text-white cursor-pointer" />
           </div>
         </div>
       </motion.div>

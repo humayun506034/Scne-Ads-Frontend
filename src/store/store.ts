@@ -10,7 +10,7 @@ const cookieStorage = {
     return Promise.resolve(Cookies.get(key));
   },
   setItem: (key: string, value: string) => {
-    return Promise.resolve(Cookies.set(key, value, { expires: 365, path: '' }));
+    return Promise.resolve(Cookies.set(key, value, { expires: 365, path: '/' }));
   },
   removeItem: (key: string) => {
     return Promise.resolve(Cookies.remove(key));
@@ -19,7 +19,7 @@ const cookieStorage = {
 
 
 const persistConfig = {
-  key: 'auth',
+  key: 'auth_v2',
   storage: cookieStorage,
 };
 
