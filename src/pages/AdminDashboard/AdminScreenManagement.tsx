@@ -410,7 +410,6 @@ function AdminScreenManagement() {
     setSelectedScreen(screen);
     setIsModalOpen(true);
   };
-
   const handleEdit = (screen: any) => {
     console.log("[v0] Edit screen:", screen.id);
   };
