@@ -59,6 +59,6 @@ export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithRefreshToken,
     endpoints: () => ({}),
-    tagTypes:['Screen',"Banner"]
+    tagTypes:['Screen',"Banner","Bundle"],
 });
 

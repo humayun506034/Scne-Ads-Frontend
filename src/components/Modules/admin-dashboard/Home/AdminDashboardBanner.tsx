@@ -189,7 +189,7 @@ const wantIndex = banners.length > 1 ? 1 : 0;
   );
 
   return (
-    <div className="mt-20 w-full">
+    <div className="mt-10 w-full">
       
 
       {isLoading ? (
@@ -234,11 +234,13 @@ const wantIndex = banners.length > 1 ? 1 : 0;
                       />
                       {(activeSlide === index || banners.length === 1) && (
                         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black/50 to-black/80 flex flex-col justify-center items-center">
-                          <CommonDashboardButton
+                          <div className="w-fit">
+                            <CommonDashboardButton
                             onClick={() => handleModalOpen(slide)}
                             title="Manage Banner"
                             Icon={Plus}
                           />
+                          </div>
                         </div>
                       )}
                     </div>
