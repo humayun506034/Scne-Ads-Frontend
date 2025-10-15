@@ -292,6 +292,7 @@ if(isDeleting) return;
                 Icon={Plus}
               />
               <DashboardDeleteButton
+                onClick={handleDelete}
                 disabled={isLoading}
                 title={isLoading ? "Deleting..." : "Delete"}
                 Icon={Plus}
