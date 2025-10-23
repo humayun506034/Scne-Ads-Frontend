@@ -12,10 +12,10 @@ interface Option {
   label: string;
 }
 interface CommonSelectProps {
-  setValue: (value: string) => void;
+  setValue: (value: string ) => void;
   options: Option[];
   Icon?: any;
-  Value: string;
+  Value: string ; 
   bgColor?: string;
 className?: string;
 }

@@ -101,6 +101,7 @@ const AdminSpecialSection = () => {
   });
 
 
+
   const allScreens: Screen[] = useMemo(() => {
     return data?.data?.data ?? [];
   }, [data]);
@@ -200,7 +201,7 @@ const AdminSpecialSection = () => {
              <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <div className="w-full h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
+          <div className="w-full min-h-[40dvh]  h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
             <motion.div
               whileTap={{ scale: 0.8 }}
               whileHover={{ scale: 1.1 }}

@@ -9,7 +9,7 @@ import {
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import { MapPin } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 const containerStyle = {
@@ -17,40 +17,57 @@ const containerStyle = {
   height: "500px",
 };
 
+type LocationMapModalProps = {
+  open: boolean;
+  setOpenMap: (open: boolean) => void;
+  lat?: number;
+  lng?: number;
+
+  onConfirm?: (lat: number, lng: number) => void;
+};
+
 const LocationMapModal = ({
   open,
   setOpenMap,
   lat,
   lng,
-}: {
-  open: boolean;
-  setOpenMap: (open: boolean) => void;
-  lat?: number;
-  lng?: number;
-}) => {
+  onConfirm,
+}: LocationMapModalProps) => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
   });
 
-  const center = {
-    lat: lat || 37.7749,
-    lng: lng || -122.4194,
-  };
+  // Stable center from props or fallback (SF)
+  const center = useMemo(
+    () => ({
+      lat: typeof lat === "number" ? lat : 37.7749,
+      lng: typeof lng === "number" ? lng : -122.4194,
+    }),
+    [lat, lng]
+  );
+
   const [markerPosition, setMarkerPosition] = useState(center);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+
   const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
     const latLng = e.latLng;
+    if (!latLng) return;
     setMarkerPosition({
-      lat: latLng!.lat(),
-      lng: latLng!.lng(),
+      lat: latLng.lat(),
+      lng: latLng.lng(),
     });
   }, []);
+
   const handleChangeLocation = () => {
-    console.log(markerPosition);
+    // Bubble up to parent
+    if (onConfirm) {
+      onConfirm(markerPosition.lat, markerPosition.lng);
+    }
     toast.success("Location changed successfully!");
     setConfirmDeleteOpen(false);
     setOpenMap(false);
   };
+
   if (!isLoaded) return <div>kela mela...</div>;
 
   return (

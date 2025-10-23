@@ -33,7 +33,43 @@ const screenApi = baseApi.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags:['Screen']
-    })
+    }),
+
+
+    createScreen: builder.mutation({
+      query: (payload) => ({
+        url: `/screen`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags:['Screen']
+    }),
+    uploadScreenImages: builder.mutation({
+      query: ({payload,id}) => ({
+        url: `screen/add-screen-images/${id}`,
+        method: "POST",
+        body: payload,
+      }),
+      invalidatesTags:['Screen']
+    }),
+
+    updateScreen: builder.mutation({
+      query: ({payload,id}) => ({
+        url: `/screen/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags:['Screen']
+    }),
+    deleteScreenImage: builder.mutation({
+      query: ({payload,id}) => ({
+        url: `/screen/delete-single-image/${id}`,
+        method: "DELETE",
+        body: payload,
+       
+      }),
+      invalidatesTags:['Screen']
+    }),
   }),
 });
 
@@ -41,5 +77,9 @@ export const {
   useGetAllScreenQuery,
   useGetMySelfFavouriteScreensQuery,
   useGetTopSalesScreenQuery,
-  useDeleteScreenMutation
+  useCreateScreenMutation,
+  useDeleteScreenMutation,
+  useUpdateScreenMutation,
+  useUploadScreenImagesMutation,
+  useDeleteScreenImageMutation
 } = screenApi;

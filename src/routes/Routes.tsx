@@ -29,22 +29,22 @@ import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
 
+import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCampaignManagement";
+import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
+import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement";
+import AllBundlePayments from "@/pages/AdminDashboard/AllBundlePayments";
+import AllScreenPayments from "@/pages/AdminDashboard/AllScreenPayments";
 import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
 import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
-import ProtectedRoute from "@/pages/ProtectedRoutes";
-import CostEstimator from "@/pages/UserDashboard/CostEstimator";
-import AdminScreenManagement from "@/pages/AdminDashboard/AdminScreenManagement";
-import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCampaignManagement";
-import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
-import UserBundleCampaignManagement from "@/pages/UserDashboard/UserBundleCampaignManagement";
-import UserScreenCampaignManagement from "@/pages/UserDashboard/UserScreenCampaignManagement";
 import Billboard from "@/pages/Billboard";
 import PaymentSuccess from "@/pages/PaymentSuccess";
+import ProtectedRoute from "@/pages/ProtectedRoutes";
+import CostEstimator from "@/pages/UserDashboard/CostEstimator";
+import UserBundleCampaignManagement from "@/pages/UserDashboard/UserBundleCampaignManagement";
 import UserBundlePayments from "@/pages/UserDashboard/UserBundlePayments";
+import UserScreenCampaignManagement from "@/pages/UserDashboard/UserScreenCampaignManagement";
 import UserScreenPayments from "@/pages/UserDashboard/UserScreenPayments";
-import AllBundlePayments from "@/pages/AdminDashboard/AllBundlePayments";
-import AllScreenPayments from "@/pages/AdminDashboard/AllScreenPayments";
 
 const routes = createBrowserRouter([
   {
@@ -58,14 +58,12 @@ const routes = createBrowserRouter([
     ],
   },
   {
-
-    path:"billboards",
-    element:<Billboard/>
+    path: "billboards",
+    element: <Billboard />,
   },
   {
-
-    path:"payment-success/:paymentId",
-    element:<PaymentSuccess/>
+    path: "payment-success/:paymentId",
+    element: <PaymentSuccess />,
   },
   {
     path: "/user-dashboard",
@@ -99,7 +97,6 @@ const routes = createBrowserRouter([
 
       { path: "bundle-payments", element: <UserBundlePayments /> },
       { path: "screen-payments", element: <UserScreenPayments /> },
-
 
       { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
       { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
@@ -156,7 +153,7 @@ const routes = createBrowserRouter([
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },
-            { path: "screen", element: <AdminScreenManagement /> },
+      { path: "screen", element: <AdminScreenManagement /> },
 
       {
         path: "adminAnalytics",

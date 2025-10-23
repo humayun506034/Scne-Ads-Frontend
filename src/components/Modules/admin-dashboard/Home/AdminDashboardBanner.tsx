@@ -30,9 +30,8 @@ type BannerItem = {
 };
 
 const AdminDashboardBanner = () => {
- const { data, isLoading, refetch } = useGetAllBannerQuery(undefined);
- const [activeSlide, setActiveSlide] = useState(0);
-
+  const { data, isLoading, refetch } = useGetAllBannerQuery(undefined);
+  const [activeSlide, setActiveSlide] = useState(0);
 
   const [openModal, setOpenModal] = useState(false);
   const [selectedSlideIndex, setSelectedSlideIndex] = useState<string | null>(null);
@@ -43,11 +42,12 @@ const AdminDashboardBanner = () => {
 
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const swiperRef = useRef<any>(null);
-  
+
   const [deleteBanner, { isLoading: isDeleting }] = useDeleteBannerMutation();
   const [createBanner, { isLoading: isUploading }] = useCreateBannerMutation();
 
   const banners = Array.isArray(data?.data) ? (data?.data as BannerItem[]) : [];
+  
   const hasBanners = banners.length > 0;
 
   useEffect(() => {
@@ -56,13 +56,10 @@ const AdminDashboardBanner = () => {
     };
   }, [newImage]);
 
-
-
   const resolveBannerId = (banner: BannerItem | undefined): string | null => {
     if (!banner) return null;
     return banner._id ?? banner.id ?? banner.bannerId ?? banner.banner_id ?? null;
   };
-
 
   const openEmptyModal = () => {
     setSelectedSlideIndex(null);
@@ -72,7 +69,6 @@ const AdminDashboardBanner = () => {
     setConfirmDeleteOpen(false);
     setOpenModal(true);
   };
-
 
   const handleModalOpen = (banner: BannerItem) => {
     const bannerId = resolveBannerId(banner);
@@ -121,7 +117,6 @@ const AdminDashboardBanner = () => {
       return;
     }
 
-
     const formData = new FormData();
     formData.append("file", newImageFile);
 
@@ -148,7 +143,8 @@ const AdminDashboardBanner = () => {
   const handleDeleteConfirmation = async () => {
     if (isDeleting) {
       toast.info("Delete in progress. Please wait.");
-      return};
+      return;
+    }
 
     if (!selectedSlideIndex) {
       toast.error("Select a valid banner before deleting.");
@@ -157,23 +153,23 @@ const AdminDashboardBanner = () => {
 
     try {
       const res = await deleteBanner(selectedSlideIndex).unwrap();
-      console.log("🚀 ~ handleDeleteConfirmation ~ res:", res);
-        if (res?.success) {
-      toast.success("Banner image deleted.");
-      setNewImage(null);
-      setNewImageFile(null);
-      setCurrentImage(null);
-      setSelectedSlideIndex(null);
-      setConfirmDeleteOpen(false);
-      handleModalChange(false);
-      await refetch();}
+      if (res?.success) {
+        toast.success("Banner image deleted.");
+        setNewImage(null);
+        setNewImageFile(null);
+        setCurrentImage(null);
+        setSelectedSlideIndex(null);
+        setConfirmDeleteOpen(false);
+        handleModalChange(false);
+        await refetch();
+      }
     } catch (error) {
       console.error("Delete failed:", error);
       toast.error("Failed to delete banner image.");
     }
   };
 
-const wantIndex = banners.length > 1 ? 1 : 0;
+  const wantIndex = banners.length > 1 ? 1 : 0;
   const PlaceholderCard = ({ onManage }: { onManage: () => void }) => (
     <div className="relative w-full h-full">
       <div className="w-full h-full bg-[#0a1024] border border-white/10 rounded-md grid place-content-center">
@@ -190,8 +186,6 @@ const wantIndex = banners.length > 1 ? 1 : 0;
 
   return (
     <div className="mt-10 w-full">
-      
-
       {isLoading ? (
         <div className="w-full h-[250px] flex justify-center items-center">
           <Loading />
@@ -220,6 +214,7 @@ const wantIndex = banners.length > 1 ? 1 : 0;
         >
           {hasBanners ? (
             banners.map((slide, index) => {
+           
               const id = resolveBannerId(slide);
               const hasImage = Boolean(slide?.img_url);
 
@@ -251,7 +246,6 @@ const wantIndex = banners.length > 1 ? 1 : 0;
               );
             })
           ) : (
-            // No banners at all → show a single placeholder slide
             <SwiperSlide className="p-0 m-0">
               <PlaceholderCard onManage={openEmptyModal} />
             </SwiperSlide>
@@ -283,7 +277,6 @@ const wantIndex = banners.length > 1 ? 1 : 0;
               </div>
             )}
 
-            {/* Delete only when an image + valid banner is present and no new upload in progress */}
             {selectedSlideIndex && currentImage && !newImage && (
               <div className="mt-4 flex w-full mb-12 justify-center items-center gap-4">
                 <DashboardDeleteButton
