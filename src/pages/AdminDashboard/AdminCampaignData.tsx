@@ -1,3 +1,6 @@
+import CommonSelect from "@/common/CommonSelect";
+import Loading from "@/common/MapLoading";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -5,11 +8,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChevronDown, Calendar, Menu, User, LogOut } from "lucide-react";
-import { motion } from "framer-motion";
-import React, { useState } from "react";
-import CommonStatus from "@/common/CommonStatus";
-import CommonSelect from "@/common/CommonSelect";
+import {
+  useGetAllBundleCampaignQuery,
+  useGetAllCustomCampaignQuery,
+} from "@/store/api/Campaign/campaignApi";
+import { useGetAllUserQuery } from "@/store/api/User/useApi";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,14 +20,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Calendar, ChevronDown, LogOut, Menu, User } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  useGetAllBundleCampaignQuery,
-  useGetAllCustomCampaignQuery,
-} from "@/store/api/Campaign/campaignApi";
-import Loading from "@/common/MapLoading";
-import { useGetAllUserQuery } from "@/store/api/User/useApi";
+import CampaignPerformanceAnalytics from "./CampaignPerformanceAnalytics";
 
 // Month Dropdown Button Component
 const MonthDropdownButton = ({ className = "" }) => {
@@ -80,16 +80,17 @@ const MetricCard = ({ title, subtitle, value, className = "" }) => (
 const AdminCampaignData: React.FC = () => {
   const { data: BundleResponse, isLoading } = useGetAllBundleCampaignQuery({});
   const { data: ScreenResponse } = useGetAllCustomCampaignQuery({});
+  console.log("🚀 ~ AdminCampaignData ~ ScreenResponse:", ScreenResponse)
   const { data: UserResponse } = useGetAllUserQuery({});
 
-  // console.log(UserResponse)
+
 
   const BundleCampaignMeta = BundleResponse?.data.meta;
   const ScreenCampaignMeta = ScreenResponse?.data.meta;
   const UserAnalytics = UserResponse?.data.analytics;
-  // console.log(BundleCampaignMeta);
 
-  // console.log(UserAnalytics)
+
+
 
   if (isLoading) {
     return <Loading />;
@@ -133,32 +134,7 @@ const AdminCampaignData: React.FC = () => {
     },
   ];
 
-  const campaignsData = [
-    {
-      name: "New Product Launch",
-      advertiser: "TechCorp",
-      status: "Completed",
-      startDate: "2025-08-15",
-    },
-    {
-      name: "Back to School",
-      advertiser: "BookWorms",
-      status: "Pending",
-      startDate: "2025-08-15",
-    },
-    {
-      name: "Summer Sale 2025",
-      advertiser: "FashionCo",
-      status: "Active",
-      startDate: "2025-07-01",
-    },
-    {
-      name: "Holiday Special",
-      advertiser: "FoodMart",
-      status: "Active",
-      startDate: "2025-07-02",
-    },
-  ];
+
 
   return (
     <motion.div
@@ -243,56 +219,8 @@ const AdminCampaignData: React.FC = () => {
           ))}
         </motion.div>
 
-        {/* Recent Campaigns Table */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl sm:py-11 font-normal text-[#C3CEE9]">
-            Recent Campaigns
-          </h2>
-
-          <Card className="bg-bg-dashboard border-[#11214D] rounded lg:p-0 sm:py-5">
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead className="text-sm sm:text-lg bg-[#11214D] border-[#11214D] text-[#AEB9E1] font-normal">
-                    <tr>
-                      <th className="py-3 px-2 sm:py-4 sm:px-3">
-                        Campaign Name
-                      </th>
-                      <th className="py-3 px-2">Advertiser</th>
-                      <th className="py-3 px-2">Status</th>
-                      <th className="py-3 px-2">Start date</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {campaignsData.map((campaign, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-slate-800/40 last:border-0"
-                      >
-                        <td className="py-3 px-4 text-[#AEB9E1]">
-                          {campaign.name}
-                        </td>
-                        <td className="py-3 px-2 text-[#AEB9E1]">
-                          {campaign.advertiser}
-                        </td>
-                        <td className="py-3 px-2">
-                          <CommonStatus status={campaign.status} />
-                        </td>
-                        <td className="py-3 px-2 text-[#AEB9E1]">
-                          {campaign.startDate}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
+       <CampaignPerformanceAnalytics />
+      
       </div>
     </motion.div>
   );

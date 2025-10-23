@@ -65,12 +65,14 @@ export function DashboardSidebar({ user }: { user: string }) {
         </nav>
       </div>
 
-      <div className="px-6 z-50  mt-10">
+      {
+        user !== "admin" && (<div className="px-6 z-50  mt-10">
         <Link to="/user-dashboard/new-campaign">
-          {" "}
+       
           <CommonDashboardButton title="New Campaign" Icon={Plus} />
         </Link>
-      </div>
+      </div>)
+      }
     </div>
   );
 }

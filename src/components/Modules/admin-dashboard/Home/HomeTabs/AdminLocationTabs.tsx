@@ -67,7 +67,7 @@ export default function AdminLocationTabs() {
   const { data: topSalesData, isLoading: topSalesLoading ,refetch: topSalesRefetch} =
     useGetTopSalesScreenQuery(undefined, { skip: tab !== "top" });
 
-  const { data, isLoading ,refetch} = useGetAllScreenQuery({ limit: 1000, page: "1" });
+  const { data, isLoading ,refetch} = useGetAllScreenQuery({ limit: 100000, page: "1" });
 
   const { data: favData, isLoading: favLoading ,refetch: favRefetch} =
     useGetMySelfFavouriteScreensQuery(undefined, { skip: tab !== "fav" });

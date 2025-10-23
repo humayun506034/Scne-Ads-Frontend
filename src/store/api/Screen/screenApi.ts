@@ -34,6 +34,14 @@ const screenApi = baseApi.injectEndpoints({
       }),
       invalidatesTags:['Screen']
     }),
+    changeScreenStatus: builder.mutation({
+      query: ({payload,id}) => ({
+        url: `/screen/change-availability-status/${id}`,
+        method: "PATCH",
+        body:payload
+      }),
+      invalidatesTags:['Screen']
+    }),
 
 
     createScreen: builder.mutation({
@@ -81,5 +89,6 @@ export const {
   useDeleteScreenMutation,
   useUpdateScreenMutation,
   useUploadScreenImagesMutation,
-  useDeleteScreenImageMutation
+  useDeleteScreenImageMutation,
+  useChangeScreenStatusMutation
 } = screenApi;

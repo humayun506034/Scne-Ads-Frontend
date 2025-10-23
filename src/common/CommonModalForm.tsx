@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown, X } from "lucide-react";
@@ -30,7 +31,7 @@ const FormInput = ({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className={`w-full px-4 py-3 bg-[#1A274C] text-white text-sm rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 transition-all ${className}`}
+      className={`w-full px-4 py-3 bg-[#1A274C] text-white text-sm rounded-lg placeholder-titletext-title-color focus:outline-none focus:ring-2 transition-all ${className}`}
     />
   </div>
 );
@@ -74,6 +75,7 @@ const FormDropdown = ({
           className="w-full px-4 py-3 bg-[#1A274C] text-white text-sm text-left rounded-lg flex justify-between items-center transition-all"
           style={{
             border: "2px solid",
+            borderColor: "transparent",
             borderImage:
               "linear-gradient(291deg, #38B6FF -45.64%, #09489D 69.04%) 1",
           }}
@@ -83,7 +85,7 @@ const FormDropdown = ({
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.2 }}
           >
-            <ChevronDown className="w-4 h-4 text-gray-400" />
+            <ChevronDown className="w-4 h-4 text-title-color" />
           </motion.div>
         </button>
 
@@ -94,20 +96,18 @@ const FormDropdown = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute top-full left-0 right-0 mt-1 bg-[#0B1739] rounded-lg shadow-2xl z-50 overflow-hidden"
+              className="absolute top-full left-0 right-0 mt-1 bg-[#0B1739] shadow-2xl  z-50 overflow-hidden"
             >
-              {options.map((option, index) => (
+              {options.map((option) => (
                 <button
                   key={option.value}
                   type="button"
                   onClick={() => handleSelect(option)}
-                  className={`w-full px-4 py-3 text-left text-sm transition-colors ${
+                  className={`w-full cursor-pointer px-4 py-3 text-left text-sm rounded-lg transition-colors ${
                     value === option.value
-                      ? "bg-blue-600 text-white"
+                      ? "bg-dashboard-border text-white"
                       : "text-gray-200 hover:bg-[#222E51] hover:text-white"
-                  } ${index === 0 ? "rounded-t-lg" : ""} ${
-                    index === options.length - 1 ? "rounded-b-lg" : ""
-                  }`}
+                  } `}
                 >
                   {option.label}
                 </button>
@@ -155,6 +155,7 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
 }) => {
   const [formState, setFormState] = useState(formData);
 
+
   const updateField = (fieldName: string, value: string) => {
     setFormState((prev: any) => ({ ...prev, [fieldName]: value }));
   };
@@ -167,17 +168,17 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 40 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 40 }}
         transition={{ duration: 0.25 }}
-        className="bg-[#0B1739] rounded-2xl w-full lg:w-2xl md:w-xl sm:w-md mx-4 shadow-2xl border border-[#1c2c55] overflow-hidden"
+        className="bg-[#0B1739] rounded-2xl w-full lg:w-xl md:w-xl sm:w-md mx-4 shadow-2xl border border-[#1c2c55] overflow-hidden"
       >
         {/* Header */}
         <div className="flex justify-between items-center px-6 py-5 border-b border-[#1c2c55]">
-          <h3 className="text-lg font-medium text-white">{title}</h3>
+          <h3 className="text-2xl font-medium text-white">{title}</h3>
           <button onClick={onClose}>
             <X className="w-6 h-6 text-[#AEB9E1] hover:text-red-400 cursor-pointer transition" />
           </button>

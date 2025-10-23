@@ -30,7 +30,7 @@ const Pagination: React.FC<PaginationProps> = ({
       }
     }
 
-    for (let i of range) {
+    for (const i of range) {
       if (last !== null) {
         if (i - last === 2) {
           rangeWithDots.push(last + 1);
