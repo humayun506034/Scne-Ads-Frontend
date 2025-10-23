@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 
 const DashboardDeleteButton = ({
   title,
+  type="submit",
   Icon,
   onClick,
   disabled,
@@ -10,6 +11,7 @@ const DashboardDeleteButton = ({
 }: {
   title: string;
   Icon?: any;
+  type?: "button" | "submit" | "reset" | undefined;
   className?: string;
   disabled?: boolean;
   onClick?: () => void;
@@ -18,7 +20,7 @@ const DashboardDeleteButton = ({
     <motion.button
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.8 }}
-      type="submit"
+      type={type ?? "submit"}
       disabled={disabled}
       onClick={onClick}
       className={`px-2 md:px-8 py-4 w-full  md:w-fit cursor-pointer flex justify-center items-center gap-2 bg-red-500 text-sm md:text-base text-white rounded-md bg-[linear-gradient(291deg,_#FF4C4C_-45.64%,_#B71C1C_69.04%)]  ${className}`}

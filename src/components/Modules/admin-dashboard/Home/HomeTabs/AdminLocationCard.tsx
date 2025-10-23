@@ -32,13 +32,13 @@ import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import LocationMapModal from "./LocationMap";
 
-/** Images as returned by your API screenshot */
+
 export interface IImageUrl {
   url: string;
   index?: number;
 }
 
-/** Screen object based on your console screenshot */
+
 export interface IScreen {
   id?: string;
   slug?: string;
@@ -65,19 +65,7 @@ export interface LocationCardProps {
   edit?: boolean;
 }
 
-type NumericString = `${number}`;
 
-interface IUpdateScreenPayload {
-  screen_name: string;
-  screen_size?: string;
-  description?: string;
-  resolution?: string;
-  price?: number;
-  isFeatured?: boolean;
-  lat?: NumericString;
-  lng?: NumericString;
-  location?: string;
-}
 
 const AdminLocationCard = ({ location }: LocationCardProps) => {
   const {
@@ -99,7 +87,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
 
   const [open, setOpen] = useState(false);
   const [openMap, setOpenMap] = useState(false);
-  const [updateScreenImage, { isLoading: updateLoading }] =
+  const [updateScreenImage] =
     useUploadScreenImagesMutation();
   const [updateScreen, { isLoading }] = useUpdateScreenMutation();
   const [deleteScreen, { isLoading: deleteLoading }] =
@@ -124,16 +112,14 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
   ).map((img: any) => (typeof img === "string" ? { url: img } : img));
 
   const [existingImages, setExistingImages] = useState<{ url: string }[]>([]);
-  const [deletedExistingIndexes, setDeletedExistingIndexes] = useState<
-    number[]
-  >([]);
+
   const [files, setFiles] = useState<File[]>([]);
   const [newPreviews, setNewPreviews] = useState<string[]>([]);
 
   useEffect(() => {
     if (open) {
       setExistingImages(cardImages);
-      setDeletedExistingIndexes([]);
+
       setFiles([]);
       setNewPreviews([]);
     }
@@ -174,7 +160,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
         toast.success("Screen updated successfully", { id });
 
         setExistingImages((prev) => prev.filter((_, i) => i !== index));
-        setDeletedExistingIndexes((prev) => [...prev, index]);
+
       }
     } catch (err: any) {
       console.error("Error updating screen:", err);

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { useDeleteBundleMutation, useUpdateBundleMutation } from "@/store/api/Bundle/bundleApi";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { Plus, Trash } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -62,7 +62,7 @@ const AdminSpecialCard = ({ bundle, onUpdated }: Props) => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const preview = usePreview(file, bundle.img_url);
-
+const  [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [updateBundle, { isLoading }] = useUpdateBundleMutation();
   const [deleteBundle, { isLoading: isDeleting }] = useDeleteBundleMutation();
   const {
@@ -89,14 +89,17 @@ const AdminSpecialCard = ({ bundle, onUpdated }: Props) => {
     });
     setFile(null);
   }, [bundle, reset]);
+
 const handleDelete = async () => {
-if(isDeleting) return;
-  if (!confirm("Are you sure you want to delete this bundle? This action cannot be undone.")) {
-    return;
-  }
+if(isDeleting){
+  toast.info("Delete in progress. Please wait.");
+  return;
+}
+  
+  
  
   try {
-    const res =await deleteBundle(bundle.id).unwrap();
+    const res =await deleteBundle(bundle.slug).unwrap();
  toast.promise(res , {
     loading: "Deleting bundle...",
     success: "Bundle deleted successfully.",
@@ -110,26 +113,33 @@ if(isDeleting) return;
   }}
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
+      const toastId = toast.loading("Updating bundle...");
+    if (isDeleting) return;
+
     try {
+    
       const payload = {
         bundle_name: data.bundle_name,
         price: Number(data.price ?? 0),
         duration: data.duration,
         status: data.status,
-      };
 
+      };
+  
       const fd = new FormData();
       fd.append("data", JSON.stringify(payload));
       if (file) fd.append("file", file); 
 
-      await updateBundle({ id: bundle.id, body: fd } as any).unwrap();
-
-      toast.success("Bundle updated!");
+  const res =  await updateBundle({ id: bundle.slug, payload: fd } as any).unwrap();
+if(res.success){
+       toast.success("Bundle updated!",{id: toastId});
       setOpen(false);
       onUpdated?.();
+}
+   
     } catch (e: any) {
       const msg = e?.data?.message || e?.message || "Update failed.";
-      toast.error(msg);
+      toast.error(msg,{id: toastId});
     }
   };
 
@@ -153,7 +163,7 @@ if(isDeleting) return;
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <motion.div
-            className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[280px] w-full overflow-hidden flex flex-col"
+            className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[320px] w-full overflow-hidden flex flex-col"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -230,7 +240,7 @@ if(isDeleting) return;
                   }
                   options={[
                     { value: "ongoing", label: "Ongoing" },
-                    { value: "expired", label: "Completed" },
+                    { value: "expired", label: "Expired" },
                   ]}
                 />
               </div>
@@ -241,7 +251,7 @@ if(isDeleting) return;
                   className="w-full mt-2"
                   Value={bundle.duration}
                   setValue={(v: string) => {
-                    // accept only supported values, keep previous otherwise
+                    
                     const safe = (["7 Days", "15 Days", "30 Days"].includes(v) ? v : bundle.duration) as FormValues["duration"];
                     setValue("duration", safe, { shouldValidate: true });
                   }}
@@ -262,13 +272,13 @@ if(isDeleting) return;
                   <img
                     src={preview || "/placeholder.png"}
                     alt="preview"
-                    className="w-full max-h-40 object-cover rounded-md"
+                    className="w-full max-h-40 object-fill rounded-md"
                     onError={(e) => (e.currentTarget.src = "/placeholder.png")}
                   />
                 </div>
 
                 <div
-                  className="border-dashed bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-32"
+                  className="border-dashed bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-40"
                   onClick={() => document.getElementById("bundle-file")?.click()}
                 >
                   <input
@@ -287,17 +297,22 @@ if(isDeleting) return;
 
             <div className="flex flex-col mt-10 md:flex-row justify-end gap-4">
               <CommonDashboardButton
+              type="submit"
                 disabled={isLoading}
                 title={isLoading ? "Saving..." : "Save Changes"}
                 Icon={Plus}
               />
-              <DashboardDeleteButton
-                onClick={handleDelete}
-                disabled={isLoading}
-                title={isLoading ? "Deleting..." : "Delete"}
-                Icon={Plus}
-              />
+               <DashboardDeleteButton
+                 type="button"
+                  title={isDeleting ? "Deleting..." : "Delete Current Image"}
+                  Icon={Trash}
+                  onClick={() => 
+                    setConfirmDeleteOpen(true) }
+                   
+                />
+           
               <CommonCancelButton
+              type="button"
                 onClick={() => {
                   reset();
                   setFile(null);
@@ -307,6 +322,24 @@ if(isDeleting) return;
               />
             </div>
           </form>
+              <Dialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
+                      <DialogContent className="bg-[#081028] rounded-lg border-none p-6 mx-auto text-center">
+                        <DialogHeader>
+                          <DialogTitle className="text-xl">Are you sure you want to delete this Bundle?</DialogTitle>
+                        </DialogHeader>
+              
+                        <div className="flex flex-col md:flex-row justify-between gap-4 mt-4">
+                          <DashboardDeleteButton
+                onClick={handleDelete}
+                disabled={isLoading}
+                title={isLoading ? "Deleting..." : "Delete"}
+                Icon={Plus}
+              />
+                          <CommonCancelButton onClick={() => setConfirmDeleteOpen(false)} title="Cancel" />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+             
         </DialogContent>
       </Dialog>
     </div>

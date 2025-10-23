@@ -58,7 +58,7 @@ export type Screen = {
   location?: string;
   price?: number;
   availability?: "available" | "unavailable";
-  status?: "ongoing" | "expired";
+  
   imageUrls?: string[];
 };
 
@@ -67,7 +67,7 @@ const AdminSpecialSection = () => {
   const [file, setFile] = useState<File | null>(null);
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
-  const [value, setValueStatus] = useState<BundleForm["status"]>("ongoing");
+
   const [duration, setDuration] = useState<BundleForm["duration"]>("7 Days");
   const {
     register,
@@ -80,7 +80,7 @@ const AdminSpecialSection = () => {
     defaultValues: {
       title: "",
       price: undefined,
-      status: "ongoing",
+    
       duration: undefined,
     },
   });
@@ -148,15 +148,16 @@ const AdminSpecialSection = () => {
       toast.error("Please select at least two screens for this bundle.");
       return;
     }
-
+const id = toast.loading("Adding bundle...");
     try {
       const dataJson = {
         bundle_name: String(form.title),
         price: Number(form.price),
         duration: form.duration,
-        status: form.status,
+        status: 'ongoing',
         screens: selected.map((id: string) => ({ screen_id: id })),
       };
+
 
       const fd = new FormData();
       fd.append("data", JSON.stringify(dataJson));
@@ -165,13 +166,13 @@ const AdminSpecialSection = () => {
       const res = await createBundle(fd).unwrap();
 
       if (res?.success) {
-        toast.success("Bundle added successfully!");
+        toast.success("Bundle added successfully!",{id});
         reset();
         setFile(null);
         setSelected([]);
         setQuery("");
         setDuration("7 Days");
-        setValueStatus("ongoing");
+       
         setOpen(false);
       } else {
         toast.error(res?.message || "Failed to add bundle.");
@@ -179,7 +180,7 @@ const AdminSpecialSection = () => {
     } catch (error: any) {
       const message =
         error?.data?.message || error?.message || "Failed to add bundle.";
-      toast.error(message);
+      toast.error(message,{id});
     }
   };
 
@@ -201,7 +202,7 @@ const AdminSpecialSection = () => {
              <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <div className="w-full min-h-[40dvh]  h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
+          <div className="w-full min-h-[30dvh]  h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
             <motion.div
               whileTap={{ scale: 0.8 }}
               whileHover={{ scale: 1.1 }}
@@ -251,28 +252,7 @@ const AdminSpecialSection = () => {
                           </p>
                         )}
                       </div>
-                      <div className="mb-4 w-full">
-                        <label className="mb-4">Status</label>
-                        <CommonSelect
-                          className="w-full mt-2"
-                          Value={value}
-                          setValue={(v) => {
-                            setValueStatus(v as BundleForm["status"]);
-                            setValue("status", v as BundleForm["status"], {
-                              shouldValidate: true,
-                            });
-                          }}
-                          options={[
-                            { value: "ongoing", label: "Ongoing" },
-                            { value: "expired", label: "Completed" },
-                          ]}
-                        />
-                        {errors.status && (
-                          <p className="text-red-400 text-xs mt-1">
-                            {errors.status.message}
-                          </p>
-                        )}
-                      </div>
+                    
 
                       <div className="mb-4 w-full">
                         <label className="">Duration</label>

@@ -26,9 +26,9 @@ const bundleApi = baseApi.injectEndpoints({
 
     }),
     UpdateBundle : builder.mutation({
-      query: (payload) => ({
-        url: `/bundle/${payload.id}`,
-        method: "POST",
+      query: ({payload,id}) => ({
+        url: `/bundle/${id}`,
+        method: "PATCH",
         body: payload,
     }),
     invalidatesTags: ["Bundle"],
