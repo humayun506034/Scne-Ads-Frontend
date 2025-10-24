@@ -153,7 +153,11 @@ export default function AdminLocationTabs() {
       : favData?.data;
 
   return (
-    <Tabs value={tab} onValueChange={setTab} className="w-full mt-20">
+   <div className="w-full flex justify-between "> 
+   <Tabs value={tab} onValueChange={setTab} className="w-full mt-20">
+     <h1 className="text-center text-xl md:text-3xl font-semibold text-nowrap">
+     Total Screens : {locationData?.length}
+    </h1>
       <TabsList className="bg-transparent mb-8">
         {TabName.map((item) => (
           <TabsTrigger
@@ -407,5 +411,7 @@ export default function AdminLocationTabs() {
         )}
       </TabsContent>
     </Tabs>
+   
+   </div>
   );
 }

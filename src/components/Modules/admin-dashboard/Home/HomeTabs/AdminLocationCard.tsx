@@ -177,15 +177,18 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
 
   const onSubmit = async (data: FieldValues) => {
     const payload = {
-      screen_name: data.screen_name,
-      screen_size: data.screen_size,
-      description: data.description,
-      resolution: data.resolution,
-      price: Number(data.price),
+      screen_name: data.screen_name ?? location.screen_name,
+      screen_size: data.screen_size ?? location.screen_size,
+      availability: location.availability ?? "available",
+      description: data.description ?? location.description,
+      status: location.status ?? "active",
+      resolution: data.resolution ?? location.resolution,
+      price: Number(data.price) || location.price,
       isFeatured: value === "true",
-      lat: selectedCoords?.lat,
-      lng: selectedCoords?.lng,
-      location: data.location,
+      isDeleted: location.isDeleted ?? false,
+      lat: selectedCoords?.lat || location.lat,
+      lng: selectedCoords?.lng || location.lng,
+      location: data.location || location.location,
     };
 
     const toastId = toast.loading("Updating screen...");

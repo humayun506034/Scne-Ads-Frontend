@@ -1,6 +1,4 @@
-import CommonSelect from "@/common/CommonSelect";
 import Loading from "@/common/MapLoading";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -13,44 +11,11 @@ import {
   useGetAllCustomCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 import { useGetAllUserQuery } from "@/store/api/User/useApi";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@radix-ui/react-dropdown-menu";
+
+import AdminDashboardHeader from "@/components/Modules/admin-dashboard/AdminDashboardHeader";
 import { motion } from "framer-motion";
-import { Calendar, ChevronDown, LogOut, Menu, User } from "lucide-react";
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import CampaignPerformanceAnalytics from "./CampaignPerformanceAnalytics";
-
-// Month Dropdown Button Component
-const MonthDropdownButton = ({ className = "" }) => {
-  const [selectedPeriod, setSelectedPeriod] = useState("Current Month");
-
-  const periods = [
-    { value: "year", label: "Current Year" },
-    { value: "month", label: "Current Month" },
-    { value: "week", label: "Current Week" },
-  ];
-
-  return (
-    <div className={className}>
-      <CommonSelect
-        Value={selectedPeriod}
-        setValue={(val) => {
-          const selected = periods.find((p) => p.value === val);
-          if (selected) setSelectedPeriod(selected.label);
-        }}
-        options={periods}
-        Icon={Calendar}
-        bgColor="bg-[#0B1739]"
-      />
-    </div>
-  );
-};
 
 // Metric Card Component with motion
 const MetricCard = ({ title, subtitle, value, className = "" }) => (
@@ -80,7 +45,7 @@ const MetricCard = ({ title, subtitle, value, className = "" }) => (
 const AdminCampaignData: React.FC = () => {
   const { data: BundleResponse, isLoading } = useGetAllBundleCampaignQuery({});
   const { data: ScreenResponse } = useGetAllCustomCampaignQuery({});
-  console.log("🚀 ~ AdminCampaignData ~ ScreenResponse:", ScreenResponse)
+
   const { data: UserResponse } = useGetAllUserQuery({});
 
 
@@ -92,9 +57,7 @@ const AdminCampaignData: React.FC = () => {
 
 
 
-  if (isLoading) {
-    return <Loading />;
-  }
+
 
   const metricsData = [
     {
@@ -134,6 +97,7 @@ const AdminCampaignData: React.FC = () => {
     },
   ];
 
+ 
 
 
   return (
@@ -141,75 +105,22 @@ const AdminCampaignData: React.FC = () => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="min-h-screen bg-bg-dashboard lg:py-8 sm:py-14"
+      className="min-h-screen bg-bg-dashboard lg:py-8 "
     >
-      <div className="px-4 sm:px-8 lg:px-6 mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4"
-        >
-          <h1 className="text-3xl sm:text-4xl font-semibold text-white">
-            Hey, <span className="text-secondary-color">Admin</span>
-          </h1>
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="hidden sm:flex items-center gap-3 sm:gap-4">
-              {/* Replace static button with MonthDropdownButton */}
-              <MonthDropdownButton className="sm:mr-10" />
+      <div className="px-4 md:px-8 lg:px-6 mx-auto">
 
-              {/* Profile section */}
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className="flex items-center gap-2 text-white px-4 py-3 focus:ring-0 focus:outline-none focus:border-none border-none ring-0 rounded-full cursor-pointer transition-all duration-300"
-                    >
-                      <div className="w-8 h-8 bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] rounded-full flex items-center justify-center">
-                        <User className="h-4 w-4" />
-                      </div>
-                      <span className="hidden sm:inline font-medium">SS</span>
-                      <ChevronDown className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="w-full bg-[#1A2342] border-none flex items-center shadow-[0_0_12px_rgba(9,72,157,0.9)]  justify-center flex-col"
-                  >
-                    <DropdownMenuItem className="cursor-pointer py-2 hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-secondary-color hover:text-white px-5 w-full">
-                      <Link
-                        to="/admin-dashboard/adminBasicInfo"
-                        className="flex items-center w-full"
-                      >
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem className="cursor-pointer py-2 px-5 flex items-center justify-between hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] w-full text-red-600">
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-            <div className="sm:hidden flex items-center">
-              <Menu className="w-7 h-7 text-white cursor-pointer" />
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Metrics Grid */}
+      <AdminDashboardHeader/>
+       
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10 mt-6 md:mt-10"
         >
-          {metricsData.map((metric, index) => (
+          {
+            isLoading && <Loading />
+          }
+          {   !isLoading && metricsData.map((metric, index) => (
             <MetricCard
               key={index}
               title={metric.title}

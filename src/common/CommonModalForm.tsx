@@ -211,7 +211,7 @@ const CommonModalForm: React.FC<CommonModalFormProps> = ({
         </div>
 
         {/* buttons */}
-        <div className="px-6 pb-6 flex justify-end gap-5">
+        <div className="px-6 pb-6 flex flex-col md:flex-row items-center justify-end gap-5">
           <CommonDashboardButton
             title={saveButtonText}
             onClick={handleSave}

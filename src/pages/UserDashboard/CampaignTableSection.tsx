@@ -3,7 +3,7 @@ import CampaignTable from "@/components/Modules/UserDashboard/CampaignManagement
 
 export default function CampaignTablePage() {
   return (
-    <div className="px-4 md:px-10 mt-10">
+    <div className="px-4 md:px-10 md:mt-10">
       <div className="mb-6">
         <h1 className="text-2xl md:text-4xl  font-semibold text-white mb-2">
           Campaign Management

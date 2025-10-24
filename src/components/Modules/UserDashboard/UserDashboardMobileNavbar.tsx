@@ -10,14 +10,15 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import logo from "../../../assets/logo.png";
-import { navItems, userSidebarItems } from "./Home";
+import { adminSidebarItems, navItems, userSidebarItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
-const UserDashboardMobileNavbar = () => {
+const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/customer-dashboard");
   const dispatch = useDispatch();
 
+  const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
     <div className="lg:hidden px-5 md:px-10 flex items-center  mt-4  border-border border-b-1 pb-4 justify-between gap-4 w-full">
       <div className="flex h-12 px-6  lg:mt-8   lg:items-center  ">
@@ -47,7 +48,7 @@ const UserDashboardMobileNavbar = () => {
             </div>
 
             <div className="flex-1 mt-6 mb-0 ">
-              {userSidebarItems.map((section) => (
+              {sidebarItems.map((section) => (
                 <div key={section.title} className="mb-6">
                   <h3 className="mb-2 px-2 text-[#C3CEE9] text-sm font-semibold uppercase tracking-wider">
                     {section.title}

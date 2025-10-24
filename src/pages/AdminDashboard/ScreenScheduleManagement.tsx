@@ -2,6 +2,7 @@
 import CommonModalForm, { Field } from "@/common/CommonModalForm";
 import CommonStatus from "@/common/CommonStatus";
 import ExtractErrorMessage from "@/common/ExtractErrorMessage";
+import Loading from "@/common/MapLoading";
 import { IScreen } from "@/components/Modules/admin-dashboard/Home/HomeTabs/AdminLocationCard";
 import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,7 +47,7 @@ const ScreenScheduleManagement: React.FC = () => {
   ];
 
 const handleSave = async (data: React.SetStateAction<any>, screenId: string) => {
-  console.log("Form Data before saving:", data, screenId);
+
 
   if (isChangeScreenStatusLoading) {
     toast.info("Updating screen status...");
@@ -55,14 +56,15 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
 
   const id = toast.loading("Updating screen status...");
   try {
-    // The payload contains the status, for example { status: "available" }
-    const payload = { status: data.status };
+   
+    const payload = { availability: data.Status };
+      console.log("Form Data before saving:", payload, screenId);
+
     
-    // Call the mutation with the payload and screenId
     const res = await changeScreenStatus({ id: screenId, payload }).unwrap();
     
     if (res.success) {
-      refetch(); // Refetch the screens to update the UI
+      refetch();         
       setIsModalOpen(false);
       setSelectedData(null);
       toast.success("Screen status updated successfully", { id });
@@ -80,13 +82,13 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
   };
 
   return (
-    <div className="p-4 sm:p-6 lg:py-16 lg:px-6 bg-bg-dashboard">
+    <div className="p-4 min-h-[90dvh] sm:p-6 lg:py-16 lg:px-6 bg-bg-dashboard">
       <div className="flex flex-col md:flex-row justify-between items-center">
   <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
     Screen Schedule Management
   </h2>
 
-  <div className="relative w-full max-w-lg">
+  <div className="relative mb-6 w-full max-w-lg">
     <input
       type="text"
       value={searchTerm}
@@ -99,7 +101,7 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
 </div>
 
       {/* Desktop and Tablet View */}
-      <Card className="hidden sm:block bg-bg-dashboard lg:p-0 border-[#11214D]">
+      <Card className="block bg-bg-dashboard lg:p-0 border-[#11214D]">
         <CardContent className="p-0">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse min-w-[800px]">
@@ -118,7 +120,7 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
                 {isLoading ? (
                   <tr>
                     <td colSpan={7} className="py-4 px-4 text-center">
-                      Loading...
+                     <Loading/>
                     </td>
                   </tr>
                 ) : (
@@ -174,49 +176,10 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
         </CardContent>
       </Card>
 
-      {/* Mobile View - Card Layout */}
-      <div className="grid gap-4 md:hidden">
-        {screens.map((screen: any) => (
-          <Card key={screen.id} className="bg-[#11214D] border-[#1a2b5d]">
-            <CardContent className="p-4 text-[#AEB9E1] space-y-2">
-              <div className="flex justify-between items-center">
-                <h3 className="text-base font-semibold">{screen.screen_name}</h3>
-                <CommonStatus status={screen.status} />
-              </div>
-              <p className="text-sm">
-                <span className="font-medium">Location:</span> {screen.location}
-              </p>
-              <p className="text-sm">
-                <span className="font-medium">Price:</span> ${screen.price}
-              </p>
-              <div className="flex justify-end">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="22"
-                  height="22"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  onClick={() => {
-                    setSelectedData(screen);
-                    setIsModalOpen(true);
-                  }}
-                  className="w-5 h-5 text-title-color cursor-pointer transition-all duration-200 ease-in-out hover:text-blue-600 hover:scale-125"
-                >
-                  <path
-                    d="M11 4.00023H4C3.46957 4.00023 2.96086 4.21094 2.58579 4.58601C2.21071 4.96109 2 5.46979 2 6.00023V20.0002C2 20.5307 2.21071 21.0394 2.58579 21.4144C2.96086 21.7895 3.46957 22.0002 4 22.0002H18C18.5304 22.0002 19.0391 21.7895 19.4142 21.4144C19.7893 21.0394 20 20.5307 20 20.0002V13.0002M18.5 2.50023C18.8978 2.1024 19.4374 1.87891 20 1.87891C20.5626 1.87891 21.1022 2.1024 21.5 2.50023C21.8978 2.89805 22.1213 3.43762 22.1213 4.00023C22.1213 4.56284 21.8978 5.1024 21.5 5.50023L12 15.0002L8 16.0002L9 12.0002L18.5 2.50023Z"
-                    stroke="#38B6FF"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+   
 
-      <div className="flex justify-end mt-4">
+      <div className="flex justify-between items-center mt-6 mb-4">
+        <div></div>
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

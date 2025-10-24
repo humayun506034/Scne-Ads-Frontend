@@ -14,7 +14,7 @@ export function AdminDashboardLayout() {
         <main className="flex-1 ">
           <div className="relative">
             <div className=" lg:hidden">
-              <UserDashboardMobileNavbar />
+              <UserDashboardMobileNavbar user="admin" />
             </div>
 
             <Outlet />

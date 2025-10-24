@@ -1,6 +1,6 @@
 const Loading = () => {
   return (
-    <div className="grid place-items-center h-screen">
+    <div className="grid place-items-center h-screen md:h-auto mt-20">
       <svg
         className="pl"
         viewBox="0 0 160 160"

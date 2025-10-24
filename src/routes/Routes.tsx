@@ -10,7 +10,6 @@ import Signup from "@/pages/Signup";
 import { AdminDashboardLayout } from "@/Layout/AdminLayout";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
-import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
@@ -33,7 +32,6 @@ import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCam
 import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
 import AllBundlePayments from "@/pages/AdminDashboard/AllBundlePayments";
 import AllScreenPayments from "@/pages/AdminDashboard/AllScreenPayments";
-import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
 import Billboard from "@/pages/Billboard";
 import PaymentSuccess from "@/pages/PaymentSuccess";
@@ -151,9 +149,9 @@ const routes = createBrowserRouter([
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },    
-      { path: "campaigns", element: <AdminCampaignManagement /> },
+   
       { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
-      { path: "pricing-management", element: <DynamicPricingManagement /> },
+      // { path: "pricing-management", element: <DynamicPricingManagement /> },
     ],
   },
   {

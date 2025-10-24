@@ -48,7 +48,9 @@ const Pagination: React.FC<PaginationProps> = ({
   const pages = getPageNumbers();
 
   return (
-    <nav
+    <>
+      {Number(totalPages) !== 1 && (
+        <nav
       className="inline-flex items-center justify-center space-x-1 mt-6"
       aria-label="Pagination Navigation"
     >
@@ -124,7 +126,9 @@ const Pagination: React.FC<PaginationProps> = ({
           <path d="M9 18l6-6-6-6" />
         </svg>
       </button>
-    </nav>
+    </nav>)
+      }
+    </>
   );
 };
 
