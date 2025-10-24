@@ -107,9 +107,13 @@ const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
             </div>
 
             <div className="px-3 py-4">
-              <Link to="/new-campaign">
+              {
+                user !== "admin" &&  <Link to="/new-campaign">
                 <CommonDashboardButton title="New Campaign" Icon={Plus} />
               </Link>
+
+              }
+             
             </div>
 
             <div className="px-3 pb-6">

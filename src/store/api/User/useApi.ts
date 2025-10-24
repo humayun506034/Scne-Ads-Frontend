@@ -16,18 +16,30 @@ const userApi = baseApi.injectEndpoints({
         },
 
       }),
+      providesTags: ["User"],
     }),
   changePassword: builder.mutation({
       query: (payload) => ({
-        url: "/user/all-users",
+        url: "/auth/change-password",
         method: "POST",
         body: payload,
 
       }),
+      invalidatesTags:["User"]
+    }),
+
+  updateProfile: builder.mutation({
+      query: (payload) => ({
+        url: "/user/update-profile",
+        method: "POST",
+        body: payload,
+
+      }),
+      invalidatesTags:["User"]
     }),
 
   }),
 });
 
-export const { useGetAllUserQuery } =
+export const { useGetAllUserQuery ,useChangePasswordMutation,useUpdateProfileMutation } =
   userApi;
