@@ -17,6 +17,7 @@ export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
   });
 
   const handleDragOver = (e: React.DragEvent) => {
+    console.log(setUploadStatus)
     e.preventDefault();
   };
 

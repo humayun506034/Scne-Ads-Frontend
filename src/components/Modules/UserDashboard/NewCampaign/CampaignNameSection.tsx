@@ -42,9 +42,8 @@ const CampaignNameSection = () => {
     { value: "other", label: "Other" },
   ];
 
-  // ✅ input change handler
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setCampaignName(e.target.value)); // redux এ সেট করা হচ্ছে
+    dispatch(setCampaignName(e.target.value)); 
   };
 
   return (
@@ -54,7 +53,7 @@ const CampaignNameSection = () => {
           <h1 className="text-2xl md:text-4xl font-semibold">Campaign Name</h1>
           <input
             type="text"
-            value={name} // redux state থেকে নেওয়া মান
+            value={name} 
             onChange={handleNameChange}
             className="w-full mt-16 p-4 rounded-md bg-transparent text-white border border-dashboard-border text-base focus:outline-none placeholder:text-[#6371A3] focus:ring-0"
             placeholder="Enter your campaign name"

@@ -42,6 +42,7 @@ export interface LocationCardProps {
   select?: boolean;
   onToggleFav?: (id: string) => void;
   showButton?: boolean;
+  imageUrls?: { url: string,id:string }[];
 }
 
 

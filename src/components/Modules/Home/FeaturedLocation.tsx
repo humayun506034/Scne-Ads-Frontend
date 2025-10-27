@@ -6,9 +6,8 @@ import {
 } from "@/components/ui/carousel";
 import { locationData } from "@/lib/Data";
 
-import CommonLocationCardModal, {
-  ILocation,
-} from "@/common/CommonLocationCardModal";
+import CommonLocationCardModal  from "@/common/CommonLocationCardModal";
+import {ILocation} from "@/types/locations";
 
 export function FeaturedLocationsCarousel() {
   return (

@@ -65,7 +65,7 @@ export default function UserBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
-  // ✅ Clear button handler
+
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);
