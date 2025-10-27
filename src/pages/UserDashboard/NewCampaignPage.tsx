@@ -5,52 +5,46 @@ import { SelectBoard } from "@/components/Modules/UserDashboard/NewCampaign/Sele
 import SelectLocations from "@/components/Modules/UserDashboard/NewCampaign/SelectLocations";
 import UploadGraphics from "@/components/Modules/UserDashboard/NewCampaign/UploadGraphics/UploadGraphics";
 import DurationSection from "@/components/Modules/UserDashboard/NewCampaign/DurationSection";
-import { usePublishCampaignMutation } from "@/store/api/Campaign/campaignApi";
 import Swal from "sweetalert2";
 
 export default function NewCampaignPage() {
   const campaign = useAppSelector((state) => state.campaign);
-<<<<<<< HEAD
-  const [publishCampaign, { isLoading }] = usePublishCampaignMutation();
-=======
+
+  // const handlePublish = async () => {
+
+  //   // Validation
+  //   // if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {
+  //   //   alert("Please fill all fields before publishing!");
+  //   //   return;
+  //   // }
+
+  //   // Prepare form-data
+  //   // const formData = new FormData();
+  //   // formData.append(
+  //   //   "data",
+  //   //   JSON.stringify({ name, screenIds, startDate, endDate, type })
+  //   // );
+  //   // files.forEach((file) => formData.append("files", file));
+
+  //   // try {
+  //   //   const token = localStorage.getItem("accessToken");
+  //   //   const res = await axios.post("/payment/checkout-custom", formData, {
+  //   //     headers: {
+  //   //       "Content-Type": "multipart/form-data",
+  //   //       Authorization: `Bearer ${token}`,
+  //   //     },
+  //   //   });
+  //   //   console.log("✅ Success:", res.data);
+  //   //   alert("Campaign published successfully!");
+  //   // } catch (err: any) {
+  //   //   console.error(err);
+  //   //   alert(err.response?.data?.message || "Publish failed");
+  //   // }
+  //    console.log("✅ Success:", campaign);
+  // };
 
   const handlePublish = async () => {
-
-    // Validation
-    // if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {
-    //   alert("Please fill all fields before publishing!");
-    //   return;
-    // }
-
-    // Prepare form-data
-    // const formData = new FormData();
-    // formData.append(
-    //   "data",
-    //   JSON.stringify({ name, screenIds, startDate, endDate, type })
-    // );
-    // files.forEach((file) => formData.append("files", file));
-
-    // try {
-    //   const token = localStorage.getItem("accessToken");
-    //   const res = await axios.post("/payment/checkout-custom", formData, {
-    //     headers: {
-    //       "Content-Type": "multipart/form-data",
-    //       Authorization: `Bearer ${token}`,
-    //     },
-    //   });
-    //   console.log("✅ Success:", res.data);
-    //   alert("Campaign published successfully!");
-    // } catch (err: any) {
-    //   console.error(err);
-    //   alert(err.response?.data?.message || "Publish failed");
-    // }
-     console.log("✅ Success:", campaign);
-  };
->>>>>>> rezwan_dev
-
-  
-const handlePublish = async () => {
-  const { name, screenIds, startDate, endDate, type, files } = campaign;
+    const { name, screenIds, startDate, endDate, type, files } = campaign;
 
 
   if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {

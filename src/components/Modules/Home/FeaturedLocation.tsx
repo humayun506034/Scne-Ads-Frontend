@@ -4,16 +4,9 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-<<<<<<< HEAD
-import { locationData } from "@/lib/Data";
-
-import CommonLocationCardModal  from "@/common/CommonLocationCardModal";
-import {ILocation} from "@/types/locations";
-=======
 import CommonLocationCardModal from "@/common/CommonLocationCardModal";
 import { useGetFeaturedScreenQuery } from "@/store/api/Common/commonApi";
 import { ILocation } from "@/types/locations";
->>>>>>> rezwan_dev
 
 export function FeaturedLocationsCarousel() {
   const { data: locationData, isLoading
