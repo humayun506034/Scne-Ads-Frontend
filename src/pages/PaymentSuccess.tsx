@@ -1,5 +1,4 @@
-import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 const PaymentSuccess = () => {
   const { paymentId } = useParams<{ paymentId: string }>();
