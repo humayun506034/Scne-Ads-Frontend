@@ -75,7 +75,7 @@ export default function AdminScreenCampaignManagement() {
     setCurrentPage(1);
   };
 
-  // ✅ Clear button handler
+  
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);

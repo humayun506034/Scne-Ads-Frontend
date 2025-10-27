@@ -5,8 +5,17 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setFiles } from "@/store/Slices/campaign/campaignSlice";
 import { BulkUploader } from "./BulkUploader";
 import { UploadedFileCard } from "./UploadFileCard";
-import { UploadedFile } from ".";
+// import { UploadedFile } from ".";
 import { useState } from "react";
+
+export interface UploadedFile {
+  id: string;
+  name: string;
+  url: string;
+  dimensions: string;
+  type: string;
+  compatible: boolean;
+}
 
 export default function MobileUploadGraphics() {
   const dispatch = useAppDispatch();
@@ -17,16 +26,14 @@ export default function MobileUploadGraphics() {
 
   const handleBulkUpload = (files: FileList) => {
     const fileArray = Array.from(files);
-    dispatch(setFiles(fileArray)); // ✅ Update Redux
-    console.log("Uploaded files stored in Redux:", fileArray);
+    dispatch(setFiles(fileArray));
 
-    // Optional: Create a temporary preview for UI
-    const previews = fileArray.map((file, index) => ({
+    const previews: UploadedFile[] = fileArray.map((file, index) => ({
       id: `${Date.now()}-${index}`,
       name: file.name,
       url: URL.createObjectURL(file),
       dimensions: "1920x1080",
-      fileType: file.type,
+      type: file.type,
       compatible: true,
     }));
 
@@ -37,7 +44,9 @@ export default function MobileUploadGraphics() {
     <div className="bg-dashboard-card-bg rounded-xl p-4">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-white text-2xl font-medium mb-2">Upload Graphics</h1>
+        <h1 className="text-white text-2xl font-medium mb-2">
+          Upload Graphics
+        </h1>
         <p className="text-title-color text-sm">
           Upload your images and media files for your campaigns.
         </p>
@@ -77,29 +86,35 @@ export default function MobileUploadGraphics() {
                   fill="#14CA74"
                 />
               </svg>
-              <span className="text-white text-base font-medium">Your Uploads</span>
+              <span className="text-white text-base font-medium">
+                Your Uploads
+              </span>
             </div>
 
             <div className="space-y-4 mt-12">
-              {localPreview.length > 0
-                ? localPreview.map((file) => (
-                    <UploadedFileCard key={file.id} file={file} />
-                  ))
-                : uploadedFiles.length > 0
-                ? uploadedFiles.map((file, i) => (
-                    <UploadedFileCard
-                      key={i}
-                      file={{
-                        id: String(i),
-                        name: file.name,
-                        url: URL.createObjectURL(file),
-                        dimensions: "1920x1080",
-                        fileType: file.type,
-                        compatible: true,
-                      }}
-                    />
-                  ))
-                : <p className="text-gray-400 text-sm text-center">No uploads yet.</p>}
+              {localPreview.length > 0 ? (
+                localPreview.map((file) => (
+                  <UploadedFileCard key={file.id} file={file} />
+                ))
+              ) : uploadedFiles.length > 0 ? (
+                uploadedFiles.map((file, i) => (
+                  <UploadedFileCard
+                    key={i}
+                    file={{
+                      id: String(i),
+                      name: file.name,
+                      url: URL.createObjectURL(file),
+                      dimensions: "1920x1080",
+                      type: file.type, 
+                      compatible: true,
+                    }}
+                  />
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm text-center">
+                  No uploads yet.
+                </p>
+              )}
             </div>
           </div>
         </TabsContent>

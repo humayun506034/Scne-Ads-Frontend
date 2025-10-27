@@ -7,7 +7,7 @@ export interface UploadedFile {
     type: "landscape" | "portrait" | "square"
     compatible: boolean
     url: string
-    uploadedAt: Date
+    // uploadedAt: Date
 }
 
 export interface LocationTemplate {
@@ -36,7 +36,7 @@ export const mockUploadedFiles: UploadedFile[] = [
         type: "landscape",
         compatible: false,
         url: img,
-        uploadedAt: new Date(),
+        // uploadedAt: new Date(),
     },
 ]
 
