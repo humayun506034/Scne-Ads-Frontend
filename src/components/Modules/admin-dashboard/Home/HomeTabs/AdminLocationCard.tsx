@@ -197,7 +197,6 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
         id: location.id!,
         payload,
       }).unwrap();
-      console.log("✅ Screen updated:", resUpdate);
 
       if (resUpdate.success) {
         toast.success("Screen updated", { id: toastId });

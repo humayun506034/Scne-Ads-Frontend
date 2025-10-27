@@ -32,7 +32,7 @@ export function MapOfBoardPage() {
       // Size filter
       if (
         filters.size.length > 0 &&
-        !filters.size.includes(location.screenSize)
+        !filters.size.includes(location.screen_size)
       ) {
         return false;
       }

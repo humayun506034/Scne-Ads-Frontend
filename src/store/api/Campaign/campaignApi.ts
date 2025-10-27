@@ -1,4 +1,18 @@
 import { baseApi } from "@/store/api/baseApi";
+interface PublishCampaignBody {
+  name: string;
+  screenIds: string[];
+  startDate: string;
+  endDate: string;
+  type: string;
+  files: File[];
+}
+
+interface PublishCampaignResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+}
 
 const campaignsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -95,6 +109,26 @@ const campaignsApi = baseApi.injectEndpoints({
         },
       }),
     }),
+
+    publishCampaign: builder.mutation<PublishCampaignResponse, PublishCampaignBody>({
+      query: ({ name, screenIds, startDate, endDate, type, files }) => {
+        const formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({ name, screenIds, startDate, endDate, type })
+        );
+        files.forEach((file) => formData.append("files", file));
+
+        return {
+          url: "/payment/checkout-custom",
+          method: "POST",
+          body: formData,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -103,4 +137,5 @@ export const {
   useGetAllCustomCampaignQuery,
   useGetMyselfAllBundleCampaignQuery,
   useGetMyselfAllCustomCampaignQuery,
+  usePublishCampaignMutation
 } = campaignsApi;

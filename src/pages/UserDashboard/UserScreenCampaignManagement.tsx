@@ -11,17 +11,17 @@ import Pagination from "@/components/Pagination";
 
 export default function UserScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
 
-  // ✅ Date Filter States
+
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [dateFilter, setDateFilter] = useState<string | null>(null);
 
-  // ✅ Build query params
+  
   const queryParams: Record<string, string> = {
     page: currentPage.toString(),
-    searchTerm,
+    // searchTerm,
   };
 
   if (startDate) queryParams.startDate = `${startDate}T00:00:00.000Z`;
@@ -36,7 +36,6 @@ export default function UserScreenCampaignManagement() {
   const meta = customData?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
-  // Modal States
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
@@ -54,7 +53,7 @@ export default function UserScreenCampaignManagement() {
     setSelectedCampaign(null);
   };
 
-  // ✅ Handlers for date filters
+
   const handleDateFilterClick = (filter: string) => {
     setDateFilter(filter);
     setStartDate(null);

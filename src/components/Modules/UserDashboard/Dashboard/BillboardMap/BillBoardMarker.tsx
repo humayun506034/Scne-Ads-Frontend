@@ -1,5 +1,5 @@
-import { ILocation } from "@/common/CommonLocationCardModal";
 import { Badge } from "@/components/ui/badge";
+import { ILocation } from "@/types/locations";
 import { motion } from "framer-motion";
 import { divIcon } from "leaflet";
 import { Eye, MapPin } from "lucide-react";
