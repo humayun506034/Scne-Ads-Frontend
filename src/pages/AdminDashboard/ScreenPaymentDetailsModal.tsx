@@ -1,12 +1,17 @@
-
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { motion } from 'framer-motion';
 import { X } from "lucide-react";
 
-const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
+const ScreenPaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
   if (!selectedPayment) return null;
+
 
 
   const isVideo = (url: string) => url?.endsWith(".mp4") || url?.includes("video");
@@ -31,7 +36,7 @@ const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
         {/* Header */}
         <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
           <h2 id="modal-title" className="text-2xl font-semibold">
-            Bundle Payment Details
+            Screen Payment Details
           </h2>
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -97,56 +102,19 @@ const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
             </section>
           </div>
 
-          {/* Bundle Info */}
-          <section>
-            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
-              Bundle Information
-            </h3>
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="md:w-1/3">
-                <img
-                  src={selectedPayment?.bundle.img_url}
-                  alt={selectedPayment?.bundle.bundle_name}
-                  className="w-full h-auto object-cover rounded-lg"
-                />
-              </div>
-              <div className="md:w-2/3 space-y-2">
-                <p className="text-lg font-medium">{selectedPayment?.bundle.bundle_name}</p>
-                <p>
-                  <span className="text-title-color text-base">Bundle ID: </span> {selectedPayment?.bundle.id}
-                </p>
-                <p>
-                  <span className="text-title-color text-base">Slug: </span> {selectedPayment?.bundle.slug}
-                </p>
-                <p>
-                  <span className="text-title-color text-base">Price: </span> ${selectedPayment?.bundle.price}
-                </p>
-                <p>
-                  <span className="text-title-color text-base">Duration: </span> {selectedPayment?.bundle.duration}
-                </p>
-                <p>
-                  <span className="text-title-color text-base">Status: </span> {selectedPayment?.bundle.status.toUpperCase()}
-                </p>
-               
-              </div>
-            </div>
-          </section>
-
           {/* Screens */}
           <section>
             <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
               Screens
             </h3>
-          
-               {selectedPayment?.bundle?.screens&&selectedPayment?.bundle?.screens.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {selectedPayment?.bundle?.screens.map((screen :  any) => (
-                  <div
-                    key={screen.id}
-                    className="p-4 border border-slate-700 rounded-lg space-y-3"
-                  >
-                    <h4 className="text-sm font-semibold">{screen.screen_name}</h4>
-                    <div className="mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(selectedPayment?.screens || []).map((screen: any) => (
+                <div
+                  key={screen.id}
+                  className="p-4 border border-slate-700 rounded-lg space-y-3"
+                >
+                  <h4 className="text-sm font-semibold">{screen.screen_name}</h4>
+                   <div className="mb-4">
                       <Carousel className="w-full relative">
                         <CarouselContent className="p-0">
                           {screen.imageUrls.length > 0 ? (
@@ -191,37 +159,22 @@ const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
                         )}
                       </Carousel>
                     </div>
-
-                    {/* Screen Details */}
-                    <div className="text-sm">
-                      <p>
-                        <span className="text-title-color text-base ">Size : </span>{" "}
-                        {screen.screen_size}
-                      </p>
-                      <p>
-                        <span className="text-title-color text-base ">Location : </span>{" "}
-                        {screen.location}
-                      </p>
-                      <p>
-                        <span className="text-title-color text-base ">Price : </span> $
-                        {screen.price}
-                      </p>
-                      <p>
-                        <span className="text-title-color text-base ">Resolution : </span>{" "}
-                        {screen.resolution}
-                      </p>
-                    </div>
+                  <p className="text-base font-medium">{screen.screen_name}</p>
+                  <p className="text-sm text-gray-300">{screen.location}</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <span className="px-2 py-1 text-xs bg-slate-700 rounded-full">
+                      Size: {screen.screen_size}
+                    </span>
+                    <span className="px-2 py-1 text-xs bg-slate-700 rounded-full">
+                      Price: ${screen.price} Per Day
+                    </span>
                   </div>
-                ))}
-              </div>
-            )  :  (
-              <p className="text-title-color text-base ">No screens available for this bundle.</p>
-            )}
-          
-        
+                </div>
+              ))}
+            </div>
           </section>
 
-          {/* Uploaded Contents */}
+        
           <section>
             <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
               Uploaded Contents
@@ -232,7 +185,7 @@ const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
                   <div key={index} className="border border-slate-700 rounded-lg p-4 bg-slate-800/50">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-base font-medium">Content {index + 1}</h4>
-                     
+            
                     </div>
                     {isVideo(contentUrl) ? (
                       <video controls className="w-full h-48 object-cover rounded-lg">
@@ -256,17 +209,17 @@ const BundlePaymentDetailsModal = ({ selectedPayment, closeModal }: any) => {
              <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.8 }}
-            onClick={closeModal}
+           onClick={closeModal}
             aria-label="Close modal"
             className="text-title-color border px-4 py-2 rounded-lg border-secondary-color cursor-pointer hover:text-red-400 " 
           >
             Close
           </motion.button>
-           </div>
+        </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default BundlePaymentDetailsModal;
+export default ScreenPaymentDetailsModal;

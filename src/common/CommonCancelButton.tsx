@@ -5,10 +5,12 @@ const CommonCancelButton = ({
   title,
   Icon,
   onClick,
+  type='submit' ,
   className = "",
 }: {
   title: string;
   Icon?: any;
+  type?: "button" | "submit" | "reset" | undefined;
   className?: string;
   onClick?: () => void;
 }) => {
@@ -16,7 +18,7 @@ const CommonCancelButton = ({
     <motion.button
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.95 }}
-      type="submit"
+      type={type ?? "submit"}
       onClick={onClick}
       className={`bg-transparent border-secondary-color border text-white font-medium text-sm xl:text-base xl:w-fit w-full px-4 py-3 rounded-lg cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex justify-center items-center gap-2 ${className}`}
     >
