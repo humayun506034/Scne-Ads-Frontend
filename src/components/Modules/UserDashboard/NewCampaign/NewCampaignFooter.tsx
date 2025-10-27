@@ -109,13 +109,13 @@ export function NewCampaignFooter() {
           </div>
 
           <div className="flex flex-col gap-4 justify-between items-center w-full xl:w-auto mt-6 md:mt-0">
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.85 }}
               className="text-white py-2 w-full  px-6 bg-[#0A193D] rounded-full cursor-pointer"
             >
               Save & Exit
-            </motion.button>
+            </motion.button> */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.85 }}

@@ -10,17 +10,18 @@ export function UploadedFileCard({ file }: UploadedFileCardProps) {
   return (
     <Card className="border-[#203265] px-8 rounded-xl">
       <div className="flex flex-col gap-4">
-        <div className="relative w-full ">
+        <div className="relative w-full">
           <img
             src={file.url}
             alt={file.name}
-            className=" h-[200px] w-full object-cover rounded-lg"
+            className="h-[200px] w-full object-cover rounded-lg"
           />
-          {/* {!file.compatible && (
+
+          {!file.compatible && (
             <div className="absolute -top-2 -left-2 bg-yellow-500 rounded-full p-1">
               <AlertTriangle className="w-3 h-3 text-white" />
             </div>
-          )} */}
+          )}
         </div>
 
         {/* File Info */}
