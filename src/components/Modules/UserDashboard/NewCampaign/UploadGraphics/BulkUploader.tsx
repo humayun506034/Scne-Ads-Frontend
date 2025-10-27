@@ -1,7 +1,7 @@
 import type React from "react";
 
 import { Card } from "@/components/ui/card";
-import { Check } from "lucide-react";
+import { Check, Upload } from "lucide-react";
 import { useState } from "react";
 import { BulkUploadStatus } from ".";
 
@@ -30,7 +30,6 @@ export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    console.log(setUploadStatus);
     if (files && onFileUpload) {
       onFileUpload(files);
     }
@@ -55,21 +54,7 @@ export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
           htmlFor="bulk-upload"
           className="cursor-pointer grid place-items-center "
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="40"
-            height="44"
-            viewBox="0 0 40 44"
-            fill="none"
-          >
-            <path
-              d="M38 28.6667V37.5556C38 38.7343 37.5786 39.8648 36.8284 40.6983C36.0783 41.5317 35.0609 42 34 42H6C4.93913 42 3.92172 41.5317 3.17157 40.6983C2.42143 39.8648 2 38.7343 2 37.5556V28.6667M30 13.1111L20 2M20 2L10 13.1111M20 2V28.6667"
-              stroke="white"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <Upload className="w-12 h-12 text-white" />
           <h3 className="text-title-color text-xl md:text-2xl font-medium mt-6">
             Bulk Uploader
           </h3>
