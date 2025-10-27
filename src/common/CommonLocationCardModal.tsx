@@ -6,45 +6,16 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Circle, Heart } from "lucide-react";
+import { Circle} from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-
-export interface ILocation {
-  id: string;
-  imgUrls: { url: string,id:string }[];
-  title: string;
-  lat: number;
-  lng: number;
-  availability: "available" | "booked" | "maintenance";
-  reach: number;
-  price: number;
-  campaigns: number;
-  category: "new" | "fav" | "top"; 
-  screenSize: string;
-  description: string;
-  status: "active" | "inactive" | "maintenance"; 
-  location: string;
-  tierLevel: "Basic" | "Standard" | "Premium"; 
-  costPerPlay: number;
-}
-
-
-export interface LocationCardProps {
-  location: ILocation;
-  fav?: Set<string>;
-  bookmark?: boolean;
-  select?: boolean;
-  onToggleFav?: (id: string) => void;
-  showButton?: boolean;
-}
+import { LocationCardProps} from "@/types/locations";
 
 const CommonLocationCardModal = ({
   location,
   fav,
-  bookmark,
   select,
   onToggleFav,
   showButton = false,
@@ -90,11 +61,12 @@ const CommonLocationCardModal = ({
           <Card className="lg:w-full relative border-none h-[380px] xl:h-[350px] card  mx-0 p-0 rounded-[30px] transition-all duration-300 hover:shadow-[0px_0px_20px_0px_rgba(47,171,249,0.90)] bg-transparent cursor-pointer">
             <CardContent className="flex flex-col items-center gap-4 text-center p-0">
               <div className="w-full rounded-[15px] overflow-hidden p-6">
-                <img
-                  src={location.image.url}
-                  alt={location.title}
-                  className="object-cover rounded-xl w-full h-40"
-                />
+               <img
+                src={location.imageUrls && location.imageUrls.length > 0 ? location.imageUrls[0].url : ""}
+                alt={location.title}
+                className="object-cover rounded-xl w-full h-40"
+              />
+
               </div>
               <h3 className="text-white text-xl lg:font-semibold px-4">
                 {location.title}
@@ -102,29 +74,6 @@ const CommonLocationCardModal = ({
               <p className="text-white/80 text-base lg:text-[14px] px-4">
                 {location.description}
               </p>
-              {bookmark ||
-                (fav && (
-                  <div
-                    onClick={(e) => handleBookmark(e, location.id)}
-                    tabIndex={-1}
-                    className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
-                  >
-                    <motion.button
-                      className="bg-transparent"
-                      whileHover={{ scale: 1.2 }}
-                      whileTap={{ scale: 0.8 }}
-                      type="button"
-                    >
-                      <Heart
-                        className={`h-7 w-7 cursor-pointer ${
-                          fav?.has(location.id)
-                            ? "fill-white stroke-white"
-                            : "stroke-white"
-                        }`}
-                      />
-                    </motion.button>
-                  </div>
-                ))}
               {select && (
                 <div
                   onClick={(e) => handleBookmark(e, location.id)}
@@ -187,11 +136,12 @@ const CommonLocationCardModal = ({
               </div>
             </div>
             <div className="lg:w-2/4 mt-10 lg:mt-0 rounded-lg">
-              <img
-                src={location.imgUrls[0].url}
-                alt="Location"
-                className="w-full h-[250px] object-fill rounded-lg"
-              />
+             <img
+              src={location.imageUrls && location.imageUrls.length > 0 ? location?.imageUrls[0]?.url : ""}
+              alt={location.title}
+              className="object-cover rounded-xl w-full h-40"
+            />
+             
             </div>
           </div>
           <p className="lg:text-lg mt-4 text-[#c3cee9]">

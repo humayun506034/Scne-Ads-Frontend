@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -74,7 +72,7 @@ export default function AdminBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
-  // ✅ Clear button handler
+  
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);

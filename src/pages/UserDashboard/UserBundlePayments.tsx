@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import { useMySelfBundlePaymentQuery } from '@/store/api/Payment/paymentApi'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
