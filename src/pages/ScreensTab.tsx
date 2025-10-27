@@ -4,7 +4,6 @@ import Loading from "@/common/MapLoading";
 import ScreenDetailsModal from "./AdminDashboard/ScreenDetailsModal";
 import Pagination from "@/components/Pagination";
 import CreateCampaignModal from "@/components/Shared/CreateCampaignModal";
-import Navbar from "./Navbar";
 import { useMakeScreenPaymentMutation } from "@/store/api/Payment/paymentApi";
 import { toast } from "sonner";
 
@@ -74,7 +73,7 @@ function ScreensTab() {
     setSelectedScreen(null);
   };
 
-  const handleCreateCampaign = (screen: Screen) => {
+  const handleCreateCampaign = () => {
     setIsCreateModalOpen(true);
   };
 

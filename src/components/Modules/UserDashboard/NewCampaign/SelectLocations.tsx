@@ -68,6 +68,7 @@ export default function SelectLocations() {
           }}
           className="mySwiper w-full mx-auto"
         >
+<<<<<<< HEAD
           {locations.map((location) => (
             <SwiperSlide className="px-2 pt-6 pb-20" key={location.id}>
               <CommonLocationCardModal
@@ -96,6 +97,29 @@ export default function SelectLocations() {
               />
             </SwiperSlide>
           ))}
+=======
+          {locations?.map((location) => {
+            // Ensure imageUrls have id as string (not undefined)
+            const fixedLocation = {
+              ...location,
+              imageUrls: (location.imageUrls || []).map((img, idx) => ({
+                url: img.url,
+                id: typeof img.id === "string" && img.id ? img.id : String(idx),
+              })),
+            };
+            return (
+              <SwiperSlide className="px-2 pt-6 pb-20" key={location.id}>
+                <CommonLocationCardModal
+                  showButton={false}
+                  location={fixedLocation}
+                  fav={new Set(selectedScreens)}
+                  onToggleFav={toggleSelect}
+                  select={true}
+                />
+              </SwiperSlide>
+            );
+          })}
+>>>>>>> rezwan_dev
         </Swiper>
       </div>
     </div>

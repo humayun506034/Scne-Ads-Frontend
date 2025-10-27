@@ -1,6 +1,10 @@
 'use client'
 
+<<<<<<< HEAD
 import  { useState } from 'react'
+=======
+import { useState } from 'react'
+>>>>>>> rezwan_dev
 import { useMySelfBundlePaymentQuery } from '@/store/api/Payment/paymentApi'
 import * as Dialog from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
@@ -8,8 +12,8 @@ import Loading from '@/common/MapLoading'
 import Pagination from '@/components/Pagination'
 
 const UserBundlePayments = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    
+  const [currentPage, setCurrentPage] = useState(1);
+
   const queryParams: Record<string, string> = {
     page: currentPage.toString(),
   };
@@ -18,14 +22,14 @@ const UserBundlePayments = () => {
   const payments = data?.data?.data || []
   const [selectedPayment, setSelectedPayment] = useState<any>(null)
 
-    const meta = data?.data?.meta;
+  const meta = data?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
   return (
     <div className="p-4 max-w-7xl mx-auto text-white">
       <h2 className="text-2xl font-semibold mb-6">My Bundle Payments</h2>
 
       {isLoading ? (
-        <Loading/>
+        <Loading />
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full shadow-md rounded-lg overflow-hidden bg-gray-900 text-white">
@@ -52,11 +56,10 @@ const UserBundlePayments = () => {
                   <td className="px-4 py-3">৳{payment.amount}</td>
                   <td className="px-4 py-3 capitalize">
                     <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        payment.status === 'success'
+                      className={`px-2 py-1 text-xs rounded-full ${payment.status === 'success'
                           ? 'bg-green-600/20 text-green-400'
                           : 'bg-yellow-600/20 text-yellow-400'
-                      }`}
+                        }`}
                     >
                       {payment.status}
                     </span>
@@ -192,13 +195,13 @@ const UserBundlePayments = () => {
           </table>
         </div>
       )}
-        <div className="flex justify-end mt-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={TotalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
+      <div className="flex justify-end mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={TotalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
 
     </div>
   )

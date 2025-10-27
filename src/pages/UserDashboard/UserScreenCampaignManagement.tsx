@@ -11,7 +11,7 @@ import Pagination from "@/components/Pagination";
 
 export default function UserScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
 
 
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export default function UserScreenCampaignManagement() {
   
   const queryParams: Record<string, string> = {
     page: currentPage.toString(),
-    searchTerm,
+    // searchTerm,
   };
 
   if (startDate) {

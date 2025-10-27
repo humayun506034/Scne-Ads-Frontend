@@ -1,67 +1,72 @@
-import profileImage from "@/assets/AdminPanel/profileImage.png";
-import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import CommonInputField from "@/common/CommonInputField";
-import ExtractErrorMessage from "@/common/ExtractErrorMessage";
-import { useChangePasswordMutation } from "@/store/api/User/useApi";
-import { Eye, EyeOff } from "lucide-react";
 import React, { useState } from "react";
+import CommonInputField from "@/common/CommonInputField";
+import { Eye, EyeOff } from "lucide-react";
+import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import { useChangePasswordMutation } from "@/store/api/User/useApi";
 import { toast } from "sonner";
 import AdminPanelNavbar from "./AdminPanelNavbar";
+import { useSelector } from "react-redux";
 
 const AdminChangePassword: React.FC = () => {
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showOldPassword, setShowOldPassword] = useState(false);
-
   const [changePassword, { isLoading }] = useChangePasswordMutation();
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
   const [formData, setFormData] = useState({
     newPassword: "",
-    oldPassword: "",
-    confirmPassword: "",
+    oldPassword: "", // Fixed: changed from "OldPassword" to "oldPassword"
   });
+  const { image } = useSelector((state: any) => state.auth.user);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit =async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.newPassword !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-    
+
+    // Validation
+    if (!formData.oldPassword || !formData.newPassword) {
+      toast.error("Please fill in all fields");
       return;
     }
-    const id =toast.loading("Changing password...");
- try{
-    const res =await changePassword({
-      oldPassword: formData.oldPassword,
-      newPassword: formData.newPassword,
-    }).unwrap();
-    if (res.success) {
-      toast.success("Password changed successfully",{ id});
+
+    if (formData.newPassword.length < 6) {
+      toast.error("New password must be at least 6 characters long");
+      return;
+    }
+
+    try {
+      const response = await changePassword({
+        oldPassword: formData.oldPassword,
+        newPassword: formData.newPassword
+      }).unwrap();
+
+      if (response) toast.success("Password changed successfully!");
+
+      // Clear form after successful update
       setFormData({
         newPassword: "",
         oldPassword: "",
-        confirmPassword: "",
       });
+
+    } catch (err: any) {
+      const errorMessage = err?.data?.message || "Failed to change password";
+      toast.error(errorMessage);
+      console.error("Password change error:", err);
     }
- }catch(err){
-  const msg = ExtractErrorMessage(err);
-  toast.error( msg,{ id});
- }
   };
 
   return (
-    <div className=" bg-bg-dashboard ">
+    <div className="bg-bg-dashboard">
       <AdminPanelNavbar />
       <div>
         <main className="flex mx-auto items-center justify-center">
           {/* Form Section */}
-          <div className="w-full max-w-5xl  p-6 flex flex-col items-center justify-center">
+          <div className="w-full max-w-5xl p-6 flex flex-col items-center justify-center">
             {/* Profile Image */}
             <div className="relative w-56 h-56 mb-20">
               <img
-                src={profileImage}
+                src={image}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full border-4 border-[#081028]"
               />
@@ -79,12 +84,19 @@ const AdminChangePassword: React.FC = () => {
                 onChange={(val) => handleChange("oldPassword", val)}
                 icon={
                   showOldPassword ? (
-                    <EyeOff onClick={() => setShowOldPassword(false)} />
+                    <EyeOff
+                      className="cursor-pointer"
+                      onClick={() => setShowOldPassword(false)}
+                    />
                   ) : (
-                    <Eye onClick={() => setShowOldPassword(true)} />
+                    <Eye
+                      className="cursor-pointer"
+                      onClick={() => setShowOldPassword(true)}
+                    />
                   )
                 }
               />
+
               <CommonInputField
                 label="New Password"
                 type={showNewPassword ? "text" : "password"}
@@ -92,33 +104,28 @@ const AdminChangePassword: React.FC = () => {
                 onChange={(val) => handleChange("newPassword", val)}
                 icon={
                   showNewPassword ? (
-                    <EyeOff onClick={() => setShowNewPassword(false)} />
+                    <EyeOff
+                      className="cursor-pointer"
+                      onClick={() => setShowNewPassword(false)}
+                    />
                   ) : (
-                    <Eye onClick={() => setShowNewPassword(true)} />
-                  )
-                }
-              />
-
-              <CommonInputField
-                label="Confirm Password"
-                type={showConfirmPassword ? "text" : "password"}
-                value={formData.confirmPassword}
-                onChange={(val) => handleChange("confirmPassword", val)}
-                icon={
-                  showConfirmPassword ? (
-                    <EyeOff onClick={() => setShowConfirmPassword(false)} />
-                  ) : (
-                    <Eye onClick={() => setShowConfirmPassword(true)} />
+                    <Eye
+                      className="cursor-pointer"
+                      onClick={() => setShowNewPassword(true)}
+                    />
                   )
                 }
               />
 
               {/* Submit Button */}
               <div className="col-span-1 md:col-span-2 flex justify-center">
-                <button>
-                  <CommonDashboardButton
+                <button
+                  type="submit"
                   disabled={isLoading}
-                    title="Save"
+                  className="disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <CommonDashboardButton
+                    title={isLoading ? "Changing..." : "Change Password"}
                     className="px-14 py-2 mt-4 rounded-full text-xl text-white font-semibold transition"
                   />
                 </button>

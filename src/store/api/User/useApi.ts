@@ -18,28 +18,36 @@ const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["User"],
     }),
-  changePassword: builder.mutation({
+    getSingleUser: builder.query({
+      query: ({ }) => ({
+        url: "/user/me",
+        method: "GET"
+
+      }),
+      providesTags: ["User"],
+    }),
+    changePassword: builder.mutation({
       query: (payload) => ({
         url: "/auth/change-password",
         method: "POST",
         body: payload,
 
       }),
-      invalidatesTags:["User"]
+      invalidatesTags: ["User"]
     }),
 
-  updateProfile: builder.mutation({
+    updateProfile: builder.mutation({
       query: (payload) => ({
         url: "/user/update-profile",
-        method: "POST",
+        method: "PATCH",
         body: payload,
 
       }),
-      invalidatesTags:["User"]
+      invalidatesTags: ["User"]
     }),
 
   }),
 });
 
-export const { useGetAllUserQuery ,useChangePasswordMutation,useUpdateProfileMutation } =
+export const { useGetAllUserQuery, useGetSingleUserQuery, useChangePasswordMutation, useUpdateProfileMutation } =
   userApi;

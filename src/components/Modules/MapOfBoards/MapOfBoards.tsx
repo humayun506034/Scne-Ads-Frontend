@@ -12,8 +12,8 @@ import { useCallback, useState } from "react";
 
 import { FilterOptions } from ".";
 
-import { ILocation } from "@/common/CommonLocationCardModal";
 import { FilterSidebar } from "./FilterSidebar";
+import { ILocation } from "@/types/locations";
 
 interface BillboardMapProps {
   locations: ILocation[];
@@ -179,7 +179,7 @@ export function MapOfBoards({
                         <div>
                           <span className="text-title-color">Size:</span>
                           <span className="ml-1 font-medium">
-                            {location.screenSize} ft
+                            {location.screen_size} ft
                           </span>
                         </div>
                         <div>
