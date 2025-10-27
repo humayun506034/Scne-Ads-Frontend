@@ -5,17 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setFiles } from "@/store/Slices/campaign/campaignSlice";
 import { BulkUploader } from "./BulkUploader";
 import { UploadedFileCard } from "./UploadFileCard";
-// import { UploadedFile } from ".";
+import { UploadedFile } from ".";
 import { useState } from "react";
-
-export interface UploadedFile {
-  id: string;
-  name: string;
-  url: string;
-  dimensions: string;
-  type: string;
-  compatible: boolean;
-}
 
 export default function MobileUploadGraphics() {
   const dispatch = useAppDispatch();
@@ -33,7 +24,8 @@ export default function MobileUploadGraphics() {
       name: file.name,
       url: URL.createObjectURL(file),
       dimensions: "1920x1080",
-      type: file.type,
+      fileType: file.type,
+      type: "landscape", 
       compatible: true,
     }));
 
@@ -105,7 +97,8 @@ export default function MobileUploadGraphics() {
                       name: file.name,
                       url: URL.createObjectURL(file),
                       dimensions: "1920x1080",
-                      type: file.type, 
+                      fileType: file.type,
+                      type: "landscape", // Default value, you might want to determine this based on actual file dimensions
                       compatible: true,
                     }}
                   />
