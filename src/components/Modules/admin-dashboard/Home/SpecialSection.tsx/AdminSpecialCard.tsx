@@ -1,11 +1,9 @@
-import { CardProps } from "@/components/Modules/UserDashboard/Home/SpecialSection/SpecialCard";
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonCancelButton from "@/common/CommonCancelButton";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import CustomInput from "@/common/CommonDashboardInput";
+import CommonSelect from "@/common/CommonSelect";
+import DashboardDeleteButton from "@/common/DashboardDeleteButton";
 import {
   Dialog,
   DialogContent,
@@ -13,102 +11,191 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, X } from "lucide-react";
+import { useDeleteBundleMutation, useUpdateBundleMutation } from "@/store/api/Bundle/bundleApi";
+import { motion } from "framer-motion";
+import { Plus, Trash } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { Screen } from "./AdminSpecialSection";
 
-interface AdminSpecialCardProps {
-  card: CardProps;
-  edit?: boolean;
+export type Bundle = {
+  id: string;
+  slug: string;
+  bundle_name: string;
+  price: number;
+  duration: "7 Days" | "15 Days" | "30 Days" | string;
+  status: "ongoing" | "expired";
+  img_url?: string;
+  screens?: Screen[];
+  totalNumberOfBuy?: number;
+};
+
+type FormValues = {
+  bundle_name: string;
+  price: number | string;
+  duration: "7 Days" | "15 Days" | "30 Days" | string;
+  status: "ongoing" | "expired";
+};
+
+interface Props {
+  bundle: Bundle;
+  onUpdated?: () => void;
 }
 
-const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
+function usePreview(file: File | null, fallback?: string) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (file) {
+      const u = URL.createObjectURL(file);
+      setUrl(u);
+      return () => URL.revokeObjectURL(u);
+    }
+    setUrl(null);
+  }, [file]);
+  return url || fallback || "";
+}
+
+const AdminSpecialCard = ({ bundle, onUpdated }: Props) => {
+
+
+  const [open, setOpen] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const preview = usePreview(file, bundle.img_url);
+const  [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [updateBundle, { isLoading }] = useUpdateBundleMutation();
+  const [deleteBundle, { isLoading: isDeleting }] = useDeleteBundleMutation();
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm();
-  const [files, setFiles] = useState<File[]>([]);
-  const [features, setFeatures] = useState<string[]>(card.description || []);
-  const [open, setOpen] = useState(false);
-  // file upload handler
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const uploadedFiles = Array.from(e.target.files);
-      setFiles((prev) => [...prev, ...uploadedFiles]);
+  } = useForm<FormValues>({
+    defaultValues: {
+      bundle_name: bundle.bundle_name ?? "",
+      price: bundle.price ?? 0,
+      duration: (bundle.duration as any) ?? "7 Days",
+      status: bundle.status ?? "ongoing",
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      bundle_name: bundle.bundle_name ?? "",
+      price: bundle.price ?? 0,
+      duration: (bundle.duration as any) ?? "7 Days",
+      status: bundle.status ?? "ongoing",
+    });
+    setFile(null);
+  }, [bundle, reset]);
+
+const handleDelete = async () => {
+if(isDeleting){
+  toast.info("Delete in progress. Please wait.");
+  return;
+}
+  
+  
+ 
+  try {
+    const res =await deleteBundle(bundle.slug).unwrap();
+ toast.promise(res , {
+    loading: "Deleting bundle...",
+    success: "Bundle deleted successfully.",
+    error: "Failed to delete bundle.",
+  });
+  
+    onUpdated?.();
+  } catch (e: any) {
+    const msg = e?.data?.message || e?.message || "Delete failed.";
+    toast.error(msg);
+  }}
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+      const toastId = toast.loading("Updating bundle...");
+    if (isDeleting) return;
+
+    try {
+    
+      const payload = {
+        bundle_name: data.bundle_name,
+        price: Number(data.price ?? 0),
+        duration: data.duration,
+        status: data.status,
+
+      };
+  
+      const fd = new FormData();
+      fd.append("data", JSON.stringify(payload));
+      if (file) fd.append("file", file); 
+
+  const res =  await updateBundle({ id: bundle.slug, payload: fd } as any).unwrap();
+if(res.success){
+       toast.success("Bundle updated!",{id: toastId});
+      setOpen(false);
+      onUpdated?.();
+}
+   
+    } catch (e: any) {
+      const msg = e?.data?.message || e?.message || "Update failed.";
+      toast.error(msg,{id: toastId});
     }
   };
 
-  const handleClickUpload = () => {
-    const fileInput = document.getElementById(
-      "file-upload"
-    ) as HTMLInputElement;
-    fileInput?.click();
-  };
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setFile(e.target.files?.[0] ?? null);
 
-  const handleFeatureChange = (index: number, value: string) => {
-    const updated = [...features];
-    updated[index] = value;
-    setFeatures(updated);
-  };
-
-  const handleAddFeature = () => {
-    setFeatures((prev) => [...prev, ""]);
-  };
-
-  const handleRemoveFeature = (index: number) => {
-    setFeatures(features.filter((_, i) => i !== index));
-  };
-
-  const onSubmit = (data: FieldValues) => {
-    const finalData = {
-      ...data,
-      description: features,
-      image: files[0] || card.image,
-    };
-    console.log("Edited Card Data:", finalData);
-    reset();
-  };
+  const hero = useMemo(
+    () => (
+      <img
+        src={preview || "/placeholder.png"}
+        alt={bundle.bundle_name}
+        className="w-full h-full object-cover rounded-2xl"
+        onError={(ev) => ((ev.currentTarget.src = "/placeholder.png"))}
+      />
+    ),
+    [preview, bundle.bundle_name]
+  );
 
   return (
     <div className="w-full">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <motion.div
-            className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[280px] w-full overflow-hidden flex flex-col"
+            className="rounded-lg my-6 cursor-pointer h-[300px] xl:h-[320px] w-full overflow-hidden flex flex-col"
             whileHover={{ scale: 1.04 }}
             whileTap={{ scale: 0.98 }}
           >
             <div className="relative w-full h-full">
-              <img
-                src={
-                  typeof card.image === "string"
-                    ? card.image
-                    : URL.createObjectURL(card.image)
-                }
-                alt={card.title}
-                className="w-full h-full object-cover rounded-2xl"
-              />
+              {hero}
               <div className="absolute left-0 right-0 top-0 px-4 pt-4 pb-1 bg-gradient-to-b from-[#101A33]/80 via-[#101A33]/60 to-transparent rounded-md">
                 <h3 className="text-white text-base font-semibold leading-6 drop-shadow-lg">
-                  {card.title}
+                  {bundle.slug}
                 </h3>
 
-                <div className="bg-[#132046] rounded-md mt-10 px-6 py-5 flex flex-col gap-2">
-                  <div className="flex items-center">
-                    <span className="text-3xl">{card.bundleIcon}</span>
-                    <span className="text-white font-semibold text-lg">
-                      {card.bundleTitle}
-                    </span>
+                <div className="bg-[#132046]/60 rounded-md mt-10 px-6 py-5 flex flex-col gap-2">
+                   <h3 className="text-white text-2xl font-semibold leading-6 drop-shadow-lg">
+                  {bundle.bundle_name}
+                </h3>
+                 
+
+                  <div className=" ">
+                      <h3 className="text-white mt-4  font-semibold  drop-shadow-lg flex gap-2">
+                 <p className="text-title-color ">Duration :  </p>  {bundle.duration}
+                </h3>
+                   {bundle.status === "ongoing" ? "Ongoing" : "Completed"}
+                    {Array.isArray(bundle.screens) ? ` • ${bundle.screens.length} screens` : ""}
                   </div>
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/80 text-xs ml-4">
-                    {card.description?.map((desc, index) => (
-                      <span key={index}>✔ {desc}</span>
-                    ))}
-                  </div>
-                  <div className="mt-2 ml-4">
-                    <span className=" text-base font-semibold">
-                      $ {card.price} USD
-                    </span>
+                  <div className="mt-2 flex items-center justify-between">
+                    <p className="text-base font-semibold">
+                      ৳ {bundle.price}
+                    </p>
+                    {typeof bundle.totalNumberOfBuy === "number" && (
+                      <p className="text-white/70 text-xs ml-2">
+                        • Bought {bundle.totalNumberOfBuy}x
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -116,165 +203,143 @@ const AdminSpecialCard = ({ card }: AdminSpecialCardProps) => {
           </motion.div>
         </DialogTrigger>
 
-        {/* MODAL CONTENT */}
+        
         <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh]">
           <DialogHeader>
-            <DialogTitle className="flex justify-between items-center">
-              <p className=" md:text-2xl mb-4">Edit Special Card</p>
-            </DialogTitle>
+            <DialogTitle className="md:text-2xl">Edit Bundle</DialogTitle>
           </DialogHeader>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-4">
-              <label>Title</label>
-              <CustomInput
-                register={register("title")}
-                placeholder={card.title}
-                isError={!!errors.title}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label>Bundle Name</label>
+                <CustomInput
+                  register={register("bundle_name", { required: true })}
+                  placeholder="Bundle name"
+                  isError={!!errors.bundle_name}
+                />
+              </div>
+
+              <div>
+                <label>Price</label>
+                <CustomInput
+                  type="number"
+                  register={register("price", { required: true })}
+                  placeholder="e.g. 1500"
+                  isError={!!errors.price}
+                />
+              </div>
+
+              <div>
+                <label>Status</label>
+                <CommonSelect
+                  className="w-full mt-2"
+                  Value={bundle.status}
+                  setValue={(v: string) =>
+                    setValue("status", (v === "expired" ? "expired" : "ongoing"), { shouldValidate: true })
+                  }
+                  options={[
+                    { value: "ongoing", label: "Ongoing" },
+                    { value: "expired", label: "Expired" },
+                  ]}
+                />
+              </div>
+
+              <div>
+                <label>Duration</label>
+                <CommonSelect
+                  className="w-full mt-2"
+                  Value={bundle.duration}
+                  setValue={(v: string) => {
+                    
+                    const safe = (["7 Days", "15 Days", "30 Days"].includes(v) ? v : bundle.duration) as FormValues["duration"];
+                    setValue("duration", safe, { shouldValidate: true });
+                  }}
+                  options={[
+                    { value: "7 Days", label: "7 Days" },
+                    { value: "15 Days", label: "15 Days" },
+                    { value: "30 Days", label: "30 Days" },
+                  ]}
+                />
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label>Bundle Title</label>
-              <CustomInput
-                register={register("bundleTitle")}
-                placeholder={card.bundleTitle}
-                isError={!!errors.bundleTitle}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label>Bundle Icon</label>
-              <CustomInput
-                register={register("bundleIcon")}
-                placeholder={card.bundleIcon}
-                isError={!!errors.bundleIcon}
-              />
-            </div>
-
-            <div className="mb-4">
-              <label>Price</label>
-              <CustomInput
-                register={register("price")}
-                placeholder={card.price}
-                isError={!!errors.price}
-              />
-            </div>
-
-            {/* Dynamic features */}
-            <div className="mb-4">
-              <label>Feature(s)</label>
-              {features.map((feature, index) => {
-                const isLast = index === features.length - 1;
-
-                return (
-                  <div key={index} className="flex items-center gap-2 mb-2">
-                    {isLast ? (
-                      <input
-                        type="text"
-                        value={feature}
-                        onChange={(e) =>
-                          handleFeatureChange(index, e.target.value)
-                        }
-                        placeholder={`Feature ${index + 1}`}
-                        className="flex-1 border rounded-lg px-3 py-2 text-sm bg-transparent text-white"
-                      />
-                    ) : (
-                      <span className="flex-1 text-white/80 px-3 py-2">
-                        {feature}
-                      </span>
-                    )}
-
-                    {isLast ? (
-                      <button
-                        type="button"
-                        onClick={handleAddFeature}
-                        className="p-2 bg-green-500 text-white rounded-full hover:bg-green-600"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveFeature(index)}
-                        className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600"
-                      >
-                        <X size={16} />
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Image Upload */}
-            <div className="mb-4">
-              <label className="">Screen Thumbnail</label>
-              <div className="flex items-start  gap-4">
-                {files && (
-                  <div className="flex my-2 flex-wrap gap-2 w-1/2">
-                    {files.map((file, index) => (
-                      <div key={index} className=" relative">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt="preview"
-                          className="w-full max-h-40 h-full object-fill rounded-md"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                )}
+            {/* Image */}
+            <div className="mt-6">
+              <label>Thumbnail</label>
+              <div className="flex items-start gap-4 mt-2">
+                <div className="w-1/2">
+                  <img
+                    src={preview || "/placeholder.png"}
+                    alt="preview"
+                    className="w-full max-h-40 object-fill rounded-md"
+                    onError={(e) => (e.currentTarget.src = "/placeholder.png")}
+                  />
+                </div>
 
                 <div
-                  className="border-dashed  bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-32"
-                  onClick={handleClickUpload}
+                  className="border-dashed bg-[#132C51] p-6 rounded-md flex items-center justify-center cursor-pointer w-1/2 h-40"
+                  onClick={() => document.getElementById("bundle-file")?.click()}
                 >
                   <input
-                    id="file-upload"
+                    id="bundle-file"
                     type="file"
                     accept="image/*"
-                    multiple
-                    onChange={handleFileUpload}
+                    onChange={handleFile}
                     className="hidden"
                   />
                   <span className="text-sm md:text-base">
-                    {files.length > 0 ? (
-                      "Upload More Images"
-                    ) : (
-                      <div className="flex flex-col items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="54"
-                          height="54"
-                          viewBox="0 0 54 54"
-                          fill="none"
-                        >
-                          <path
-                            d="M47.25 33.75V42.75C47.25 43.9435 46.7759 45.0881 45.932 45.932C45.0881 46.7759 43.9435 47.25 42.75 47.25H11.25C10.0565 47.25 8.91193 46.7759 8.06802 45.932C7.22411 45.0881 6.75 43.9435 6.75 42.75V33.75M38.25 18L27 6.75M27 6.75L15.75 18M27 6.75V33.75"
-                            stroke="white"
-                            strokeWidth="2.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </div>
-                    )}
+                    {file ? "Replace Image" : "Upload Image"}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col mt-12 md:flex-row justify-end gap-4">
-              <CommonDashboardButton title="Edit Screen" Icon={Plus} />
+            <div className="flex flex-col mt-10 md:flex-row justify-end gap-4">
+              <CommonDashboardButton
+              type="submit"
+                disabled={isLoading}
+                title={isLoading ? "Saving..." : "Save Changes"}
+                Icon={Plus}
+              />
+               <DashboardDeleteButton
+                 type="button"
+                  title={isDeleting ? "Deleting..." : "Delete Current Image"}
+                  Icon={Trash}
+                  onClick={() => 
+                    setConfirmDeleteOpen(true) }
+                   
+                />
+           
               <CommonCancelButton
+              type="button"
                 onClick={() => {
                   reset();
+                  setFile(null);
                   setOpen(false);
                 }}
                 title="Cancel"
               />
             </div>
           </form>
+              <Dialog open={confirmDeleteOpen} onOpenChange={setConfirmDeleteOpen}>
+                      <DialogContent className="bg-[#081028] rounded-lg border-none p-6 mx-auto text-center">
+                        <DialogHeader>
+                          <DialogTitle className="text-xl">Are you sure you want to delete this Bundle?</DialogTitle>
+                        </DialogHeader>
+              
+                        <div className="flex flex-col md:flex-row justify-between gap-4 mt-4">
+                          <DashboardDeleteButton
+                onClick={handleDelete}
+                disabled={isLoading}
+                title={isLoading ? "Deleting..." : "Delete"}
+                Icon={Plus}
+              />
+                          <CommonCancelButton onClick={() => setConfirmDeleteOpen(false)} title="Cancel" />
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+             
         </DialogContent>
       </Dialog>
     </div>

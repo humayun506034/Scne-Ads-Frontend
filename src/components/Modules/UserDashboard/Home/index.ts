@@ -1,5 +1,5 @@
 
-import { ChartLineIcon, DollarSign, Eye, Home, LayoutDashboard, MonitorCog, Settings, Upload } from "lucide-react";
+import { Eye, Home, LayoutDashboard, MonitorCog, Settings, Upload } from "lucide-react";
 
 import img from '../../../../assets/featured.jpg';
 export const navItems = [
@@ -114,12 +114,12 @@ export const adminSidebarItems = [
                 title: "Screen Campaign",
                 icon: Settings,
                 href: "/admin-dashboard/screen-campaigns",
+            },{
+                title: "Screen Scheduling",
+                icon: MonitorCog,
+                href: "/admin-dashboard/screen-scheduling",
             },
-            {
-                title: "Screen",
-                icon: Settings,
-                href: "/admin-dashboard/screen",
-            },
+           
           
         ],
     },
@@ -140,27 +140,7 @@ export const adminSidebarItems = [
           
         ],
     },
-    {
-        title: "General",
-        items: [
-            {
-                title: "Screen Scheduling",
-                icon: MonitorCog,
-                href: "/admin-dashboard/screen-scheduling",
-            },
-            {
-                title: "Pricing",
-                icon: DollarSign,
-                href: "/admin-dashboard/pricing-management",
-            },
-            {
-                title: "Analytics",
-                icon: ChartLineIcon,
-                href: "/admin-dashboard/adminAnalytics",
-            },
-        ],
-    },
-
+  
 ];
 
 

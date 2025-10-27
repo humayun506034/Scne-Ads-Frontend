@@ -1,12 +1,13 @@
-import { useState } from "react";
-import { Eye } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import CommonStatus from "@/common/CommonStatus";
+import Loading from "@/common/MapLoading";
+import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import CommonStatus from "@/common/CommonStatus";
-import DeleteCampaignModal from "./DeleteCampaignModal";
-import Loading from "@/common/MapLoading";
+import { Eye } from "lucide-react";
+import { useState } from "react";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
-import Pagination from "@/components/Pagination";
+import DeleteCampaignModal from "./DeleteCampaignModal";
 
 export default function AdminScreenCampaignManagement() {
   // Modal States
@@ -86,10 +87,11 @@ export default function AdminScreenCampaignManagement() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-     <h1 className="text-2xl font-bold text-white mb-6 border-b border-[#11214D] pb-2">
-        All Screen Campaigns
-        </h1>
+    <div className="p-6 space-y-6 md:mt-10">
+      <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
+    All Screen Campaigns
+  </h2>
+
 
 
       <div className="flex flex-wrap items-center gap-4 mb-4">
@@ -237,11 +239,16 @@ export default function AdminScreenCampaignManagement() {
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
+                     <h3 className="text-[#AEB9E1] mb-2 font-medium ">
+                    Total Screens :<span className="text-white"> {campaign.screens?.length ?? 0 }</span> 
+                    
+                    </h3>
                     <h3 className="text-[#AEB9E1] font-medium text-sm">
                       {campaign.customer?.first_name}{" "}
                       {campaign.customer?.last_name}
                     </h3>
-                    <p className="text-[#AEB9E1]/70 text-xs mt-1">
+                   
+                    <p className="text-white  text-xs mt-1">
                       {campaign.customer?.email}
                     </p>
                   </div>
@@ -279,7 +286,7 @@ export default function AdminScreenCampaignManagement() {
 
                 <button
                   onClick={() => openApproveModal(campaign)}
-                  className="text-[#38B6FF] text-sm mt-2"
+                  className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
                 >
                   View Details
                 </button>

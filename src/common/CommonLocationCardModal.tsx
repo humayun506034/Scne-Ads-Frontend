@@ -14,24 +14,23 @@ import { toast } from "sonner";
 
 export interface ILocation {
   id: string;
-  image: string;
-  img_url:string
+  imgUrls: { url: string,id:string }[];
   title: string;
   lat: number;
-  availability: "available" | "booked" | "maintenance";
   lng: number;
+  availability: "available" | "booked" | "maintenance";
   reach: number;
-
   price: number;
   campaigns: number;
-  category: "new" | "fav" | "top";
+  category: "new" | "fav" | "top"; 
   screenSize: string;
   description: string;
-  status: "active" | "inactive" | "maintenance";
+  status: "active" | "inactive" | "maintenance"; 
   location: string;
-  tierLevel: "Basic" | "Standard" | "Premium";
+  tierLevel: "Basic" | "Standard" | "Premium"; 
   costPerPlay: number;
 }
+
 
 export interface LocationCardProps {
   location: ILocation;
@@ -92,7 +91,7 @@ const CommonLocationCardModal = ({
             <CardContent className="flex flex-col items-center gap-4 text-center p-0">
               <div className="w-full rounded-[15px] overflow-hidden p-6">
                 <img
-                  src={location.image}
+                  src={location.image.url}
                   alt={location.title}
                   className="object-cover rounded-xl w-full h-40"
                 />
@@ -189,7 +188,7 @@ const CommonLocationCardModal = ({
             </div>
             <div className="lg:w-2/4 mt-10 lg:mt-0 rounded-lg">
               <img
-                src={location.image}
+                src={location.imgUrls[0].url}
                 alt="Location"
                 className="w-full h-[250px] object-fill rounded-lg"
               />

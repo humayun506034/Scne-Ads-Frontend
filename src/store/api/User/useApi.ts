@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/store/api/baseApi";
 
 const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllUser: builder.query<
-      any, // response type (optional)
+      any,
       { page?: string; searchTerm?: string }
     >({
       query: ({ page, searchTerm }) => ({
@@ -13,12 +14,32 @@ const userApi = baseApi.injectEndpoints({
           page,
           searchTerm,
         },
-       
+
       }),
+      providesTags: ["User"],
     }),
-    
+  changePassword: builder.mutation({
+      query: (payload) => ({
+        url: "/auth/change-password",
+        method: "POST",
+        body: payload,
+
+      }),
+      invalidatesTags:["User"]
+    }),
+
+  updateProfile: builder.mutation({
+      query: (payload) => ({
+        url: "/user/update-profile",
+        method: "POST",
+        body: payload,
+
+      }),
+      invalidatesTags:["User"]
+    }),
+
   }),
 });
 
-export const { useGetAllUserQuery } =
+export const { useGetAllUserQuery ,useChangePasswordMutation,useUpdateProfileMutation } =
   userApi;

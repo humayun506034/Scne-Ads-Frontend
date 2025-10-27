@@ -91,7 +91,7 @@ const Login = () => {
   };
 
   return (
-    <div className=" flex items-center justify-center my-10 md:my-0 ">
+    <div className=" flex items-center justify-center my-10 md:my-10 min-h-screen ">
       <CommonWrapper>
         <div className="w-full max-w-4xl mx-auto">
           <motion.div
