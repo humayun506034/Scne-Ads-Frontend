@@ -1,18 +1,18 @@
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import { useGetAllBannersQuery } from "@/store/api/bannerApi";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import logo from "../../../../assets/logo.png";
-import { useGetAllBannersQuery } from "@/store/api/bannerApi";
 
 const DashboardBanner = () => {
   const [activeSlide, setActiveSlide] = useState(1);
-  const { data, isLoading, isError } = useGetAllBannersQuery();
+  const { data, isLoading, isError } = useGetAllBannersQuery({ limit: 1000 });
 
   // API response structure: { success, message, data: [...] }
-  const bannerList = data?.data || [];
+  const bannerList = data?.data|| [];
 
   return (
     <div className="mt-20 w-full">

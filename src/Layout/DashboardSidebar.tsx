@@ -5,19 +5,22 @@ import {
   userSidebarItems,
 } from "@/components/Modules/UserDashboard/Home";
 import { cn } from "@/lib/utils";
+import { logout } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from "framer-motion";
-import { Plus } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
+import { useDispatch } from "react-redux";
 
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 
 export function DashboardSidebar({ user }: { user: string }) {
   const location = useLocation();
-
+  const dispatch = useDispatch();
   const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
     <div
       className={cn(
-        "sticky top-0 left-0 z-50 h-screen flex w-80 flex-col px-4 border-r border-[#283F81] "
+        "sticky top-0 left-0 z-50 h-screen flex w-80 flex-col px-4 border-r border-[#283F81] ",
       )}
     >
       <div className="flex h-12 px-6 mt-8   items-center  ">
@@ -49,7 +52,7 @@ export function DashboardSidebar({ user }: { user: string }) {
                           whileTap={{ scale: 0.9 }}
                           className={cn(
                             "flex w-full items-center gap-3 text-nowrap hover:text-[#38B6FF] cursor-pointer text-left rounded-lg px-3  text-base  transition-colors",
-                            isActive ? "text-[#38B6FF]" : " text-[#AEB9E1] "
+                            isActive ? "text-[#38B6FF]" : " text-[#AEB9E1] ",
                           )}
                         >
                           <Icon className="h-4 w-4 " />
@@ -65,14 +68,25 @@ export function DashboardSidebar({ user }: { user: string }) {
         </nav>
       </div>
 
-      {
-        user !== "admin" && (<div className="px-6 z-50  mt-10">
-        <Link to="/user-dashboard/new-campaign">
-       
-          <CommonDashboardButton title="New Campaign" Icon={Plus} />
-        </Link>
-      </div>)
-      }
+      {user !== "admin" && (
+        <div className="px-6 z-50  mt-10">
+          <Link to="/user-dashboard/new-campaign">
+            <CommonDashboardButton title="New Campaign" Icon={Plus} />
+          </Link>
+        </div>
+      )}
+      <div className="px-3  mt-20 pb-6">
+        <button
+          onClick={() => {
+            dispatch(logout());
+            toast.success("Logout successful");
+          }}
+          className="flex border-red-500 border  text-red-500 w-full justify-center items-center gap-3 text-nowrap hover:text-white cursor-pointer  rounded-lg px-2 py-3 text-sm  align-center"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

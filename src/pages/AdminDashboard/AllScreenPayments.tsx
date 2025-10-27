@@ -120,8 +120,7 @@ const AllScreenPayments = () => {
          </div>
       )
     }
-      <div className="flex justify-between items-center mt-6 mb-4">
-        <div></div>
+      <div className="flex justify-end mt-6">
         <Pagination
           currentPage={currentPage}
           totalPages={TotalPages}

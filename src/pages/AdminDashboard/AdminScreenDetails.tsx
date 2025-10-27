@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import MapView from "./MapView"; // adjust the path if needed
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   screen: any;
-  onCreateCampaign?: (screen: any) => void; // optional handler
+ 
 }
 
 const AdminScreenDetails: React.FC<ModalProps> = ({

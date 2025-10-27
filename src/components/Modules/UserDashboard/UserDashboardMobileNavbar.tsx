@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -13,7 +14,8 @@ import logo from "../../../assets/logo.png";
 import { adminSidebarItems, navItems, userSidebarItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
-const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
+const UserDashboardMobileNavbar = ({ user }: any ) => {
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/customer-dashboard");
   const dispatch = useDispatch();
@@ -59,7 +61,10 @@ const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
                       const isActive = activeItem === item.href;
                       return (
                         <li key={item.title}>
-                          <Link to={item.href}>
+                          <Link
+                            to={item.href}
+                            onClick={() => setIsMobileMenuOpen(false)}
+                          >
                             <motion.button
                               whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
@@ -88,7 +93,11 @@ const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
                 const Icon = item.icon;
                 return (
                   <>
-                    <Link to={item.href} key={item.title}>
+                    <Link
+                      to={item.href}
+                      key={item.title}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}

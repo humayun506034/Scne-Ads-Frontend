@@ -178,8 +178,7 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
 
    
 
-      <div className="flex justify-between items-center mt-6 mb-4">
-        <div></div>
+      <div className="flex justify-end mt-4">
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

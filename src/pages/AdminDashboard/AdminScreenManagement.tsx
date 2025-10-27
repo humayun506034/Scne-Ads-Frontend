@@ -639,14 +639,11 @@ function AdminScreenManagement() {
 
         {/* Pagination */}
         {meta && (
-          <div className="flex justify-between items-center mt-6 mb-4">
-            <div></div>
-            <Pagination
-              currentPage={currentPage}
-              totalPages={meta.totalPages}
-              onPageChange={setCurrentPage}
-            />
-          </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={meta.totalPages}
+            onPageChange={setCurrentPage}
+          />
         )}
       </div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -6,17 +7,17 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
 import { Circle, Heart } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
 
 export interface ILocation {
   id: string;
   category?: "new" | "fav" | "top";
-  imgUrls: { url: string; index?: string }[];
+  imageUrls: { url: string; index?: string }[];
   title: string;
   screenSize?: string;
   description?: string;
@@ -45,7 +46,7 @@ const CommonLocationCardModal = ({
   select,
   onToggleFav,
   showButton = false,
-}: LocationCardProps) => {
+}: any) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [loadingFav, setLoadingFav] = useState(false);
   const [addFavouriteScreen] = useAddFavouriteScreenMutation();
@@ -66,7 +67,7 @@ const CommonLocationCardModal = ({
       await addFavouriteScreen({ screenId: id }).unwrap();
       onToggleFav?.(id);
       toast.success("Location bookmarked successfully!");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     } catch (err: any) {
       console.error("Add favourite failed:", err);
       toast.error(err?.data?.message || "Failed to add to favorites.");
@@ -215,8 +216,8 @@ const CommonLocationCardModal = ({
             </div>
 
             <div className="lg:w-2/4 mt-10 lg:mt-0 space-y-4">
-              {location.imgUrls.length ? (
-                location.imgUrls.map((img) => (
+              {location.imageUrls.length ? (
+                location.imageUrls.map((img) => (
                   <img
                     key={img.index || img.url}
                     src={img.url}

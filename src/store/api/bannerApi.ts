@@ -11,7 +11,7 @@ export interface Banner {
 
 export const bannerApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllBanners: builder.query<Banner[], void>({
+    getAllBanners: builder.query({
       query: () => ({
         url: "/banner",
         method: "GET",

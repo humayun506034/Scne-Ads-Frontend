@@ -1,18 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import CommonLocationCardModal from "@/common/CommonLocationCardModal";
 import CommonWrapper from "@/common/CommonWrapper";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import CommonLocationCardModal from "@/common/CommonLocationCardModal";
 import { useGetFeaturedScreenQuery } from "@/store/api/Common/commonApi";
-import { ILocation } from "@/types/locations";
 
 export function FeaturedLocationsCarousel() {
   const { data: locationData, isLoading
   } = useGetFeaturedScreenQuery({});
 
-  console.log(locationData)
+
 
   if (isLoading) return <div>Loading...</div>
   return (
@@ -20,7 +20,7 @@ export function FeaturedLocationsCarousel() {
       <div className="xl:px-0 relative">
         <Carousel className="w-full">
           <CarouselContent className="flex md:gap-0  gap-12">
-            {locationData?.data?.data?.map((location: ILocation) => (
+            {locationData?.data?.data?.map((location:any) => (
               <CarouselItem
                 key={location.id}
                 className="xl:basis-1/4 lg:basis-1/3 md:basis-1/2 sm:basis-1/1 md:m-6"

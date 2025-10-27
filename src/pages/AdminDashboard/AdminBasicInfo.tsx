@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
-import CommonInputField from "@/common/CommonInputField";
-import { Pencil } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonInputField from "@/common/CommonInputField";
 import { useGetSingleUserQuery, useUpdateProfileMutation } from "@/store/api/User/useApi";
+import { Pencil } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import AdminPanelNavbar from "./AdminPanelNavbar";
+
 
 const AdminBasicInfo: React.FC = () => {
   const { data: userData, isLoading, error } = useGetSingleUserQuery({});

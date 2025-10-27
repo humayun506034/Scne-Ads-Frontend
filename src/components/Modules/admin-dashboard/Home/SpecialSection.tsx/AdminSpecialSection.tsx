@@ -16,9 +16,7 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import {
   useCreateBundleMutation,
@@ -187,7 +185,8 @@ const id = toast.loading("Adding bundle...");
   return (
     <div className="mt-12 md:mt-20 relative">
       <h1 className="text-3xl md:mb-6 font-semibold text-center">
-        Bundle Campaigns
+        Bundle Campaigns 
+        
       </h1>
 
       {isLoadingBundle && (
@@ -216,11 +215,11 @@ const id = toast.loading("Adding bundle...");
         </DialogTrigger>
 
                   <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh]">
-                    <DialogHeader>
+                    {/* <DialogHeader>
                       <DialogTitle className="text-2xl font-semibold text-white">
                         Add bundle
                       </DialogTitle>
-                    </DialogHeader>
+                    </DialogHeader> */}
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                       {/* Title */}

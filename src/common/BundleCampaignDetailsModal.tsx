@@ -7,8 +7,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { motion } from 'framer-motion';
-import { Download, X } from "lucide-react";
-import { toast } from "sonner";
+import { X } from "lucide-react";
 
 type BundleCampaignDetailsModalProps = {
   isOpen: boolean;
