@@ -1,6 +1,7 @@
 
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, FetchArgs, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+import { logout, setUser } from '../Slices/AuthSlice/authSlice';
 import { RootState } from '../store';
 
 
@@ -19,36 +20,45 @@ const baseQuery = fetchBaseQuery(
         }
     })
 
-const baseQueryWithRefreshToken = async (args, api, extraOptions) => {
-    const result = await baseQuery(args, api, extraOptions);
+const baseQueryWithRefreshToken = async (args: string | FetchArgs, api, extraOptions) => {
+    const state = api.getState() as RootState;
+  const hadToken = !!state.auth.token;
 
-    // if status is 401 ,unauthorized, try to get a accessToken new token by refreshToken
-    // if (result.error?.status === 401) {
-    //     const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh-token`, {
-    //         method: 'POST',
-    //         credentials: 'include',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //     });
-    //     const data = await res.json();
+  let result = await baseQuery(args, api, extraOptions);
 
-    //     if (data.data.accessToken) {
-    //         const user = (api.getState() as RootState).auth.user;
-    //         api.dispatch(setUser({ user, token: data.accessToken }));
+  
+  if (result.error?.status === 401 && hadToken) {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_BASE_URL}/auth/refresh-token`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
 
-    //         return baseQuery(args, api, extraOptions);
-    //     } else {
-    //         api.dispatch(logout());
-    //     }
-    //     return result;
-    // }
-    return result
-}
+   
+      const newAccessToken: string | undefined = data?.data?.accessToken;
+
+      if (res.ok && newAccessToken) {
+        const user = (api.getState() as RootState).auth.user;
+       
+        api.dispatch(setUser({ user, token: newAccessToken }));
+       
+        result = await baseQuery(args, api, extraOptions);
+      } else {
+        api.dispatch(logout());
+      }
+    } catch {
+      api.dispatch(logout());
+    }
+  }
+
+  return result;
+};
 export const baseApi = createApi({
     reducerPath: 'baseApi',
     baseQuery: baseQueryWithRefreshToken,
     endpoints: () => ({}),
-    tagTypes:['Screen']
+    tagTypes:['Screen',"Banner","Bundle","User"],
 });
 

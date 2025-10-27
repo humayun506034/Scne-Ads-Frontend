@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import ScreensTab from "./ScreensTab";
+import BundleTab from "../components/Modules/UserDashboard/Home/SpecialSection/BundleTab";
 import Navbar from "./Navbar";
-import BundleTab from "./BundleTab";
+import ScreensTab from "./ScreensTab";
 
 function Billboard() {
   const [activeTab, setActiveTab] = useState<"screens" | "bundles">("screens");

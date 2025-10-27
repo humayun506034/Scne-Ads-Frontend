@@ -1,7 +1,7 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
 import CommonLocationCardModal from "@/common/CommonLocationCardModal";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetMySelfFavouriteScreensQuery } from "@/store/api/Screen/screenApi";
+import { useEffect, useState } from "react";
 
 // 👇 RTK Query hook import
 

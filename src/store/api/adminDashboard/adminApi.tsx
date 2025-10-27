@@ -7,12 +7,14 @@ const adminApi = baseApi.injectEndpoints({
         url: "/banner",
         method: "GET",
       }),
+      providesTags: ["Banner"],
     }),
     getSingleBanner: builder.query({
       query: (id) => ({
         url: `/banner/${id}`,
         method: "GET",
       }),
+      providesTags: ( id) => [{ type: "Banner", id }],
     }),
     createBanner: builder.mutation({
       query: (payload) => ({
@@ -20,14 +22,21 @@ const adminApi = baseApi.injectEndpoints({
         method: "POST",
         body: payload,
       }),
+      invalidatesTags: ["Banner"],
     }),
     deleteBanner: builder.mutation({
       query: (id) => ({
         url: `/banner/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Banner"],
     }),
   }),
 });
 
-export const { useGetAllBannerQuery, useCreateBannerMutation } = adminApi;
+export const {
+  useGetAllBannerQuery,
+  useCreateBannerMutation,
+  useDeleteBannerMutation,
+  useGetSingleBannerQuery,
+} = adminApi;

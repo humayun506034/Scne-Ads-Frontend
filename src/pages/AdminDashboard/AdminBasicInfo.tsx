@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import profileImage from "@/assets/AdminPanel/profileImage.png";
-import CommonInputField from "@/common/CommonInputField";
 import Icon from "@/assets/AdminPanel/edit-2.svg";
+import profileImage from "@/assets/AdminPanel/profileImage.png";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonInputField from "@/common/CommonInputField";
+import { useUpdateProfileMutation } from "@/store/api/User/useApi";
+import React, { useState } from "react";
 import AdminPanelNavbar from "./AdminPanelNavbar";
 
 const AdminBasicInfo: React.FC = () => {
@@ -15,7 +16,7 @@ const AdminBasicInfo: React.FC = () => {
     city: "",
     country: "",
   });
-
+const  [updateProfile,{isLoading}] = useUpdateProfileMutation();
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
