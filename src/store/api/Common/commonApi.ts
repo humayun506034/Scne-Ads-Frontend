@@ -10,10 +10,19 @@ const commonApi = baseApi.injectEndpoints({
 
             }),
         }),
+        getFeaturedScreen: builder.query({
+            query: () => ({
+                url: "/screen",
+                method: "GET",
+                params: { isFeatured: true }
+
+            }),
+        }),
 
     }),
 });
 
 export const {
-    useGetInTouchMutation
+    useGetInTouchMutation,
+    useGetFeaturedScreenQuery
 } = commonApi;

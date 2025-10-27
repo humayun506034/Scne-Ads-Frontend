@@ -8,8 +8,8 @@ import { locationData } from "@/lib/Data";
 import "leaflet/dist/leaflet.css";
 import { mapConfig } from ".";
 
-import { BillboardMarker } from "./BillBoardMarker";
-import { ILocation } from "@/common/CommonLocationCardModal";
+import { BillboardMarker } from "./BillBoardMarker"
+import { ILocation } from "@/types/locations";
 
 export default function MobileBillboardMap() {
   const [viewMode, setViewMode] = useState<"map" | "list">("map");

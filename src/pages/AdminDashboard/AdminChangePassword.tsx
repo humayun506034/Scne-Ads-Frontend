@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import profileImage from "@/assets/UserPanel/profileImage.png";
 import CommonInputField from "@/common/CommonInputField";
-import { Eye, EyeOff, Pencil } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { useChangePasswordMutation } from "@/store/api/User/useApi";
 import { toast } from "sonner";
 import AdminPanelNavbar from "./AdminPanelNavbar";
+import { useSelector } from "react-redux";
 
 const AdminChangePassword: React.FC = () => {
   const [changePassword, { isLoading }] = useChangePasswordMutation();
@@ -15,6 +15,7 @@ const AdminChangePassword: React.FC = () => {
     newPassword: "",
     oldPassword: "", // Fixed: changed from "OldPassword" to "oldPassword"
   });
+  const { image } = useSelector((state: any) => state.auth.user);
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -39,15 +40,15 @@ const AdminChangePassword: React.FC = () => {
         oldPassword: formData.oldPassword,
         newPassword: formData.newPassword
       }).unwrap();
-      
-      toast.success("Password changed successfully!");
-      
+
+      if (response) toast.success("Password changed successfully!");
+
       // Clear form after successful update
       setFormData({
         newPassword: "",
         oldPassword: "",
       });
-      
+
     } catch (err: any) {
       const errorMessage = err?.data?.message || "Failed to change password";
       toast.error(errorMessage);
@@ -65,7 +66,7 @@ const AdminChangePassword: React.FC = () => {
             {/* Profile Image */}
             <div className="relative w-56 h-56 mb-20">
               <img
-                src={profileImage}
+                src={image}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full border-4 border-[#081028]"
               />
@@ -83,19 +84,19 @@ const AdminChangePassword: React.FC = () => {
                 onChange={(val) => handleChange("oldPassword", val)}
                 icon={
                   showOldPassword ? (
-                    <EyeOff 
-                      className="cursor-pointer" 
-                      onClick={() => setShowOldPassword(false)} 
+                    <EyeOff
+                      className="cursor-pointer"
+                      onClick={() => setShowOldPassword(false)}
                     />
                   ) : (
-                    <Eye 
-                      className="cursor-pointer" 
-                      onClick={() => setShowOldPassword(true)} 
+                    <Eye
+                      className="cursor-pointer"
+                      onClick={() => setShowOldPassword(true)}
                     />
                   )
                 }
               />
-              
+
               <CommonInputField
                 label="New Password"
                 type={showNewPassword ? "text" : "password"}
@@ -103,14 +104,14 @@ const AdminChangePassword: React.FC = () => {
                 onChange={(val) => handleChange("newPassword", val)}
                 icon={
                   showNewPassword ? (
-                    <EyeOff 
-                      className="cursor-pointer" 
-                      onClick={() => setShowNewPassword(false)} 
+                    <EyeOff
+                      className="cursor-pointer"
+                      onClick={() => setShowNewPassword(false)}
                     />
                   ) : (
-                    <Eye 
-                      className="cursor-pointer" 
-                      onClick={() => setShowNewPassword(true)} 
+                    <Eye
+                      className="cursor-pointer"
+                      onClick={() => setShowNewPassword(true)}
                     />
                   )
                 }
@@ -118,8 +119,8 @@ const AdminChangePassword: React.FC = () => {
 
               {/* Submit Button */}
               <div className="col-span-1 md:col-span-2 flex justify-center">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isLoading}
                   className="disabled:opacity-50 disabled:cursor-not-allowed"
                 >

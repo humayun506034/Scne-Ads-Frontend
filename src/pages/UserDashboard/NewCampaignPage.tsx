@@ -1,4 +1,4 @@
-import { useAppSelector, useAppDispatch } from "@/store/hooks";
+import { useAppSelector } from "@/store/hooks";
 import { motion } from "framer-motion";
 import CampaignNameSection from "@/components/Modules/UserDashboard/NewCampaign/CampaignNameSection";
 import { SelectBoard } from "@/components/Modules/UserDashboard/NewCampaign/SelectBoard";
@@ -8,10 +8,8 @@ import DurationSection from "@/components/Modules/UserDashboard/NewCampaign/Dura
 
 export default function NewCampaignPage() {
   const campaign = useAppSelector((state) => state.campaign);
-  const dispatch = useAppDispatch();
 
   const handlePublish = async () => {
-    const { name, screenIds, startDate, endDate, type, files } = campaign;
 
     // Validation
     // if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {

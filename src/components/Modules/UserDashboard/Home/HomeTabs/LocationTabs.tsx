@@ -27,8 +27,7 @@ export default function LocationTabs() {
 
   const {
     data: favData,
-    isLoading: favLoading,
-    error: favError,
+    isLoading: favLoading
   } = useGetMySelfFavouriteScreensQuery(undefined, {
     skip: tab !== "fav", 
   });

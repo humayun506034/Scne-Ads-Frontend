@@ -7,7 +7,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import { mapConfig } from ".";
 
 import { BillboardMarker } from "./BillBoardMarker";
-import { ILocation } from "@/common/CommonLocationCardModal";
+import { ILocation } from "@/types/locations";
 
 function BillboardWorldMap() {
   const mapRef = useRef<any>(null);

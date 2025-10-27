@@ -120,7 +120,7 @@ const UserPanel: React.FC = () => {
             {/* Profile Image */}
             <div className="relative w-56 h-56 mb-20">
               <img
-                src={imagePreview || formData.file || "/default-avatar.png"}
+                src={imagePreview || (typeof formData.file === "string" ? formData.file : "") || "/default-avatar.png"}
                 alt="Profile"
                 className="w-full h-full object-cover rounded-full border-4 border-[#081028]"
               />
@@ -164,7 +164,7 @@ const UserPanel: React.FC = () => {
 
               <CommonInputField
                 label="Phone"
-                type="tel"
+                type="phone"
                 value={formData.phone}
                 onChange={(val) => handleChange("phone", val)}
               />

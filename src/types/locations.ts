@@ -3,23 +3,21 @@ export interface Screen {
   slug: string;
   screen_name: string;
   title?: string;
-  reach ?: number;
-  campaigns ?: number;
-  category ?: "new" | "fav" | "top";
-  screenSize?: string;
-  tierLevel ?: "Basic" | "Standard" | "Premium";
+  reach?: number;
+  campaigns?: number;
+  category?: "new" | "fav" | "top";
+  tierLevel?: "Basic" | "Standard" | "Premium";
   costPerPlay?: number;
-  screen_size: string; 
-  resolution: string; 
+  resolution: string;
   description: string;
   location: string;
   lat: string;
-  lng: string; 
+  lng: string;
 
 
   imageUrls: {
     url: string;
-    index?: string | number; 
+    index?: string | number;
     id?: string;
   }[];
 
@@ -30,8 +28,8 @@ export interface Screen {
   isFeatured: boolean;
   isDeleted: boolean;
 
- 
-  createdAt: string; 
+
+  createdAt: string;
   updatedAt: string;
 }
 
@@ -47,7 +45,7 @@ export interface LocationCardProps {
 
 export interface ILocation {
   id: string;
-  imageUrls: { url: string,id:string }[];
+  imageUrls: { url: string, id: string }[];
   title: string;
   lat: number;
   lng: number;
@@ -55,12 +53,12 @@ export interface ILocation {
   reach: number;
   price: number;
   campaigns: number;
-  category: "new" | "fav" | "top"; 
-  screenSize: string;
+  category: "new" | "fav" | "top";
+  screen_size: string;
   description: string;
-  status: "active" | "inactive" | "maintenance"; 
+  status: "active" | "inactive" | "maintenance";
   location: string;
-  tierLevel: "Basic" | "Standard" | "Premium"; 
+  tierLevel: "Basic" | "Standard" | "Premium";
   costPerPlay: number;
 }
 

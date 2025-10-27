@@ -15,14 +15,14 @@ export interface IUser {
 }
 
 export interface IRegisterInput {
-  first_name: string;
-  last_name: string;
-  phone: string;
-  email: string;
-  password: string;
-  organisation_name: string;
-  organisation_role: string;
-  profile_image?: File | null;
+  // first_name: string;
+  // last_name: string;
+  // phone: string;
+  // email: string;
+  // password: string;
+  // organisation_name: string;
+  // organisation_role: string;
+  // profile_image?: File | null;
 }
 
 
