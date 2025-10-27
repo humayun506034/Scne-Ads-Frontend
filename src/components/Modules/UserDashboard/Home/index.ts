@@ -40,11 +40,11 @@ export const userSidebarItems = [
     {
         title: "Management",
         items: [
-            {
-                title: "Campaign Management",
-                icon: Settings,
-                href: "/user-dashboard/campaigns",
-            },
+            // {
+            //     title: "Campaign Management",
+            //     icon: Settings,
+            //     href: "/user-dashboard/campaigns",
+            // },
             {
                 title: "Bundle Campaign",
                 icon: Settings,

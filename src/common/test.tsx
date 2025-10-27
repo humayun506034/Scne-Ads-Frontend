@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -7,17 +6,17 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
-import { Circle, Heart } from "lucide-react";
+import { Circle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
 
 export interface ILocation {
   id: string;
   category?: "new" | "fav" | "top";
-  imageUrls: { url: string; index?: string }[];
+  imgUrls: { url: string; index?: string }[];
   title: string;
   screenSize?: string;
   description?: string;
@@ -39,13 +38,13 @@ export interface LocationCardProps {
   showButton?: boolean;
 }
 
-const CommonLocationCardModal = ({
+const Test = ({
   location,
   fav,
-  bookmark,
   select,
   onToggleFav,
   showButton = false,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [loadingFav, setLoadingFav] = useState(false);
@@ -58,6 +57,7 @@ const CommonLocationCardModal = ({
       // Remove locally only
       onToggleFav?.(id);
       toast.error("Item removed from favorites!");
+      console.log(loadingFav)
       return;
     }
 
@@ -67,7 +67,7 @@ const CommonLocationCardModal = ({
       await addFavouriteScreen({ screenId: id }).unwrap();
       onToggleFav?.(id);
       toast.success("Location bookmarked successfully!");
-     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Add favourite failed:", err);
       toast.error(err?.data?.message || "Failed to add to favorites.");
@@ -120,29 +120,7 @@ const CommonLocationCardModal = ({
                 {location.description || "-"}
               </p>
 
-              {(bookmark || fav) && (
-                <div
-                  onClick={(e) => handleBookmark(e, location.id)}
-                  tabIndex={-1}
-                  className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
-                >
-                  <motion.button
-                    className="bg-transparent"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.8 }}
-                    type="button"
-                    disabled={loadingFav}
-                  >
-                    <Heart
-                      className={`h-7 w-7 cursor-pointer ${
-                        fav?.has(location.id)
-                          ? "fill-white stroke-white"
-                          : "stroke-white"
-                      }`}
-                    />
-                  </motion.button>
-                </div>
-              )}
+              
 
               {select && (
                 <div
@@ -216,8 +194,8 @@ const CommonLocationCardModal = ({
             </div>
 
             <div className="lg:w-2/4 mt-10 lg:mt-0 space-y-4">
-              {location.imageUrls.length ? (
-                location.imageUrls.map((img) => (
+              {location.imgUrls.length ? (
+                location.imgUrls.map((img) => (
                   <img
                     key={img.index || img.url}
                     src={img.url}
@@ -253,4 +231,4 @@ const CommonLocationCardModal = ({
   );
 };
 
-export default CommonLocationCardModal;
+export default Test;

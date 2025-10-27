@@ -54,6 +54,7 @@ export function UploadGraphicsSection() {
                   url: URL.createObjectURL(file),
                   dimensions: "1920x1080",
                   fileType: file.type,
+                  type: "landscape", // Default value, you might want to determine this based on actual file dimensions
                   compatible: true,
                 }}
               />

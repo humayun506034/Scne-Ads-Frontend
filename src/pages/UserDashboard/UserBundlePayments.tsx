@@ -1,207 +1,169 @@
-'use client'
+"use client";
 
-import  { useState } from 'react'
-import { useMySelfBundlePaymentQuery } from '@/store/api/Payment/paymentApi'
-import * as Dialog from '@radix-ui/react-dialog'
-import { X } from 'lucide-react'
-import Loading from '@/common/MapLoading'
-import Pagination from '@/components/Pagination'
+import { useState } from "react";
+import { Eye } from "lucide-react";
+import { useMySelfBundlePaymentQuery } from "@/store/api/Payment/paymentApi";
+import Loading from "@/common/MapLoading";
+import Pagination from "@/components/Pagination";
+import UserBundlePaymentDetailsModal from "./UserBundlePaymentDetailsModal";
 
 const UserBundlePayments = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    
-  const queryParams: Record<string, string> = {
-    page: currentPage.toString(),
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPayment, setSelectedPayment] = useState<any>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  const queryParams: Record<string, string> = { page: currentPage.toString() };
+  const { data, isLoading } = useMySelfBundlePaymentQuery(queryParams);
+
+  const payments = data?.data?.data || [];
+  const meta = data?.data?.meta;
+  const totalPages = meta?.totalPages || 1;
+
+  const openModal = (payment: any) => {
+    setSelectedPayment(payment);
+    setIsDetailsModalOpen(true);
   };
 
-  const { data, isLoading } = useMySelfBundlePaymentQuery(queryParams)
-  const payments = data?.data?.data || []
-  const [selectedPayment, setSelectedPayment] = useState<any>(null)
+  const closeModal = () => {
+    setSelectedPayment(null);
+    setIsDetailsModalOpen(false);
+  };
 
-    const meta = data?.data?.meta;
-  const TotalPages = meta?.totalPages || 1;
+  if (isLoading) return <Loading />;
+
   return (
-    <div className="p-4 max-w-7xl mx-auto text-white">
-      <h2 className="text-2xl font-semibold mb-6">My Bundle Payments</h2>
+    <div className="p-6 space-y-6 text-white">
+      <h2 className="text-2xl font-bold border-b border-[#11214D] pb-2">
+        My Bundle Payments
+      </h2>
 
-      {isLoading ? (
-        <Loading/>
-      ) : (
-        <div className="overflow-x-auto">
-          <table className="min-w-full shadow-md rounded-lg overflow-hidden bg-gray-900 text-white">
-            <thead className="bg-gray-800 text-left text-gray-300">
-              <tr>
-                <th className="px-4 py-3">Bundle</th>
-                <th className="px-4 py-3">Amount</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Date</th>
-                <th className="px-4 py-3 text-center">Actions</th>
+      {/* Desktop Table */}
+      <div className="hidden md:block">
+        <div className="rounded-lg border border-[#11214D] bg-bg-dashboard overflow-hidden">
+          <table className="min-w-full divide-y divide-slate-800/40">
+            <thead>
+              <tr className="text-left text-[#38B6FF]">
+                <th className="py-3 px-4">Bundle</th>
+                <th className="py-3 px-4">Amount</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Date</th>
+                <th className="py-3 px-4">Actions</th>
               </tr>
             </thead>
             <tbody>
               {payments.map((payment: any) => (
-                <tr key={payment.id} className="border-b border-gray-700">
-                  <td className="px-4 py-3 font-medium flex items-center gap-3">
+                <tr
+                  key={payment.id}
+                  className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
+                >
+                  {/* Bundle Info */}
+                  <td className="py-3 px-4 flex items-center gap-3">
                     <img
-                      src={payment.bundle.img_url}
-                      alt={payment.bundle.bundle_name}
+                      src={payment.bundle?.img_url}
+                      alt={payment.bundle?.bundle_name}
                       className="w-10 h-10 object-cover rounded"
                     />
-                    <span>{payment.bundle.bundle_name}</span>
+                    <span>{payment.bundle?.bundle_name}</span>
                   </td>
-                  <td className="px-4 py-3">৳{payment.amount}</td>
-                  <td className="px-4 py-3 capitalize">
+
+                  {/* Amount */}
+                  <td className="py-3 px-4">${payment.amount}</td>
+
+                  {/* Status */}
+                  <td className="py-3 px-4 capitalize">
                     <span
                       className={`px-2 py-1 text-xs rounded-full ${
-                        payment.status === 'success'
-                          ? 'bg-green-600/20 text-green-400'
-                          : 'bg-yellow-600/20 text-yellow-400'
+                        payment.status === "success"
+                          ? "bg-green-600/20 text-green-400"
+                          : "bg-yellow-600/20 text-yellow-400"
                       }`}
                     >
                       {payment.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3">
+
+                  {/* Date */}
+                  <td className="py-3 px-4">
                     {new Date(payment.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-3 text-center">
-                    <Dialog.Root>
-                      <Dialog.Trigger asChild>
-                        <button
-                          onClick={() => setSelectedPayment(payment)}
-                          className="text-sm bg-blue-600 text-white px-4 py-1.5 rounded hover:bg-blue-700 transition"
-                        >
-                          View Details
-                        </button>
-                      </Dialog.Trigger>
 
-                      <Dialog.Portal>
-                        <Dialog.Overlay className="fixed inset-0 bg-black/80 z-40" />
-                        <Dialog.Content className="fixed z-50 top-1/2 left-1/2 w-[95vw] max-w-4xl max-h-[90vh] overflow-y-auto -translate-x-1/2 -translate-y-1/2 bg-gray-900 text-white rounded-lg p-6 shadow-lg">
-                          <Dialog.Title className="text-2xl font-bold mb-6">
-                            {selectedPayment?.bundle.bundle_name} - Payment Details
-                          </Dialog.Title>
-
-                          {/* Payment Info */}
-                          <div className="space-y-2 text-sm bg-gray-800 p-4 rounded-lg mb-6">
-                            <h4 className="font-semibold text-lg mb-2">Payment Information</h4>
-                            <p><strong>ID:</strong> {selectedPayment?.id}</p>
-                            <p><strong>Transaction ID:</strong> {selectedPayment?.transactionId}</p>
-                            <p><strong>Amount:</strong> ৳{selectedPayment?.amount}</p>
-                            <p><strong>Status:</strong> {selectedPayment?.status}</p>
-                            <p><strong>Purchased:</strong> {new Date(selectedPayment?.createdAt).toLocaleString()}</p>
-                            {/* <p><strong>Updated:</strong> {new Date(selectedPayment?.updatedAt).toLocaleString()}</p> */}
-                          </div>
-
-                          {/* User Info */}
-                          <div className="space-y-2 text-sm bg-gray-800 p-4 rounded-lg mb-6">
-                            <h4 className="font-semibold text-lg mb-2">Customer Information</h4>
-                            <p><strong>Name:</strong> {selectedPayment?.user.first_name} {selectedPayment?.user.last_name}</p>
-                            <p><strong>Email:</strong> {selectedPayment?.user.email}</p>
-                            <p><strong>User ID:</strong> {selectedPayment?.user.id}</p>
-                          </div>
-
-                          {/* Bundle Info */}
-                          <div className="space-y-2 text-sm bg-gray-800 p-4 rounded-lg mb-6">
-                            <h4 className="font-semibold text-lg mb-2">Bundle Information</h4>
-                            <img
-                              src={selectedPayment?.bundle.img_url}
-                              alt={selectedPayment?.bundle.bundle_name}
-                              className="w-40 h-28 object-cover rounded mb-3"
-                            />
-                            <p><strong>Bundle ID:</strong> {selectedPayment?.bundle.id}</p>
-                            <p><strong>Slug:</strong> {selectedPayment?.bundle.slug}</p>
-                            <p><strong>Price:</strong> ৳{selectedPayment?.bundle.price}</p>
-                            <p><strong>Duration:</strong> {selectedPayment?.bundle.duration}</p>
-                            <p><strong>Status:</strong> {selectedPayment?.bundle.status}</p>
-                            <p><strong>Location:</strong> {selectedPayment?.bundle.location}</p>
-                          </div>
-
-                          {/* Screens */}
-                          <div className="mt-6">
-                            <h4 className="font-semibold text-lg mb-4">Screens</h4>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                              {selectedPayment?.bundle?.screens.map((screen: any) => (
-                                <div
-                                  key={screen.id}
-                                  className="border rounded p-3 bg-gray-800"
-                                >
-                                  <img
-                                    src={screen.img_url}
-                                    alt={screen.screen_name}
-                                    className="w-full h-24 object-cover rounded mb-2"
-                                  />
-                                  <p className="text-sm font-medium">{screen.screen_name}</p>
-                                  <p className="text-xs text-gray-400">{screen.location}</p>
-                                  <p className="text-xs text-gray-400">Size: {screen.screen_size}</p>
-                                  <p className="text-xs text-gray-400">Resolution: {screen.resolution}</p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Uploaded Contents */}
-                          <div className="mt-6">
-                            <h4 className="font-semibold text-lg mb-4">Uploaded Contents</h4>
-                            <div className="grid sm:grid-cols-2 gap-4">
-                              {selectedPayment?.contents.map((content: any) => (
-                                <div key={content.id} className="border rounded p-2 bg-gray-800">
-                                  <a
-                                    href={content.url}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    {content.url.endsWith('.mp4') ? (
-                                      <video
-                                        controls
-                                        className="w-full h-32 object-cover rounded"
-                                      >
-                                        <source src={content.url} type="video/mp4" />
-                                      </video>
-                                    ) : (
-                                      <img
-                                        src={content.url}
-                                        alt="Uploaded Content"
-                                        className="w-full h-32 object-cover rounded"
-                                      />
-                                    )}
-                                  </a>
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    Screen: {content.screen?.screen_name}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          <Dialog.Close asChild>
-                            <button
-                              className="absolute top-4 right-4 inline-flex items-center justify-center rounded-full p-2 text-gray-300 hover:bg-gray-700"
-                              aria-label="Close"
-                            >
-                              <X size={20} />
-                            </button>
-                          </Dialog.Close>
-                        </Dialog.Content>
-                      </Dialog.Portal>
-                    </Dialog.Root>
+                  {/* Actions */}
+                  <td className="py-3 px-4">
+                    <Eye
+                      className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125 transition-transform"
+                      onClick={() => openModal(payment)}
+                    />
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {payments.map((payment: any) => (
+          <div
+            key={payment.id}
+            className="border border-[#11214D] rounded-lg bg-bg-dashboard p-4"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-medium text-[#38B6FF] text-sm">
+                {payment.bundle?.bundle_name}
+              </span>
+              <span
+                className={`px-2 py-1 text-xs rounded-full ${
+                  payment.status === "success"
+                    ? "bg-green-600/20 text-green-400"
+                    : "bg-yellow-600/20 text-yellow-400"
+                }`}
+              >
+                {payment.status}
+              </span>
+            </div>
+
+            <div className="text-xs text-[#AEB9E1] space-y-1">
+              <p>
+                <span className="text-[#AEB9E1]/50">Amount:</span>{" "}
+                ${payment.amount}
+              </p>
+              <p>
+                <span className="text-[#AEB9E1]/50">Date:</span>{" "}
+                {new Date(payment.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+
+            <div className="mt-3 flex justify-end">
+              <button
+                onClick={() => openModal(payment)}
+                className="px-3 py-1.5 text-xs bg-[#38B6FF] text-black font-semibold rounded hover:bg-[#5cc4ff] transition"
+              >
+                View Details
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-end mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
+
+      {/* Details Modal */}
+      {isDetailsModalOpen && selectedPayment && (
+        <UserBundlePaymentDetailsModal
+          selectedPayment={selectedPayment}
+          closeModal={closeModal}
+        />
       )}
-        <div className="flex justify-end mt-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={TotalPages}
-            onPageChange={setCurrentPage}
-          />
-        </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default UserBundlePayments
+export default UserBundlePayments;

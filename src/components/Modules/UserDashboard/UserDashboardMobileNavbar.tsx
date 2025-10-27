@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -13,7 +14,8 @@ import logo from "../../../assets/logo.png";
 import { adminSidebarItems, navItems, userSidebarItems } from "./Home";
 import { LiveChatSystem } from "./LiveChat/LiveChatSystem";
 
-const UserDashboardMobileNavbar = ({ user }: { user: string }) => {
+const UserDashboardMobileNavbar = ({ user }: any ) => {
+  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeItem, setActiveItem] = useState("/customer-dashboard");
   const dispatch = useDispatch();

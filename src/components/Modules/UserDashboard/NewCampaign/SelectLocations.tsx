@@ -68,34 +68,27 @@ export default function SelectLocations() {
           }}
           className="mySwiper w-full mx-auto"
         >
-          {locations.map((location) => (
-            <SwiperSlide className="px-2 pt-6 pb-20" key={location.id}>
-              <CommonLocationCardModal
-                showButton={false}
-                location={{
-                  id: location.id,
-                  imageUrls: location.imageUrls.map((img) => ({ url: img.url, id: img.id || "" })),
-                  title: location.title || "",
-                  lat: parseFloat(location.lat),
-                  lng: parseFloat(location.lng),
-                  availability: location.availability as "available" | "booked" | "maintenance",
-                  reach: location.reach || 0,
-                  price: location.price || 0,
-                  campaigns: location.campaigns || 0,
-                  category: location.category || "new",
-                  screenSize: location.screenSize || "",
-                  description: location.description || "",
-                  status: location.status as "active" | "inactive" | "maintenance",
-                  location: location.location || "",
-                  tierLevel: location.tierLevel || "Basic",
-                  costPerPlay: location.costPerPlay || 0,
-                }}
-                fav={new Set(selectedScreens)}
-                onToggleFav={toggleSelect}
-                select
-              />
-            </SwiperSlide>
-          ))}
+          {locations?.map((location) => {
+            // Ensure imageUrls have id as string (not undefined)
+            const fixedLocation = {
+              ...location,
+              imageUrls: (location.imageUrls || []).map((img, idx) => ({
+                url: img.url,
+                id: typeof img.id === "string" && img.id ? img.id : String(idx),
+              })),
+            };
+            return (
+              <SwiperSlide className="px-2 pt-6 pb-20" key={location.id}>
+                <CommonLocationCardModal
+                  showButton={false}
+                  location={fixedLocation}
+                  fav={new Set(selectedScreens)}
+                  onToggleFav={toggleSelect}
+                  select={true}
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
       </div>
     </div>

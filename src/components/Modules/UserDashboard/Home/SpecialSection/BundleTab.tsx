@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useGetAllBundleQuery } from "@/store/api/Bundle/bundleApi";
 import BundleDetailsModal from "./BundleDetailsModal";
@@ -106,6 +107,7 @@ const BundleTab = () => {
                 Included Screens: {bundle.screens.length} Screen
               </p>
               <ul className="list-disc pl-4 space-y-1">
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 {bundle.screens.slice(0, 2).map((screen:any) => (
                   <li key={screen.id}>{screen.screen_name}</li>
                 ))}

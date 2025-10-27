@@ -1,67 +1,50 @@
-import { useAppSelector } from "@/store/hooks";
-import { motion } from "framer-motion";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CampaignNameSection from "@/components/Modules/UserDashboard/NewCampaign/CampaignNameSection";
+import DurationSection from "@/components/Modules/UserDashboard/NewCampaign/DurationSection";
 import { SelectBoard } from "@/components/Modules/UserDashboard/NewCampaign/SelectBoard";
 import SelectLocations from "@/components/Modules/UserDashboard/NewCampaign/SelectLocations";
 import UploadGraphics from "@/components/Modules/UserDashboard/NewCampaign/UploadGraphics/UploadGraphics";
-import DurationSection from "@/components/Modules/UserDashboard/NewCampaign/DurationSection";
 import { usePublishCampaignMutation } from "@/store/api/Campaign/campaignApi";
-import Swal from "sweetalert2";
+import { useAppSelector } from "@/store/hooks";
+import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function NewCampaignPage() {
   const campaign = useAppSelector((state) => state.campaign);
   const [publishCampaign, { isLoading }] = usePublishCampaignMutation();
 
-  
-const handlePublish = async () => {
-  const { name, screenIds, startDate, endDate, type, files } = campaign;
+  const handlePublish = async () => {
+    const { name, screenIds, startDate, endDate, type, files } = campaign;
 
-
-  if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {
-    Swal.fire({
-      icon: "warning",
-      title: "Incomplete Data",
-      text: "Please fill all fields before publishing!",
-    });
-    return;
-  }
-
-  try {
-    const res = await publishCampaign({
-      name,
-      screenIds,
-      startDate,
-      endDate,
-      type,
-      files,
-    }).unwrap();
-
-    if (res.data?.url) {
-      Swal.fire({
-        icon: "success",
-        title: "Campaign Published",
-        text: "Redirecting to payment page...",
-        timer: 2000,
-        showConfirmButton: false,
-      }).then(() => {
-        window.location.href = res.data.url;
-      });
-    } else {
-      Swal.fire({
-        icon: "success",
-        title: "Campaign Published",
-        text: res.message || "Campaign published successfully!",
-      });
+    // Fix the condition for checking missing data
+    if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {
+      toast.error("Please fill all fields before publishing!");
+      return;
     }
-  } catch (err: any) {
-    console.error("❌ Publish failed:", err);
-    Swal.fire({
-      icon: "error",
-      title: "Publish Failed",
-      text: err?.data?.message || "Publish failed!",
-    });
-  }
-};
+
+    try {
+      const res = await publishCampaign({
+        name,
+        screenIds,
+        startDate,
+        endDate,
+        type,
+        files,
+      }).unwrap();
+
+      if (res.data?.url) {
+        toast.success("Campaign Published. Redirecting to payment page...");
+        setTimeout(() => {
+          window.location.href = res.data.url;
+        }, 2000);
+      } else {
+        toast.success(res.message || "Campaign published successfully!");
+      }
+    } catch (err: any) {
+      console.error("❌ Publish failed:", err);
+      toast.error(err?.data?.message || "Publish failed!");
+    }
+  };
 
   return (
     <div className="px-5 md:px-10">

@@ -1,14 +1,16 @@
-"use client";
+
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Eye } from "lucide-react";
+import { CheckCircle, Eye } from "lucide-react";
 import { useState } from "react";
 
 import CommonStatus from "@/common/CommonStatus";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { useGetAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
+
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
+import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
 
 export default function AdminBundleCampaignManagement() {
   const [startDate, setStartDate] = useState<string | null>(null);
@@ -20,28 +22,20 @@ export default function AdminBundleCampaignManagement() {
     page: currentPage.toString(),
   };
 
-  if (startDate) {
-    queryParams.startDate = `${startDate}T00:00:00.000Z`;
-  }
-
-  if (endDate) {
-    queryParams.endDate = `${endDate}T00:00:00.000Z`;
-  }
-
-  if (dateFilter) {
-    queryParams.dateFilter = dateFilter;
-  }
+  if (startDate) queryParams.startDate = `${startDate}T00:00:00.000Z`;
+  if (endDate) queryParams.endDate = `${endDate}T00:00:00.000Z`;
+  if (dateFilter) queryParams.dateFilter = dateFilter;
 
   const { data, isLoading } = useGetAllBundleCampaignQuery(queryParams);
-
   const campaigns = data?.data?.data || [];
   const meta = data?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
-  const currentData = campaigns;
-
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
+
+  const [markUploaded] = useMarkCustomCampaignUploadedMutation();
+  const [uploadedIds, setUploadedIds] = useState<string[]>([]); // Track uploaded campaigns
 
   const openApproveModal = (campaign: any) => {
     setSelectedCampaign(campaign);
@@ -59,6 +53,12 @@ export default function AdminBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
+  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+    setDateFilter(null);
+    setCurrentPage(1);
+  };
+
   const handleDateFilterClick = (filter: string) => {
     setDateFilter(filter);
     setStartDate(null);
@@ -66,13 +66,6 @@ export default function AdminBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.target.value);
-    setDateFilter(null);
-    setCurrentPage(1);
-  };
-
-  
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);
@@ -80,17 +73,24 @@ export default function AdminBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const handleMarkUploaded = async (campaignId: string) => {
+    try {
+      await markUploaded(campaignId).unwrap();
+      setUploadedIds((prev) => [...prev, campaignId]);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to mark as uploaded.");
+    }
+  };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>
       <div className="p-6 space-y-6 md:mt-10">
-         <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium m text-[#AEB9E1] mb-6 lg:mb-8 relative">
-    All Bundle Campaigns 
-  </h2>
-
+        <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
+          All Bundle Campaigns
+        </h2>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-4 mb-4">
@@ -113,7 +113,7 @@ export default function AdminBundleCampaignManagement() {
             <span className="text-sm font-medium">Dates</span>
           </div>
 
-          {/* Start Date Input */}
+          {/* Start Date */}
           <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
             <span className="text-sm font-medium whitespace-nowrap">
               Select Start Date
@@ -126,7 +126,7 @@ export default function AdminBundleCampaignManagement() {
             />
           </div>
 
-          {/* End Date Input */}
+          {/* End Date */}
           <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
             <span className="text-sm font-medium whitespace-nowrap">
               Optional - Set End Date
@@ -161,7 +161,7 @@ export default function AdminBundleCampaignManagement() {
               </button>
             ))}
 
-            {/* Clear Button */}
+            {/* Clear */}
             <button
               className="px-4 py-2 rounded-full text-sm font-medium bg-red-600 text-white"
               onClick={handleClearFilters}
@@ -171,7 +171,7 @@ export default function AdminBundleCampaignManagement() {
           </div>
         </div>
 
-        {/* Desktop Table View */}
+        {/* Desktop Table */}
         <div className="hidden md:block">
           <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
             <table className="min-w-full divide-y divide-slate-800/40">
@@ -180,10 +180,12 @@ export default function AdminBundleCampaignManagement() {
                   <th className="py-3 px-4">Bundle Name</th>
                   <th className="py-3 px-4">Customer</th>
                   <th className="py-3 px-4">Status</th>
+                   <th className="py-3 px-4">Is Uploaded</th>
                   <th className="py-3 px-4">Approved By</th>
                   <th className="py-3 px-4">Budget</th>
                   <th className="py-3 px-4">Start Date</th>
                   <th className="py-3 px-4">End Date</th>
+                  
                   <th className="py-3 px-4">Actions</th>
                 </tr>
               </thead>
@@ -193,29 +195,37 @@ export default function AdminBundleCampaignManagement() {
                     key={campaign.id}
                     className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
                   >
-                    <td className="py-3 px-4">
-                      {campaign?.bundle?.bundle_name}
-                    </td>
-                    <td className="py-3 px-4">
-                      {campaign.customer?.first_name}{" "}
-                      {campaign.customer?.last_name}
-                    </td>
-                    <td className="py-3 px-4">
-                      <CommonStatus status={campaign.status} />
-                    </td>
+                    <td className="py-3 px-4">{campaign?.bundle?.bundle_name}</td>
+                    <td className="py-3 px-4">{campaign.customer?.first_name} {campaign.customer?.last_name}</td>
+                    <td className="py-3 px-4"><CommonStatus status={campaign.status} /></td>
+                    <td className="py-3 px-4">{campaign.isUploaded ? "True" : "False"}</td>
                     <td className="py-3 px-4">System Auto</td>
                     <td className="py-3 px-4">${campaign?.payment?.amount}</td>
-                    <td className="py-3 px-4">
-                      {new Date(campaign.startDate).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4">
-                      {new Date(campaign.endDate).toLocaleDateString()}
-                    </td>
+                    <td className="py-3 px-4">{new Date(campaign.startDate).toLocaleDateString()}</td>
+                    <td className="py-3 px-4">{new Date(campaign.endDate).toLocaleDateString()}</td>
+                     
                     <td className="py-3 px-4 flex items-center gap-3">
                       <Eye
-                        className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
+                        className="w-6 h-6 text-[#38B6FF] cursor-pointer hover:scale-125"
                         onClick={() => openApproveModal(campaign)}
                       />
+
+                      <CheckCircle
+                        className={`w-6 h-6 cursor-pointer ${
+                          uploadedIds.includes(campaign.id) || campaign.isUploaded
+                            ? "text-gray-500 cursor-not-allowed"
+                            : "text-green-500 hover:scale-125"
+                        }`}
+                        onClick={() => {
+                          if (!campaign.isUploaded && !uploadedIds.includes(campaign.id)) {
+                            handleMarkUploaded(campaign.id);
+                          }
+                        }}
+                      />
+
+                      {/* {(uploadedIds.includes(campaign.id) || campaign.isUploaded) && (
+                        <span className="ml-2 text-green-400 text-sm font-medium">Uploaded</span>
+                      )} */}
                     </td>
                   </tr>
                 ))}
@@ -226,51 +236,47 @@ export default function AdminBundleCampaignManagement() {
 
         {/* Mobile Card View */}
         <div className="md:hidden space-y-4">
-          {currentData.map((campaign: any) => (
-            <Card
-              key={campaign.id}
-              className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]"
-            >
+          {campaigns.map((campaign: any) => (
+            <Card key={campaign.id} className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]">
               <CardContent className="space-y-3">
-                <h2 className="text-lg font-bold text-white">
-                  {campaign?.bundle?.bundle_name}
-                </h2>
-                <p className="text-sm text-[#AEB9E1]">
-                  Customer: {campaign.customer?.first_name}{" "}
-                  {campaign.customer?.last_name}
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  Status: <CommonStatus status={campaign.status} />
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  Start Date:{" "}
-                  {new Date(campaign.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  End Date: {new Date(campaign.endDate).toLocaleDateString()}
-                </p>
-                <button
-                  onClick={() => openApproveModal(campaign)}
-                  className="px-4 py-2 text-sm bg-[#38B6FF] text-white rounded-md"
-                >
-                  View Details
-                </button>
+                <h2 className="text-lg font-bold text-white">{campaign?.bundle?.bundle_name}</h2>
+                <p className="text-sm text-[#AEB9E1]">Customer: {campaign.customer?.first_name} {campaign.customer?.last_name}</p>
+                <p className="text-sm text-[#AEB9E1]">Status: <CommonStatus status={campaign.status} /></p>
+                <p className="text-sm text-[#AEB9E1]">Start Date: {new Date(campaign.startDate).toLocaleDateString()}</p>
+                <p className="text-sm text-[#AEB9E1]">End Date: {new Date(campaign.endDate).toLocaleDateString()}</p>
+                <div className="flex gap-3 mt-2">
+                  <Eye
+                    className="w-6 h-6 text-[#38B6FF] cursor-pointer"
+                    onClick={() => openApproveModal(campaign)}
+                  />
+                  <CheckCircle
+                    className={`w-6 h-6 cursor-pointer ${
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                        ? "text-gray-500 cursor-not-allowed"
+                        : "text-green-500"
+                    }`}
+                    onClick={() => {
+                      if (!campaign.isUploaded && !uploadedIds.includes(campaign.id)) {
+                        handleMarkUploaded(campaign.id);
+                      }
+                    }}
+                  />
+                  {(uploadedIds.includes(campaign.id) || campaign.isUploaded) && (
+                    <span className="ml-2 text-green-400 text-sm font-medium">Uploaded</span>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Pagination */}
-     <div className="flex justify-center md:justify-end">
-         <Pagination
-          currentPage={currentPage}
-          totalPages={TotalPages}
-          onPageChange={setCurrentPage}
-        />
-     </div>
+        <div className="flex justify-center md:justify-end">
+          <Pagination currentPage={currentPage} totalPages={TotalPages} onPageChange={setCurrentPage} />
+        </div>
       </div>
 
-      {/* Modal for Campaign Details */}
+      {/* Campaign Details Modal */}
       {isApproveModalOpen && (
         <BundleCampaignDetailsModal
           isOpen={isApproveModalOpen}
