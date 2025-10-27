@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'; // Import js-cookie
 import { FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE } from 'redux-persist';
 import { baseApi } from "./api/baseApi";
 import authSlice from './Slices/AuthSlice/authSlice';
+import campaignReducer from './Slices/campaign/campaignSlice';
 
 
 const cookieStorage = {
@@ -29,6 +30,7 @@ export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedReducer,
+    campaign: campaignReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

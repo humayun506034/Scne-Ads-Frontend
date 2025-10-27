@@ -1,13 +1,15 @@
 
 import { ILocation } from '@/common/CommonLocationCardModal';
-import img from '../assets/featured.jpg';
 import rating from '../assets/Home/rating.png';
 
 
 export const locationData: ILocation[] = [
   {
     id: "1",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Piccadilly Circus, London",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -25,7 +27,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "2",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Times Square, NYC",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -43,7 +48,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "3",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Shibuya Crossing, Tokyo",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -61,7 +69,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "4",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Champs-Élysées, Paris",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -79,7 +90,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "5",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Gangnam District, Seoul",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -97,7 +111,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "6",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Sydney Harbour, Sydney",
     category: "new",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -115,7 +132,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "7",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Dubai Mall, Dubai",
     category: "new",
     screenSize: "18m x 12m (approx. 59ft x 39ft)",
@@ -133,7 +153,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "8",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Rodeo Drive, Los Angeles",
     category: "new",
     screenSize: "12m x 8m (approx. 39ft x 26ft)",
@@ -151,7 +174,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "9",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Ginza District, Tokyo",
     category: "new",
     screenSize: "14m x 9m (approx. 46ft x 30ft)",
@@ -169,7 +195,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "10",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Las Vegas Strip",
     category: "top",
     screenSize: "20m x 15m (approx. 66ft x 49ft)",
@@ -187,7 +216,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "11",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Shinjuku Station, Tokyo",
     category: "top",
     screenSize: "16m x 11m (approx. 52ft x 36ft)",
@@ -205,7 +237,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "12",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Orchard Road, Singapore",
     category: "top",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -223,7 +258,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "13",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Hong Kong Central",
     category: "top",
     screenSize: "17m x 12m (approx. 56ft x 39ft)",
@@ -241,7 +279,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "14",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Miami South Beach",
     category: "top",
     screenSize: "14m x 9m (approx. 46ft x 30ft)",
@@ -259,7 +300,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "15",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Milan Fashion District",
     category: "top",
     screenSize: "13m x 8m (approx. 43ft x 26ft)",
@@ -277,7 +321,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "16",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Toronto Yonge-Dundas Square",
     category: "top",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -295,7 +342,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "17",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Berlin Alexanderplatz",
     category: "top",
     screenSize: "16m x 11m (approx. 52ft x 36ft)",
@@ -313,7 +363,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "18",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "São Paulo Paulista Avenue",
     category: "top",
     screenSize: "18m x 12m (approx. 59ft x 39ft)",
@@ -331,7 +384,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "19",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "London Eye, London",
     category: "fav",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -349,7 +405,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "20",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Central Park, NYC",
     category: "fav",
     screenSize: "14m x 9m (approx. 46ft x 30ft)",
@@ -367,7 +426,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "21",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Eiffel Tower, Paris",
     category: "fav",
     screenSize: "16m x 11m (approx. 52ft x 36ft)",
@@ -385,7 +447,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "22",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Venice Beach, Los Angeles",
     category: "fav",
     screenSize: "13m x 8m (approx. 43ft x 26ft)",
@@ -403,7 +468,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "23",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Amsterdam Dam Square",
     category: "fav",
     screenSize: "14m x 9m (approx. 46ft x 30ft)",
@@ -421,7 +489,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "24",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Sydney Opera House",
     category: "fav",
     screenSize: "15m x 10m (approx. 49ft x 33ft)",
@@ -439,7 +510,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "25",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Rio Copacabana Beach",
     category: "fav",
     screenSize: "17m x 12m (approx. 56ft x 39ft)",
@@ -457,7 +531,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "26",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Prague Old Town Square",
     category: "fav",
     screenSize: "13m x 8m (approx. 43ft x 26ft)",
@@ -475,7 +552,10 @@ export const locationData: ILocation[] = [
   },
   {
     id: "27",
-    image: img,
+    imgUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Istanbul Taksim Square",
     category: "fav",
     screenSize: "16m x 11m (approx. 52ft x 36ft)",
