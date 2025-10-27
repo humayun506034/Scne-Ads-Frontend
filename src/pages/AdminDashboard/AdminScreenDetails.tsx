@@ -11,7 +11,6 @@ const AdminScreenDetails: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   screen,
-  onCreateCampaign,
 }) => {
   if (!isOpen || !screen) return null;
 

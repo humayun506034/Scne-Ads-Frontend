@@ -1,16 +1,18 @@
 
-import { ILocation } from '@/common/CommonLocationCardModal';
-import img from '../assets/featured.jpg';
+import { ILocation } from '@/types/locations';
 import rating from '../assets/Home/rating.png';
 
 
 export const locationData: ILocation[] = [
   {
     id: "1",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Piccadilly Circus, London",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Dominate a key European intersection with iconic digital billboards.",
     lat: 51.5074,
     lng: -0.128,
@@ -25,10 +27,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "2",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Times Square, NYC",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Reach millions in the heart of global commerce and entertainment.",
     lat: 40.7580,
     lng: -73.9855,
@@ -43,10 +48,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "3",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Shibuya Crossing, Tokyo",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Capture the attention of millions at the world's busiest pedestrian crossing.",
     lat: 35.6595,
     lng: 139.7004,
@@ -61,10 +69,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "4",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Champs-Élysées, Paris",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Showcase your brand on the most famous avenue in Paris.",
     lat: 48.8566,
     lng: 2.3522,
@@ -79,10 +90,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "5",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Gangnam District, Seoul",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Display your message in South Korea's trendiest neighborhood.",
     lat: 37.4979,
     lng: 127.0276,
@@ -97,10 +111,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "6",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Sydney Harbour, Sydney",
     category: "new",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Iconic views and massive audience in Sydney's core.",
     lat: -33.8688,
     lng: 151.2093,
@@ -115,10 +132,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "7",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Dubai Mall, Dubai",
     category: "new",
-    screenSize: "18m x 12m (approx. 59ft x 39ft)",
+    screen_size: "18m x 12m (approx. 59ft x 39ft)",
     description: "Reach affluent shoppers at the world's largest shopping mall.",
     lat: 25.1972,
     lng: 55.2744,
@@ -133,10 +153,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "8",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Rodeo Drive, Los Angeles",
     category: "new",
-    screenSize: "12m x 8m (approx. 39ft x 26ft)",
+    screen_size: "12m x 8m (approx. 39ft x 26ft)",
     description: "Target luxury consumers in Beverly Hills' famous shopping district.",
     lat: 34.0736,
     lng: -118.4004,
@@ -151,10 +174,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "9",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Ginza District, Tokyo",
     category: "new",
-    screenSize: "14m x 9m (approx. 46ft x 30ft)",
+    screen_size: "14m x 9m (approx. 46ft x 30ft)",
     description: "Premium advertising in Tokyo's luxury shopping and entertainment district.",
     lat: 35.6719,
     lng: 139.7639,
@@ -169,10 +195,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "10",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Las Vegas Strip",
     category: "top",
-    screenSize: "20m x 15m (approx. 66ft x 49ft)",
+    screen_size: "20m x 15m (approx. 66ft x 49ft)",
     description: "Stand out in the entertainment capital of the world.",
     lat: 36.1699,
     lng: -115.1398,
@@ -187,10 +216,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "11",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Shinjuku Station, Tokyo",
     category: "top",
-    screenSize: "16m x 11m (approx. 52ft x 36ft)",
+    screen_size: "16m x 11m (approx. 52ft x 36ft)",
     description: "Reach commuters at the world's busiest transportation hub.",
     lat: 35.6895,
     lng: 139.7004,
@@ -205,10 +237,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "12",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Orchard Road, Singapore",
     category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Prime advertising in Singapore's famous shopping belt.",
     lat: 1.3048,
     lng: 103.8318,
@@ -223,10 +258,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "13",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Hong Kong Central",
     category: "top",
-    screenSize: "17m x 12m (approx. 56ft x 39ft)",
+    screen_size: "17m x 12m (approx. 56ft x 39ft)",
     description: "Dominate the financial heart of Asia with premium digital displays.",
     lat: 22.2795,
     lng: 114.1628,
@@ -241,10 +279,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "14",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Miami South Beach",
     category: "top",
-    screenSize: "14m x 9m (approx. 46ft x 30ft)",
+    screen_size: "14m x 9m (approx. 46ft x 30ft)",
     description: "Capture the vibrant tourist and local audience in Miami's iconic beachfront.",
     lat: 25.7877,
     lng: -80.1311,
@@ -259,10 +300,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "15",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Milan Fashion District",
     category: "top",
-    screenSize: "13m x 8m (approx. 43ft x 26ft)",
+    screen_size: "13m x 8m (approx. 43ft x 26ft)",
     description: "Target fashion-conscious audiences in the world's fashion capital.",
     lat: 45.4686,
     lng: 9.1815,
@@ -277,10 +321,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "16",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Toronto Yonge-Dundas Square",
     category: "top",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Canada's busiest intersection and premier advertising location.",
     lat: 43.6565,
     lng: -79.3805,
@@ -295,10 +342,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "17",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Berlin Alexanderplatz",
     category: "top",
-    screenSize: "16m x 11m (approx. 52ft x 36ft)",
+    screen_size: "16m x 11m (approx. 52ft x 36ft)",
     description: "Central Berlin location with high foot traffic and visibility.",
     lat: 52.5219,
     lng: 13.4132,
@@ -313,10 +363,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "18",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "São Paulo Paulista Avenue",
     category: "top",
-    screenSize: "18m x 12m (approx. 59ft x 39ft)",
+    screen_size: "18m x 12m (approx. 59ft x 39ft)",
     description: "Prime advertising on South America's most important financial corridor.",
     lat: -23.5614,
     lng: -46.6550,
@@ -331,10 +384,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "19",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "London Eye, London",
     category: "fav",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Iconic riverside location with millions of annual visitors.",
     lat: 51.5033,
     lng: -0.1195,
@@ -349,10 +405,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "20",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Central Park, NYC",
     category: "fav",
-    screenSize: "14m x 9m (approx. 46ft x 30ft)",
+    screen_size: "14m x 9m (approx. 46ft x 30ft)",
     description: "Capture the attention of millions visiting NYC's most famous park.",
     lat: 40.7812,
     lng: -73.9665,
@@ -367,10 +426,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "21",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Eiffel Tower, Paris",
     category: "fav",
-    screenSize: "16m x 11m (approx. 52ft x 36ft)",
+    screen_size: "16m x 11m (approx. 52ft x 36ft)",
     description: "Advertising at the world's most visited paid monument.",
     lat: 48.8584,
     lng: 2.2945,
@@ -385,10 +447,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "22",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Venice Beach, Los Angeles",
     category: "fav",
-    screenSize: "13m x 8m (approx. 43ft x 26ft)",
+    screen_size: "13m x 8m (approx. 43ft x 26ft)",
     description: "Reach the eclectic crowd at LA's most famous beachfront.",
     lat: 33.9850,
     lng: -118.4695,
@@ -403,10 +468,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "23",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Amsterdam Dam Square",
     category: "fav",
-    screenSize: "14m x 9m (approx. 46ft x 30ft)",
+    screen_size: "14m x 9m (approx. 46ft x 30ft)",
     description: "Historic city center location with high tourist traffic.",
     lat: 52.3731,
     lng: 4.8924,
@@ -421,10 +489,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "24",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Sydney Opera House",
     category: "fav",
-    screenSize: "15m x 10m (approx. 49ft x 33ft)",
+    screen_size: "15m x 10m (approx. 49ft x 33ft)",
     description: "Advertising at Australia's most iconic cultural landmark.",
     lat: -33.8568,
     lng: 151.2153,
@@ -439,10 +510,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "25",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Rio Copacabana Beach",
     category: "fav",
-    screenSize: "17m x 12m (approx. 56ft x 39ft)",
+    screen_size: "17m x 12m (approx. 56ft x 39ft)",
     description: "Reach millions of beachgoers at one of the world's most famous beaches.",
     lat: -22.9712,
     lng: -43.1826,
@@ -457,10 +531,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "26",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Prague Old Town Square",
     category: "fav",
-    screenSize: "13m x 8m (approx. 43ft x 26ft)",
+    screen_size: "13m x 8m (approx. 43ft x 26ft)",
     description: "Historic central European location with high tourist appeal.",
     lat: 50.0875,
     lng: 14.4213,
@@ -475,10 +552,13 @@ export const locationData: ILocation[] = [
   },
   {
     id: "27",
-    image: img,
+    imageUrls: [
+      { url: "https://example.com/img1.jpg", id: "img-1" },
+      { url: "https://example.com/img2.jpg", id: "img-2" },
+    ],
     title: "Istanbul Taksim Square",
     category: "fav",
-    screenSize: "16m x 11m (approx. 52ft x 36ft)",
+    screen_size: "16m x 11m (approx. 52ft x 36ft)",
     description: "Prime advertising in the heart of Istanbul's commercial and entertainment district.",
     lat: 41.0351,
     lng: 28.9833,

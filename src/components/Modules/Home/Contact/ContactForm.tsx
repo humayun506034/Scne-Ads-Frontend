@@ -2,6 +2,9 @@ import CommonHomeInput from "@/common/CommonHomeInput";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import img from "../../../../assets/Home/rocket.png";
+import { useGetInTouchMutation } from "@/store/api/Common/commonApi";
+import { toast } from "sonner";
+
 interface ContactFormData {
   firstName: string;
   lastName: string;
@@ -9,7 +12,10 @@ interface ContactFormData {
   phone: string;
   message: string;
 }
+
 const ContactForm = () => {
+  const [getInTouch, { isLoading }] = useGetInTouchMutation();
+  
   const [formData, setFormData] = useState<ContactFormData>({
     firstName: "",
     lastName: "",
@@ -28,10 +34,30 @@ const ContactForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    
+    // Send as regular JSON object (not FormData)
+    try {
+      const result = await getInTouch(formData).unwrap();
+      toast.success("Message sent successfully!");
+      console.log("Form submitted successfully:", result);
+      
+      // Clear form after successful submission
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
@@ -109,15 +135,18 @@ const ContactForm = () => {
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <button
             type="submit"
-            className="w-full bg-[#47B5FF] hover:bg-[#3BA3E8] text-white font-medium py-4 rounded-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(71,181,255,0.5)] flex items-center cursor-pointer justify-center gap-2 text-base"
+            disabled={isLoading}
+            className="w-full bg-[#47B5FF] hover:bg-[#3BA3E8] text-white font-medium py-4 rounded-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(71,181,255,0.5)] flex items-center cursor-pointer justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Send it to the moon
-            <img
-              src={img}
-              alt="rocket"
-              style={{ mixBlendMode: "screen" }}
-              className="w-[25px]  h-3"
-            />
+            {isLoading ? "Sending..." : "Send it to the moon"}
+            {!isLoading && (
+              <img
+                src={img}
+                alt="rocket"
+                style={{ mixBlendMode: "screen" }}
+                className="w-[25px] h-3"
+              />
+            )}
           </button>
         </motion.div>
       </form>

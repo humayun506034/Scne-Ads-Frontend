@@ -12,7 +12,7 @@ import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal"
 
 export default function UserBundleCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
+  // const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [dateFilter, setDateFilter] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export default function UserBundleCampaignManagement() {
     page: currentPage.toString(),
   };
 
-  if (searchTerm) queryParams.searchTerm = searchTerm;
+  // if (searchTerm) queryParams.searchTerm = searchTerm;
   if (startDate) queryParams.startDate = `${startDate}T00:00:00.000Z`;
   if (endDate) queryParams.endDate = `${endDate}T00:00:00.000Z`;
   if (dateFilter) queryParams.dateFilter = dateFilter;
@@ -65,7 +65,7 @@ export default function UserBundleCampaignManagement() {
     setCurrentPage(1);
   };
 
-  // ✅ Clear button handler
+
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);

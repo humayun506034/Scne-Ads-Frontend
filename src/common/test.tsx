@@ -6,7 +6,7 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Circle, Heart } from "lucide-react";
+import { Circle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -38,14 +38,14 @@ export interface LocationCardProps {
   showButton?: boolean;
 }
 
-const CommonLocationCardModal = ({
+const Test = ({
   location,
   fav,
-  bookmark,
   select,
   onToggleFav,
   showButton = false,
-}: LocationCardProps) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+}: any) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [loadingFav, setLoadingFav] = useState(false);
   const [addFavouriteScreen] = useAddFavouriteScreenMutation();
@@ -57,6 +57,7 @@ const CommonLocationCardModal = ({
       // Remove locally only
       onToggleFav?.(id);
       toast.error("Item removed from favorites!");
+      console.log(loadingFav)
       return;
     }
 
@@ -119,29 +120,7 @@ const CommonLocationCardModal = ({
                 {location.description || "-"}
               </p>
 
-              {(bookmark || fav) && (
-                <div
-                  onClick={(e) => handleBookmark(e, location.id)}
-                  tabIndex={-1}
-                  className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
-                >
-                  <motion.button
-                    className="bg-transparent"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.8 }}
-                    type="button"
-                    disabled={loadingFav}
-                  >
-                    <Heart
-                      className={`h-7 w-7 cursor-pointer ${
-                        fav?.has(location.id)
-                          ? "fill-white stroke-white"
-                          : "stroke-white"
-                      }`}
-                    />
-                  </motion.button>
-                </div>
-              )}
+              
 
               {select && (
                 <div
@@ -252,4 +231,4 @@ const CommonLocationCardModal = ({
   );
 };
 
-export default CommonLocationCardModal;
+export default Test;
