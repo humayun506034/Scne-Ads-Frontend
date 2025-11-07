@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -9,8 +10,8 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { useGetAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
 
-import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
 import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
 
 export default function AdminBundleCampaignManagement() {
   const [startDate, setStartDate] = useState<string | null>(null);

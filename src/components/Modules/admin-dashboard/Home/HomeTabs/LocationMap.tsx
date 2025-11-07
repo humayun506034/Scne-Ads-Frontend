@@ -1,5 +1,6 @@
 import CommonCancelButton from "@/common/CommonCancelButton";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import Loading from "@/common/MapLoading";
 import {
   Dialog,
   DialogContent,
@@ -68,7 +69,7 @@ const LocationMapModal = ({
     setOpenMap(false);
   };
 
-  if (!isLoaded) return <div>kela mela...</div>;
+  if (!isLoaded) return <div><Loading/></div>;
 
   return (
     <Dialog open={open} onOpenChange={setOpenMap}>

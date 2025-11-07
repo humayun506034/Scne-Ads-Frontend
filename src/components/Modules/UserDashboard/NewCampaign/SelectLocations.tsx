@@ -1,22 +1,26 @@
 import CommonLocationCardModal from "@/common/CommonLocationCardModal";
-import { useGetAllLocationsQuery } from "@/store/api/locations/ScreenApi";
+import { useGetAllScreenQuery } from "@/store/api/Screen/screenApi";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setScreens } from "@/store/Slices/campaign/campaignSlice";
+import { toggleScreen } from "@/store/Slices/campaign/campaignSlice";
+import { useMemo } from "react";
 import { Scrollbar } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function SelectLocations() {
   const dispatch = useAppDispatch();
   const selectedScreens = useAppSelector((state) => state.campaign.screenIds);
-  const { data, isLoading, isError } = useGetAllLocationsQuery();
-  const locations = data?.data?.data || [];
+  const { data, isLoading,isError } = useGetAllScreenQuery({ limit: 100000, page: "1" });
 
-  function toggleSelect(id: string) {
-    const updatedScreens = selectedScreens.includes(id)
-      ? selectedScreens.filter((screenId) => screenId !== id)
-      : [...selectedScreens, id];
-    dispatch(setScreens(updatedScreens));
-  }
+
+  
+  const screens = useMemo(() => {
+    if (!data?.data?.data) return [];
+    return data.data.data;
+  }, [data]);
+
+
+
+ 
 
   if (isLoading) {
     return (
@@ -37,7 +41,7 @@ export default function SelectLocations() {
     );
   }
 
-  if (!locations.length) {
+  if (screens.length === 0) {
     return (
       <div className="w-full my-20 grid place-items-center p-8 bg-blue-800/20 border border-blue-700 rounded-lg">
         <h1 className="text-blue-400 text-2xl">ℹ️ No screens available at this time.</h1>
@@ -49,7 +53,7 @@ export default function SelectLocations() {
     <div className="w-full my-20">
       <div className="grid place-items-center">
         <h1 className="w-fit cursor-pointer text-white font-medium text-2xl md:text-4xl px-4 py-3 flex justify-center items-center">
-          New Arrival
+          All Available Screens
         </h1>
       </div>
 
@@ -68,8 +72,8 @@ export default function SelectLocations() {
           }}
           className="mySwiper w-full mx-auto"
         >
-          {locations?.map((location) => {
-            // Ensure imageUrls have id as string (not undefined)
+          {screens?.map((location) => {
+          
             const fixedLocation = {
               ...location,
               imageUrls: (location.imageUrls || []).map((img, idx) => ({
@@ -77,14 +81,15 @@ export default function SelectLocations() {
                 id: typeof img.id === "string" && img.id ? img.id : String(idx),
               })),
             };
+            const isSelected = selectedScreens.includes(location.id);
             return (
               <SwiperSlide className="px-2 pt-6 pb-20" key={location.id}>
                 <CommonLocationCardModal
                   showButton={false}
                   location={fixedLocation}
-                  fav={new Set(selectedScreens)}
-                  onToggleFav={toggleSelect}
                   select={true}
+                  isSelected={isSelected}
+                  onToggleSelect={() => dispatch(toggleScreen(location.id))}
                 />
               </SwiperSlide>
             );

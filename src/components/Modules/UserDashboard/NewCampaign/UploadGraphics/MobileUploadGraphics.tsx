@@ -1,12 +1,12 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { removeFile, setFiles } from "@/store/Slices/campaign/campaignSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setFiles } from "@/store/Slices/campaign/campaignSlice";
+import { useState } from "react";
+import { UploadedFile } from ".";
 import { BulkUploader } from "./BulkUploader";
 import { UploadedFileCard } from "./UploadFileCard";
-import { UploadedFile } from ".";
-import { useState } from "react";
 
 export default function MobileUploadGraphics() {
   const dispatch = useAppDispatch();
@@ -23,13 +23,16 @@ export default function MobileUploadGraphics() {
       id: `${Date.now()}-${index}`,
       name: file.name,
       url: URL.createObjectURL(file),
-      dimensions: "1920x1080",
       fileType: file.type,
-      type: "landscape", 
-      compatible: true,
     }));
 
     setLocalPreview(previews);
+  };
+
+  const handleDeleteFile = (index: number) => {
+    dispatch(removeFile(index));
+    // Also remove from local preview if it exists
+    setLocalPreview((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -51,13 +54,13 @@ export default function MobileUploadGraphics() {
             value="uploads"
             className="text-title-color data-[state=active]:text-white data-[state=active]:bg-dashboard-card-bg"
           >
-            Uploads
+            Uploaded Contents
           </TabsTrigger>
           <TabsTrigger
             value="bulk"
             className="text-title-color data-[state=active]:text-white data-[state=active]:bg-dashboard-card-bg"
           >
-            Bulk
+            Bulk Uploader
           </TabsTrigger>
         </TabsList>
 
@@ -85,8 +88,12 @@ export default function MobileUploadGraphics() {
 
             <div className="space-y-4 mt-12">
               {localPreview.length > 0 ? (
-                localPreview.map((file) => (
-                  <UploadedFileCard key={file.id} file={file} />
+                localPreview.map((file, i) => (
+                  <UploadedFileCard 
+                    key={file.id} 
+                    file={file}
+                    onDelete={() => handleDeleteFile(i)}
+                  />
                 ))
               ) : uploadedFiles.length > 0 ? (
                 uploadedFiles.map((file, i) => (
@@ -96,11 +103,9 @@ export default function MobileUploadGraphics() {
                       id: String(i),
                       name: file.name,
                       url: URL.createObjectURL(file),
-                      dimensions: "1920x1080",
                       fileType: file.type,
-                      type: "landscape", // Default value, you might want to determine this based on actual file dimensions
-                      compatible: true,
                     }}
+                    onDelete={() => handleDeleteFile(i)}
                   />
                 ))
               ) : (

@@ -6,43 +6,82 @@ import SelectLocations from "@/components/Modules/UserDashboard/NewCampaign/Sele
 import UploadGraphics from "@/components/Modules/UserDashboard/NewCampaign/UploadGraphics/UploadGraphics";
 import { usePublishCampaignMutation } from "@/store/api/Campaign/campaignApi";
 import { useAppSelector } from "@/store/hooks";
+import { publishCampaignSchema } from "@/validations/campaignValidation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { ZodError } from "zod";
 
 export default function NewCampaignPage() {
-  const campaign = useAppSelector((state) => state.campaign);
+  const campaign = useAppSelector((state) => {
+    return state.campaign;
+  });
+  
   const [publishCampaign, { isLoading }] = usePublishCampaignMutation();
 
   const handlePublish = async () => {
-    const { name, screenIds, startDate, endDate, type, files } = campaign;
+    const { name, screenIds, startDate, endDate, files, type } = campaign;
 
-    // Fix the condition for checking missing data
-    if (!name || screenIds.length === 0 || !startDate || !endDate || files.length === 0) {
-      toast.error("Please fill all fields before publishing!");
-      return;
-    }
-
+    // Validate campaign data using Zod
     try {
-      const res = await publishCampaign({
+      const validatedData = publishCampaignSchema.parse({
         name,
         screenIds,
-        startDate,
-        endDate,
-        type,
+        startDate: startDate ,
+        endDate: endDate ,
+        type: type || "custom",
         files,
-      }).unwrap();
+      });
+  
 
-      if (res.data?.url) {
-        toast.success("Campaign Published. Redirecting to payment page...");
-        setTimeout(() => {
+    
+      try {
+        const res = await publishCampaign({
+          name: validatedData.name,
+          screenIds: validatedData.screenIds,
+          startDate: validatedData.startDate,
+          endDate: validatedData.endDate,
+          type: validatedData.type,
+          files: validatedData.files,
+        }).unwrap();
+        
+
+        if (res.data?.url) {
+          toast.success("Campaign Published. Redirecting to payment page...");
           window.location.href = res.data.url;
-        }, 2000);
-      } else {
-        toast.success(res.message || "Campaign published successfully!");
+        } else {
+          toast.success(res.message || "Campaign published successfully!");
+        }
+      } catch (err: any) {
+        console.error("❌ Publish failed:", err);
+        toast.error(err?.data?.message || "Publish failed!");
       }
-    } catch (err: any) {
-      console.error("❌ Publish failed:", err);
-      toast.error(err?.data?.message || "Publish failed!");
+    } catch (error) {
+    
+      if (error instanceof ZodError) {
+        const errorMessages = error.errors.map((err) => {
+          const field = err.path.join(".");
+          // Format field names for better readability
+          const fieldName = field
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase())
+            .trim() || "Field";
+          return `${fieldName}: ${err.message}`;
+        });
+        
+      
+        const firstError = errorMessages[0] || "Validation failed. Please check your input.";
+        toast.error(firstError);
+        
+       
+        if (errorMessages.length > 1) {
+          console.error("All validation errors:", errorMessages);
+        } else {
+          console.error("Validation error:", error.errors);
+        }
+      } else {
+        toast.error("An unexpected error occurred during validation.");
+        console.error("Validation error:", error);
+      }
     }
   };
 

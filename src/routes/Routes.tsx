@@ -59,7 +59,11 @@ const routes = createBrowserRouter([
   },
   {
     path: "payment-success/:paymentId",
-    element: <PaymentSuccess />,
+    element: <PaymentSuccess status="success" />,
+  },
+  {
+    path: "payment-failed/:paymentId",
+    element: <PaymentSuccess status="failed" />,
   },
   {
     path: "/user-dashboard",

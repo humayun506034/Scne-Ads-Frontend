@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+ 
 import {
   Carousel,
   CarouselContent,
@@ -7,9 +6,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import SpecialCard from "./SpecialCard";
 import { useGetAllBundleQuery } from "@/store/api/Bundle/bundleApi";
+import { useState } from "react";
 import BundleInfoModal, { Bundle } from "./BundleInfoModal";
+import SpecialCard from "./SpecialCard";
 
 const SpecialSection = () => {
   const { data, isLoading, isError } = useGetAllBundleQuery({ limit: 1000 });
@@ -37,7 +37,7 @@ const SpecialSection = () => {
 
   return (
     <div className="mt-20 relative">
-      <h1 className="text-3xl font-semibold text-center">..Bundles..</h1>
+      <h1 className="text-3xl font-semibold text-center">Customized Bundles</h1>
 
       <Carousel className="w-full mt-0">
         <CarouselContent>
@@ -56,7 +56,7 @@ const SpecialSection = () => {
                   bundleIcon={"🔥"}
                   image={bundle.img_url}
                   description={[`${bundle.duration}`, `${bundle.screens.length} Screens`]}
-                  price={bundle.price.toString()} // ✅ convert number to string
+                  price={bundle.price.toString()} 
                   id=""
                 />
 

@@ -1,23 +1,17 @@
 import type React from "react";
 
 import { Card } from "@/components/ui/card";
-import { Check, Upload } from "lucide-react";
-import { useState } from "react";
-import { BulkUploadStatus } from ".";
+import { Upload } from "lucide-react";
 
 interface BulkUploaderProps {
   onFileUpload?: (files: FileList) => void;
 }
 
 export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
-  const [uploadStatus, setUploadStatus] = useState<BulkUploadStatus>({
-    isUploading: false,
-    maxFileSize: "5 MB",
-    recentUpload: "Image.png successfully uploaded",
-  });
+
 
   const handleDragOver = (e: React.DragEvent) => {
-    console.log(setUploadStatus)
+  
     e.preventDefault();
   };
 
@@ -59,16 +53,7 @@ export function BulkUploader({ onFileUpload }: BulkUploaderProps) {
           <h3 className="text-title-color text-xl md:text-2xl font-medium mt-6">
             Bulk Uploader
           </h3>
-          <p className="text-title-color text-sm mt-4">
-            Max file size {uploadStatus.maxFileSize}
-          </p>
-
-          {uploadStatus.recentUpload && (
-            <div className="flex flex-col md:flex-row items-center w-full md:justify-center gap-2 text-green-400 bg-[#16294E] md:px-16  rounded-xl  px-4 py-2 md:py-5  text-sm mt-12">
-              <Check className="w-4 h-4" />
-              <span>{uploadStatus.recentUpload}</span>
-            </div>
-          )}
+        
         </label>
       </div>
     </Card>
