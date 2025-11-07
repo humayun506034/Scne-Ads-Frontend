@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { Card, CardContent } from "@/components/ui/card";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Circle } from "lucide-react";
+import { ChevronLeft, ChevronRight, Circle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -43,6 +44,7 @@ const CommonLocationCardModal = ({
   onToggleSelect,
   showButton = false,
 }: any) => {
+  console.log("🚀 ~ CommonLocationCardModal ~ location:", location)
   const [openDialog, setOpenDialog] = useState<string | null>(null);
   const [loadingFav] = useState(false);
 
@@ -62,7 +64,7 @@ const CommonLocationCardModal = ({
   const capitalize = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "-";
 
-  const firstImage = location?.imageUrls?.[0]?.url || "/placeholder.jpg";
+  
 
   return (
     <div className="w-full">
@@ -73,15 +75,66 @@ const CommonLocationCardModal = ({
       >
         <DialogTrigger asChild>
           <Card className="lg:w-full relative border-none h-[380px] xl:h-[350px] card mx-0 p-0 rounded-[30px] transition-all duration-300 hover:shadow-[0px_0px_20px_0px_rgba(47,171,249,0.90)] bg-transparent cursor-pointer">
-            <CardContent className="flex flex-col items-center gap-4 text-center p-0">
-              <div className="w-full rounded-[15px] overflow-hidden p-6">
-                <img
-                  src={firstImage}
-                  alt={location.title}
-                  className="object-cover rounded-xl w-full h-40"
-                />
+          <CardContent className="flex flex-col overflow-hidden items-center  p-0">
+            <Carousel className="w-full ">
+            <CarouselContent className="p-0 ">
+              {location.imgUrls.length > 0 ? (
+                location.imgUrls.map((image, index) => (
+                  <CarouselItem key={index}>
+                    <div className="p-4 ">
+                      <div className="flex items-center border-none justify-center ">
+                        <img
+                          src={image.url}
+                          alt={`image ${index + 1}`}
+                          className="object-fill rounded-[15px] w-full h-[220px]"
+                        />
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                <CarouselItem className="absolute  top-1/2 left-0">
+                  <div className="p-1">
+                    <Card>
+                      <CardContent className="flex aspect-square items-center justify-center p-6">
+                        <span className="text-4xl font-semibold">
+                          No images
+                        </span>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </CarouselItem>
+              )}
+            </CarouselContent>
 
-              </div>
+            <CarouselPrevious
+              type="button"
+              className="
+                absolute top-1/2 left-2 -translate-y-1/2 z-10
+                h-10 w-10 rounded-full
+                bg-white/15 text-black font-bold cursor-pointer border border-white/20
+                backdrop-blur shadow-lg
+                hover:bg-white/25 hover:scale-105 transition
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40
+              "
+            >
+              <ChevronLeft className="h-10 w-10" />
+            </CarouselPrevious>
+            <CarouselNext
+              type="button"
+              className="
+                absolute top-1/2 right-2 -translate-y-1/2 z-10
+                h-10 w-10 rounded-full
+                bg-white/15 text-black font-bold cursor-pointer border border-white/20
+                backdrop-blur shadow-lg
+                hover:bg-white/25 hover:scale-105 transition
+                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40
+              "
+            >
+              <ChevronRight className="h-10 w-10" />
+            </CarouselNext>
+          </Carousel>
+
 
               <h3 className="text-white text-xl lg:font-semibold px-4">
                 {location.location}
@@ -90,7 +143,7 @@ const CommonLocationCardModal = ({
                 {location.description || "-"}
               </p>
 
-              {false && loadingFav && <div />}
+             
 
               {select && (
                 <div

@@ -34,7 +34,7 @@ export default function LocationTabs() {
     isLoading: favLoading,
     error: favError,
   } = useGetMySelfFavouriteScreensQuery(
-    { limit: 100, page: 1 },
+    { limit: 100000, page: 1 },
     { skip: tab !== "fav" }
   );
 
