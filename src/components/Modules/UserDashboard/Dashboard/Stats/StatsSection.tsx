@@ -1,13 +1,24 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { StatsCard } from "./StatsCard"; // Assuming this is the card component for stats
+import { daysVariants } from "@/lib/Data";
+import { useGetAnalyticsQuery } from "@/store/api/analyticApi";
+import CommonLoading from "@/common/CommonLoading";
 
-const dateOptions = ["Today", "1D", "7D", "1 Mo"];
+const durationOptions = ["All", ...daysVariants] as const;
+
+type DurationOption = (typeof durationOptions)[number];
 
 export const StatsSection = () => {
-  const [selectedDate, setSelectedDate] = useState("7D");
+  const [selectedDate, setSelectedDate] = useState<DurationOption>("All");
 
-  const handleDateChange = (date: string) => {
+  const { data, isLoading } = useGetAnalyticsQuery(undefined);
+
+  if (isLoading) {
+    return <CommonLoading />;
+  }
+
+  const handleDateChange = (date: DurationOption) => {
     setSelectedDate(date);
   };
 
@@ -22,7 +33,7 @@ export const StatsSection = () => {
           </div>
         </div>
         <div className="flex flex-wrap justify-between gap-2 w-full mb-6">
-          {dateOptions.map((option) => (
+          {durationOptions.map((option) => (
             <Card className="border-none mt-10 p-0 ">
               <CardContent className="p-0">
                 <button
@@ -45,9 +56,18 @@ export const StatsSection = () => {
       </div>
 
       <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-10 ">
-        <StatsCard title="People Reached" value="0" />
-        <StatsCard title="ADS Played" value="0" />
-        <StatsCard title="Total Spend" value="$0.00 USD" />
+        <StatsCard
+          title="People Reached"
+          value="0"
+        />
+        <StatsCard
+          title="ADS Played"
+          value="0"
+        />
+        <StatsCard
+          title="Total Spend"
+          value={data.data.analyticsData.totalSpend}
+        />
       </div>
     </div>
   );

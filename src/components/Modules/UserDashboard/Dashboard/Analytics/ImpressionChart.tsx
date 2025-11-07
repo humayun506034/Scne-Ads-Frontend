@@ -1,27 +1,19 @@
 import CommonSelect from "@/common/CommonSelect";
 import { CalendarDays } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { ChartDataPoint } from ".";
 import { MetricCard } from "./MetricCard";
+import { useGetAnalyticsQuery } from "@/store/api/analyticApi";
+import CommonLoading from "@/common/CommonLoading";
 const Chart = React.lazy(() => import("react-apexcharts"));
 
-interface SpendImpressionsChartProps {
-  spendData: ChartDataPoint[];
-  impressionsData: ChartDataPoint[];
-  totalSpend: {
-    value: string;
-    growth: number;
-    isPositive: boolean;
-  };
-}
 
-export function SpendImpressionsChart({
-  spendData,
-  impressionsData,
-  totalSpend,
-}: SpendImpressionsChartProps) {
+
+export function SpendImpressionsChart() {
   const [isClient, setIsClient] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Jan 2025 - Dec 2025");
+
+  const { data, isLoading } = useGetAnalyticsQuery(undefined);
+
   const options = [
     {
       value: "Jan 2025 - Dec 2025",
@@ -36,9 +28,22 @@ export function SpendImpressionsChart({
       label: "Jan 2023 - Dec 2023",
     },
   ];
+
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  if (isLoading || !isClient) {
+    return (
+      <div>
+        <CommonLoading />
+      </div>
+    );
+  }
+
+  const analyticsData = data.data.analyticsData;
+
+  const maxY = Math.max(...analyticsData.spendData.map((d) => d.y));
 
   const chartOptions = {
     chart: {
@@ -84,7 +89,7 @@ export function SpendImpressionsChart({
       },
     },
     xaxis: {
-      categories: spendData.map((item) => item.x),
+      categories: analyticsData.spendData.map((item) => item.x),
       axisBorder: {
         show: false,
       },
@@ -103,17 +108,12 @@ export function SpendImpressionsChart({
       enabled: false,
     },
     yaxis: {
+      max: Math.ceil(maxY * 1.1), // 10% padding
       labels: {
-        style: {
-          colors: "#64748b",
-          fontSize: "12px",
-        },
-        formatter: (value: number) => {
-          if (value >= 1000000) {
-            return `${(value / 1000000).toFixed(1)}M`;
-          } else if (value >= 1000) {
-            return `${(value / 1000).toFixed(0)}K`;
-          }
+        style: { colors: "#64748b", fontSize: "12px" },
+        formatter: (value) => {
+          if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+          if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
           return value.toString();
         },
       },
@@ -140,31 +140,27 @@ export function SpendImpressionsChart({
   const series = [
     {
       name: "Ad Spend",
-      data: spendData.map((item) => item.y),
+      data: analyticsData.spendData.map((item) => item.y),
     },
-    {
-      name: "Impressions",
-      data: impressionsData.map((item) => item.y),
-    },
+    // {
+    //   name: "Impressions",
+    //   data: impressionsData.map((item) => item.y),
+    // },
   ];
 
-  if (!isClient) {
-    return (
-      <div className="bg-[#0B1739] rounded-xl p-6 h-[400px] flex items-center justify-center">
-        <div className="text-title-color">Loading chart...</div>
-      </div>
-    );
-  }
-
+  console.log(
+    "🚀 ~ SpendImpressionsChart ~ analyticsData.totalSpend.isPositive:",
+    analyticsData.totalSpend
+  );
   return (
     <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
           title="Total Ad Spend"
-          value={totalSpend.value}
-          growth={totalSpend.growth}
-          isPositive={totalSpend.isPositive}
+          value={analyticsData.totalSpend}
+          growth={analyticsData.growth}
+          isPositive={analyticsData.isPositive}
         />
 
         <div className="flex flex-wrap  items-center gap-4">
@@ -173,10 +169,10 @@ export function SpendImpressionsChart({
               <div className="w-4 h-4 rounded-full bg-[#CB3CFF]"></div>
               <span className="text-title-color text-sm">Ad Spend</span>
             </div>
-            <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-[#57C3FF]"></div>
               <span className="text-title-color text-sm">Impressions</span>
-            </div>
+            </div> */}
           </div>
 
           <div className="flex items-center gap-2 bg-[#0A1330] rounded-lg px-2 py-1 ">

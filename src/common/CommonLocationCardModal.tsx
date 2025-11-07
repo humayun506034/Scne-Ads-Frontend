@@ -216,7 +216,7 @@ const CommonLocationCardModal = ({
             </div>
 
             <div className="lg:w-2/4 mt-10 lg:mt-0 space-y-4">
-              {location.imageUrls.length ? (
+              {location.imageUrls?.length ? (
                 location.imageUrls.map((img) => (
                   <img
                     key={img.index || img.url}

@@ -1,9 +1,25 @@
 import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analytics/AnalyticsSection";
 import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard/BillboardMap/ResponsiveBillboard";
 import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
-import { RecentCampaignsSection } from "@/components/Modules/UserDashboard/Dashboard/RecentCampaigns/RecentCampaign";
 import { StatsSection } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
 import { UserDashboardNavbar } from "@/components/Modules/UserDashboard/UserDashboardNavbar";
+
+export interface SpendDataPoint {
+  x: string; // e.g. "Jan", "Feb"
+  y: number; // spend amount
+}
+
+export interface AnalyticsResponse {
+  period: "month" | "year";
+  startDate: string; // ISO date string
+  endDate: string; // ISO date string
+  totalBundleSpend: number;
+  totalCustomSpend: number;
+  totalSpend: number;
+  spendData: SpendDataPoint[];
+  growth: number;
+  isPositive: boolean;
+}
 
 const UserDashboardMetrics = () => {
   return (
@@ -23,7 +39,7 @@ const UserDashboardMetrics = () => {
         </div>
         <AnalyticsSection />
         <NewCampaignSection />
-        <RecentCampaignsSection />
+        {/* <RecentCampaignsSection /> */}
       </div>
     </div>
   );

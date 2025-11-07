@@ -1,7 +1,5 @@
-
-import { ILocation } from '@/types/locations';
-import rating from '../assets/Home/rating.png';
-
+import { ILocation } from "@/types/locations";
+import rating from "../assets/Home/rating.png";
 
 export const locationData: ILocation[] = [
   {
@@ -13,7 +11,8 @@ export const locationData: ILocation[] = [
     title: "Piccadilly Circus, London",
     category: "new",
     screen_size: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Dominate a key European intersection with iconic digital billboards.",
+    description:
+      "Dominate a key European intersection with iconic digital billboards.",
     lat: 51.5074,
     lng: -0.128,
     availability: "available",
@@ -34,8 +33,9 @@ export const locationData: ILocation[] = [
     title: "Times Square, NYC",
     category: "new",
     screen_size: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Reach millions in the heart of global commerce and entertainment.",
-    lat: 40.7580,
+    description:
+      "Reach millions in the heart of global commerce and entertainment.",
+    lat: 40.758,
     lng: -73.9855,
     availability: "available",
     reach: 5000000,
@@ -55,7 +55,8 @@ export const locationData: ILocation[] = [
     title: "Shibuya Crossing, Tokyo",
     category: "new",
     screen_size: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Capture the attention of millions at the world's busiest pedestrian crossing.",
+    description:
+      "Capture the attention of millions at the world's busiest pedestrian crossing.",
     lat: 35.6595,
     lng: 139.7004,
     availability: "available",
@@ -97,7 +98,8 @@ export const locationData: ILocation[] = [
     title: "Gangnam District, Seoul",
     category: "new",
     screen_size: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Display your message in South Korea's trendiest neighborhood.",
+    description:
+      "Display your message in South Korea's trendiest neighborhood.",
     lat: 37.4979,
     lng: 127.0276,
     availability: "available",
@@ -139,7 +141,8 @@ export const locationData: ILocation[] = [
     title: "Dubai Mall, Dubai",
     category: "new",
     screen_size: "18m x 12m (approx. 59ft x 39ft)",
-    description: "Reach affluent shoppers at the world's largest shopping mall.",
+    description:
+      "Reach affluent shoppers at the world's largest shopping mall.",
     lat: 25.1972,
     lng: 55.2744,
     availability: "available",
@@ -160,7 +163,8 @@ export const locationData: ILocation[] = [
     title: "Rodeo Drive, Los Angeles",
     category: "new",
     screen_size: "12m x 8m (approx. 39ft x 26ft)",
-    description: "Target luxury consumers in Beverly Hills' famous shopping district.",
+    description:
+      "Target luxury consumers in Beverly Hills' famous shopping district.",
     lat: 34.0736,
     lng: -118.4004,
     availability: "available",
@@ -181,7 +185,8 @@ export const locationData: ILocation[] = [
     title: "Ginza District, Tokyo",
     category: "new",
     screen_size: "14m x 9m (approx. 46ft x 30ft)",
-    description: "Premium advertising in Tokyo's luxury shopping and entertainment district.",
+    description:
+      "Premium advertising in Tokyo's luxury shopping and entertainment district.",
     lat: 35.6719,
     lng: 139.7639,
     availability: "booked",
@@ -265,7 +270,8 @@ export const locationData: ILocation[] = [
     title: "Hong Kong Central",
     category: "top",
     screen_size: "17m x 12m (approx. 56ft x 39ft)",
-    description: "Dominate the financial heart of Asia with premium digital displays.",
+    description:
+      "Dominate the financial heart of Asia with premium digital displays.",
     lat: 22.2795,
     lng: 114.1628,
     availability: "available",
@@ -286,7 +292,8 @@ export const locationData: ILocation[] = [
     title: "Miami South Beach",
     category: "top",
     screen_size: "14m x 9m (approx. 46ft x 30ft)",
-    description: "Capture the vibrant tourist and local audience in Miami's iconic beachfront.",
+    description:
+      "Capture the vibrant tourist and local audience in Miami's iconic beachfront.",
     lat: 25.7877,
     lng: -80.1311,
     availability: "available",
@@ -307,7 +314,8 @@ export const locationData: ILocation[] = [
     title: "Milan Fashion District",
     category: "top",
     screen_size: "13m x 8m (approx. 43ft x 26ft)",
-    description: "Target fashion-conscious audiences in the world's fashion capital.",
+    description:
+      "Target fashion-conscious audiences in the world's fashion capital.",
     lat: 45.4686,
     lng: 9.1815,
     availability: "available",
@@ -328,7 +336,8 @@ export const locationData: ILocation[] = [
     title: "Toronto Yonge-Dundas Square",
     category: "top",
     screen_size: "15m x 10m (approx. 49ft x 33ft)",
-    description: "Canada's busiest intersection and premier advertising location.",
+    description:
+      "Canada's busiest intersection and premier advertising location.",
     lat: 43.6565,
     lng: -79.3805,
     availability: "available",
@@ -349,7 +358,8 @@ export const locationData: ILocation[] = [
     title: "Berlin Alexanderplatz",
     category: "top",
     screen_size: "16m x 11m (approx. 52ft x 36ft)",
-    description: "Central Berlin location with high foot traffic and visibility.",
+    description:
+      "Central Berlin location with high foot traffic and visibility.",
     lat: 52.5219,
     lng: 13.4132,
     availability: "available",
@@ -370,9 +380,10 @@ export const locationData: ILocation[] = [
     title: "São Paulo Paulista Avenue",
     category: "top",
     screen_size: "18m x 12m (approx. 59ft x 39ft)",
-    description: "Prime advertising on South America's most important financial corridor.",
+    description:
+      "Prime advertising on South America's most important financial corridor.",
     lat: -23.5614,
-    lng: -46.6550,
+    lng: -46.655,
     availability: "available",
     reach: 3200000,
     price: 7700,
@@ -412,7 +423,8 @@ export const locationData: ILocation[] = [
     title: "Central Park, NYC",
     category: "fav",
     screen_size: "14m x 9m (approx. 46ft x 30ft)",
-    description: "Capture the attention of millions visiting NYC's most famous park.",
+    description:
+      "Capture the attention of millions visiting NYC's most famous park.",
     lat: 40.7812,
     lng: -73.9665,
     availability: "available",
@@ -455,7 +467,7 @@ export const locationData: ILocation[] = [
     category: "fav",
     screen_size: "13m x 8m (approx. 43ft x 26ft)",
     description: "Reach the eclectic crowd at LA's most famous beachfront.",
-    lat: 33.9850,
+    lat: 33.985,
     lng: -118.4695,
     availability: "available",
     reach: 1400000,
@@ -517,7 +529,8 @@ export const locationData: ILocation[] = [
     title: "Rio Copacabana Beach",
     category: "fav",
     screen_size: "17m x 12m (approx. 56ft x 39ft)",
-    description: "Reach millions of beachgoers at one of the world's most famous beaches.",
+    description:
+      "Reach millions of beachgoers at one of the world's most famous beaches.",
     lat: -22.9712,
     lng: -43.1826,
     availability: "available",
@@ -559,7 +572,8 @@ export const locationData: ILocation[] = [
     title: "Istanbul Taksim Square",
     category: "fav",
     screen_size: "16m x 11m (approx. 52ft x 36ft)",
-    description: "Prime advertising in the heart of Istanbul's commercial and entertainment district.",
+    description:
+      "Prime advertising in the heart of Istanbul's commercial and entertainment district.",
     lat: 41.0351,
     lng: 28.9833,
     availability: "available",
@@ -570,162 +584,180 @@ export const locationData: ILocation[] = [
     location: "Istanbul, Turkey",
     tierLevel: "Standard",
     costPerPlay: 140,
-  }
+  },
 ];
-
 
 export const StepsData = [
   {
-    "id": "1",
-    "stepNumber": "Step 1:",
-    "title": "Select Your Boards",
-    "description": "Browse our extensive network of digital billboards. Choose locations based on geography, audience demographics, and real-time availability",
-    "icon": "location"
+    id: "1",
+    stepNumber: "Step 1:",
+    title: "Select Your Boards",
+    description:
+      "Browse our extensive network of digital billboards. Choose locations based on geography, audience demographics, and real-time availability",
+    icon: "location",
   },
   {
-    "id": "2",
-    "stepNumber": "Step 2:",
-    "title": "Schedule Ad's Times",
-    "description": "Define your campaign's duration, frequency, and specific display times. Optimize for peak hours or continuous brand presence effortlessly.",
-    "icon": "calendar"
+    id: "2",
+    stepNumber: "Step 2:",
+    title: "Schedule Ad's Times",
+    description:
+      "Define your campaign's duration, frequency, and specific display times. Optimize for peak hours or continuous brand presence effortlessly.",
+    icon: "calendar",
   },
   {
-    "id": "3",
-    "stepNumber": "Step 3:",
-    "title": "Upload Your Creative",
-    "description": "Easily upload your high-resolution images or videos. Our platform ensures seamless integration and optimal display across all selected screens.",
-    "icon": "upload"
-  }
-]
+    id: "3",
+    stepNumber: "Step 3:",
+    title: "Upload Your Creative",
+    description:
+      "Easily upload your high-resolution images or videos. Our platform ensures seamless integration and optimal display across all selected screens.",
+    icon: "upload",
+  },
+];
 export const PricingData = [
   {
-    "id": "1",
-    "title": "Screen Tier",
-    "description": "Billboards are categorized into tiers (Tier 1: Prime, Tier 2: Mid, Tier 3: Low) reflecting their premium visibility and audience reach. Prime locations naturally command a higher base CPP.",
-    "icon": "layers"
+    id: "1",
+    title: "Screen Tier",
+    description:
+      "Billboards are categorized into tiers (Tier 1: Prime, Tier 2: Mid, Tier 3: Low) reflecting their premium visibility and audience reach. Prime locations naturally command a higher base CPP.",
+    icon: "layers",
   },
   {
-    "id": "2",
-    "title": "Time of Day",
-    "description": "Advertising during prime hours (e.g., morning commutes, lunch breaks, evening rush) costs more due to increased audience exposure. Our system optimizes for your chosen schedule.",
-    "icon": "clock"
+    id: "2",
+    title: "Time of Day",
+    description:
+      "Advertising during prime hours (e.g., morning commutes, lunch breaks, evening rush) costs more due to increased audience exposure. Our system optimizes for your chosen schedule.",
+    icon: "clock",
   },
   {
-    "id": "3",
-    "title": "Traffic Value",
-    "description": "Screens located in areas with consistently high foot or vehicular traffic yield a higher base CPP, reflecting the greater potential for impressions and engagement.",
-    "icon": "trending-up"
+    id: "3",
+    title: "Traffic Value",
+    description:
+      "Screens located in areas with consistently high foot or vehicular traffic yield a higher base CPP, reflecting the greater potential for impressions and engagement.",
+    icon: "trending-up",
   },
   {
-    "id": "4",
-    "title": "Bid Competition",
-    "description": "In high-demand scenarios where multiple advertisers are vying for the same slot, increased competition may lead to a higher effective CPP to secure your desired placement.",
-    "icon": "lightbulb"
-  }
-]
+    id: "4",
+    title: "Bid Competition",
+    description:
+      "In high-demand scenarios where multiple advertisers are vying for the same slot, increased competition may lead to a higher effective CPP to secure your desired placement.",
+    icon: "lightbulb",
+  },
+];
 export const RatingData = [
   {
-    "id": "1",
-    "name": "Wade Warren",
-    "location": "London, UK",
-    "comment": "The booking process was easy, and the villa was fantastic. I highly recommend it!",
-    "rating": 5.0,
-    "profileImage": rating,
+    id: "1",
+    name: "Wade Warren",
+    location: "London, UK",
+    comment:
+      "The booking process was easy, and the villa was fantastic. I highly recommend it!",
+    rating: 5.0,
+    profileImage: rating,
   },
   {
-    "id": "2",
-    "name": "Esther Howard",
-    "location": "New York, USA",
-    "comment": "Amazing experience! The villa exceeded expectations. Booking was simple!",
-    "rating": 4.5,
-    "profileImage": rating,
+    id: "2",
+    name: "Esther Howard",
+    location: "New York, USA",
+    comment:
+      "Amazing experience! The villa exceeded expectations. Booking was simple!",
+    rating: 4.5,
+    profileImage: rating,
   },
   {
-    "id": "3",
-    "name": "Robert Fox",
-    "location": "Paris, France",
-    "comment": "Had an incredible stay! The villa was perfect, and booking was smooth.",
-    "rating": 4.8,
-    "profileImage": rating,
+    id: "3",
+    name: "Robert Fox",
+    location: "Paris, France",
+    comment:
+      "Had an incredible stay! The villa was perfect, and booking was smooth.",
+    rating: 4.8,
+    profileImage: rating,
   },
   {
-    "id": "4",
-    "name": "Sophie Turner",
-    "location": "Los Angeles, USA",
-    "comment": "The villa was great, and the booking experience was seamless. Definitely recommend!",
-    "rating": 2,
-    "profileImage": rating,
+    id: "4",
+    name: "Sophie Turner",
+    location: "Los Angeles, USA",
+    comment:
+      "The villa was great, and the booking experience was seamless. Definitely recommend!",
+    rating: 2,
+    profileImage: rating,
   },
   {
-    "id": "5",
-    "name": "David Smith",
-    "location": "Sydney, Australia",
-    "comment": "Absolutely loved the villa! Everything was perfect and easy to book.",
-    "rating": 1,
-    "profileImage": rating,
+    id: "5",
+    name: "David Smith",
+    location: "Sydney, Australia",
+    comment:
+      "Absolutely loved the villa! Everything was perfect and easy to book.",
+    rating: 1,
+    profileImage: rating,
   },
   {
-    "id": "6",
-    "name": "Emily Johnson",
-    "location": "Toronto, Canada",
-    "comment": "The villa was even better than expected. The booking process was quick and easy!",
-    "rating": 1.5,
-    "profileImage": rating,
+    id: "6",
+    name: "Emily Johnson",
+    location: "Toronto, Canada",
+    comment:
+      "The villa was even better than expected. The booking process was quick and easy!",
+    rating: 1.5,
+    profileImage: rating,
   },
   {
-    "id": "7",
-    "name": "Michael Brown",
-    "location": "Berlin, Germany",
-    "comment": "Perfect stay, very convenient booking system. The villa was stunning!",
-    "rating": 3.6,
-    "profileImage": rating,
+    id: "7",
+    name: "Michael Brown",
+    location: "Berlin, Germany",
+    comment:
+      "Perfect stay, very convenient booking system. The villa was stunning!",
+    rating: 3.6,
+    profileImage: rating,
   },
   {
-    "id": "8",
-    "name": "Alice Williams",
-    "location": "Madrid, Spain",
-    "comment": "It was an amazing experience. Easy booking and the villa was wonderful.",
-    "rating": 4.5,
-    "profileImage": rating,
+    id: "8",
+    name: "Alice Williams",
+    location: "Madrid, Spain",
+    comment:
+      "It was an amazing experience. Easy booking and the villa was wonderful.",
+    rating: 4.5,
+    profileImage: rating,
   },
   {
-    "id": "9",
-    "name": "Tom Clark",
-    "location": "Rome, Italy",
-    "comment": "Fantastic villa and very easy to book. Highly recommend!",
-    "rating": 4.8,
-    "profileImage": rating,
+    id: "9",
+    name: "Tom Clark",
+    location: "Rome, Italy",
+    comment: "Fantastic villa and very easy to book. Highly recommend!",
+    rating: 4.8,
+    profileImage: rating,
   },
 ];
 
-
 export const FaqData = [
   {
-    "id": "1",
-    "question": "How do I get started with SCNE Ads?",
-    "answer": "To get started, simply sign up on our website, create an account, and then you can begin uploading your ad materials (images or videos). After that, you can select the locations, schedule your ads, set your budget, and launch your campaign!"
+    id: "1",
+    question: "How do I get started with SCNE Ads?",
+    answer:
+      "To get started, simply sign up on our website, create an account, and then you can begin uploading your ad materials (images or videos). After that, you can select the locations, schedule your ads, set your budget, and launch your campaign!",
   },
   {
-    "id": "2",
-    "question": "How do I choose the location for my ads?",
-    "answer": "You can browse our extensive network of digital billboards through our interactive map. Filter locations by geography, audience demographics, traffic patterns, and real-time availability. Our platform provides detailed analytics for each location to help you make informed decisions."
+    id: "2",
+    question: "How do I choose the location for my ads?",
+    answer:
+      "You can browse our extensive network of digital billboards through our interactive map. Filter locations by geography, audience demographics, traffic patterns, and real-time availability. Our platform provides detailed analytics for each location to help you make informed decisions.",
   },
   {
-    "id": "3",
-    "question": "What is the appointment booking feature?",
-    "answer": "The appointment booking feature allows you to schedule consultations with our advertising specialists. They can help you optimize your campaign strategy, select the best locations, and provide personalized recommendations based on your target audience and budget."
+    id: "3",
+    question: "What is the appointment booking feature?",
+    answer:
+      "The appointment booking feature allows you to schedule consultations with our advertising specialists. They can help you optimize your campaign strategy, select the best locations, and provide personalized recommendations based on your target audience and budget.",
   },
   {
-    "id": "4",
-    "question": "How is the pricing for my campaign determined?",
-    "answer": "Our dynamic pricing engine considers multiple factors: screen tier (Prime, Mid, Low), time of day (peak vs off-peak hours), traffic value of the location, and bid competition. This ensures fair pricing while maximizing your campaign's effectiveness and ROI."
+    id: "4",
+    question: "How is the pricing for my campaign determined?",
+    answer:
+      "Our dynamic pricing engine considers multiple factors: screen tier (Prime, Mid, Low), time of day (peak vs off-peak hours), traffic value of the location, and bid competition. This ensures fair pricing while maximizing your campaign's effectiveness and ROI.",
   },
   {
-    "id": "5",
-    "question": "What types of ads can I upload?",
-    "answer": "You can upload high-resolution images (JPEG, PNG) and videos (MP4, MOV) up to 30 seconds long. We support various aspect ratios and our platform automatically optimizes your content for different screen sizes. All content must comply with our advertising guidelines."
-  }
-]
+    id: "5",
+    question: "What types of ads can I upload?",
+    answer:
+      "You can upload high-resolution images (JPEG, PNG) and videos (MP4, MOV) up to 30 seconds long. We support various aspect ratios and our platform automatically optimizes your content for different screen sizes. All content must comply with our advertising guidelines.",
+  },
+];
 export const CountryCodes = [
   { label: "Australia", code: "AU", value: "+61" },
   { label: "United States", code: "US", value: "+1" },
@@ -830,3 +862,4 @@ export const CountryCodes = [
   { label: "Zimbabwe", code: "ZW", value: "+263" },
 ];
 
+export const daysVariants = ["15 Days", "30 days", "60 Days"] as const;

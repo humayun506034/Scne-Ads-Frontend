@@ -12,12 +12,12 @@ interface Option {
   label: string;
 }
 interface CommonSelectProps {
-  setValue: (value: string ) => void;
+  setValue: (value: string) => void;
   options: Option[];
   Icon?: any;
-  Value: string ; 
+  Value: string;
   bgColor?: string;
-className?: string;
+  className?: string;
 }
 
 const CommonSelect = ({
@@ -31,9 +31,9 @@ const CommonSelect = ({
   return (
     <Select onValueChange={(value) => setValue(value)}>
       <SelectTrigger
-        className={`w-full md:w-fit min-w-40 cursor-pointer  text-white border-none rounded-xl px-4 flex- justify-center focus:ring-0 focus:border-none focus:outline-none items-center gap-2 py-3 ${cn(className)} ${
-          bgColor ? bgColor : "bg-[#89AAD5]"
-        }`}
+        className={`w-full md:w-fit min-w-40 cursor-pointer  text-white border-none rounded-xl px-4 flex- justify-center focus:ring-0 focus:border-none focus:outline-none items-center gap-2 py-3 ${cn(
+          className
+        )} ${bgColor ? bgColor : "bg-[#89AAD5]"}`}
       >
         {Icon && <Icon className="w-4 h-4 text-white" />}
         <SelectValue placeholder={Value} />
