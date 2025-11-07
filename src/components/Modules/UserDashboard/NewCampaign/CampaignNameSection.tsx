@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   Select,
   SelectContent,
@@ -5,42 +6,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { setCampaignName } from "@/store/Slices/campaign/campaignSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useState } from "react";
 import { RecommendedVideosSection } from "../Dashboard/NewCampaign/Recommended";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setCampaignName } from "@/store/Slices/campaign/campaignSlice";
-
+export  const options = [
+  { value: "arts", label: "Arts & Entertainment" },
+  { value: "automotive", label: "Automotive" },
+  { value: "business", label: "Business" },
+  { value: "careers", label: "Careers" },
+  { value: "education", label: "Education" },
+  { value: "family-parenting", label: "Family & Parenting" },
+  { value: "health-fitness", label: "Health & Fitness" },
+  { value: "food-drink", label: "Food & Drink" },
+  { value: "hobbies-interests", label: "Hobbies & Interests" },
+  { value: "home-garden", label: "Home & Garden" },
+  { value: "law-govt-policies", label: "Law, Govt & Policies" },
+  { value: "news", label: "News" },
+  { value: "personal-finance", label: "Personal Finance" },
+  { value: "society", label: "Society" },
+  { value: "science", label: "Science" },
+  { value: "pets", label: "Pets" },
+  { value: "sports", label: "Sports" },
+  { value: "style-fashion", label: "Style & Fashion" },
+  { value: "technology-computing", label: "Technology & Computing" },
+  { value: "travel", label: "Travel" },
+  { value: "real-estate", label: "Real Estate" },
+  { value: "shopping", label: "Shopping" },
+  { value: "religion-spirituality", label: "Religion & Spirituality" },
+  { value: "other", label: "Other" },
+];
 const CampaignNameSection = () => {
   const dispatch = useAppDispatch();
   const name = useAppSelector((state) => state.campaign.name); 
   const [Value, setValue] = useState("Arts and Entertainment");
 
-  const options = [
-    { value: "arts", label: "Arts & Entertainment" },
-    { value: "automotive", label: "Automotive" },
-    { value: "business", label: "Business" },
-    { value: "careers", label: "Careers" },
-    { value: "education", label: "Education" },
-    { value: "family-parenting", label: "Family & Parenting" },
-    { value: "health-fitness", label: "Health & Fitness" },
-    { value: "food-drink", label: "Food & Drink" },
-    { value: "hobbies-interests", label: "Hobbies & Interests" },
-    { value: "home-garden", label: "Home & Garden" },
-    { value: "law-govt-policies", label: "Law, Govt & Policies" },
-    { value: "news", label: "News" },
-    { value: "personal-finance", label: "Personal Finance" },
-    { value: "society", label: "Society" },
-    { value: "science", label: "Science" },
-    { value: "pets", label: "Pets" },
-    { value: "sports", label: "Sports" },
-    { value: "style-fashion", label: "Style & Fashion" },
-    { value: "technology-computing", label: "Technology & Computing" },
-    { value: "travel", label: "Travel" },
-    { value: "real-estate", label: "Real Estate" },
-    { value: "shopping", label: "Shopping" },
-    { value: "religion-spirituality", label: "Religion & Spirituality" },
-    { value: "other", label: "Other" },
-  ];
+
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setCampaignName(e.target.value)); 

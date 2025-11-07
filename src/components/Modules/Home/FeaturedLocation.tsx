@@ -12,7 +12,7 @@ export function FeaturedLocationsCarousel() {
   const { data: locationData, isLoading
   } = useGetFeaturedScreenQuery({});
 
-  console.log(locationData)
+
 
   if (isLoading) return <div>Loading...</div>
   return (
@@ -30,6 +30,7 @@ export function FeaturedLocationsCarousel() {
                   location={location}
                   showButton={true}
                 />
+
               </CarouselItem>
             ))}
           </CarouselContent>

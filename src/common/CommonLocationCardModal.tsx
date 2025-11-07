@@ -7,12 +7,10 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
-import { Circle, Heart } from "lucide-react";
+import { Circle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 
 export interface ILocation {
   id: string;
@@ -32,49 +30,21 @@ export interface ILocation {
 
 export interface LocationCardProps {
   location: ILocation;
-  fav?: Set<string>;
-  bookmark?: boolean;
   select?: boolean;
-  onToggleFav?: (id: string) => void;
+  isSelected?: boolean;
+  onToggleSelect?: (id: string) => void;
   showButton?: boolean;
 }
 
 const CommonLocationCardModal = ({
   location,
-  fav,
-  bookmark,
   select,
-  onToggleFav,
+  isSelected,
+  onToggleSelect,
   showButton = false,
 }: any) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
-  const [loadingFav, setLoadingFav] = useState(false);
-  const [addFavouriteScreen] = useAddFavouriteScreenMutation();
-
-  const handleBookmark = async (e: React.MouseEvent, id: string) => {
-    e.stopPropagation();
-
-    if (fav?.has(id)) {
-      // Remove locally only
-      onToggleFav?.(id);
-      toast.error("Item removed from favorites!");
-      return;
-    }
-
-    try {
-      setLoadingFav(true);
-      // Only send screenId in the POST body
-      await addFavouriteScreen({ screenId: id }).unwrap();
-      onToggleFav?.(id);
-      toast.success("Location bookmarked successfully!");
-     
-    } catch (err: any) {
-      console.error("Add favourite failed:", err);
-      toast.error(err?.data?.message || "Failed to add to favorites.");
-    } finally {
-      setLoadingFav(false);
-    }
-  };
+  const [loadingFav] = useState(false);
 
   const getBadgeColors = (category?: "new" | "fav" | "top") => {
     switch (category) {
@@ -92,7 +62,7 @@ const CommonLocationCardModal = ({
   const capitalize = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "-";
 
-  const firstImage = location?.imgUrls?.[0]?.url || "/placeholder.jpg";
+  const firstImage = location?.imageUrls?.[0]?.url || "/placeholder.jpg";
 
   return (
     <div className="w-full">
@@ -120,33 +90,14 @@ const CommonLocationCardModal = ({
                 {location.description || "-"}
               </p>
 
-              {(bookmark || fav) && (
-                <div
-                  onClick={(e) => handleBookmark(e, location.id)}
-                  tabIndex={-1}
-                  className="w-12 h-12 bg-[#033579] absolute -right-5 shadow-lg -bottom-5 flex items-center justify-center rounded-full"
-                >
-                  <motion.button
-                    className="bg-transparent"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.8 }}
-                    type="button"
-                    disabled={loadingFav}
-                  >
-                    <Heart
-                      className={`h-7 w-7 cursor-pointer ${
-                        fav?.has(location.id)
-                          ? "fill-white stroke-white"
-                          : "stroke-white"
-                      }`}
-                    />
-                  </motion.button>
-                </div>
-              )}
+              {false && loadingFav && <div />}
 
               {select && (
                 <div
-                  onClick={(e) => handleBookmark(e, location.id)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSelect && onToggleSelect(location.id);
+                  }}
                   tabIndex={-1}
                   className="w-9 h-9 bg-[#081028] border-4 border-dashboard-border absolute lg:-right-4 shadow-lg -top-4 flex items-center justify-center rounded-full"
                 >
@@ -157,10 +108,9 @@ const CommonLocationCardModal = ({
                     type="button"
                   >
                     <Circle
-                      className={`h-8 w-8 cursor-pointer ${fav?.has(location.id)
-                        ? "fill-dashboard-border stroke-[#081028]"
-                        : "stroke-[#081028] stroke-2"
-                        }`}
+                      className={`h-8 w-8 cursor-pointer ${
+                        isSelected ? "fill-dashboard-border stroke-[#081028]" : "stroke-[#081028] stroke-2"
+                      }`}
                     />
                   </motion.button>
                 </div>
@@ -216,8 +166,8 @@ const CommonLocationCardModal = ({
             </div>
 
             <div className="lg:w-2/4 mt-10 lg:mt-0 space-y-4">
-              {location.imageUrls.length ? (
-                location.imageUrls.map((img) => (
+              {location?.imageUrls?.length ? (
+                location?.imageUrls?.map((img) => (
                   <img
                     key={img.index || img.url}
                     src={img.url}

@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import { locationData } from "@/lib/Data";
+
 import { ArrowRight } from "lucide-react";
 import { useRef } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { mapConfig } from ".";
 
-import { BillboardMarker } from "./BillBoardMarker";
-import { ILocation } from "@/types/locations";
 
 function BillboardWorldMap() {
   const mapRef = useRef<any>(null);
 
-  const handleViewCampaigns = (location: ILocation) => {
-    console.log("View campaigns for:", location.title);
-    // Implement navigation to campaigns page
-  };
+  // const handleViewCampaigns = (location: ILocation) => {
+  //   console.log("View campaigns for:", location.title);
+  //   // Implement navigation to campaigns page
+  // };
 
   return (
     <div
@@ -46,13 +44,13 @@ function BillboardWorldMap() {
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">Scene ADS</a>'
           />
-          {locationData.map((location) => (
+          {/* {locationData.map((location) => (
             <BillboardMarker
               key={location.id}
               location={location}
               onViewCampaigns={handleViewCampaigns}
             />
-          ))}
+          ))} */}
         </MapContainer>
         <div className="grid place-items-center mt-4">
           <CommonDashboardButton title="See All Campaigns" Icon={ArrowRight} />

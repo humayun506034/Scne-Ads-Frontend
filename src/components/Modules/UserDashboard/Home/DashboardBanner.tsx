@@ -1,28 +1,51 @@
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import { useGetAllBannersQuery } from "@/store/api/bannerApi";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import type { Swiper as SwiperType } from "swiper";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import logo from "../../../../assets/logo.png";
 
 const DashboardBanner = () => {
   const [activeSlide, setActiveSlide] = useState(1);
+  const swiperRef = useRef<SwiperType | null>(null);
   const { data, isLoading, isError } = useGetAllBannersQuery({ limit: 1000 });
 
-  // API response structure: { success, message, data: [...] }
-  const bannerList = data?.data|| [];
+  const wantIndex = data?.data && data.data.length > 1 ? 1 : 0;
+
+  const bannerList = data?.data || [];
+
+  // Update swiper to show 2nd image (index 1) at center after data loads
+  useEffect(() => {
+    if (!isLoading && !isError && bannerList.length > 0 && swiperRef.current) {
+      // Use setTimeout to ensure swiper is fully initialized with all slides
+      const timer = setTimeout(() => {
+        if (swiperRef.current) {
+          swiperRef.current.update();
+          // Slide to the desired index - the onSlideChangeTransitionEnd callback will update activeSlide
+          swiperRef.current.slideTo(wantIndex, 300);
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, isError, bannerList.length, wantIndex]);
 
   return (
     <div className="mt-20 w-full">
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
-        centeredSlides={true}
         slidesPerView={1}
-        initialSlide={1}
+        initialSlide={wantIndex}
+        centeredSlides={true}
+        loop={true}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
         onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
+        onSlideChangeTransitionEnd={(swiper) => setActiveSlide(swiper.realIndex)}
         coverflowEffect={{
           rotate: 50,
           stretch: 50,
@@ -66,8 +89,8 @@ const DashboardBanner = () => {
         {!isLoading &&
           !isError &&
           bannerList.map((banner, index) => (
-            <SwiperSlide key={banner.id} className="p-0 m-0">
-              <div className="relative w-full h-full">
+            <SwiperSlide key={`banner-${banner.id || index}`} className="p-0 m-0">
+              <div className="relative bg-bg-dashboard w-full h-full">
                 <img
                   src={banner.img_url}
                   alt={`Banner ${index + 1}`}

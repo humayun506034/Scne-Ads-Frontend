@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonLocationCardModal from "@/common/CommonLocationCardModal";
+import Loading from "@/common/MapLoading";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   useGetMySelfFavouriteScreensQuery,
-  useGetTopSalesScreenQuery,
   useGetNewArrivalScreensQuery,
+  useGetTopSalesScreenQuery,
 } from "@/store/api/Screen/screenApi";
 import { useEffect, useState } from "react";
 
@@ -155,13 +156,13 @@ export default function LocationTabs() {
 
   return (
     <Tabs value={tab} onValueChange={setTab} className="w-full mt-20">
-          <TabsList className="bg-transparent mb-8 flex border-b border-gray-700">
+          <TabsList className="bg-transparent mb-8 flex ">
          {TabName.map((item) => (
             <TabsTrigger
               key={item.tab}
               value={item.tab}
               className={`relative rounded-none bg-transparent text-white text-sm font-medium px-4 py-2 transition-colors
-                data-[state=active]:border-b-2 data-[state=active]:border-blue-500
+                data-[state=active]:border-b-2 cursor-pointer data-[state=active]:border-b-blue-500
                 border-b-2 border-transparent hover:text-blue-400`}
             >
               {item.label}
@@ -173,7 +174,7 @@ export default function LocationTabs() {
       <TabsContent value={tab}>
         <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
           {isLoadingFinal ? (
-            <p className="text-white">Loading...</p>
+            <div className="flex justify-center items-center min-h-[40dvh] "><Loading/></div>
           ) : data.length === 0 ? (
             <p className="text-white">No Data Found</p>
           ) : (

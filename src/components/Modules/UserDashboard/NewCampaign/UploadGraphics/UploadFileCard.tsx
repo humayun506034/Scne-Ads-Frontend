@@ -1,44 +1,38 @@
 import { Card } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Trash } from "lucide-react";
 import { UploadedFile } from ".";
 
 interface UploadedFileCardProps {
   file: UploadedFile;
+  onDelete?: () => void;
 }
 
-export function UploadedFileCard({ file }: UploadedFileCardProps) {
+export function UploadedFileCard({ file, onDelete }: UploadedFileCardProps) {
   return (
-    <Card className="border-[#203265] px-8 rounded-xl">
+    <Card className="border-[#203265] px-8 rounded-xl relative group">
       <div className="flex flex-col gap-4">
-        <div className="relative w-full">
+        <div className="relative">
           <img
             src={file.url}
             alt={file.name}
             className="h-[200px] w-full object-cover rounded-lg"
           />
-
-          {!file.compatible && (
-            <div className="absolute -top-2 -left-2 bg-yellow-500 rounded-full p-1">
-              <AlertTriangle className="w-3 h-3 text-white" />
-            </div>
+          {onDelete && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.85 }}
+              onClick={onDelete}
+              className="absolute top-2 right-2 cursor-pointer bg-red-500 hover:bg-red-600 text-white rounded-full p-1.5  opacity-100 transition-opacity duration-200 shadow-lg"
+              aria-label="Delete file"
+            >
+              <Trash className="w-4 h-4" />
+            </motion.button>
           )}
         </div>
-
-        {/* File Info */}
-        <div className="flex-1">
-          {!file.compatible && (
-            <div className="flex items-center mt-4 gap-2 mb-4">
-              <AlertTriangle className="w-4 h-4 text-[#E5D978]" />
-              <span className="text-[#E5D978] text-sm ">Not Compatible</span>
-            </div>
-          )}
-
-          <h3 className="text-white font-medium text-sm mb-1">
-            {file.dimensions}
-          </h3>
-          <p className=" text-gray-500 text-xs">{file.name}</p>
-          {/* <p className="text-gray-500 text-xs mt-4">{file.fileType}</p> */}
-        </div>
+        <p className="text-white text-sm truncate" title={file.name}>
+          {file.name}
+        </p>
       </div>
     </Card>
   );

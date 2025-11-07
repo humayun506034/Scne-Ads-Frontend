@@ -1,5 +1,5 @@
+import { removeFile, setFiles } from "@/store/Slices/campaign/campaignSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setFiles } from "@/store/Slices/campaign/campaignSlice";
 import { BulkUploader } from "./BulkUploader";
 import { UploadedFileCard } from "./UploadFileCard";
 
@@ -9,8 +9,11 @@ export function UploadGraphicsSection() {
 
   const handleBulkUpload = (files: FileList) => {
     const fileArray = Array.from(files);
-    console.log("Files stored in Redux:", fileArray);
     dispatch(setFiles(fileArray));
+  };
+
+  const handleDeleteFile = (index: number) => {
+    dispatch(removeFile(index));
   };
 
   return (
@@ -52,11 +55,9 @@ export function UploadGraphicsSection() {
                   id: String(i),
                   name: file.name,
                   url: URL.createObjectURL(file),
-                  dimensions: "1920x1080",
                   fileType: file.type,
-                  type: "landscape", // Default value, you might want to determine this based on actual file dimensions
-                  compatible: true,
                 }}
+                onDelete={() => handleDeleteFile(i)}
               />
             ))
           ) : (

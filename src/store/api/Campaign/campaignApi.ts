@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/store/api/baseApi";
 interface PublishCampaignBody {
   name: string;

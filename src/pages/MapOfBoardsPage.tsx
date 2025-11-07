@@ -1,111 +1,43 @@
-import { useMemo, useState } from "react";
-
-import {
-  defaultFilters,
-  FilterOptions,
-} from "@/components/Modules/MapOfBoards";
+import Loading from "@/common/MapLoading";
 import { MapOfBoards } from "@/components/Modules/MapOfBoards/MapOfBoards";
-import { locationData } from "@/lib/Data";
+import { useGetAllScreenQuery } from "@/store/api/Screen/screenApi";
+import { Screen } from "@/types/locations";
+import { useMemo } from "react";
 
 export function MapOfBoardPage() {
-  const [filters, setFilters] = useState<FilterOptions>(defaultFilters);
-  const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
+  const { data, isLoading } = useGetAllScreenQuery({ limit: 100000, page: "1" });
 
-  const filteredLocations = useMemo(() => {
-    return locationData.filter((location) => {
-      // Price range filter
-      if (
-        location.price < filters.priceRange[0] ||
-        location.price > filters.priceRange[1]
-      ) {
-        return false;
-      }
 
-      // Reach filter
-      if (
-        location.reach < filters.reach[0] ||
-        location.reach > filters.reach[1]
-      ) {
-        return false;
-      }
+  
+  const screens: Screen[] = useMemo(() => {
+    if (!data?.data?.data) return [];
+    return data.data.data;
+  }, [data]);
 
-      // Size filter
-      if (
-        filters.size.length > 0 &&
-        !filters.size.includes(location.screen_size)
-      ) {
-        return false;
-      }
 
-      // Type filter
-      if (
-        filters.type.length > 0 &&
-        !filters.type.includes(location.category)
-      ) {
-        return false;
-      }
+ 
+  const defaultMapCenter = useMemo(() => {
+    if (screens.length > 0 && screens[0].lat && screens[0].lng) {
+      return {
+        lat: parseFloat(screens[0].lat),
+        lng: parseFloat(screens[0].lng),
+      };
+    }
+    return { lat: 23.8103, lng: 90.4125 };
+  }, [screens]);
 
-      // Availability filter
-      if (
-        filters.availability.length > 0 &&
-        !filters.availability.includes(location.availability)
-      ) {
-        return false;
-      }
 
-      // Location search filter
-      if (
-        filters.location &&
-        !location.location
-          .toLowerCase()
-          .includes(filters.location.toLowerCase()) &&
-        !location.location
-          .toLowerCase()
-          .includes(filters.location.toLowerCase())
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [filters]);
-
-  const handleLocationSelect = (locationId: string) => {
-    setSelectedLocations((prev) =>
-      prev.includes(locationId)
-        ? prev.filter((id) => id !== locationId)
-        : [...prev, locationId]
+  if (isLoading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <div className=""><Loading/></div>
+      </div>
     );
-
-    console.log("Location selected:", locationId);
-    console.log("Current selection:", selectedLocations);
-  };
-
-  const handleFiltersChange = (newFilters: FilterOptions) => {
-    setFilters(newFilters);
-    console.log("Filters updated:", newFilters);
-  };
-
-  const handleClearFilters = () => {
-    setFilters(defaultFilters);
-    console.log("Filters cleared");
-  };
-
-  // Default map center (New York City)
-  const mapCenter = { lat: 51.5074, lng: -0.128 };
+  }
 
   return (
-    <div className=" h-screen">
-      <MapOfBoards
-        filters={filters}
-        selectedCount={selectedLocations.length}
-        onFiltersChange={handleFiltersChange}
-        onClearFilters={handleClearFilters}
-        locations={filteredLocations}
-        selectedLocations={selectedLocations}
-        onLocationSelect={handleLocationSelect}
-        center={mapCenter}
-      />
+    <div className="h-screen">
+      <MapOfBoards screens={screens} defaultCenter={defaultMapCenter} />
     </div>
   );
 }
