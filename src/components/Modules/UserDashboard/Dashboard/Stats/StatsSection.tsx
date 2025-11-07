@@ -1,25 +1,32 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useState } from "react";
 import { StatsCard } from "./StatsCard"; // Assuming this is the card component for stats
-import { daysVariants } from "@/lib/Data";
-import { useGetAnalyticsQuery } from "@/store/api/analyticApi";
-import CommonLoading from "@/common/CommonLoading";
+import { Duration } from "@/lib/Data";
+import { useSearchParams } from "react-router-dom";
+import { AnalyticsData } from "@/pages/UserDashboard/UserDashboardMetrics";
 
-const durationOptions = ["All", ...daysVariants] as const;
+const durationOptions = [{ label: "All", value: "All" }, ...Duration] as const;
+export type DurationOption = (typeof durationOptions)[number];
 
-type DurationOption = (typeof durationOptions)[number];
+type Props = {
+  analyticsData: AnalyticsData;
+};
 
-export const StatsSection = () => {
-  const [selectedDate, setSelectedDate] = useState<DurationOption>("All");
+export const StatsSection = ({ analyticsData }: Props) => {
+  const [selectedDate, setSelectedDate] = useState<DurationOption>(
+    durationOptions[0]
+  );
 
-  const { data, isLoading } = useGetAnalyticsQuery(undefined);
-
-  if (isLoading) {
-    return <CommonLoading />;
-  }
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleDateChange = (date: DurationOption) => {
     setSelectedDate(date);
+
+    const params = new URLSearchParams(searchParams);
+
+    params.set("duration", date.value);
+
+    setSearchParams(params);
   };
 
   return (
@@ -37,7 +44,7 @@ export const StatsSection = () => {
             <Card className="border-none mt-10 p-0 ">
               <CardContent className="p-0">
                 <button
-                  key={option}
+                  key={option.value}
                   onClick={() => handleDateChange(option)}
                   className={`px-6 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer duration-300 
                 ${
@@ -47,7 +54,7 @@ export const StatsSection = () => {
                 }
                   `}
                 >
-                  {option}
+                  {option.label}
                 </button>
               </CardContent>
             </Card>
@@ -66,7 +73,7 @@ export const StatsSection = () => {
         />
         <StatsCard
           title="Total Spend"
-          value={data.data.analyticsData.totalSpend}
+          value={analyticsData.totalSpend}
         />
       </div>
     </div>

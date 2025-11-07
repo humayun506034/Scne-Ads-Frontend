@@ -1,12 +1,10 @@
+import rating from "../assets/Home/rating.png";
 
-import rating from '../assets/Home/rating.png';
-
-
-export const Duration =[
-  {label :"7 Days", value:'7'},
-  {label :"15 Days", value:'15'},
-  {label :"30 Days", value:'30'},
-]
+export const Duration = [
+  { label: "7 Days", value: "7" },
+  { label: "15 Days", value: "15" },
+  { label: "30 Days", value: "30" },
+];
 
 export const StepsData = [
   {
@@ -34,6 +32,7 @@ export const StepsData = [
     icon: "upload",
   },
 ];
+
 export const PricingData = [
   {
     id: "1",
@@ -64,6 +63,7 @@ export const PricingData = [
     icon: "lightbulb",
   },
 ];
+
 export const RatingData = [
   {
     id: "1",
@@ -179,6 +179,7 @@ export const FaqData = [
       "You can upload high-resolution images (JPEG, PNG) and videos (MP4, MOV) up to 30 seconds long. We support various aspect ratios and our platform automatically optimizes your content for different screen sizes. All content must comply with our advertising guidelines.",
   },
 ];
+
 export const CountryCodes = [
   { label: "Australia", code: "AU", value: "+61" },
   { label: "United States", code: "US", value: "+1" },
@@ -287,22 +288,22 @@ export const ALLOWED_MIME = [
   // Images
   "image/png",
   "image/jpeg",
-  "image/jpg",      // sometimes used
+  "image/jpg", // sometimes used
   "image/gif",
   "image/webp",
   "image/svg+xml",
   "image/avif",
   "image/bmp",
   "image/tiff",
-  "image/x-icon",   // .ico
+  "image/x-icon", // .ico
 
   // Videos
   "video/mp4",
   "video/webm",
-  "video/ogg",      // .ogv
-  "video/quicktime",// .mov
-  "video/x-msvideo",// .avi
-  "video/x-matroska",// .mkv
-  "video/mpeg",     // .mpeg/.mpg
-  "video/3gpp",     // .3gp/.3gpp
+  "video/ogg", // .ogv
+  "video/quicktime", // .mov
+  "video/x-msvideo", // .avi
+  "video/x-matroska", // .mkv
+  "video/mpeg", // .mpeg/.mpg
+  "video/3gpp", // .3gp/.3gpp
 ];

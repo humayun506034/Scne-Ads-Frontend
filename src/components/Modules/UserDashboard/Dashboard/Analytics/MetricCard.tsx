@@ -3,7 +3,7 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 
 interface MetricCardProps {
   title: string;
-  value: string;
+  value: string | number;
   growth: number;
   isPositive: boolean;
   className?: string;

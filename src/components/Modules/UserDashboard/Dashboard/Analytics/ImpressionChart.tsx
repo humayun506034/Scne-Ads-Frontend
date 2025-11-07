@@ -2,17 +2,19 @@ import CommonSelect from "@/common/CommonSelect";
 import { CalendarDays } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { MetricCard } from "./MetricCard";
-import { useGetAnalyticsQuery } from "@/store/api/analyticApi";
 import CommonLoading from "@/common/CommonLoading";
+import { AnalyticsData } from "@/pages/UserDashboard/UserDashboardMetrics";
+
 const Chart = React.lazy(() => import("react-apexcharts"));
 
+type Props = {
+  analyticsData: AnalyticsData;
+};
 
-
-export function SpendImpressionsChart() {
+export function SpendImpressionsChart({ analyticsData }: Props) {
+  console.log("🚀 ~ SpendImpressionsChart ~ analyticsData:", analyticsData)
   const [isClient, setIsClient] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Jan 2025 - Dec 2025");
-
-  const { data, isLoading } = useGetAnalyticsQuery(undefined);
 
   const options = [
     {
@@ -33,15 +35,13 @@ export function SpendImpressionsChart() {
     setIsClient(true);
   }, []);
 
-  if (isLoading || !isClient) {
+  if (!isClient) {
     return (
       <div>
         <CommonLoading />
       </div>
     );
   }
-
-  const analyticsData = data.data.analyticsData;
 
   const maxY = Math.max(...analyticsData.spendData.map((d) => d.y));
 
@@ -148,10 +148,6 @@ export function SpendImpressionsChart() {
     // },
   ];
 
-  console.log(
-    "🚀 ~ SpendImpressionsChart ~ analyticsData.totalSpend.isPositive:",
-    analyticsData.totalSpend
-  );
   return (
     <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
       {/* Header */}
