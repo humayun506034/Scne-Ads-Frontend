@@ -5,7 +5,7 @@ import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/New
 import { StatsSection } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
 import { UserDashboardNavbar } from "@/components/Modules/UserDashboard/UserDashboardNavbar";
 import { useGetAnalyticsQuery } from "@/store/api/analyticApi";
-import { useSearchParams } from "react-router-dom";
+import { parseAsString, useQueryState } from "nuqs";
 
 export interface SpendPoint {
   x: string; // e.g. "Jan"
@@ -30,17 +30,26 @@ export interface AnalyticsResponse {
 }
 
 const UserDashboardMetrics = () => {
-  const [searchParams] = useSearchParams();
+  const [duration] = useQueryState(
+    "duration",
+    parseAsString.withDefault("All")
+  );
+  const [year] = useQueryState(
+    "period",
+    parseAsString.withDefault(String(new Date().getFullYear()))
+  );
 
-  const duration = searchParams.get("duration");
-
-  const { data, isLoading } = useGetAnalyticsQuery(duration!);
+  const { data, isLoading } = useGetAnalyticsQuery({
+    durationFilters: duration,
+    periodFilters: year,
+  });
 
   if (isLoading) {
     return <CommonLoading />;
   }
 
   const analyticsData = data?.data.analyticsData;
+  const availableYears = data?.data.availableYears;
 
   return (
     <div>
@@ -50,7 +59,10 @@ const UserDashboardMetrics = () => {
       <div className="px-5 md:px-10">
         <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full ">
           <div className="xl:w-[60%]  w-full">
-            <StatsSection analyticsData={analyticsData} />
+            <StatsSection
+              analyticsData={analyticsData}
+              availableYears={availableYears}
+            />
           </div>
 
           <div className="xl:w-[40%] w-full">

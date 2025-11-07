@@ -2,7 +2,8 @@ import { DurationOption } from "@/components/Modules/UserDashboard/Dashboard/Sta
 import { baseApi } from "./baseApi";
 
 type Filters = {
-  durationFilters: DurationOption;
+  durationFilters: DurationOption["value"];
+  periodFilters: string;
 };
 
 const analyticApi = baseApi.injectEndpoints({
@@ -13,6 +14,7 @@ const analyticApi = baseApi.injectEndpoints({
         method: "GET",
         params: {
           duration: filters.durationFilters,
+          year: filters.periodFilters,
         },
       }),
     }),
