@@ -1,29 +1,23 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import {
   GoogleMap,
   InfoWindow,
   LoadScript,
-  Marker,
+  Marker
 } from "@react-google-maps/api";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { FilterOptions } from ".";
-
+import { Badge } from "@/components/ui/badge";
+import { toggleScreen } from "@/store/Slices/campaign/campaignSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { Screen } from "@/types/locations";
+import { useNavigate } from "react-router-dom";
 import { FilterSidebar } from "./FilterSidebar";
-import { ILocation } from "@/types/locations";
 
 interface BillboardMapProps {
-  locations: ILocation[];
-  filters: FilterOptions;
-  onFiltersChange: (filters: FilterOptions) => void;
-  selectedLocations: string[];
-  onClearFilters: () => void;
-  selectedCount: number;
-  onLocationSelect: (locationId: string) => void;
-  center: { lat: number; lng: number };
+  screens: Screen[];
+  defaultCenter: { lat: number; lng: number };
 }
 
 const mapContainerStyle = {
@@ -96,16 +90,46 @@ const mapOptions = {
 };
 
 export function MapOfBoards({
-  locations,
-  onClearFilters,
-  selectedCount,
-  onFiltersChange,
-  filters,
-  selectedLocations,
-  onLocationSelect,
-  center,
+  screens,
+  defaultCenter,
 }: BillboardMapProps) {
   const [selectedMarker, setSelectedMarker] = useState<string | null>(null);
+
+  const [selectedScreenId, setSelectedScreenId] = useState<string | null>(null);
+  const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const dispatch = useAppDispatch();
+  const selectedIds = useAppSelector((state) => state.campaign.screenIds);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (screens.length > 0 && !selectedScreenId) {
+      setSelectedScreenId(screens[0].id);
+      const firstScreen = screens[0];
+      if (firstScreen.lat && firstScreen.lng) {
+        setMapCenter({
+          lat: parseFloat(firstScreen.lat),
+          lng: parseFloat(firstScreen.lng),
+        });
+      }
+    }
+  }, [screens, selectedScreenId]);
+
+  // Update map center when selected screen changes
+  useEffect(() => {
+    if (selectedScreenId) {
+      const screen = screens.find((s) => s.id === selectedScreenId);
+      if (screen?.lat && screen?.lng) {
+        setMapCenter({
+          lat: parseFloat(screen.lat),
+          lng: parseFloat(screen.lng),
+        });
+      }
+    }
+  }, [selectedScreenId, screens]);
+
+  const handleScreenSelect = (screenId: string) => {
+    setSelectedScreenId(screenId);
+  };
 
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
@@ -119,98 +143,131 @@ export function MapOfBoards({
         return "bg-gray-100 text-gray-800";
     }
   };
+  
+  const [map, setMap] = useState<google.maps.Map | null>(null);
 
-  const onLoad = useCallback((map: google.maps.Map) => {
-    console.log("🚀 ~ MapOfBoards ~ map:", map);
+  const onLoad = useCallback((mapInstance: google.maps.Map) => {
+    setMap(mapInstance);
   }, []);
+
+  // Pan map when center changes
+  useEffect(() => {
+    if (map && mapCenter) {
+      map.panTo(mapCenter);
+    }
+  }, [map, mapCenter]);
 
   return (
     <div className="relative w-full h-full">
       <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
-          center={center}
+          center={mapCenter}
           zoom={13}
           onLoad={onLoad}
           options={mapOptions}
         >
-          {locations.map((location) => (
-            <Marker
-              key={location.id}
-              position={{ lat: location.lat, lng: location.lng }}
-              onClick={() => setSelectedMarker(location.id)}
-            />
-          ))}
-          <Marker position={{ lat: center.lat, lng: center.lng }} />
+          {screens?.map((screen) => {
+            if (!screen.lat || !screen.lng) return null;
+            const isSelected = screen.id === selectedScreenId;
+            return (
+              <Marker
+                key={screen.id}
+                position={{
+                  lat: parseFloat(screen.lat),
+                  lng: parseFloat(screen.lng),
+                }}
+                onClick={() => {
+                  setSelectedMarker(screen.id || null);
+                  setSelectedScreenId(screen.id || null);
+                }}
+                icon={isSelected ? undefined : undefined}
+              />
+            );
+          })}
+
           {selectedMarker && (
             <InfoWindow
               position={{
-                lat: locations.find((l) => l.id === selectedMarker)?.lat || 0,
-                lng: locations.find((l) => l.id === selectedMarker)?.lng || 0,
+                lat:
+                  parseFloat(
+                    screens.find((s) => s.id === selectedMarker)?.lat || "0"
+                  ) || 0,
+                lng:
+                  parseFloat(
+                    screens.find((s) => s.id === selectedMarker)?.lng || "0"
+                  ) || 0,
               }}
               onCloseClick={() => setSelectedMarker(null)}
             >
-              <div className="p-2 max-w-xs">
+              <div className=" max-w-xl w-full bg-dashboard-card-bg rounded-lg shadow-lg p-2 m-0">
                 {(() => {
-                  const location = locations.find(
-                    (l) => l.id === selectedMarker
-                  );
-                  if (!location) return null;
+                  const info = screens.find((s) => s.id === selectedMarker);
+                   
+                 
+         
 
                   return (
-                    <div className="space-y-3">
+                    <div className="space-y-3 text-sm md:text-base    text-white">
                       <div>
-                        <h3 className="font-semibold ">{location.title}</h3>
-                        <p className="text-sm text-title-color">
-                          {location.location}
+                        <h3 className="font-semibold md:text-2xl">{info?.screen_name}</h3>
+                        <p className="mt-2 ">
+                        Location:  {info?.location}
                         </p>
                       </div>
 
                       <div className="flex items-center gap-2">
                         <Badge
-                          className={getStatusBadgeColor(location.availability)}
+                          className={getStatusBadgeColor(
+                            info?.availability || "available"
+                          )}
                         >
-                          {location.availability}
+                          {info?.availability}
                         </Badge>
-                        <Badge variant="outline">{location.category}</Badge>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2 text-sm">
                         <div>
-                          <span className="text-title-color">Size:</span>
+                          <span className="">Size :</span>
                           <span className="ml-1 font-medium">
-                            {location.screen_size} ft
+                            {info?.screen_size}
                           </span>
                         </div>
                         <div>
-                          <span className="text-title-color">Price:</span>
+                          <span className="">Price:</span>
                           <span className="ml-1 font-medium">
-                            ${location.price}/day
-                          </span>
-                        </div>
-                        <div className="col-span-2">
-                          <span className="text-title-color">Daily Reach:</span>
-                          <span className="ml-1 font-medium">
-                            {(location.reach / 1000).toFixed(0)}k
+                            ${info?.price}/day 
                           </span>
                         </div>
                       </div>
 
-                      {location.availability === "available" && (
+                      {/* Show the image of the screen */}
+                      <img
+                        src={info?.imageUrls[0]?.url }
+                        alt="Screen Image"
+                        className="mt-2 w-full h-32 object-cover rounded-md"
+                      />
+
+                      <div className="mt-3 flex items-center gap-2">
                         <Button
-                          onClick={() => onLocationSelect(location.id)}
                           size="sm"
-                          className={`w-full ${
-                            selectedLocations.includes(location.id)
-                              ? "bg-red-500 hover:bg-red-600"
-                              : "bg-blue-500 hover:bg-blue-600"
-                          }`}
+                          className={`px-3 cursor-pointer ${selectedMarker && selectedIds.includes(selectedMarker) ? "bg-red-600 hover:bg-red-500" : "bg-[#14CA74] hover:bg-[#10a862]"}`}
+                          onClick={() => {
+                            if (selectedMarker) dispatch(toggleScreen(selectedMarker));
+                          }}
                         >
-                          {selectedLocations.includes(location.id)
-                            ? "Remove"
-                            : "Select"}
+                          {selectedMarker && selectedIds.includes(selectedMarker) ? "Deselect" : "Select"}
                         </Button>
-                      )}
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-[#14CA74] cursor-pointer text-[#14CA74] hover:bg-[#14CA74]/10"
+                          disabled={selectedIds.length === 0}
+                          onClick={() => navigate("/user-dashboard/new-campaign")}
+                        >
+                          Build Campaign ({selectedIds.length})
+                        </Button>
+                      </div>
                     </div>
                   );
                 })()}
@@ -220,16 +277,15 @@ export function MapOfBoards({
         </GoogleMap>
       </LoadScript>
 
-      <div className="absolute top-20 left-10 transform  z-10">
+      <div className="absolute top-4 left-4 md:top-20 md:left-10 z-10">
         <FilterSidebar
-          filters={filters}
-          onFiltersChange={onFiltersChange}
-          selectedCount={selectedCount}
-          onClearFilters={onClearFilters}
+          screens={screens}
+          selectedScreenId={selectedScreenId}
+          onScreenSelect={handleScreenSelect}
         />
       </div>
 
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
+      {/* <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10">
         <Card className="bg-bg-dashboard text-white p-4 shadow-lg">
           <div className="text-center">
             <p className="text-sm">This is a preview of all my boards</p>
@@ -247,7 +303,7 @@ export function MapOfBoards({
             </div>
           </div>
         </Card>
-      </div>
+      </div> */}
     </div>
   );
 }

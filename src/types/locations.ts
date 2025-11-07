@@ -2,6 +2,7 @@ export interface Screen {
   id: string;
   slug: string;
   screen_name: string;
+  screen_size?: string;
   title?: string;
   reach?: number;
   campaigns?: number;

@@ -5,7 +5,7 @@ export const screenApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllScreen: builder.query<
       any,
-      { page?: string; searchTerm?: string; limit?: number }
+      { page?:  string; searchTerm?: string; limit?: number }
     >({
       query: ({ page, searchTerm, limit }) => {
         const params: Record<string, any> = {};
@@ -99,18 +99,15 @@ export const screenApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["Screen"],
     }),
-
-    // -------------------------
-    // Add favourite mutation
     addFavouriteScreen: builder.mutation<any, { screenId: string }>({
       query: ({ screenId }) => ({
         url: "/screen/add-favourite-screen",
         method: "POST",
-        body: { screenId }, // only screenId, no userId
+        body: { screenId }, 
       }),
       invalidatesTags: ["Screen"],
     }),
-    // -------------------------
+  
   }),
 });
 

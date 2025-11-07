@@ -1,14 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { ArrowRight, List, Map } from "lucide-react";
 import { useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import { locationData } from "@/lib/Data";
+
 import "leaflet/dist/leaflet.css";
 import { mapConfig } from ".";
 
-import { BillboardMarker } from "./BillBoardMarker"
 import { ILocation } from "@/types/locations";
 
 export default function MobileBillboardMap() {
@@ -83,17 +81,17 @@ export default function MobileBillboardMap() {
               attribution="&copy; OpenStreetMap contributors &copy; CARTO"
             />
 
-            {locationData.map((location) => (
+            {/* {locationData.map((location) => (
               <BillboardMarker
                 key={location.id}
                 location={location}
                 onViewCampaigns={handleViewCampaigns}
               />
-            ))}
+            ))} */}
           </MapContainer>
         ) : (
           <div className="h-full overflow-y-auto px-4 space-y-3">
-            {locationData.map((location) => (
+            {/* {locationData.map((location) => (
               <div
                 key={location.id}
                 className=" backdrop-blur rounded-lg p-4 border border-white/20"
@@ -127,7 +125,7 @@ export default function MobileBillboardMap() {
                   </Button>
                 </div>
               </div>
-            ))}
+            ))} */}
           </div>
         )}
         <div className="mt-6 ">

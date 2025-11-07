@@ -28,6 +28,23 @@ const campaignSlice = createSlice({
     setScreens: (state, action: PayloadAction<string[]>) => {
       state.screenIds = action.payload;
     },
+    toggleScreen: (state, action: PayloadAction<string>) => {
+      const screenId = action.payload;
+      const isSelected = state.screenIds.includes(screenId);
+      state.screenIds = isSelected
+        ? state.screenIds.filter((id) => id !== screenId)
+        : [...state.screenIds, screenId];
+    },
+    addScreen: (state, action: PayloadAction<string>) => {
+      const screenId = action.payload;
+      if (!state.screenIds.includes(screenId)) {
+        state.screenIds.push(screenId);
+      }
+    },
+    removeScreen: (state, action: PayloadAction<string>) => {
+      const screenId = action.payload;
+      state.screenIds = state.screenIds.filter((id) => id !== screenId);
+    },
     setDates: (
       state,
       action: PayloadAction<{ startDate: string; endDate: string }>
@@ -38,6 +55,12 @@ const campaignSlice = createSlice({
     setFiles: (state, action: PayloadAction<File[]>) => {
       state.files = action.payload;
     },
+    removeFile: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      if (index >= 0 && index < state.files.length) {
+        state.files = state.files.filter((_, i) => i !== index);
+      }
+    },
     resetCampaign: () => initialState,
   },
 });
@@ -45,8 +68,12 @@ const campaignSlice = createSlice({
 export const {
   setCampaignName,
   setScreens,
+  toggleScreen,
+  addScreen,
+  removeScreen,
   setDates,
   setFiles,
+  removeFile,
   resetCampaign,
 } = campaignSlice.actions;
 
