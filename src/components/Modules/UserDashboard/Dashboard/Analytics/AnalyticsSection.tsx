@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  Campaign,
-  CampaignMeta,
-} from "@/pages/UserDashboard/UserDashboardMetrics";
+import { Campaign, CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
 import { SpendImpressionsChart } from "./ImpressionChart";
 
 type Props = {
@@ -37,7 +34,9 @@ export default function AnalyticsSection({ meta, campaigns }: Props) {
                   className="bg-[#1E2B4D] p-4 rounded-md"
                 >
                   <p className="text-sm font-semibold">{screenName}</p>
-                  <p className="text-xs text-gray-400">{c.status}</p>
+                  <p className="text-xs text-gray-400 capitalize">
+                    {c.status}
+                  </p>
                   <p className="text-xs">৳{amount.toLocaleString()}</p>
                 </div>
               );
@@ -48,3 +47,4 @@ export default function AnalyticsSection({ meta, campaigns }: Props) {
     </div>
   );
 }
+

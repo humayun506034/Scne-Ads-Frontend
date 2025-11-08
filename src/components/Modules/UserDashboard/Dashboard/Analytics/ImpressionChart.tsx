@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CommonSelect from "@/common/CommonSelect";
-import { CalendarDays } from "lucide-react";
 import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
 import { MetricCard } from "./MetricCard";
+import { useQueryState, parseAsString } from "nuqs";
 
 const Chart = React.lazy(() => import("react-apexcharts"));
 
@@ -11,30 +10,24 @@ type Props = {
 };
 
 export function SpendImpressionsChart({ meta }: Props) {
-
   const [isClient, setIsClient] = useState(false);
-  const [selectedDate, setSelectedDate] = useState("Jan 2025 - Dec 2025");
+  const [period] = useQueryState(
+    "period",
+    parseAsString.withDefault(new Date().getFullYear().toString())
+  );
 
   useEffect(() => setIsClient(true), []);
 
-  const options = [
-    { value: "Jan 2025 - Dec 2025", label: "Jan 2025 - Dec 2025" },
-    { value: "Jan 2024 - Dec 2024", label: "Jan 2024 - Dec 2024" },
-    { value: "Jan 2023 - Dec 2023", label: "Jan 2023 - Dec 2023" },
-  ];
+  // Extract correct year’s data
+  const selectedYearData = meta?.revenue?.monthlyRevenue.find(
+    (r) => r.year.toString() === period
+  );
 
-  // Data extraction
-  const monthly = meta?.revenue?.monthlyRevenue?.[0]?.months || [];
-
-
-  const year = meta?.revenue?.monthlyRevenue[0].year;
-
+  const monthly = selectedYearData?.months || [];
+  const year = selectedYearData?.year || new Date().getFullYear();
   const categories = monthly.map((m) => `${m.month} ${year}`);
   const data = monthly.map((m) => m.revenue);
-
-
   const totalRevenue = meta?.revenue?.totalRevenue || 0;
-
 
   const chartOptions = {
     chart: {
@@ -66,9 +59,7 @@ export function SpendImpressionsChart({ meta }: Props) {
       categories,
       axisBorder: { show: false },
       axisTicks: { show: false },
-      labels: {
-        style: { colors: "#64748b", fontSize: "12px" },
-      },
+      labels: { style: { colors: "#64748b", fontSize: "12px" } },
     },
     dataLabels: { enabled: true },
     yaxis: {
@@ -96,7 +87,6 @@ export function SpendImpressionsChart({ meta }: Props) {
 
   const series = [{ name: "Revenue", data }];
 
-
   if (!isClient) {
     return (
       <div className="bg-[#0B1739] rounded-xl p-6 h-[400px] flex items-center justify-center">
@@ -107,36 +97,19 @@ export function SpendImpressionsChart({ meta }: Props) {
 
   return (
     <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
-      {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
           title="Total Revenue"
           value={`$${totalRevenue.toLocaleString()}`}
         />
-
-        <div className="flex flex-wrap items-center gap-4">
-          {/* Legend */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#38B6FF]" />
-              <span className="text-title-color text-sm">Revenue</span>
-            </div>
-          </div>
-
-          {/* Year Dropdown */}
-          <div className="flex items-center gap-2 bg-[#0A1330] rounded-lg px-2 py-1">
-            <CommonSelect
-              bgColor="#0A1330"
-              Value={selectedDate}
-              setValue={setSelectedDate}
-              options={options}
-              Icon={CalendarDays}
-            />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 rounded-full bg-[#38B6FF]" />
+            <span className="text-title-color text-sm">Revenue ({year})</span>
           </div>
         </div>
       </div>
 
-      {/* Chart */}
       <div className="h-[370px]">
         <Chart
           options={chartOptions}

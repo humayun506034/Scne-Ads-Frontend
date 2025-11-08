@@ -8,6 +8,7 @@ import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analy
 import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard/BillboardMap/ResponsiveBillboard";
 import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
 import Loading from "@/common/MapLoading";
+import { parseAsString, useQueryState } from "nuqs";
 
 export interface ScreenImage {
   url: string;
@@ -91,98 +92,87 @@ export interface CampaignResponse {
 }
 
 const UserDashboardMetrics = () => {
-  // const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-  // const [limit] = useQueryState("limit", parseAsInteger.withDefault(10));
-  // const [dateFilter] = useQueryState(
-  //   "dateFilter",
-  //   parseAsString.withDefault("today")
-  // );
-  // const [startDate] = useQueryState("startDate", parseAsString);
-  // const [endDate] = useQueryState("endDate", parseAsString);
+  const [chartType] = useQueryState(
+    "chartType",
+    parseAsString.withDefault("bundle")
+  );
+  const [period, setPeriod] = useQueryState(
+    "period",
+    parseAsString.withDefault(new Date().getFullYear().toString())
+  );
 
-  // // --- fallback to full current year if no custom dates ---
-  // const currentYear = new Date().getFullYear();
-  // const defaultStart = `${currentYear}-01-01T00:00:00.000Z`;
-  // const defaultEnd = `${currentYear}-12-31T00:00:00.000Z`;
-
-  // const effectiveStart = startDate || defaultStart;
-  // const effectiveEnd = endDate || defaultEnd;
-
-  const { data: customData, isLoading: customDataLoading } =
+  const { data: customData, isLoading: customLoading, isError: customError } =
     useGetCustomerCustomsQuery(undefined);
-  const { data: bundleData, isLoading: bundleDataLoading } =
+  const { data: bundleData, isLoading: bundleLoading, isError: bundleError } =
     useGetCustomerBundlesQuery(undefined);
 
-  if (customDataLoading || bundleDataLoading) return <Loading />;
-  const customCampaigns = customData?.data?.data || [];
-  const bundleCampaigns = bundleData?.data?.data || [];
+  if (customLoading || bundleLoading) return <Loading />;
+  if (customError || bundleError)
+    return <div className="text-center py-10">Failed to load data.</div>;
 
-  const mergedData = [...customCampaigns, ...bundleCampaigns];
+  const isBundle = chartType === "bundle";
+  const selectedResponse = isBundle ? bundleData?.data : customData?.data;
 
-  // Merge stats manually
-  const mergedMeta: CampaignMeta = {
-    page: 1,
-    limit: 10,
-    total:
-      (customData?.data?.meta?.total || 0) +
-      (bundleData?.data?.meta?.total || 0),
-    totalPages: 1,
-    counts: {
-      totalCampaign:
-        (customData?.data?.meta?.counts.totalCampaign || 0) +
-        (bundleData?.data?.meta?.counts.totalCampaign || 0),
-      byStatus: {
-        pending:
-          (customData?.data?.meta?.counts.byStatus.pending || 0) +
-          (bundleData?.data?.meta?.counts.byStatus.pending || 0),
-        running:
-          (customData?.data?.meta?.counts.byStatus.running || 0) +
-          (bundleData?.data?.meta?.counts.byStatus.running || 0),
-        completed:
-          (customData?.data?.meta?.counts.byStatus.completed || 0) +
-          (bundleData?.data?.meta?.counts.byStatus.completed || 0),
+  const campaigns = selectedResponse?.data || [];
+  const meta = selectedResponse?.meta;
+
+  // Extract available years
+  const revenueYears =
+    meta?.revenue?.monthlyRevenue?.map((r) => r.year.toString()) || [];
+  const campaignYears = campaigns.map((c) =>
+    new Date(c.createdAt).getFullYear().toString()
+  );
+  const availableYears = Array.from(new Set([...revenueYears, ...campaignYears]));
+
+  // Fallback year
+  if (!availableYears.includes(period) && availableYears.length > 0) {
+    setPeriod(availableYears.at(-1)!);
+  }
+
+  // Filter data by selected year
+  const filteredCampaigns = campaigns.filter(
+    (c) => new Date(c.createdAt).getFullYear().toString() === period
+  );
+
+  let filteredMeta: CampaignMeta | undefined = undefined;
+  if (meta) {
+    const selectedRevenueYear = meta.revenue.monthlyRevenue.find(
+      (r) => r.year.toString() === period
+    );
+
+    filteredMeta = {
+      ...meta,
+      revenue: {
+        ...meta.revenue,
+        monthlyRevenue: selectedRevenueYear
+          ? [selectedRevenueYear]
+          : meta.revenue.monthlyRevenue,
       },
-    },
-    revenue: {
-      totalRevenue:
-        (customData?.data?.meta?.revenue.totalRevenue || 0) +
-        (bundleData?.data?.meta?.revenue.totalRevenue || 0),
-      monthlyRevenue: [
-        {
-          year: new Date().getFullYear(),
-          months: (
-            customData?.data?.meta?.revenue.monthlyRevenue?.[0]?.months || []
-          ).map((m, i) => ({
-            month: m.month,
-            revenue:
-              m.revenue +
-              (bundleData?.data?.meta?.revenue.monthlyRevenue?.[0]?.months?.[i]
-                ?.revenue || 0),
-          })),
-        },
-      ],
-    },
-  };
-
+    };
+  }
 
   return (
     <div>
       <div className="md:px-8">
         <UserDashboardNavbar />
       </div>
+
       <div className="px-5 md:px-10">
         <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full">
           <div className="xl:w-[60%] w-full">
-            <StatsSection meta={mergedMeta} />
+            {filteredMeta && (
+              <StatsSection meta={filteredMeta} availableYears={availableYears} />
+            )}
           </div>
           <div className="xl:w-[40%] w-full">
             <ResponsiveBillboardMap />
           </div>
         </div>
-        <AnalyticsSection
-          meta={mergedMeta}
-          campaigns={mergedData}
-        />
+
+        {filteredMeta && (
+          <AnalyticsSection meta={filteredMeta} campaigns={filteredCampaigns} />
+        )}
+
         <NewCampaignSection />
       </div>
     </div>
