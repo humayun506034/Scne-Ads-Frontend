@@ -44,7 +44,7 @@ const SpecialSection = () => {
           {bundles.map((bundle, index) => (
             <CarouselItem
               key={bundle?.id || index}
-              className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4"
+              className="md:basis-1/2 md:m-4   lg:basis-1/2 xl:basis-1/4"
             >
               <div
                 onClick={() => handleOpenModal(bundle)}
