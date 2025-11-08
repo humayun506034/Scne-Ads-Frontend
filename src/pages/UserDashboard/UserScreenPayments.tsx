@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Eye } from "lucide-react";
-import { useMySelfScreenPaymentQuery } from "@/store/api/Payment/paymentApi";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
+import { useMySelfScreenPaymentQuery } from "@/store/api/Payment/paymentApi";
+import { Eye } from "lucide-react";
+import { useState } from "react";
 import UserScreenPaymentDetailsModal from "./UserScreenPaymentsModal";
 
 const UserScreenPayments = () => {

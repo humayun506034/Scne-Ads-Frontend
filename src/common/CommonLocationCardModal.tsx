@@ -45,6 +45,9 @@ const CommonLocationCardModal = ({
   onToggleSelect,
   showButton = false,
 }: any) => {
+  console.log("🚀 ~ CommonLocationCardModal ~ location:", location)
+  
+ 
 
   const [openDialog, setOpenDialog] = useState<string | null>(null);
 
@@ -65,7 +68,13 @@ const CommonLocationCardModal = ({
   const capitalize = (str?: string) =>
     str ? str.charAt(0).toUpperCase() + str.slice(1) : "-";
 
-  
+  const images = location?.imgUrls?.map((image, index) => ({
+    url: image.url,
+    index: index,
+  })) || location?.imageUrls?.map((image, index) => ({
+    url: image.url,
+    index: index,
+  })) 
 
   return (
     <div className="w-full">
@@ -79,8 +88,8 @@ const CommonLocationCardModal = ({
           <CardContent className="flex flex-col overflow-hidden md:items-center p-0">
             <Carousel className="w-full ">
             <CarouselContent className="p-0 ">
-              {location.imgUrls.length > 0 ? (
-                location.imgUrls.map((image, index) => (
+              {images.length > 0 ? (
+                images.map((image, index) => (
                   <CarouselItem key={index}>
                     <div className="p-4 ">
                       <div className="flex md:items-center border-none justify-center ">
@@ -191,8 +200,8 @@ const CommonLocationCardModal = ({
   <div className="mb-4">
     <Carousel className="w-full">
       <CarouselContent className="p-0">
-        {location.imgUrls.length > 0 ? (
-          location.imgUrls.map((image, index) => (
+        {images.length > 0 ? (
+          images.map((image, index) => (
             <CarouselItem key={index}>
               <div className="p-3">
                 <div className="flex justify-center">
@@ -241,7 +250,7 @@ const CommonLocationCardModal = ({
       {/* Row 1 */}
       <div className="flex items-center gap-2">
         <Monitor className="text-sky-400 h-4 w-4" />
-        <span>{location.title}</span>
+        <span>{location.title || location.screen_name}</span>
       </div>
       <div className="flex items-center gap-2">
         <MapPin className="text-emerald-400 h-4 w-4" />
@@ -251,7 +260,7 @@ const CommonLocationCardModal = ({
       {/* Row 2 */}
       <div className="flex items-center gap-2">
         <Tv2 className="text-blue-400 h-4 w-4" />
-        <span>Screen Size:</span> {location.screenSize || "-"}
+        <span>Screen Size:</span> {location.screenSize ||  location.size}
       </div>
       <div className="flex items-center gap-2">
         <Monitor className="text-indigo-400 h-4 w-4" />
