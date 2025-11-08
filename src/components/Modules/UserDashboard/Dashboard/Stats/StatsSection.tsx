@@ -15,10 +15,6 @@ interface Option {
 }
 
 export const StatsSection = ({ meta, availableYears }: Props) => {
-  const [chartType, setChartType] = useQueryState(
-    "chartType",
-    parseAsString.withDefault("bundle")
-  );
   const [period, setPeriod] = useQueryState(
     "period",
     parseAsString.withDefault(new Date().getFullYear().toString())
@@ -31,8 +27,8 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
   const totalRevenue = meta.revenue.totalRevenue;
 
   const yearOptions: Option[] = availableYears.map((year) => ({
-    value: `${year}`,
-    label: `Jan ${year} - Dec ${year}`,
+    value: year,
+    label: year,
   }));
 
   return (
@@ -41,17 +37,8 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
 
       <div className="p-6 mt-6 border-dashboard-border bg-dashboard-card-bg rounded-md border">
         <div className="flex justify-between text-title-color mt-2 w-full">
-          <h1 className="text-2xl font-semibold">Filters</h1>
+          <h1 className="text-2xl font-semibold">Stats</h1>
           <div className="flex items-center gap-2 text-sm md:text-base">
-            <CommonSelect
-              Value={chartType}
-              setValue={setChartType}
-              options={[
-                { value: "bundle", label: "Bundle" },
-                { value: "custom", label: "Custom" },
-              ]}
-            />
-
             <CommonSelect
               Value={period}
               setValue={setPeriod}
@@ -63,8 +50,14 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
         </div>
 
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-10">
-          <StatsCard title="Total Campaigns" value={totalCampaign} />
-          <StatsCard title="Completed" value={completed} />
+          <StatsCard
+            title="Total Campaigns"
+            value={totalCampaign}
+          />
+          <StatsCard
+            title="Completed"
+            value={completed}
+          />
           <StatsCard
             title="Total Revenue"
             value={`$${totalRevenue.toLocaleString()}`}

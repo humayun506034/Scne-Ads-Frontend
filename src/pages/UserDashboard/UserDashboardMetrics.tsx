@@ -9,6 +9,7 @@ import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard
 import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
 import Loading from "@/common/MapLoading";
 import { parseAsString, useQueryState } from "nuqs";
+import { Button } from "@/components/ui/button";
 
 export interface ScreenImage {
   url: string;
@@ -92,7 +93,7 @@ export interface CampaignResponse {
 }
 
 const UserDashboardMetrics = () => {
-  const [chartType] = useQueryState(
+  const [chartType, setChartType] = useQueryState(
     "chartType",
     parseAsString.withDefault("bundle")
   );
@@ -101,10 +102,16 @@ const UserDashboardMetrics = () => {
     parseAsString.withDefault(new Date().getFullYear().toString())
   );
 
-  const { data: customData, isLoading: customLoading, isError: customError } =
-    useGetCustomerCustomsQuery(undefined);
-  const { data: bundleData, isLoading: bundleLoading, isError: bundleError } =
-    useGetCustomerBundlesQuery(undefined);
+  const {
+    data: customData,
+    isLoading: customLoading,
+    isError: customError,
+  } = useGetCustomerCustomsQuery(undefined);
+  const {
+    data: bundleData,
+    isLoading: bundleLoading,
+    isError: bundleError,
+  } = useGetCustomerBundlesQuery(undefined);
 
   if (customLoading || bundleLoading) return <Loading />;
   if (customError || bundleError)
@@ -122,7 +129,9 @@ const UserDashboardMetrics = () => {
   const campaignYears = campaigns.map((c) =>
     new Date(c.createdAt).getFullYear().toString()
   );
-  const availableYears = Array.from(new Set([...revenueYears, ...campaignYears]));
+  const availableYears = Array.from(
+    new Set([...revenueYears, ...campaignYears])
+  );
 
   // Fallback year
   if (!availableYears.includes(period) && availableYears.length > 0) {
@@ -161,7 +170,10 @@ const UserDashboardMetrics = () => {
         <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full">
           <div className="xl:w-[60%] w-full">
             {filteredMeta && (
-              <StatsSection meta={filteredMeta} availableYears={availableYears} />
+              <StatsSection
+                meta={filteredMeta}
+                availableYears={availableYears}
+              />
             )}
           </div>
           <div className="xl:w-[40%] w-full">
@@ -169,8 +181,29 @@ const UserDashboardMetrics = () => {
           </div>
         </div>
 
+        <div className="flex gap-2 my-8">
+          {["Custom", "Bundle"].map((type) => (
+  <Button
+    key={type}
+    onClick={() => setChartType(type.toLowerCase())}
+    className={`cursor-pointer py-2 px-6 rounded-lg text-sm font-medium transition-colors duration-200
+      ${
+        chartType === type.toLowerCase()
+          ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
+          : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+      }`}
+  >
+    {type}
+  </Button>
+))}
+
+        </div>
+
         {filteredMeta && (
-          <AnalyticsSection meta={filteredMeta} campaigns={filteredCampaigns} />
+          <AnalyticsSection
+            meta={filteredMeta}
+            campaigns={filteredCampaigns}
+          />
         )}
 
         <NewCampaignSection />
