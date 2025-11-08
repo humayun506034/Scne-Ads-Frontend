@@ -1,70 +1,46 @@
+import React, { useEffect, useState } from "react";
 import CommonSelect from "@/common/CommonSelect";
 import { CalendarDays } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { MetricCard } from "./MetricCard";
 import CommonLoading from "@/common/CommonLoading";
-import { AnalyticsData } from "@/pages/UserDashboard/UserDashboardMetrics";
+import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
+import { MetricCard } from "./MetricCard";
 
 const Chart = React.lazy(() => import("react-apexcharts"));
 
 type Props = {
-  analyticsData: AnalyticsData;
+  meta: CampaignMeta;
 };
 
-export function SpendImpressionsChart({ analyticsData }: Props) {
-  console.log("🚀 ~ SpendImpressionsChart ~ analyticsData:", analyticsData)
+export function SpendImpressionsChart({ meta }: Props) {
   const [isClient, setIsClient] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Jan 2025 - Dec 2025");
 
+  useEffect(() => setIsClient(true), []);
+
   const options = [
-    {
-      value: "Jan 2025 - Dec 2025",
-      label: "Jan 2025 - Dec 2025",
-    },
-    {
-      value: "Jan 2024 - Dec 2024",
-      label: "Jan 2024 - Dec 2024",
-    },
-    {
-      value: "Jan 2023 - Dec 2023",
-      label: "Jan 2023 - Dec 2023",
-    },
+    { value: "Jan 2025 - Dec 2025", label: "Jan 2025 - Dec 2025" },
+    { value: "Jan 2024 - Dec 2024", label: "Jan 2024 - Dec 2024" },
+    { value: "Jan 2023 - Dec 2023", label: "Jan 2023 - Dec 2023" },
   ];
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // Data extraction
+  const monthly = meta?.revenue?.monthlyRevenue?.[0]?.months || [];
+  const categories = monthly.map((m) => m.month);
+  const data = monthly.map((m) => m.revenue);
 
-  if (!isClient) {
-    return (
-      <div>
-        <CommonLoading />
-      </div>
-    );
-  }
-
-  const maxY = Math.max(...analyticsData.spendData.map((d) => d.y));
+  const totalRevenue = meta?.revenue?.totalRevenue || 0;
 
   const chartOptions = {
     chart: {
       type: "area" as const,
       height: 400,
       background: "transparent",
-      toolbar: {
-        show: false,
-      },
-      zoom: {
-        enabled: false,
-      },
+      toolbar: { show: false },
+      zoom: { enabled: false },
     },
-    theme: {
-      mode: "dark" as const,
-    },
-    colors: ["#CB3CFF", "#57C3FF"],
-    stroke: {
-      curve: "smooth" as const,
-      width: 3,
-    },
+    theme: { mode: "dark" as const },
+    colors: ["#38B6FF"],
+    stroke: { curve: "smooth" as const, width: 3 },
     fill: {
       type: "gradient",
       gradient: {
@@ -77,101 +53,73 @@ export function SpendImpressionsChart({ analyticsData }: Props) {
     grid: {
       borderColor: "#1e293b",
       strokeDashArray: 3,
-      xaxis: {
-        lines: {
-          show: false,
-        },
-      },
-      yaxis: {
-        lines: {
-          show: true,
-        },
-      },
+      xaxis: { lines: { show: false } },
+      yaxis: { lines: { show: true } },
     },
     xaxis: {
-      categories: analyticsData.spendData.map((item) => item.x),
-      axisBorder: {
-        show: false,
-      },
-      axisTicks: {
-        show: false,
-      },
-      labels: {
-        style: {
-          colors: "#64748b",
-          fontSize: "12px",
-        },
-      },
-    },
-
-    dataLabels: {
-      enabled: false,
-    },
-    yaxis: {
-      max: Math.ceil(maxY * 1.1), // 10% padding
+      categories,
+      axisBorder: { show: false },
+      axisTicks: { show: false },
       labels: {
         style: { colors: "#64748b", fontSize: "12px" },
-        formatter: (value) => {
-          if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
-          if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`;
-          return value.toString();
+      },
+    },
+    dataLabels: { enabled: false },
+    yaxis: {
+      labels: {
+        style: { colors: "#64748b", fontSize: "12px" },
+        formatter: (v: number) => {
+          if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(1)}M`;
+          if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
+          return v.toString();
         },
       },
     },
-
     tooltip: {
       theme: "dark",
-      style: {
-        fontSize: "12px",
-      },
+      style: { fontSize: "12px" },
       y: {
-        formatter: (value: number) => {
-          if (value >= 1000000) {
-            return `${(value / 1000000).toFixed(2)}M`;
-          } else if (value >= 1000) {
-            return `${(value / 1000).toFixed(0)}K`;
-          }
-          return value.toString();
+        formatter: (v: number) => {
+          if (v >= 1_000_000) return `${(v / 1_000_000).toFixed(2)}M`;
+          if (v >= 1_000) return `${(v / 1_000).toFixed(0)}K`;
+          return v.toString();
         },
       },
     },
   };
 
-  const series = [
-    {
-      name: "Ad Spend",
-      data: analyticsData.spendData.map((item) => item.y),
-    },
-    // {
-    //   name: "Impressions",
-    //   data: impressionsData.map((item) => item.y),
-    // },
-  ];
+  const series = [{ name: "Revenue", data }];
+
+  if (!isClient) {
+    return (
+      <div className="bg-[#0B1739] rounded-xl p-6 h-[400px] flex items-center justify-center">
+        <div className="text-title-color">Loading chart...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
-      {/* Header */}
+      {/* Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
-          title="Total Ad Spend"
-          value={analyticsData.totalSpend}
-          growth={analyticsData.growth}
-          isPositive={analyticsData.isPositive}
+          title="Total Revenue"
+          value={`৳${totalRevenue.toLocaleString()}`}
+          growth={5.4}
+          isPositive={true}
         />
 
-        <div className="flex flex-wrap  items-center gap-4">
-          <div className="flex flex-wrap items-center gap-6 justify-between md:w-fit w-full">
-            <div className="flex items-center gap-2 ">
-              <div className="w-4 h-4 rounded-full bg-[#CB3CFF]"></div>
-              <span className="text-title-color text-sm">Ad Spend</span>
+        <div className="flex flex-wrap items-center gap-4">
+          {/* Legend */}
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#38B6FF]" />
+              <span className="text-title-color text-sm">Revenue</span>
             </div>
-            {/* <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-[#57C3FF]"></div>
-              <span className="text-title-color text-sm">Impressions</span>
-            </div> */}
           </div>
 
-          <div className="flex items-center gap-2 bg-[#0A1330] rounded-lg px-2 py-1 ">
+          {/* Year Dropdown */}
+          <div className="flex items-center gap-2 bg-[#0A1330] rounded-lg px-2 py-1">
             <CommonSelect
               bgColor="#0A1330"
               Value={selectedDate}
@@ -185,12 +133,7 @@ export function SpendImpressionsChart({ analyticsData }: Props) {
 
       {/* Chart */}
       <div className="h-[370px]">
-        <Chart
-          options={chartOptions}
-          series={series}
-          type="area"
-          height="100%"
-        />
+        <Chart options={chartOptions} series={series} type="area" height="100%" />
       </div>
     </div>
   );

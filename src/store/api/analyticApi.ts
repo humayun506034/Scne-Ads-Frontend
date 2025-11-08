@@ -1,24 +1,16 @@
-import { DurationOption } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
 import { baseApi } from "./baseApi";
 
-type Filters = {
-  durationFilters: DurationOption["value"];
-  periodFilters: string;
-};
-
-const analyticApi = baseApi.injectEndpoints({
+export const analyticApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAnalytics: builder.query({
-      query: (filters: Filters) => ({
-        url: "/analytics",
-        method: "GET",
-        params: {
-          duration: filters.durationFilters,
-          year: filters.periodFilters,
-        },
-      }),
+    getCustomerCustoms: builder.query({
+      query: () => {
+        return {
+          url: "campaign/myself-all-custom-campaign",
+          method: "GET",
+        };
+      },
     }),
   }),
 });
 
-export const { useGetAnalyticsQuery } = analyticApi;
+export const { useGetCustomerCustomsQuery } = analyticApi;
