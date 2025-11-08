@@ -1,5 +1,4 @@
 import { AddCampaignSection } from "./AddCampaign";
-import { AvailableCreditSection } from "./AvailableCredit";
 import { RecommendedVideosSection } from "./Recommended";
 
 export default function NewCampaignSection() {
@@ -10,7 +9,7 @@ export default function NewCampaignSection() {
       </div>
 
       <div className="xl:w-[40%] w-full space-y-4 ">
-        <AvailableCreditSection />
+        {/* <AvailableCreditSection /> */}
         <AddCampaignSection />
       </div>
     </div>

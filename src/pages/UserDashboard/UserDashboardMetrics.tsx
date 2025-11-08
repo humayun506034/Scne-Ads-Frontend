@@ -183,20 +183,18 @@ const UserDashboardMetrics = () => {
 
         <div className="flex gap-2 my-8">
           {["Custom", "Bundle"].map((type) => (
-  <Button
-    key={type}
-    onClick={() => setChartType(type.toLowerCase())}
-    className={`cursor-pointer py-2 px-6 rounded-lg text-sm font-medium transition-colors duration-200
-      ${
-        chartType === type.toLowerCase()
-          ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
-          : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
-      }`}
-  >
-    {type}
-  </Button>
-))}
-
+            <Button
+              key={type}
+              onClick={() => setChartType(type.toLowerCase())}
+              className={`cursor-pointer py-2 px-6 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
+                chartType === type.toLowerCase()
+                  ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
+                  : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+              }`}
+            >
+              {type}
+            </Button>
+          ))}
         </div>
 
         {filteredMeta && (
