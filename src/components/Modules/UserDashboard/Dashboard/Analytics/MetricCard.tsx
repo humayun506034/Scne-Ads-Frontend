@@ -4,8 +4,8 @@ import { TrendingDown, TrendingUp } from "lucide-react";
 interface MetricCardProps {
   title: string;
   value: string | number;
-  growth: number;
-  isPositive: boolean;
+  growth?: number;
+  isPositive?: boolean;
   className?: string;
   SVG?: any;
 }
@@ -30,20 +30,22 @@ export function MetricCard({
         <span className="text-white text-2xl md:text-3xl font-bold">
           {value}
         </span>
-        <div
-          className={`flex items-center gap-1 text-sm px-2 py-1 rounded-md ${
-            isPositive
-              ? "bg-[#05c16833] text-[#14CA74]"
-              : "bg-[#FF4C4C] text-[#C24F4F]"
-          }`}
-        >
-          <span>{growth}%</span>
-          {isPositive ? (
-            <TrendingUp className="w-4 h-4" />
-          ) : (
-            <TrendingDown className="w-4 h-4" />
-          )}
-        </div>
+        {typeof growth === "number" && (
+          <div
+            className={`flex items-center gap-1 text-sm px-2 py-1 rounded-md ${
+              isPositive
+                ? "bg-[#05c16833] text-[#14CA74]"
+                : "bg-[#ff4c4c33] text-[#FF4C4C]"
+            }`}
+          >
+            <span>{growth}%</span>
+            {isPositive ? (
+              <TrendingUp className="w-4 h-4" />
+            ) : (
+              <TrendingDown className="w-4 h-4" />
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
-import { parseAsString, parseAsInteger, useQueryState } from "nuqs";
-import { useGetCustomerCustomsQuery } from "@/store/api/analyticApi";
+import {
+  useGetCustomerBundlesQuery,
+  useGetCustomerCustomsQuery,
+} from "@/store/api/analyticApi";
 import { UserDashboardNavbar } from "@/components/Modules/UserDashboard/UserDashboardNavbar";
 import { StatsSection } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
 import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analytics/AnalyticsSection";
@@ -89,29 +91,79 @@ export interface CampaignResponse {
 }
 
 const UserDashboardMetrics = () => {
-  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
-  const [limit] = useQueryState("limit", parseAsInteger.withDefault(10));
-  const [dateFilter] = useQueryState(
-    "dateFilter",
-    parseAsString.withDefault("today")
-  );
-  const [startDate] = useQueryState("startDate", parseAsString);
-  const [endDate] = useQueryState("endDate", parseAsString);
+  // const [page] = useQueryState("page", parseAsInteger.withDefault(1));
+  // const [limit] = useQueryState("limit", parseAsInteger.withDefault(10));
+  // const [dateFilter] = useQueryState(
+  //   "dateFilter",
+  //   parseAsString.withDefault("today")
+  // );
+  // const [startDate] = useQueryState("startDate", parseAsString);
+  // const [endDate] = useQueryState("endDate", parseAsString);
 
-  // --- fallback to full current year if no custom dates ---
-  const currentYear = new Date().getFullYear();
-  const defaultStart = `${currentYear}-01-01T00:00:00.000Z`;
-  const defaultEnd = `${currentYear}-12-31T00:00:00.000Z`;
+  // // --- fallback to full current year if no custom dates ---
+  // const currentYear = new Date().getFullYear();
+  // const defaultStart = `${currentYear}-01-01T00:00:00.000Z`;
+  // const defaultEnd = `${currentYear}-12-31T00:00:00.000Z`;
 
-  const effectiveStart = startDate || defaultStart;
-  const effectiveEnd = endDate || defaultEnd;
+  // const effectiveStart = startDate || defaultStart;
+  // const effectiveEnd = endDate || defaultEnd;
 
-  const { data, isLoading } = useGetCustomerCustomsQuery(undefined);
+  const { data: customData, isLoading: customDataLoading } =
+    useGetCustomerCustomsQuery(undefined);
+  const { data: bundleData, isLoading: bundleDataLoading } =
+    useGetCustomerBundlesQuery(undefined);
 
-  if (isLoading) return <Loading />;
+  if (customDataLoading || bundleDataLoading) return <Loading />;
+  const customCampaigns = customData?.data?.data || [];
+  const bundleCampaigns = bundleData?.data?.data || [];
 
-  const campaignData = data?.data?.data;
-  const meta = data?.data?.meta;
+  const mergedData = [...customCampaigns, ...bundleCampaigns];
+
+  // Merge stats manually
+  const mergedMeta: CampaignMeta = {
+    page: 1,
+    limit: 10,
+    total:
+      (customData?.data?.meta?.total || 0) +
+      (bundleData?.data?.meta?.total || 0),
+    totalPages: 1,
+    counts: {
+      totalCampaign:
+        (customData?.data?.meta?.counts.totalCampaign || 0) +
+        (bundleData?.data?.meta?.counts.totalCampaign || 0),
+      byStatus: {
+        pending:
+          (customData?.data?.meta?.counts.byStatus.pending || 0) +
+          (bundleData?.data?.meta?.counts.byStatus.pending || 0),
+        running:
+          (customData?.data?.meta?.counts.byStatus.running || 0) +
+          (bundleData?.data?.meta?.counts.byStatus.running || 0),
+        completed:
+          (customData?.data?.meta?.counts.byStatus.completed || 0) +
+          (bundleData?.data?.meta?.counts.byStatus.completed || 0),
+      },
+    },
+    revenue: {
+      totalRevenue:
+        (customData?.data?.meta?.revenue.totalRevenue || 0) +
+        (bundleData?.data?.meta?.revenue.totalRevenue || 0),
+      monthlyRevenue: [
+        {
+          year: new Date().getFullYear(),
+          months: (
+            customData?.data?.meta?.revenue.monthlyRevenue?.[0]?.months || []
+          ).map((m, i) => ({
+            month: m.month,
+            revenue:
+              m.revenue +
+              (bundleData?.data?.meta?.revenue.monthlyRevenue?.[0]?.months?.[i]
+                ?.revenue || 0),
+          })),
+        },
+      ],
+    },
+  };
+
 
   return (
     <div>
@@ -121,13 +173,16 @@ const UserDashboardMetrics = () => {
       <div className="px-5 md:px-10">
         <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full">
           <div className="xl:w-[60%] w-full">
-            <StatsSection meta={meta} />
+            <StatsSection meta={mergedMeta} />
           </div>
           <div className="xl:w-[40%] w-full">
             <ResponsiveBillboardMap />
           </div>
         </div>
-        <AnalyticsSection meta={meta} campaigns={campaignData} />
+        <AnalyticsSection
+          meta={mergedMeta}
+          campaigns={mergedData}
+        />
         <NewCampaignSection />
       </div>
     </div>

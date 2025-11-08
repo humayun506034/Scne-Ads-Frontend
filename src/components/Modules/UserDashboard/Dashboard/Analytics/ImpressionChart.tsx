@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CommonSelect from "@/common/CommonSelect";
 import { CalendarDays } from "lucide-react";
-import CommonLoading from "@/common/CommonLoading";
 import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
 import { MetricCard } from "./MetricCard";
 
@@ -12,6 +11,7 @@ type Props = {
 };
 
 export function SpendImpressionsChart({ meta }: Props) {
+
   const [isClient, setIsClient] = useState(false);
   const [selectedDate, setSelectedDate] = useState("Jan 2025 - Dec 2025");
 
@@ -25,10 +25,16 @@ export function SpendImpressionsChart({ meta }: Props) {
 
   // Data extraction
   const monthly = meta?.revenue?.monthlyRevenue?.[0]?.months || [];
-  const categories = monthly.map((m) => m.month);
+
+
+  const year = meta?.revenue?.monthlyRevenue[0].year;
+
+  const categories = monthly.map((m) => `${m.month} ${year}`);
   const data = monthly.map((m) => m.revenue);
 
+
   const totalRevenue = meta?.revenue?.totalRevenue || 0;
+
 
   const chartOptions = {
     chart: {
@@ -64,7 +70,7 @@ export function SpendImpressionsChart({ meta }: Props) {
         style: { colors: "#64748b", fontSize: "12px" },
       },
     },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     yaxis: {
       labels: {
         style: { colors: "#64748b", fontSize: "12px" },
@@ -90,6 +96,7 @@ export function SpendImpressionsChart({ meta }: Props) {
 
   const series = [{ name: "Revenue", data }];
 
+
   if (!isClient) {
     return (
       <div className="bg-[#0B1739] rounded-xl p-6 h-[400px] flex items-center justify-center">
@@ -104,9 +111,7 @@ export function SpendImpressionsChart({ meta }: Props) {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
           title="Total Revenue"
-          value={`৳${totalRevenue.toLocaleString()}`}
-          growth={5.4}
-          isPositive={true}
+          value={`$${totalRevenue.toLocaleString()}`}
         />
 
         <div className="flex flex-wrap items-center gap-4">
@@ -133,7 +138,12 @@ export function SpendImpressionsChart({ meta }: Props) {
 
       {/* Chart */}
       <div className="h-[370px]">
-        <Chart options={chartOptions} series={series} type="area" height="100%" />
+        <Chart
+          options={chartOptions}
+          series={series}
+          type="area"
+          height="100%"
+        />
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
-
-import { Campaign, CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  Campaign,
+  CampaignMeta,
+} from "@/pages/UserDashboard/UserDashboardMetrics";
 import { SpendImpressionsChart } from "./ImpressionChart";
-
 
 type Props = {
   meta: CampaignMeta;
@@ -9,11 +11,6 @@ type Props = {
 };
 
 export default function AnalyticsSection({ meta, campaigns }: Props) {
-console.log("🚀 ~ AnalyticsSection ~ campaigns:", campaigns)
-
-
-
-  
   return (
     <div className="mt-20 w-full">
       <div className="flex flex-col xl:flex-row w-full gap-4">
@@ -21,15 +18,30 @@ console.log("🚀 ~ AnalyticsSection ~ campaigns:", campaigns)
           <SpendImpressionsChart meta={meta} />
         </div>
         <div className="xl:w-[40%]">
-          <h3 className="text-2xl font-bold text-center mb-4">Recent Campaigns</h3>
+          <h3 className="text-2xl font-bold text-center mb-4">
+            Recent Campaigns
+          </h3>
           <div className="space-y-3 max-h-[370px] overflow-y-auto">
-            {campaigns.map((c) => (
-              <div key={c.id} className="bg-[#1E2B4D] p-4 rounded-md">
-                <p className="text-sm font-semibold">{c.screens[0]?.screen_name}</p>
-                <p className="text-xs text-gray-400">{c.status}</p>
-                <p className="text-xs">৳{c.CustomPayment[0]?.amount}</p>
-              </div>
-            ))}
+            {campaigns.map((c) => {
+              const amount =
+                c?.CustomPayment?.[0]?.amount ??
+                (c as any)?.payment?.amount ??
+                0;
+
+              const screenName =
+                c?.screens?.[0]?.screen_name || "Unnamed Screen";
+
+              return (
+                <div
+                  key={c.id}
+                  className="bg-[#1E2B4D] p-4 rounded-md"
+                >
+                  <p className="text-sm font-semibold">{screenName}</p>
+                  <p className="text-xs text-gray-400">{c.status}</p>
+                  <p className="text-xs">৳{amount.toLocaleString()}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

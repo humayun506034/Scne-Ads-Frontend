@@ -10,7 +10,16 @@ export const analyticApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getCustomerBundles: builder.query({
+      query: () => {
+        return {
+          url: "campaign/myself-all-bundle-campaign",
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetCustomerCustomsQuery } = analyticApi;
+export const { useGetCustomerCustomsQuery, useGetCustomerBundlesQuery } =
+  analyticApi;
