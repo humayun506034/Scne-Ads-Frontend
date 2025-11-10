@@ -1,9 +1,9 @@
-import { formatDistanceToNow } from "date-fns";
 import { ChevronRight } from "lucide-react";
-import { ChatConversation } from ".";
 import p3 from "../../../../assets/Dashboard/person3.png";
+import type { User } from ".";
+
 interface ConversationListProps {
-  conversations: ChatConversation[];
+  conversations: User[];
   onSelectConversation: (conversationId: string) => void;
 }
 
@@ -21,37 +21,23 @@ export function ConversationList({
         >
           <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
             <img
-              src={p3}
-              alt={conversation.agentName}
+              src={conversation.image || p3}
+              alt={`${conversation.first_name} ${conversation.last_name}`}
               className="w-12 h-12 rounded-full"
             />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
               <h4
-                className={`font-medium text-gray-900 truncate ${
-                  conversation.unread ? "font-semibold" : ""
-                }`}
+                className={`font-medium text-gray-900 truncate`}
               >
-                {conversation.agentName}{" "}
-                {conversation.unread && <span className="text-red-500">*</span>}
+                {`${conversation.first_name} ${conversation.last_name}`}{" "}
               </h4>
-              <span
-                className={`text-xs text-gray-500 flex-shrink-0 ${
-                  conversation.unread ? "font-semibold" : ""
-                }`}
-              >
-                {formatDistanceToNow(conversation.timestamp, {
-                  addSuffix: true,
-                })}
-              </span>
             </div>
             <p
-              className={`text-sm text-gray-600 truncate mt-1 ${
-                conversation.unread ? "font-semibold" : ""
-              }`}
+              className={`text-sm text-gray-600 truncate mt-1`}
             >
-              {conversation.lastMessage}
+              {conversation.role}
             </p>
           </div>
           <ChevronRight className="h-4 w-4 text-title-color flex-shrink-0" />

@@ -1,7 +1,10 @@
-import { ChatMessage } from ".";
+import type { Message } from ".";
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 
-export function MessageBubble({ message }: { message: ChatMessage }) {
-  const mine = message.sender === "user";
+export function MessageBubble({ message }: { message: Message }) {
+  const user = useAppSelector(selectCurrentUser);
+  const mine = user ? message.senderId === user.id : false;
   return (
     <div className={`p-4 ${mine ? "text-right" : "text-left"}`}>
       <span
@@ -9,7 +12,7 @@ export function MessageBubble({ message }: { message: ChatMessage }) {
           mine ? "bg-title-color text-black" : "bg-[#202E58] text-white"
         }`}
       >
-        {message.content}
+        {message.text}
       </span>
     </div>
   );

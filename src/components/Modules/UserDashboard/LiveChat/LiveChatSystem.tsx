@@ -1,19 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useChatWebSocket } from "@/hooks/useChatWebSocket";
 import { X } from "lucide-react";
 import { useState } from "react";
 
 import { motion } from "framer-motion";
-import { chatAgents, chatConversations, ChatMessage, chatMessages } from ".";
+import { chatAgents } from ".";
 import { ChatHeader } from "./ChatHeader";
 import { ChatHome } from "./ChatHome";
-import { MessageInput } from "./ChatInput";
+
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
+import ChatInput from "./ChatInput";
 import { ChatTabs, type ChatTab } from "./ChatTabs";
 import { ConversationList } from "./ConversationList";
 import { MessageBubble } from "./MessageBubble";
 
-export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
+export function LiveChatSystem() {
   const [isOpen, setIsOpen] = useState(false);
+  const user = useAppSelector(selectCurrentUser);
   const [activeTab, setActiveTab] = useState<ChatTab>("home");
   const [currentView, setCurrentView] = useState<"home" | "messages" | "chat">(
     "home"
@@ -21,12 +26,25 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
   const [selectedConversationId, setSelectedConversationId] = useState<
     string | null
   >(null);
-  const [messages, setMessages] = useState<ChatMessage[]>(chatMessages);
+
+  const {
+    messages,
+    admins,
+    readyState,
+    fetchHistory,
+    sendChatMessage,
+  } = useChatWebSocket();
 
   const handleStartChat = () => {
-    setCurrentView("chat");
-    console.log("Starting chat", selectedConversationId);
-    setSelectedConversationId("1");
+    if (admins && admins.length > 0) {
+      const first = admins[0];
+      setSelectedConversationId(first.id);
+      fetchHistory(first.id);
+      setCurrentView("chat");
+    } else {
+      setActiveTab("messages");
+      setCurrentView("messages");
+    }
   };
 
   const handleViewMessages = () => {
@@ -36,19 +54,14 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
 
   const handleSelectConversation = (id: string) => {
     setSelectedConversationId(id);
+    fetchHistory(id);
     setCurrentView("chat");
   };
 
   const handleSendMessage = (content: string) => {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now().toString(),
-        content,
-        sender: "user",
-        timestamp: new Date(),
-      },
-    ]);
+    if (selectedConversationId) {
+      sendChatMessage(selectedConversationId, content);
+    }
   };
 
   const handleTabChange = (tab: ChatTab) => {
@@ -77,9 +90,8 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
           <div className="flex-1 flex flex-col">
             {currentView === "home" && (
               <ChatHome
-                userName={userName}
-                onStartChat={handleStartChat}
-                onViewMessages={handleViewMessages}
+                userName={user?.first_name || "User"}
+                messages={messages}
               />
             )}
 
@@ -99,7 +111,7 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
                   </Button>
                 </div>
                 <ConversationList
-                  conversations={chatConversations}
+                  conversations={admins}
                   onSelectConversation={handleSelectConversation}
                 />
                 <div className="p-4">
@@ -118,9 +130,19 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
             {currentView === "chat" && (
               <div className="flex flex-col h-full">
                 <ChatHeader
-                  agentName={selectedAgent.name}
-                  agentRole={selectedAgent.role}
-                  agentAvatar={selectedAgent.avatar}
+                  agentName={(
+                    admins.find((a) => a.id === selectedConversationId)?.first_name +
+                      " " +
+                    (admins.find((a) => a.id === selectedConversationId)?.last_name || "")
+                  ) || selectedAgent.name}
+                  agentRole={
+                    admins.find((a) => a.id === selectedConversationId)?.role ||
+                    selectedAgent.role
+                  }
+                  agentAvatar={
+                    admins.find((a) => a.id === selectedConversationId)?.image ||
+                    selectedAgent.avatar
+                  }
                   onBack={() => {
                     setCurrentView("messages");
                     setActiveTab("messages");
@@ -132,7 +154,7 @@ export function LiveChatSystem({ userName = "Danaj" }: { userName?: string }) {
                     <MessageBubble key={m.id} message={m} />
                   ))}
                 </div>
-                <MessageInput onSendMessage={handleSendMessage} />
+                <ChatInput onSendMessage={handleSendMessage} />
               </div>
             )}
           </div>

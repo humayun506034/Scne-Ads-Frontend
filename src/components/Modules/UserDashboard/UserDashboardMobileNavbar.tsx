@@ -111,7 +111,7 @@ const UserDashboardMobileNavbar = ({ user }: any ) => {
                 );
               })}
               <motion.div className="px-1 ">
-                <LiveChatSystem userName={"Danaj"} />
+                {user?.role !== "admin" && <LiveChatSystem userName={"Danaj"} />}
               </motion.div>
             </div>
 

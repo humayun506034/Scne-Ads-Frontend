@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Paperclip, Send, Smile } from "lucide-react";
+import { Send, Smile } from "lucide-react";
 import { useState } from "react";
 
-export function MessageInput({
+export default function ChatInput({
   onSendMessage,
   placeholder = "Ask a question...",
 }: {
@@ -11,6 +11,24 @@ export function MessageInput({
   placeholder?: string;
 }) {
   const [message, setMessage] = useState("");
+  const [showEmojis, setShowEmojis] = useState(false);
+  const emojis = [
+    "😀",
+    "😁",
+    "😂",
+    "😊",
+    "😍",
+    "😉",
+    "👍",
+    "🙏",
+    "🔥",
+    "🎉",
+  ];
+
+  function addEmoji(emoji: string) {
+    setMessage((prev) => `${prev}${emoji}`);
+    setShowEmojis(false);
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,7 +46,7 @@ export function MessageInput({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={placeholder}
-            className="pr-20 p-5 rounded-full border-2  border-gray-200"
+            className="pr-20 p-5 text-black rounded-full border-2  border-gray-200"
           />{" "}
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
             <Button
@@ -36,18 +54,25 @@ export function MessageInput({
               variant="ghost"
               size="icon"
               className="h-8 w-8 text-bg-dashboard "
+              onClick={() => setShowEmojis((s) => !s)}
             >
               <Smile className="h-4 w-4" />
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-bg-dashboard "
-            >
-              <Paperclip className="h-4 w-4" />
-            </Button>
           </div>
+          {showEmojis && (
+            <div className="absolute right-0 mt-2 w-44 rounded-lg border bg-white shadow-md p-2 grid grid-cols-6 gap-2">
+              {emojis.map((e) => (
+                <button
+                  key={e}
+                  type="button"
+                  className="text-xl hover:scale-110 transition-transform"
+                  onClick={() => addEmoji(e)}
+                >
+                  {e}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <Button
           type="submit"
