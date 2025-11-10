@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -8,6 +9,8 @@ import {
   CarouselNext,
   CarouselPrevious
 } from "@/components/ui/carousel";
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from 'framer-motion';
 import { Download, X } from "lucide-react";
 
@@ -23,7 +26,10 @@ export default function ScreenCampaignDetailsModal({
   campaign,
 }: ScreenCampaignDetailsModalProps) {
   if (!isOpen || !campaign) return null;
+  const user = useAppSelector(selectCurrentUser);
+  
 
+  if (!isOpen || !campaign) return null;
   const {
     customer,
     CustomPayment,
@@ -166,7 +172,64 @@ export default function ScreenCampaignDetailsModal({
           </div>
 
           {/* Screens Section */}
-          <section>
+        
+
+          {/* Content Section */}
+          <section className=" ">
+            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
+              Content ({contentUrls?.length || 0}) 
+            </h3>
+            {contentUrls?.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {contentUrls.map((url: string, index: number) => (
+                  <div key={index} className="bg-[#11214D] p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-medium md:text-xl">
+                        Content {index + 1} ({isVideo(url) ? "Video" : "Image"})
+                      </h4>
+                      {
+                        user?.role === 'admin' && ( <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleDownload(url)}
+                      className="flex items-center gap-1 px-4 py-2 bg-title-color cursor-pointer text-black rounded-md transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download</span>
+                      </motion.button>)
+                      }
+                     
+                    </div>
+                    
+                    {isVideo(url) ? (
+                      <video
+                        controls
+                        className="w-full h-40 rounded-md"
+                        src={url}
+                      />
+                    ) : (
+                      <div className="relative">
+                        <Carousel className="w-full">
+                          <CarouselContent>
+                            <CarouselItem>
+                              <img
+                                src={url}
+                                alt={`Content ${index + 1}`}
+                                className="w-full h-40 rounded-md object-contain"
+                              />
+                            </CarouselItem>
+                          </CarouselContent>
+                        </Carousel>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-slate-400">No content available</p>
+            )}
+          </section>
+            <section>
             <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
               Screens ({screens?.length || 0})
             </h3>
@@ -256,59 +319,6 @@ export default function ScreenCampaignDetailsModal({
                 </div>
               ))}
             </div>
-          </section>
-
-          {/* Content Section */}
-          <section>
-            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
-              Content ({contentUrls?.length || 0}) 
-            </h3>
-            {contentUrls?.length > 0 ? (
-              <div className="space-y-6">
-                {contentUrls.map((url: string, index: number) => (
-                  <div key={index} className="bg-[#11214D] p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-3">
-                      <h4 className="font-medium md:text-xl">
-                        Content {index + 1} ({isVideo(url) ? "Video" : "Image"})
-                      </h4>
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleDownload(url)}
-                      className="flex items-center gap-1 px-4 py-2 bg-title-color cursor-pointer text-black rounded-md transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        <span>Download</span>
-                      </motion.button>
-                    </div>
-                    
-                    {isVideo(url) ? (
-                      <video
-                        controls
-                        className="w-full h-40 rounded-md"
-                        src={url}
-                      />
-                    ) : (
-                      <div className="relative">
-                        <Carousel className="w-full">
-                          <CarouselContent>
-                            <CarouselItem>
-                              <img
-                                src={url}
-                                alt={`Content ${index + 1}`}
-                                className="w-full h-40 rounded-md object-cover"
-                              />
-                            </CarouselItem>
-                          </CarouselContent>
-                        </Carousel>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-slate-400">No content available</p>
-            )}
           </section>
            <div className='flex justify-center md:justify-end '>
              <motion.button
