@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { CalendarDays, CheckCircle, Eye } from "lucide-react";
+import { ArrowUpCircle, CalendarDays, CheckCircle, Eye } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import CommonSelect from "@/common/CommonSelect";
@@ -10,14 +10,21 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Duration } from "@/lib/Data";
 import { useGetAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import { useMarkBundleCampaignUploadedMutation } from "@/store/api/User/isUploaded";
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
+import { toast } from "sonner";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function AdminBundleCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [startYear, setStartYear] = useState<string>("");
   const [endYear, setEndYear] = useState<string>("");
   const [dateFilter, setDateFilter] = useState<string | null>(null);
+
+  const openApproveModal = (campaign: any) => {
+    setSelectedCampaign(campaign);
+    setIsApproveModalOpen(true);
+  };
 
   // same year options as user page
   const yearOptions = useMemo(() => {
@@ -47,6 +54,7 @@ export default function AdminBundleCampaignManagement() {
   const queryParams: Record<string, string> = {
     page: currentPage.toString(),
   };
+
   const startDateIso = formatYearForApi(startYear, "start");
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
@@ -55,12 +63,13 @@ export default function AdminBundleCampaignManagement() {
 
   const { data, isLoading } = useGetAllBundleCampaignQuery(queryParams);
   const campaigns = data?.data?.data || [];
+
   const meta = data?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
-  const [markUploaded] = useMarkCustomCampaignUploadedMutation();
+  const [markUploaded] = useMarkBundleCampaignUploadedMutation();
   const [uploadedIds, setUploadedIds] = useState<string[]>([]);
 
   const closeApproveModal = () => {
@@ -83,12 +92,14 @@ export default function AdminBundleCampaignManagement() {
   };
 
   const handleMarkUploaded = async (campaignId: string) => {
+    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
     try {
       await markUploaded(campaignId).unwrap();
       setUploadedIds((prev) => [...prev, campaignId]);
+      toast.success("Marked as uploaded.");
     } catch (err) {
       console.error(err);
-      alert("Failed to mark as uploaded.");
+      toast.error("Failed to mark as uploaded.");
     }
   };
 
@@ -196,7 +207,7 @@ export default function AdminBundleCampaignManagement() {
                   <th className="py-3 px-4">Bundle Name</th>
                   <th className="py-3 px-4">Customer</th>
                   <th className="py-3 px-4">Status</th>
-                  <th className="py-3 px-4">Is Uploaded</th>
+                  <th className="py-3 px-4">Content Upload Status</th>
                   <th className="py-3 px-4">Approved By</th>
                   <th className="py-3 px-4">Budget</th>
                   <th className="py-3 px-4">Start Date</th>
@@ -221,7 +232,7 @@ export default function AdminBundleCampaignManagement() {
                       <CommonStatus status={campaign.status} />
                     </td>
                     <td className="py-3 px-4">
-                      {campaign.isUploaded ? "True" : "False"}
+                      {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
                     </td>
                     <td className="py-3 px-4">System Auto</td>
                     <td className="py-3 px-4">${campaign?.payment?.amount}</td>
@@ -239,13 +250,24 @@ export default function AdminBundleCampaignManagement() {
                           setIsApproveModalOpen(true);
                         }}
                       />
-                      <CheckCircle
-                        className={`w-6 h-6 cursor-pointer ${
+
+                      <button
+                        className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
                           uploadedIds.includes(campaign.id) ||
                           campaign.isUploaded
-                            ? "text-gray-500 cursor-not-allowed"
-                            : "text-green-500 hover:scale-125"
+                            ? "bg-green-500 text-white cursor-not-allowed"
+                            : "bg-blue-100 text-blue-500 hover:scale-125"
                         }`}
+                        disabled={
+                          uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded
+                        }
+                        title={
+                          uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded
+                            ? "Uploaded"
+                            : "Mark as uploaded"
+                        }
                         onClick={() => {
                           if (
                             !campaign.isUploaded &&
@@ -254,13 +276,92 @@ export default function AdminBundleCampaignManagement() {
                             handleMarkUploaded(campaign.id);
                           }
                         }}
-                      />
+                      >
+                        {uploadedIds.includes(campaign.id) ||
+                        campaign.isUploaded ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : (
+                          <ArrowUpCircle className="w-4 h-4 text-black" />
+                        )}
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* Mobile view */}
+        <div className="md:hidden space-y-4">
+          {campaigns.map((campaign: any) => (
+            <Card
+              key={campaign.id}
+              className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]"
+            >
+              <CardContent className="space-y-3">
+                <h2 className="text-lg font-bold text-white">
+                  {campaign?.bundle?.bundle_name}
+                </h2>
+                <p className="text-sm text-[#AEB9E1]">
+                  Customer: {campaign.customer?.first_name}{" "}
+                  {campaign.customer?.last_name}
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  Status: <CommonStatus status={campaign.status} />
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  Start Date:{" "}
+                  {new Date(campaign.startDate).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  End Date: {new Date(campaign.endDate).toLocaleDateString()}
+                </p>
+                <div className="flex gap-3 mt-2">
+                  <Eye
+                    className="w-6 h-6 text-[#38B6FF] cursor-pointer"
+                    onClick={() => openApproveModal(campaign)}
+                  />
+                  <button
+                    className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                        ? "bg-green-500 text-white cursor-not-allowed"
+                        : "bg-blue-100 text-blue-500 hover:scale-125"
+                    }`}
+                    disabled={
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                    }
+                    title={
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                        ? "Uploaded"
+                        : "Mark as uploaded"
+                    }
+                    onClick={() => {
+                      if (
+                        !campaign.isUploaded &&
+                        !uploadedIds.includes(campaign.id)
+                      ) {
+                        handleMarkUploaded(campaign.id);
+                      }
+                    }}
+                  >
+                    {uploadedIds.includes(campaign.id) ||
+                    campaign.isUploaded ? (
+                      <CheckCircle className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpCircle className="w-4 h-4 text-black" />
+                    )}
+                  </button>
+                  {(uploadedIds.includes(campaign.id) ||
+                    campaign.isUploaded) && (
+                    <span className="ml-2 text-green-400 text-sm font-medium">
+                      Uploaded
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Pagination */}

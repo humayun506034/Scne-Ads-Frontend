@@ -4,12 +4,20 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import { Eye, CalendarDays } from "lucide-react";
+import {
+  Eye,
+  CalendarDays,
+  CheckCircle,
+
+  ArrowUpCircle,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
 import CommonSelect from "@/common/CommonSelect";
 import { Duration } from "@/lib/Data";
+import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import { toast } from "sonner";
 
 export default function AdminScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,6 +26,9 @@ export default function AdminScreenCampaignManagement() {
   const [startYear, setStartYear] = useState<string>("");
   const [endYear, setEndYear] = useState<string>("");
   const [dateFilter, setDateFilter] = useState<string | null>(null);
+  const [uploadedIds, setUploadedIds] = useState<string[]>([]);
+
+  const [markUploaded] = useMarkCustomCampaignUploadedMutation();
 
   // current year ±2 for options
   const yearOptions = useMemo(() => {
@@ -26,14 +37,16 @@ export default function AdminScreenCampaignManagement() {
     const end = now + 2;
 
     const arr: { label: string; value: string }[] = [];
-    for (let y = end; y >= start; y--) arr.push({ label: String(y), value: String(y) });
+    for (let y = end; y >= start; y--)
+      arr.push({ label: String(y), value: String(y) });
     return arr;
   }, []);
 
   // ensure "All" exists in Duration
   const newDuration = useMemo(() => {
     const d = [...Duration];
-    if (!d.find((x) => x.value === "all")) d.push({ label: "All", value: "all" });
+    if (!d.find((x) => x.value === "all"))
+      d.push({ label: "All", value: "all" });
     return d;
   }, []);
 
@@ -88,6 +101,18 @@ export default function AdminScreenCampaignManagement() {
     setCurrentPage(1);
   };
 
+  const handleMarkUploaded = async (campaignId: string) => {
+    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
+    try {
+      await markUploaded(campaignId).unwrap();
+      setUploadedIds((prev) => [...prev, campaignId]);
+      toast.success("Marked as uploaded.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to mark as uploaded.");
+    }
+  };
+
   if (isCustomLoading) {
     return (
       <div className="min-h-screen w-full flex items-center justify-center">
@@ -108,7 +133,9 @@ export default function AdminScreenCampaignManagement() {
           {/* Start/End Year Select */}
           <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-fit">
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Select Start Year</label>
+              <label className="block text-xs text-slate-400 mb-1">
+                Select Start Year
+              </label>
               <CommonSelect
                 Value={startYear || "Select Year"}
                 options={yearOptions}
@@ -122,7 +149,9 @@ export default function AdminScreenCampaignManagement() {
               />
             </div>
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Optional - Set End Year</label>
+              <label className="block text-xs text-slate-400 mb-1">
+                Optional - Set End Year
+              </label>
               <CommonSelect
                 Value={endYear || "Select Year"}
                 options={yearOptions}
@@ -165,7 +194,9 @@ export default function AdminScreenCampaignManagement() {
             <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
               <p className="opacity-70">Active filter :</p>
               <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
-                {dateFilter ? `Preset – ${dateFilter}` : `${startYear || "—"} → ${endYear || "—"}`}
+                {dateFilter
+                  ? `Preset – ${dateFilter}`
+                  : `${startYear || "—"} → ${endYear || "—"}`}
               </p>
             </div>
           )}
@@ -181,6 +212,7 @@ export default function AdminScreenCampaignManagement() {
                 <th className="py-3 px-4">Total Screens</th>
                 <th className="py-3 px-4">Customer</th>
                 <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Content Upload Status</th>
                 <th className="py-3 px-4">Payment</th>
                 <th className="py-3 px-4">Budget</th>
                 <th className="py-3 px-4">Start Date</th>
@@ -196,17 +228,29 @@ export default function AdminScreenCampaignManagement() {
                 >
                   <td className="py-3 px-4">{campaign.screens?.length ?? 0}</td>
                   <td className="py-3 px-4">
-                    {campaign.customer?.first_name} {campaign.customer?.last_name}
+                    {campaign.customer?.first_name}{" "}
+                    {campaign.customer?.last_name}
                   </td>
                   <td className="py-3 px-4">
                     <CommonStatus status={campaign.status} />
                   </td>
                   <td className="py-3 px-4">
-                    {campaign.CustomPayment?.[0]?.status === "success" ? "Paid" : "Unpaid"}
+                    {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
                   </td>
-                  <td className="py-3 px-4">${campaign.CustomPayment?.[0]?.amount ?? 0}</td>
-                  <td className="py-3 px-4">{new Date(campaign.startDate).toLocaleDateString()}</td>
-                  <td className="py-3 px-4">{new Date(campaign.endDate).toLocaleDateString()}</td>
+                  <td className="py-3 px-4">
+                    {campaign.CustomPayment?.[0]?.status === "success"
+                      ? "Paid"
+                      : "Unpaid"}
+                  </td>
+                  <td className="py-3 px-4">
+                    ${campaign.CustomPayment?.[0]?.amount ?? 0}
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(campaign.startDate).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(campaign.endDate).toLocaleDateString()}
+                  </td>
                   <td className="py-3 px-4 flex items-center gap-3">
                     <Eye
                       className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
@@ -215,6 +259,37 @@ export default function AdminScreenCampaignManagement() {
                         setIsApproveModalOpen(true);
                       }}
                     />
+
+                    <button
+                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "bg-green-500 text-white cursor-not-allowed"
+                          : "bg-blue-100 text-blue-500 hover:scale-125"
+                      }`}
+                      disabled={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      }
+                      title={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "Uploaded"
+                          : "Mark as uploaded"
+                      }
+                      onClick={() => {
+                        if (
+                          !campaign.isUploaded &&
+                          !uploadedIds.includes(campaign.id)
+                        ) {
+                          handleMarkUploaded(campaign.id);
+                        }
+                      }}
+                    >
+                      {uploadedIds.includes(campaign.id) ||
+                      campaign.isUploaded ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpCircle className="w-4 h-4 text-black" />
+                      )}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -226,20 +301,29 @@ export default function AdminScreenCampaignManagement() {
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {customCampaignData.map((campaign: any) => (
-          <Card key={campaign.id} className="bg-bg-dashboard border-[#11214D]">
+          <Card
+            key={campaign.id}
+            className="bg-bg-dashboard border-[#11214D]"
+          >
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
                     <h3 className="text-[#AEB9E1] mb-2 font-medium ">
                       Total Screens :
-                      <span className="text-white"> {campaign.screens?.length ?? 0}</span>
+                      <span className="text-white">
+                        {" "}
+                        {campaign.screens?.length ?? 0}
+                      </span>
                     </h3>
                     <h3 className="text-[#AEB9E1] font-medium text-sm">
-                      {campaign.customer?.first_name} {campaign.customer?.last_name}
+                      {campaign.customer?.first_name}{" "}
+                      {campaign.customer?.last_name}
                     </h3>
 
-                    <p className="text-white text-xs mt-1">{campaign.customer?.email}</p>
+                    <p className="text-white text-xs mt-1">
+                      {campaign.customer?.email}
+                    </p>
                   </div>
                   <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-[#38B6FF]">
                     {campaign.status}
@@ -290,7 +374,11 @@ export default function AdminScreenCampaignManagement() {
 
       {/* Pagination */}
       <div className="flex justify-end mt-4">
-        <Pagination currentPage={currentPage} totalPages={TotalPages} onPageChange={setCurrentPage} />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={TotalPages}
+          onPageChange={setCurrentPage}
+        />
       </div>
 
       {/* Approve Modal */}
