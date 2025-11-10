@@ -7,7 +7,7 @@ type Props = {
   uptimeData: { screen: string; uptime: number }[];
 };
 
-const ScreenUptimeChart = ({ uptimeData }: Props) => { 
+const ScreenUptimeChart = ({ uptimeData }: Props) => {
   const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
     defaultValue: "custom",
     parse: (value: string) =>
@@ -56,11 +56,18 @@ const ScreenUptimeChart = ({ uptimeData }: Props) => {
 
   return (
     <div className="rounded-xl p-6 bg-[#0B1739]">
-    <ChartHeader 
-      title={`${chartType === "custom" ? "Custom" : "Bundle"} Screen Uptime (${selectedYear})`} 
-    />
-    <Chart options={options} series={series} type="bar" height={350} />
-  </div>
+      <ChartHeader
+        title={`${
+          chartType === "custom" ? "Custom" : "Bundle"
+        } Screen Uptime (${selectedYear})`}
+      />
+      <Chart
+        options={options}
+        series={series}
+        type="bar"
+        height={350}
+      />
+    </div>
   );
 };
 

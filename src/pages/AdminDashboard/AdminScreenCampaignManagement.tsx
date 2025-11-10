@@ -75,7 +75,6 @@ export default function AdminScreenCampaignManagement() {
     setCurrentPage(1);
   };
 
-  
   const handleClearFilters = () => {
     setStartDate(null);
     setEndDate(null);
@@ -83,16 +82,16 @@ export default function AdminScreenCampaignManagement() {
     setCurrentPage(1);
   };
   if (isCustomLoading) {
-    return <Loading />;
+    return <div className="min-h-screen w-full flex items-center justify-center">
+      <Loading />
+    </div>;
   }
 
   return (
     <div className="p-6 space-y-6 md:mt-10">
       <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
-    All Screen Campaigns
-  </h2>
-
-
+        All Screen Campaigns
+      </h2>
 
       <div className="flex flex-wrap items-center gap-4 mb-4">
         {/* Dates Button */}
@@ -125,7 +124,6 @@ export default function AdminScreenCampaignManagement() {
             onChange={handleStartDateChange}
             className="bg-transparent outline-none text-white placeholder:text-slate-400"
           />
-          
         </div>
 
         {/* End Date Input */}
@@ -139,7 +137,6 @@ export default function AdminScreenCampaignManagement() {
             onChange={handleEndDateChange}
             className="bg-transparent outline-none text-white placeholder:text-slate-400"
           />
-         
         </div>
 
         {/* Predefined Date Filters */}
@@ -234,20 +231,26 @@ export default function AdminScreenCampaignManagement() {
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {customCampaignData.map((campaign: any) => (
-          <Card key={campaign.id} className="bg-bg-dashboard border-[#11214D]">
+          <Card
+            key={campaign.id}
+            className="bg-bg-dashboard border-[#11214D]"
+          >
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
-                     <h3 className="text-[#AEB9E1] mb-2 font-medium ">
-                    Total Screens :<span className="text-white"> {campaign.screens?.length ?? 0 }</span> 
-                    
+                    <h3 className="text-[#AEB9E1] mb-2 font-medium ">
+                      Total Screens :
+                      <span className="text-white">
+                        {" "}
+                        {campaign.screens?.length ?? 0}
+                      </span>
                     </h3>
                     <h3 className="text-[#AEB9E1] font-medium text-sm">
                       {campaign.customer?.first_name}{" "}
                       {campaign.customer?.last_name}
                     </h3>
-                   
+
                     <p className="text-white  text-xs mt-1">
                       {campaign.customer?.email}
                     </p>

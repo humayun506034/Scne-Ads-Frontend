@@ -1,17 +1,16 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
-  CarouselPrevious
+  CarouselPrevious,
 } from "@/components/ui/carousel";
 import { useAppSelector } from "@/store/hooks";
 import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import { Download, X } from "lucide-react";
 
 type ScreenCampaignDetailsModalProps = {
@@ -27,7 +26,6 @@ export default function ScreenCampaignDetailsModal({
 }: ScreenCampaignDetailsModalProps) {
   if (!isOpen || !campaign) return null;
   const user = useAppSelector(selectCurrentUser);
-  
 
   if (!isOpen || !campaign) return null;
   const {
@@ -42,35 +40,36 @@ export default function ScreenCampaignDetailsModal({
     updatedAt,
   } = campaign;
 
-  const isVideo = (url: string) => url?.endsWith(".mp4") || url?.includes("video");
+  const isVideo = (url: string) =>
+    url?.endsWith(".mp4") || url?.includes("video");
 
   const handleDownload = async (url: string) => {
     try {
       // Fetch the file as a blob
       const response = await fetch(url);
       const blob = await response.blob();
-      
+
       // Create a blob URL
       const blobUrl = URL.createObjectURL(blob);
-      
+
       // Create a temporary anchor element
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = blobUrl;
-      
+
       // Set the download filename based on the URL
-      const filename = url.split('/').pop() || 
-                      (isVideo(url) ? 'video.mp4' : 'image.jpg');
+      const filename =
+        url.split("/").pop() || (isVideo(url) ? "video.mp4" : "image.jpg");
       link.download = filename;
-      
+
       // Append to body, click, and clean up
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       // Release the blob URL
       setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
     } catch (error) {
-      console.error('Download failed:', error);
+      console.error("Download failed:", error);
     }
   };
 
@@ -93,7 +92,10 @@ export default function ScreenCampaignDetailsModal({
       >
         {/* Header */}
         <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
-          <h2 id="modal-title" className="text-2xl font-semibold">
+          <h2
+            id="modal-title"
+            className="text-2xl font-semibold"
+          >
             Screen Campaign Details
           </h2>
           <motion.button
@@ -108,7 +110,7 @@ export default function ScreenCampaignDetailsModal({
         </div>
 
         <div className="space-y-8">
-          <div className='flex flex-col md:flex-row justify-between items-start gap-4'>
+          <div className="flex flex-col md:flex-row justify-between items-start gap-4">
             {/* Customer Info */}
             <section>
               <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
@@ -120,10 +122,12 @@ export default function ScreenCampaignDetailsModal({
                   {customer?.first_name} {customer?.last_name}
                 </p>
                 <p>
-                  <span className="text-title-color text-base">Email: </span> {customer?.email}
+                  <span className="text-title-color text-base">Email: </span>{" "}
+                  {customer?.email}
                 </p>
                 <p>
-                  <span className="text-title-color text-base">Status: </span> {status}
+                  <span className="text-title-color text-base">Status: </span>{" "}
+                  {status}
                 </p>
               </div>
             </section>
@@ -152,7 +156,9 @@ export default function ScreenCampaignDetailsModal({
               </h3>
               <div className="space-y-2 text-base">
                 <p>
-                  <span className="text-title-color text-base">Start Date: </span>{" "}
+                  <span className="text-title-color text-base">
+                    Start Date:{" "}
+                  </span>{" "}
                   {new Date(startDate).toLocaleDateString()}
                 </p>
                 <p>
@@ -172,35 +178,57 @@ export default function ScreenCampaignDetailsModal({
           </div>
 
           {/* Screens Section */}
-        
 
           {/* Content Section */}
-          <section className=" ">
-            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
-              Content ({contentUrls?.length || 0}) 
+          <section className="w-full mx-auto ">
+            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4 ">
+              Content ({contentUrls?.length || 0})
             </h3>
+
+            <div className="flex justify-end my-3">
+              {" "}
+              <button
+                className={` px-4 py-2 rounded-lg font-medium text-right transition-colors ${
+                  campaign?.isUploaded
+                    ? "bg-title-color text-black hover:bg-title-color/90"
+                    : "bg-red-600 text-white hover:bg-red-700"
+                }`}
+                aria-label={
+                  campaign?.isUploaded
+                    ? "Content has been uploaded by admin"
+                    : "Content has not been uploaded by admin"
+                }
+              >
+                {campaign?.isUploaded
+                  ? "Your Content has been Uploaded by Admin"
+                  : "Your Content has Not Uploaded by Admin"}
+              </button>
+            </div>
+
             {contentUrls?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {contentUrls.map((url: string, index: number) => (
-                  <div key={index} className="bg-[#11214D] p-4 rounded-lg">
+                  <div
+                    key={index}
+                    className="bg-[#11214D] p-4 rounded-lg"
+                  >
                     <div className="flex justify-between items-center mb-3">
                       <h4 className="font-medium md:text-xl">
                         Content {index + 1} ({isVideo(url) ? "Video" : "Image"})
                       </h4>
-                      {
-                        user?.role === 'admin' && ( <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => handleDownload(url)}
-                      className="flex items-center gap-1 px-4 py-2 bg-title-color cursor-pointer text-black rounded-md transition-colors"
-                      >
-                        <Download className="w-4 h-4" />
-                        <span>Download</span>
-                      </motion.button>)
-                      }
-                     
+                      {user?.role === "admin" && (
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => handleDownload(url)}
+                          className="flex items-center gap-1 px-4 py-2 bg-title-color cursor-pointer text-black rounded-md transition-colors"
+                        >
+                          <Download className="w-4 h-4" />
+                          <span>Download</span>
+                        </motion.button>
+                      )}
                     </div>
-                    
+
                     {isVideo(url) ? (
                       <video
                         controls
@@ -215,7 +243,7 @@ export default function ScreenCampaignDetailsModal({
                               <img
                                 src={url}
                                 alt={`Content ${index + 1}`}
-                                className="w-full h-40 rounded-md object-contain"
+                                className="w-full h-40 rounded-md object-contain object-center"
                               />
                             </CarouselItem>
                           </CarouselContent>
@@ -229,7 +257,7 @@ export default function ScreenCampaignDetailsModal({
               <p className="text-slate-400">No content available</p>
             )}
           </section>
-            <section>
+          <section>
             <h3 className="text-xl font-semibold text-[#38B6FF] mb-4">
               Screens ({screens?.length || 0})
             </h3>
@@ -239,7 +267,9 @@ export default function ScreenCampaignDetailsModal({
                   key={screen.id}
                   className="p-4 border border-slate-700 rounded-lg space-y-3"
                 >
-                  <h4 className="text-sm font-semibold">{screen.name || screen.screen_name}</h4>
+                  <h4 className="text-sm font-semibold">
+                    {screen.name || screen.screen_name}
+                  </h4>
                   <div className="mb-4">
                     <Carousel className="w-full relative">
                       <CarouselContent className="p-0">
@@ -249,9 +279,13 @@ export default function ScreenCampaignDetailsModal({
                               <div className="p-1">
                                 <img
                                   src={imgUrl.url || imgUrl}
-                                  alt={`Screen ${screen.name || screen.screen_name} image ${index + 1}`}
+                                  alt={`Screen ${
+                                    screen.name || screen.screen_name
+                                  } image ${index + 1}`}
                                   className="w-full h-40 object-fill rounded-lg"
-                                  aria-label={`Screen ${screen.name || screen.screen_name} image ${index + 1}`}
+                                  aria-label={`Screen ${
+                                    screen.name || screen.screen_name
+                                  } image ${index + 1}`}
                                 />
                               </div>
                             </CarouselItem>
@@ -261,21 +295,27 @@ export default function ScreenCampaignDetailsModal({
                             <div className="p-1">
                               <img
                                 src={screen.img_url}
-                                alt={`Screen ${screen.name || screen.screen_name}`}
+                                alt={`Screen ${
+                                  screen.name || screen.screen_name
+                                }`}
                                 className="w-full h-40 object-fill rounded-lg"
-                                aria-label={`Screen ${screen.name || screen.screen_name}`}
+                                aria-label={`Screen ${
+                                  screen.name || screen.screen_name
+                                }`}
                               />
                             </div>
                           </CarouselItem>
                         ) : (
                           <CarouselItem>
                             <div className="p-1 flex items-center justify-center h-40 bg-slate-800 rounded-lg">
-                              <span className="text-lg font-medium text-slate-400">No images</span>
+                              <span className="text-lg font-medium text-slate-400">
+                                No images
+                              </span>
                             </div>
                           </CarouselItem>
                         )}
                       </CarouselContent>
-                      
+
                       {screen.imageUrls && screen.imageUrls.length > 1 && (
                         <>
                           <CarouselPrevious
@@ -304,15 +344,21 @@ export default function ScreenCampaignDetailsModal({
                       {screen.screen_size || "N/A"}
                     </p>
                     <p>
-                      <span className="text-title-color text-base">Location: </span>{" "}
+                      <span className="text-title-color text-base">
+                        Location:{" "}
+                      </span>{" "}
                       {screen.location}
                     </p>
                     <p>
-                      <span className="text-title-color text-base">Price: </span> $
-                      {screen.price || "N/A"}
+                      <span className="text-title-color text-base">
+                        Price:{" "}
+                      </span>{" "}
+                      ${screen.price || "N/A"}
                     </p>
                     <p>
-                      <span className="text-title-color text-base">Status: </span>{" "}
+                      <span className="text-title-color text-base">
+                        Status:{" "}
+                      </span>{" "}
                       {screen.status}
                     </p>
                   </div>
@@ -320,17 +366,17 @@ export default function ScreenCampaignDetailsModal({
               ))}
             </div>
           </section>
-           <div className='flex justify-center md:justify-end '>
-             <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.8 }}
-           onClick={onClose}
-            aria-label="Close modal"
-            className="text-title-color border px-4 py-2 rounded-lg border-secondary-color cursor-pointer hover:text-red-400 " 
-          >
-            Close
-          </motion.button>
-        </div>
+          <div className="flex justify-center md:justify-end ">
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.8 }}
+              onClick={onClose}
+              aria-label="Close modal"
+              className="text-title-color border px-4 py-2 rounded-lg border-secondary-color cursor-pointer hover:text-red-400 "
+            >
+              Close
+            </motion.button>
+          </div>
         </div>
       </div>
     </div>

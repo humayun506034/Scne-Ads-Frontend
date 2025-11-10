@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import CampaignPerformanceChart from "./CampaignPerformanceChart";
 import RevenueChart from "./RevenueChart";
 import ScreenUptimeChart from "./ScreenUptimeChart";
+import Loading from "@/common/MapLoading";
 
 type Screen = {
   screen_name?: string;
@@ -112,7 +113,12 @@ const CampaignPerformanceAnalytics: React.FC<Props> = ({
     ),
   }));
 
-  if (!isClient) return <div className="text-white p-6">Loading charts...</div>;
+  if (!isClient)
+    return (
+      <div className="w-full min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
 
   return (
     <div className=" rounded-xl space-y-20">

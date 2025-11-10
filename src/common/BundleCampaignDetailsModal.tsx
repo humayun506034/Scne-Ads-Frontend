@@ -6,6 +6,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from "framer-motion";
 import {
   BadgeCheck,
@@ -13,6 +15,7 @@ import {
   CheckCircle2,
   CreditCard,
   DollarSign,
+  Download,
   Hash,
   ImageIcon,
   Info,
@@ -37,6 +40,8 @@ export default function BundleCampaignDetailsModal({
   onClose,
   campaign,
 }: BundleCampaignDetailsModalProps) {
+  const user = useAppSelector(selectCurrentUser);
+
   if (!isOpen || !campaign) return null;
 
   const {
@@ -53,6 +58,26 @@ export default function BundleCampaignDetailsModal({
 
   const isVideo = (url: string) =>
     url?.endsWith(".mp4") || url?.includes("video");
+
+  const handleDownload = async (url: string) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const filename =
+        url.split("/").pop() ||
+        (url.endsWith(".mp4") ? "video.mp4" : "image.jpg");
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 100);
+    } catch (error) {
+      console.error("Download failed:", error);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -73,7 +98,10 @@ export default function BundleCampaignDetailsModal({
       >
         {/* Header */}
         <div className="flex justify-between items-center border-b border-slate-700 pb-3 mb-4">
-          <h2 id="modal-title" className="text-2xl font-semibold flex items-center gap-2">
+          <h2
+            id="modal-title"
+            className="text-2xl font-semibold flex items-center gap-2"
+          >
             <Layers className="w-5 h-5 text-[#38B6FF]" />
             Bundle Campaign Details
           </h2>
@@ -121,13 +149,17 @@ export default function BundleCampaignDetailsModal({
               </h3>
               <div className="space-y-3 text-base">
                 <p className="flex flex-col md:flex-row flex-wrap md:items-center gap-2">
-                
-                  <p className="text-title-color flex  gap-2 md:justify-center items-center">   <Hash className="w-4 h-4 text-title-color" /> Transaction ID:</p>{" "}
+                  <p className="text-title-color flex  gap-2 md:justify-center items-center">
+                    {" "}
+                    <Hash className="w-4 h-4 text-title-color" /> Transaction
+                    ID:
+                  </p>{" "}
                   {payment?.transactionId}
                 </p>
                 <p className="flex items-center gap-2">
                   <DollarSign className="w-4 h-4 text-title-color" />
-                  <span className="text-title-color">Amount:</span> ${payment?.amount}
+                  <span className="text-title-color">Amount:</span> $
+                  {payment?.amount}
                 </p>
                 <p className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-title-color" />
@@ -157,11 +189,13 @@ export default function BundleCampaignDetailsModal({
               </p>
               <p className="flex items-center gap-2">
                 <Tv2 className="w-4 h-4 text-title-color" />
-                <span className="text-title-color">Duration:</span> {bundle?.duration}
+                <span className="text-title-color">Duration:</span>{" "}
+                {bundle?.duration}
               </p>
               <p className="flex items-center gap-2">
                 <DollarSign className="w-4 h-4 text-title-color" />
-                <span className="text-title-color">Price:</span> ${bundle?.price}
+                <span className="text-title-color">Price:</span> $
+                {bundle?.price}
               </p>
               <p className="flex items-center gap-2">
                 <BadgeCheck className="w-4 h-4 text-title-color" />
@@ -221,37 +255,46 @@ export default function BundleCampaignDetailsModal({
               {contentUrls?.map((url: string, index: number) => (
                 <div
                   key={index}
-                  className="p-4 border border-slate-700 rounded-lg space-y-3"
+                  className="bg-[#11214D] p-4 rounded-lg"
                 >
-                  <div className="flex justify-between items-center">
-                    <h4 className="text-lg text-title-color font-semibold flex items-center gap-2">
-                      {isVideo(url) ? (
-                        <PlaySquare className="w-4 h-4" />
-                      ) : (
-                        <ImageIcon className="w-4 h-4" />
-                      )}
-                      Content {index + 1}
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="font-medium md:text-xl">
+                      Content {index + 1} ({isVideo(url) ? "Video" : "Image"})
                     </h4>
-                  </div>
-
-                  {/* Media */}
-                  <div className="mb-2">
-                    {isVideo(url) ? (
-                      <video
-                        src={url}
-                        controls
-                        className="w-full max-h-64 rounded-lg"
-                        aria-label={`Video content ${index + 1}`}
-                      />
-                    ) : (
-                      <img
-                        src={url}
-                        alt={`Content ${index + 1}`}
-                        className="w-full h-60 object-fill rounded-lg"
-                        aria-label={`Image content ${index + 1}`}
-                      />
+                    {user?.role === "admin" && (
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleDownload(url)}
+                        className="flex items-center gap-1 px-4 py-2 bg-title-color cursor-pointer text-black rounded-md transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        <span>Download</span>
+                      </motion.button>
                     )}
                   </div>
+
+                  {isVideo(url) ? (
+                    <video
+                      controls
+                      className="w-full h-40 rounded-md"
+                      src={url}
+                    />
+                  ) : (
+                    <div className="relative">
+                      <Carousel className="w-full">
+                        <CarouselContent>
+                          <CarouselItem>
+                            <img
+                              src={url}
+                              alt={`Content ${index + 1}`}
+                              className="w-full h-40 rounded-md object-contain object-center"
+                            />
+                          </CarouselItem>
+                        </CarouselContent>
+                      </Carousel>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -270,23 +313,31 @@ export default function BundleCampaignDetailsModal({
                     key={screen.id}
                     className="p-4 border border-slate-700 rounded-lg space-y-3"
                   >
-                    <h4 className="text-sm font-semibold">{screen.screen_name}</h4>
+                    <h4 className="text-sm font-semibold">
+                      {screen.screen_name}
+                    </h4>
                     <div className="mb-4">
                       <Carousel className="w-full relative">
                         <CarouselContent className="p-0">
                           {screen.imageUrls.length > 0 ? (
-                            screen.imageUrls.map((imgUrl: any, index: number) => (
-                              <CarouselItem key={index}>
-                                <div className="p-1">
-                                  <img
-                                    src={imgUrl.url}
-                                    alt={`Screen ${screen.screen_name} image ${index + 1}`}
-                                    className="w-full h-40 object-fill rounded-lg"
-                                    aria-label={`Screen ${screen.screen_name} image ${index + 1}`}
-                                  />
-                                </div>
-                              </CarouselItem>
-                            ))
+                            screen.imageUrls.map(
+                              (imgUrl: any, index: number) => (
+                                <CarouselItem key={index}>
+                                  <div className="p-1">
+                                    <img
+                                      src={imgUrl.url}
+                                      alt={`Screen ${
+                                        screen.screen_name
+                                      } image ${index + 1}`}
+                                      className="w-full h-40 object-fill rounded-lg"
+                                      aria-label={`Screen ${
+                                        screen.screen_name
+                                      } image ${index + 1}`}
+                                    />
+                                  </div>
+                                </CarouselItem>
+                              )
+                            )
                           ) : (
                             <CarouselItem>
                               <div className="p-1 flex items-center justify-center h-40 bg-slate-800 rounded-lg">
@@ -333,11 +384,14 @@ export default function BundleCampaignDetailsModal({
                       </p>
                       <p className="flex items-center gap-2">
                         <DollarSign className="w-4 h-4 text-title-color" />
-                        <span className="text-title-color">Price:</span> ${screen.price}
+                        <span className="text-title-color">Price:</span> $
+                        {screen.price}
                       </p>
                       <p className="flex items-center gap-2">
                         <Monitor className="w-4 h-4 text-title-color" />
-                        <span className="text-title-color">Resolution:</span>{" "}
+                        <span className="text-title-color">
+                          Resolution:
+                        </span>{" "}
                         {screen.resolution}
                       </p>
                     </div>

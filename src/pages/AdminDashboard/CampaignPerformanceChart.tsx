@@ -1,6 +1,4 @@
 import Chart from "react-apexcharts";
-import activeCampaign from "@/assets/AdminPanel/active-campaigns.png";
-import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
 import { ApexOptions } from "apexcharts";
 import { useQueryState } from "nuqs";
 import { ChartHeader } from "./CampaignPerformanceAnalytics";
