@@ -7,31 +7,28 @@ import CommonDashboardButton from "@/common/CommonDashBoardButton";
 import "leaflet/dist/leaflet.css";
 import { mapConfig } from ".";
 
-import { ILocation } from "@/types/locations";
 
 export default function MobileBillboardMap() {
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
 
-  const handleViewCampaigns = (location: ILocation) => {
-    console.log("View campaigns for:", location.title);
-  };
+
 
   const handleSeeAllCampaigns = () => {
     console.log("Navigate to all campaigns");
   };
 
-  const getStatusColor = (status: ILocation["status"]) => {
-    switch (status) {
-      case "active":
-        return "bg-green-500";
-      case "maintenance":
-        return "bg-orange-500";
-      case "inactive":
-        return "bg-gray-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
+  // const getStatusColor = (status: ILocation["status"]) => {
+  //   switch (status) {
+  //     case "active":
+  //       return "bg-green-500";
+  //     case "maintenance":
+  //       return "bg-orange-500";
+  //     case "inactive":
+  //       return "bg-gray-500";
+  //     default:
+  //       return "bg-gray-500";
+  //   }
+  // };
 
   return (
     <div className="w-full h-[600px] relative bg-dashboard-card-bg rounded-lg">

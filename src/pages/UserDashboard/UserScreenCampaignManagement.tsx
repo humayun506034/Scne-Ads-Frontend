@@ -110,7 +110,7 @@ export default function UserScreenCampaignManagement() {
                 Value={startYear || "Select Year"}
                 options={yearOptions}
                 setValue={(val) => {
-                  setStartYear(val);
+                  setStartYear(String(val));
                   setDateFilter(null);
                   setCurrentPage(1);
                 }}
@@ -125,7 +125,7 @@ export default function UserScreenCampaignManagement() {
                 Value={endYear || "Select Year"}
                 options={yearOptions}
                 setValue={(val) => {
-                  setEndYear(val);
+                  setEndYear(String(val));
                   setDateFilter(null);
                   setCurrentPage(1);
                 }}
