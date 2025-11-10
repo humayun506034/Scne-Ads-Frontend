@@ -1,9 +1,9 @@
 
 
+import UserDashboardMobileNavbar from "@/components/Modules/UserDashboard/UserDashboardMobileNavbar";
 import CustomToaster from "@/pages/CustomToaster";
 import { Outlet } from "react-router-dom";
 import { DashboardSidebar } from "./DashboardSidebar";
-import UserDashboardMobileNavbar from "@/components/Modules/UserDashboard/UserDashboardMobileNavbar";
 
 export function UserDashboardLayout() {
   return (
@@ -12,8 +12,8 @@ export function UserDashboardLayout() {
         <DashboardSidebar user="customer" />
       </aside>
 
-      <div className="flex flex-col flex-1 overflow-hidden ">
-        <main className="flex-1 ">
+      <div className="flex flex-col min-h-screen flex-1 overflow-hidden ">
+        <main className="flex-1 px-4 lg:px-6">
           <div className="relative ">
             <UserDashboardMobileNavbar />
 

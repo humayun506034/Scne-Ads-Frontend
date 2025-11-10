@@ -1,298 +1,115 @@
 import React, { useEffect, useState } from "react";
-import Chart from "react-apexcharts";
-import activeCampaign from "@/assets/AdminPanel/active-campaigns.png";
-import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
-const CampaignPerformanceAnalytics: React.FC = () => {
+import CampaignPerformanceChart from "./CampaignPerformanceChart";
+import RevenueChart from "./RevenueChart";
+import ScreenUptimeChart from "./ScreenUptimeChart";
+
+
+type Screen = {
+  screen_name?: string;
+  name?: string;
+};
+
+type Bundle = {
+  screens?: Screen[];
+};
+
+type Campaign = {
+  id: string;
+  status: "pending" | "running" | "completed";
+  createdAt?: string;
+  bundle?: Bundle;
+  screens?: Screen[];
+  CustomScreens?: Screen[];
+};
+
+type RevenueMonth = {
+  year: number;
+  months: { month: string; revenue: number }[];
+};
+
+type Props = {
+  campaigns: Campaign[];
+  revenueMeta: { monthlyRevenue: RevenueMonth[] }; // NEW
+};
+
+const CampaignPerformanceAnalytics: React.FC<Props> = ({ campaigns, revenueMeta }) => {
   const [isClient, setIsClient] = useState(false);
+  useEffect(() => setIsClient(true), []);
 
-  const campaignData = [
-    { month: "Jan", active: 10, completed: 6 },
-    { month: "Feb", active: 13, completed: 8 },
-    { month: "Mar", active: 18, completed: 13 },
-    { month: "Apr", active: 8, completed: 5 },
-    { month: "May", active: 17, completed: 10 },
-    { month: "Jun", active: 9, completed: 6 },
+
+
+  // --- Monthly Campaigns ---
+  const monthOrder = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
+  const monthlyStats: Record<string, { active: number; completed: number }> =
+    {};
+  monthOrder.forEach((m) => (monthlyStats[m] = { active: 0, completed: 0 }));
 
-  const revenueData = [
-    { month: "Jan", revenue: 23000 },
-    { month: "Feb", revenue: 27000 },
-    { month: "Mar", revenue: 37000 },
-    { month: "Apr", revenue: 29000 },
-    { month: "May", revenue: 43000 },
-    { month: "Jun", revenue: 46000 },
-  ];
+  campaigns.forEach((c) => {
+    if (!c.createdAt) return;
+    const month = new Date(c.createdAt).toLocaleString("default", {
+      month: "short",
+    });
+    if (c.status === "running" || c.status === "pending")
+      monthlyStats[month].active += 1;
+    else if (c.status === "completed") monthlyStats[month].completed += 1;
+  });
 
-  const uptimeData = [
-    { screen: "Downtown Billboard", uptime: 90 },
-    { screen: "Mall Entrance Display", uptime: 97 },
-    { screen: "Airport Lounge Screen", uptime: 85 },
-    { screen: "Sports Arena Jumbotron", uptime: 100 },
-  ];
+  const campaignData = monthOrder.map((month) => ({
+    month,
+    active: monthlyStats[month].active,
+    completed: monthlyStats[month].completed,
+  }));
 
-  useEffect(() => {
-    setIsClient(true);
-    // fetch the API here
-  }, []);
+  // --- Screen Uptime ---
+  const screenStats: Record<string, { active: number; total: number }> = {};
 
-  const campaignOptions: ApexCharts.ApexOptions = {
-    chart: {
-      type: "bar",
-      height: 470,
-      background: "transparent",
-      toolbar: { show: false },
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "45%",
-        borderRadius: 5,
-        borderRadiusApplication: "end",
-      },
-    },
-    dataLabels: { enabled: false },
-    stroke: { show: true, width: 2, colors: ["transparent"] },
-    xaxis: {
-      categories: campaignData.map((d) => d.month),
-      labels: { style: { colors: "#9CA3AF", fontSize: "16px" } },
-      axisBorder: { show: true },
-      axisTicks: { show: false },
-    },
+  campaigns.forEach((c) => {
+    const screens = [
+      ...(c.bundle?.screens ?? []),
+      ...(c.CustomScreens ?? []),
+      ...(c.screens ?? []),
+    ];
 
-    yaxis: {
-      min: 0,
-      max: 20,
-      tickAmount: 4,
-      title: { style: { color: "#9CA3AF" } },
-      labels: {
-        style: { colors: "#9CA3AF", fontSize: "12px" },
-        formatter: (val) => val + "%",
-      },
+    screens.forEach((s) => {
+      const screenName = s.screen_name || s.name || "Unknown Screen";
+      if (!screenStats[screenName])
+        screenStats[screenName] = { active: 0, total: 0 };
+      screenStats[screenName].total += 1;
+      if (c.status === "running" || c.status === "completed")
+        screenStats[screenName].active += 1;
+    });
+  });
 
-      axisBorder: {
-        show: true,
-        color: "#9CA3AF", // line color
-        width: 1, // line width
-      },
-      axisTicks: {
-        show: true,
-        color: "#9CA3AF",
-        width: 1,
-      },
-    },
+  const uptimeData = Object.keys(screenStats).map((screen) => ({
+    screen,
+    uptime: Math.round(
+      (screenStats[screen].active / screenStats[screen].total) * 100
+    ),
+  }));
 
-    colors: ["#033579", "#38B6FF"],
-    fill: { opacity: 1 },
-    grid: { show: false },
-    legend: { show: false },
-    tooltip: { theme: "dark" },
-  };
-
-  const campaignSeries = [
-    { name: "Active Campaigns", data: campaignData.map((d) => d.active) },
-    { name: "Completed Campaigns", data: campaignData.map((d) => d.completed) },
-  ];
-
-  // Revenue Trends Chart
-  const revenueOptions: ApexCharts.ApexOptions = {
-    chart: {
-      type: "line",
-      height: 470,
-      background: "transparent",
-      toolbar: { show: false },
-      zoom: { enabled: false },
-    },
-    dataLabels: { enabled: false },
-    stroke: { curve: "straight", width: 1, colors: ["#ffffff"] },
-    grid: {
-      borderColor: "#374151",
-      strokeDashArray: 3,
-      xaxis: {
-        lines: {
-          show: true, // vertical grid lines
-        },
-      },
-      yaxis: {
-        lines: {
-          show: true, // horizontal grid lines
-        },
-      },
-    },
-    xaxis: {
-      categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-      labels: { style: { colors: "#9CA3AF", fontSize: "12px" } },
-      axisBorder: { show: true },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      min: 0,
-      max: 60000,
-      tickAmount: 4,
-      labels: {
-        style: { colors: "#9CA3AF", fontSize: "12px" },
-        formatter: (val) => "$" + val + "K",
-      },
-    },
-    markers: {
-      size: 5,
-      colors: ["#38B6FF"],
-      strokeColors: "#38B6FF",
-      strokeWidth: 1,
-      hover: { size: 8 },
-    },
-    tooltip: {
-      theme: "dark",
-      y: { formatter: (val) => "$" + val.toLocaleString() },
-    },
-  };
-
-  const revenueSeries = [
-    { name: "Revenue", data: revenueData.map((d) => d.revenue) },
-  ];
-
-  // Uptime Chart
-  const uptimeOptions: ApexCharts.ApexOptions = {
-    chart: {
-      type: "bar",
-      height: 470,
-      background: "transparent",
-      toolbar: { show: false },
-    },
-    grid: {
-      show: true,
-      borderColor: "#374151",
-      strokeDashArray: 3,
-    },
-    plotOptions: {
-      bar: {
-        horizontal: false,
-        columnWidth: "40%",
-        borderRadius: 5,
-        borderRadiusApplication: "end",
-      },
-    },
-    dataLabels: { enabled: false },
-    stroke: { show: true, width: 2, colors: ["transparent"] },
-    xaxis: {
-      categories: [
-        "Downtown Billboard",
-        "Mall Entrance Display",
-        "Airport Lounge Screen",
-        "Sports Arena Jumbotron",
-      ],
-      labels: {
-        style: { colors: "#9CA3AF", fontSize: "16px" },
-        rotate: 0,
-        rotateAlways: false,
-        offsetY: 3,
-      },
-
-      axisBorder: { show: true },
-      axisTicks: { show: false },
-    },
-    yaxis: {
-      min: 0,
-      max: 100,
-      tickAmount: 4,
-      title: { style: { color: "#9CA3AF" } },
-      labels: {
-        style: { colors: "#9CA3AF", fontSize: "12px" },
-        formatter: (val) => val + "%",
-      },
-
-      axisBorder: {
-        show: true,
-        color: "#9CA3AF", // line color
-        width: 1, // line width
-      },
-      axisTicks: {
-        show: true, // optionally show ticks
-        color: "#9CA3AF",
-        width: 1,
-      },
-    },
-    colors: ["#033579"],
-    fill: { opacity: 1 },
-
-    tooltip: { theme: "dark", y: { formatter: (val) => val + "%" } },
-  };
-
-  const uptimeSeries = [
-    { name: "Screen Uptime Analytics", data: uptimeData.map((d) => d.uptime) },
-  ];
-
-  if (!isClient) return <div className="text-white">Loading charts...</div>;
+  if (!isClient) return <div className="text-white p-6">Loading charts...</div>;
 
   return (
-    <div className="bg-[#081028] sm:px-6 sm:py-16">
-      <div className=" mx-auto ">
-        {/* Campaign Performance */}
-        <div className="mb-20">
-          <div>
-            <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
-              Campaign Performance Overview
-            </h2>
-            <p className="text-[#AEB9E1] text-base mb-4">
-              Active vs. Completed Campaigns (Monthly)
-            </p>
-            <div className=" rounded-lg p-6 ">
-              <Chart
-                options={campaignOptions}
-                series={campaignSeries}
-                type="bar"
-                height={470}
-              />
-            </div>
-          </div>
-          <div className="flex justify-center gap-6 items-center">
-            <div className="flex items-center gap-2">
-              <img src={activeCampaign} alt="" />
-              <p>Active Campaigns</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <img src={completedCampaign} alt="" />
-              <p>Completed Campaigns</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Revenue Trends */}
-        <div className="mb-20">
-          {" "}
-          <div>
-            <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
-              Revenue Trends
-            </h2>
-            <p className="text-[#AEB9E1] text-base mb-4">Monthly Revenue</p>
-          </div>
-          <div className=" rounded-lg p-6 ">
-            <Chart
-              options={revenueOptions}
-              series={revenueSeries}
-              type="line"
-              height={470}
-            />
-          </div>
-        </div>
-
-        {/* Screen Uptime */}
-        <div>
-          <h2 className="text-[#C3CEE9] lg:text-3xl sm:text-lg font-normal mb-1">
-            Screen Uptime Statistics
-          </h2>
-          <p className="text-[#AEB9E1] text-base mb-4">
-            Uptime Percentage by Screens
-          </p>
-        </div>
-        <div className=" rounded-lg p-6 ">
-          <Chart
-            options={uptimeOptions}
-            series={uptimeSeries}
-            type="bar"
-            height={470}
-          />
-        </div>
-      </div>
+    <div className="bg-[#081028] p-6 rounded-xl space-y-10">
+      <CampaignPerformanceChart campaignData={campaignData} />
+      
+      <RevenueChart
+      revenueMeta={revenueMeta}
+      />
+      <ScreenUptimeChart uptimeData={uptimeData} />
     </div>
   );
 };
