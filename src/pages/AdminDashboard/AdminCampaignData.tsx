@@ -11,7 +11,6 @@ import {
   useGetAllCustomCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 import { useGetAllUserQuery } from "@/store/api/User/useApi";
-
 import AdminDashboardHeader from "@/components/Modules/admin-dashboard/AdminDashboardHeader";
 import { motion } from "framer-motion";
 import CampaignPerformanceAnalytics from "./CampaignPerformanceAnalytics";
@@ -26,7 +25,6 @@ type MetricCardProps = {
   className?: string;
 };
 
-// Metric Card Component
 const MetricCard: React.FC<MetricCardProps> = ({
   title,
   subtitle,
@@ -72,7 +70,6 @@ const AdminCampaignData: React.FC = () => {
     }
   );
 
-  // Year query state
   const [selectedYear, setSelectedYear] = useQueryState<number>("year", {
     defaultValue: new Date().getFullYear(),
     parse: (value: string) => {
@@ -80,8 +77,13 @@ const AdminCampaignData: React.FC = () => {
       return isNaN(num) ? new Date().getFullYear() : num;
     },
   });
-  
-  if (bundleLoading || screenLoading) return <Loading />;
+
+  if (bundleLoading || screenLoading)
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center">
+        <Loading />
+      </div>
+    );
 
   const BundleCampaigns = BundleResponse?.data?.data ?? [];
   const CustomCampaigns = ScreenResponse?.data?.data ?? [];
@@ -122,22 +124,22 @@ const AdminCampaignData: React.FC = () => {
     },
   ];
 
-  // --- Pass actual campaigns to analytics ---
+  // Filter campaigns
   const filteredCampaigns =
     chartType === "custom" ? CustomCampaigns : BundleCampaigns;
 
   const availableYears: number[] = Array.from(
     new Set(
-      (chartType === "custom" ? CustomCampaigns : BundleCampaigns)
+      filteredCampaigns
         .map((c) => c.createdAt && new Date(c.createdAt).getFullYear())
         .filter(Boolean)
     )
   )
-    .map(Number) // ensure type is number
-    .sort((a, b) => b - a); // now TS knows a, b are numbers
+    .map(Number)
+    .sort((a, b) => b - a);
 
   const filteredCampaignsByYear = filteredCampaigns.filter(
-    (c) => new Date(c.createdAt).getFullYear() === selectedYear
+    (c) => c.createdAt && new Date(c.createdAt).getFullYear() === selectedYear
   );
 
   const filteredRevenueMeta = {
@@ -158,11 +160,12 @@ const AdminCampaignData: React.FC = () => {
       <div className="px-4 md:px-8 lg:px-6 mx-auto">
         <AdminDashboardHeader />
 
+        {/* Metrics Cards */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-10 mt-6 md:mt-10"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10 mt-6 md:mt-10"
         >
           {metricsData.map((metric, index) => (
             <MetricCard
@@ -172,36 +175,68 @@ const AdminCampaignData: React.FC = () => {
           ))}
         </motion.div>
 
-        <div className="flex gap-4 mb-6">
-          {["Custom", "Bundle"].map((type) => (
-            <Button
-              key={type}
-              onClick={() =>
-                setChartType(type.toLowerCase() as "custom" | "bundle")
-              }
-              className={`cursor-pointer py-2 px-6 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
-                chartType === type.toLowerCase()
-                  ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              {type}
-            </Button>
-          ))}
-          <CommonSelect
-            Value={String(selectedYear)}
-            setValue={(val) => setSelectedYear(Number(val))}
-            options={availableYears.map((year) => ({
-              label: String(year),
-              value: String(year),
-            }))}
-          />
+        {/* Chart Type Heading */}
+        <div className="mb-4 px-10">
+          <h2 className="text-lg md:text-xl font-semibold text-white">
+            Select Campaign Type
+          </h2>
         </div>
 
-        <CampaignPerformanceAnalytics
-          campaigns={filteredCampaignsByYear}
-          revenueMeta={filteredRevenueMeta}
-        />
+        {/* Chart Type + Year Filter */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-6 px-10">
+          {/* Chart Type Buttons */}
+          <div className="flex gap-2 flex-wrap">
+            {[
+              {
+                type: "Custom",
+                description: "Shows analytics for custom screen campaigns",
+              },
+              {
+                type: "Bundle",
+                description: "Shows analytics for bundle campaigns",
+              },
+            ].map(({ type, description }) => (
+              <Button
+                key={type}
+                onClick={() =>
+                  setChartType(type.toLowerCase() as "custom" | "bundle")
+                }
+                title={description}
+                className={`py-2 px-5 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out cursor-pointer ${
+                  chartType === type.toLowerCase()
+                    ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
+                    : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
+                }`}
+              >
+                {type}
+              </Button>
+            ))}
+          </div>
+
+          {/* Year Select */}
+          <div className="mt-2 md:mt-0 min-w-[140px]">
+            <CommonSelect
+              Value={String(selectedYear)}
+              setValue={(val) => setSelectedYear(Number(val))}
+              options={availableYears.map((year) => ({
+                label: String(year),
+                value: String(year),
+              }))}
+            />
+          </div>
+        </div>
+
+        {/* Campaign Analytics or Empty State */}
+        {filteredCampaignsByYear.length === 0 ? (
+          <div className="text-gray-400 text-center py-10">
+            No campaigns found for {selectedYear}.
+          </div>
+        ) : (
+          <CampaignPerformanceAnalytics
+            campaigns={filteredCampaignsByYear}
+            revenueMeta={filteredRevenueMeta}
+          />
+        )}
       </div>
     </motion.div>
   );

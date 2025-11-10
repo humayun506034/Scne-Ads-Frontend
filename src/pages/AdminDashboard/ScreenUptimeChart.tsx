@@ -1,12 +1,13 @@
 import { ApexOptions } from "apexcharts";
 import { useQueryState } from "nuqs";
 import Chart from "react-apexcharts";
+import { ChartHeader } from "./CampaignPerformanceAnalytics";
 
 type Props = {
   uptimeData: { screen: string; uptime: number }[];
 };
 
-const ScreenUptimeChart = ({ uptimeData }: Props) => {
+const ScreenUptimeChart = ({ uptimeData }: Props) => { 
   const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
     defaultValue: "custom",
     parse: (value: string) =>
@@ -54,14 +55,12 @@ const ScreenUptimeChart = ({ uptimeData }: Props) => {
   const series = [{ name: "Uptime", data: uptimeData.map((u) => u.uptime) }];
 
   return (
-    <div>
-      <h3 className="text-white mb-2 text-lg font-medium">
-        {chartType === "custom" ? "Custom" : "Bundle"} Screen Uptime ({selectedYear})
-      </h3>
-      <div className="rounded-xl p-4 bg-[#0B1739]">
-        <Chart options={options} series={series} type="bar" height={350} />
-      </div>
-    </div>
+    <div className="rounded-xl p-6 bg-[#0B1739]">
+    <ChartHeader 
+      title={`${chartType === "custom" ? "Custom" : "Bundle"} Screen Uptime (${selectedYear})`} 
+    />
+    <Chart options={options} series={series} type="bar" height={350} />
+  </div>
   );
 };
 

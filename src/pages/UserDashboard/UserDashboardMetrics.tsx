@@ -113,7 +113,13 @@ const UserDashboardMetrics = () => {
     isError: bundleError,
   } = useGetCustomerBundlesQuery(undefined);
 
-  if (customLoading || bundleLoading) return <Loading />;
+  if (customLoading || bundleLoading)
+    return (
+      <div className="min-h-screen w-full flex flex-col items-center justify-center">
+        <Loading />
+      </div>
+    );
+
   if (customError || bundleError)
     return <div className="text-center py-10">Failed to load data.</div>;
 

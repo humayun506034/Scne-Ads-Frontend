@@ -3,7 +3,6 @@ import CampaignPerformanceChart from "./CampaignPerformanceChart";
 import RevenueChart from "./RevenueChart";
 import ScreenUptimeChart from "./ScreenUptimeChart";
 
-
 type Screen = {
   screen_name?: string;
   name?: string;
@@ -27,16 +26,29 @@ type RevenueMonth = {
   months: { month: string; revenue: number }[];
 };
 
+interface ChartHeaderProps {
+  title: string;
+}
+
+export const ChartHeader: React.FC<ChartHeaderProps> = ({ title }) => {
+  return (
+    <h2 className="text-xl md:text-2xl font-medium text-white mb-4 text-center md:text-left">
+      {title}
+    </h2>
+  );
+};
+
 type Props = {
   campaigns: Campaign[];
   revenueMeta: { monthlyRevenue: RevenueMonth[] }; // NEW
 };
 
-const CampaignPerformanceAnalytics: React.FC<Props> = ({ campaigns, revenueMeta }) => {
+const CampaignPerformanceAnalytics: React.FC<Props> = ({
+  campaigns,
+  revenueMeta,
+}) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
-
-
 
   // --- Monthly Campaigns ---
   const monthOrder = [
@@ -103,12 +115,9 @@ const CampaignPerformanceAnalytics: React.FC<Props> = ({ campaigns, revenueMeta 
   if (!isClient) return <div className="text-white p-6">Loading charts...</div>;
 
   return (
-    <div className="bg-[#081028] p-6 rounded-xl space-y-10">
+    <div className=" rounded-xl space-y-20">
       <CampaignPerformanceChart campaignData={campaignData} />
-      
-      <RevenueChart
-      revenueMeta={revenueMeta}
-      />
+      <RevenueChart revenueMeta={revenueMeta} />
       <ScreenUptimeChart uptimeData={uptimeData} />
     </div>
   );
