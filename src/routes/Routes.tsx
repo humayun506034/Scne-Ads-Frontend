@@ -152,8 +152,8 @@ const routes = createBrowserRouter([
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,
-      },    
-   
+      },
+
       { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
       // { path: "pricing-management", element: <DynamicPricingManagement /> },
     ],

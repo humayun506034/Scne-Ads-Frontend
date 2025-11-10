@@ -1,4 +1,3 @@
- 
 import {
   Carousel,
   CarouselContent,
@@ -13,8 +12,6 @@ import SpecialCard from "./SpecialCard";
 
 const SpecialSection = () => {
   const { data, isLoading, isError } = useGetAllBundleQuery({ limit: 1000 });
-  console.log(data)
-  // Correct array path
   const bundles: Bundle[] = data?.data?.data || [];
 
   const [selectedBundle, setSelectedBundle] = useState<Bundle | null>(null);
@@ -30,36 +27,52 @@ const SpecialSection = () => {
     setSelectedBundle(null);
   };
 
-  if (isLoading) return <p className="text-center mt-10">Loading bundles...</p>;
-  if (isError)
-    return <p className="text-center text-red-500 mt-10">Failed to load bundles.</p>;
-  if (!bundles.length) return <p className="text-center mt-10">No bundles found</p>;
+  // Display either real bundles or placeholders while loading
+  const displayBundles: Bundle[] = isLoading
+    ? Array.from({ length: 4 })
+    : bundles;
 
   return (
     <div className="mt-20 relative">
       <h1 className="text-3xl font-semibold text-center">Customized Bundles</h1>
 
-      <Carousel className="w-full mt-0">
+      {isError && (
+        <p className="text-center text-red-500 mt-10">
+          Failed to load bundles.
+        </p>
+      )}
+      {!isError && !bundles.length && !isLoading && (
+        <p className="text-center mt-10">No bundles found</p>
+      )}
+
+      <Carousel className="w-full mt-10">
         <CarouselContent>
-          {bundles.map((bundle, index) => (
+          {displayBundles.map((bundle, index) => (
             <CarouselItem
               key={bundle?.id || index}
-              className="md:basis-1/2 md:m-4   lg:basis-1/2 xl:basis-1/4"
+              className="md:basis-1/2 md:m-4 lg:basis-1/2 xl:basis-1/4"
             >
               <div
-                onClick={() => handleOpenModal(bundle)}
+                onClick={() => bundle && handleOpenModal(bundle)}
                 className="cursor-pointer"
               >
-               <SpecialCard
-                  title={bundle.bundle_name}
-                  bundleTitle={bundle.bundle_name}
-                  bundleIcon={"🔥"}
-                  image={bundle.img_url}
-                  description={[`${bundle.duration}`, `${bundle.screens.length} Screens`]}
-                  price={bundle.price.toString()} 
-                  id=""
-                />
-
+                {isLoading ? (
+                  // Skeleton placeholder for loading
+                  <div className="animate-pulse h-[300px] rounded-lg bg-gray-200 p-4" />
+                ) : (
+                  <SpecialCard
+                    title={bundle.bundle_name}
+                    bundleTitle={bundle.bundle_name}
+                    bundleIcon={"🔥"}
+                    image={bundle.img_url}
+                    description={[
+                      `${bundle.duration}`,
+                      `${bundle.screens.length} Screens`,
+                    ]}
+                    price={bundle.price.toString()}
+                    id=""
+                  />
+                )}
               </div>
             </CarouselItem>
           ))}

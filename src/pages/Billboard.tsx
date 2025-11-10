@@ -25,7 +25,7 @@ function Billboard() {
             <div className="flex space-x-4 mt-6 shadow-md rounded-2xl p-2 bg-gray-900/40">
               <button
                 onClick={() => setActiveTab("screens")}
-                className={`px-6 py-2 rounded-xl font-medium transition ${
+                className={`px-6 py-2 rounded-xl font-medium transition cursor-pointer ${
                   activeTab === "screens"
                     ? "bg-blue-600 text-white shadow"
                     : "text-gray-300 hover:bg-gray-700"
@@ -35,7 +35,7 @@ function Billboard() {
               </button>
               <button
                 onClick={() => setActiveTab("bundles")}
-                className={`px-6 py-2 rounded-xl font-medium transition ${
+                className={`px-6 py-2 rounded-xl font-medium transition cursor-pointer ${
                   activeTab === "bundles"
                     ? "bg-blue-600 text-white shadow"
                     : "text-gray-300 hover:bg-gray-700"
