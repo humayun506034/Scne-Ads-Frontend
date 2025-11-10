@@ -7,6 +7,7 @@ import { useMemo, useState } from "react";
 
 import CommonSelect from "@/common/CommonSelect";
 import CommonStatus from "@/common/CommonStatus";
+import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Duration } from "@/lib/Data";
 import { useGetMyselfAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
@@ -159,7 +160,7 @@ export default function UserBundleCampaignManagement() {
 
         {/* (The rest of your table/mobile UI remains unchanged) */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-10 text-[#AEB9E1]">Loading...</div>
+          <div className="flex items-center justify-center py-10 text-[#AEB9E1]"><Loading /></div>
         ) : (
           <>
             {/* Desktop Table */}
@@ -268,7 +269,7 @@ export default function UserBundleCampaignManagement() {
                               whileHover={{ scale: 1.2 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => { setSelectedCampaign(c); setIsApproveModalOpen(true); }}
-                              className="  rounded-md px-3 py-1.5 w-full mt-6 text-sm  bg-[#38B6FF]  cursor-pointer"
+                              className="  rounded-md px-3 py-1.5 w-full mt-6 text-sm  bg-title-color  cursor-pointer"
                               title="View"
                             >
                               View
