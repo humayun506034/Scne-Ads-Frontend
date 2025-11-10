@@ -59,7 +59,7 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
             value={completed}
           />
           <StatsCard
-            title="Total Revenue"
+            title="Total Cost"
             value={`$${totalRevenue.toLocaleString()}`}
           />
         </div>

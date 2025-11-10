@@ -18,7 +18,6 @@ export function SpendImpressionsChart({ meta }: Props) {
 
   useEffect(() => setIsClient(true), []);
 
-  // Extract correct year’s data
   const selectedYearData = meta?.revenue?.monthlyRevenue.find(
     (r) => r.year.toString() === period
   );
@@ -85,7 +84,7 @@ export function SpendImpressionsChart({ meta }: Props) {
     },
   };
 
-  const series = [{ name: "Revenue", data }];
+  const series = [{ name: "Cost", data }];
 
   if (!isClient) {
     return (
@@ -99,13 +98,13 @@ export function SpendImpressionsChart({ meta }: Props) {
     <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
-          title="Total Revenue"
+          title="Total Cost"
           value={`$${totalRevenue.toLocaleString()}`}
         />
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-[#38B6FF]" />
-            <span className="text-title-color text-sm">Revenue ({year})</span>
+            <span className="text-title-color text-sm">Cost ({year})</span>
           </div>
         </div>
       </div>
