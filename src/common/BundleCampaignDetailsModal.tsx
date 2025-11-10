@@ -120,9 +120,9 @@ export default function BundleCampaignDetailsModal({
                 <CreditCard className="w-5 h-5" /> Payment Information
               </h3>
               <div className="space-y-3 text-base">
-                <p className="flex items-center gap-2">
-                  <Hash className="w-4 h-4 text-title-color" />
-                  <span className="text-title-color">Transaction ID:</span>{" "}
+                <p className="flex flex-col md:flex-row flex-wrap md:items-center gap-2">
+                
+                  <p className="text-title-color flex  gap-2 md:justify-center items-center">   <Hash className="w-4 h-4 text-title-color" /> Transaction ID:</p>{" "}
                   {payment?.transactionId}
                 </p>
                 <p className="flex items-center gap-2">
@@ -247,7 +247,7 @@ export default function BundleCampaignDetailsModal({
                       <img
                         src={url}
                         alt={`Content ${index + 1}`}
-                        className="w-full max-h-80 object-fill rounded-lg"
+                        className="w-full h-60 object-fill rounded-lg"
                         aria-label={`Image content ${index + 1}`}
                       />
                     )}

@@ -10,6 +10,7 @@ import CommonStatus from "@/common/CommonStatus";
 import Pagination from "@/components/Pagination";
 import { Duration } from "@/lib/Data";
 import { useGetMyselfAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
+import { motion } from 'framer-motion';
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
 
 export default function UserBundleCampaignManagement() {
@@ -202,14 +203,16 @@ export default function UserBundleCampaignManagement() {
                             {new Date(c.endDate).toLocaleDateString()}
                           </td>
                           <td className="py-3 px-5">
-                            <button
+                            <motion.button
+                              whileHover={{ scale: 1.2 }}
+                              whileTap={{ scale: 0.95 }}
                               onClick={() => { setSelectedCampaign(c); setIsApproveModalOpen(true); }}
-                              className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 bg-[#0F1A39] border border-[#11214D] text-[#38B6FF] hover:bg-[#11214D] transition"
+                              className="  rounded-md px-3 py-1.5  text-[#38B6FF]  cursor-pointer"
                               title="View"
                             >
                               <Eye className="w-4 h-4" />
-                              <span className="hidden lg:inline">View</span>
-                            </button>
+                              
+                            </motion.button>
                           </td>
                         </tr>
                       ))}
@@ -261,6 +264,16 @@ export default function UserBundleCampaignManagement() {
                         <span>{new Date(c.endDate).toLocaleDateString()}</span>
                       </div>
                     </div>
+                     <motion.button
+                              whileHover={{ scale: 1.2 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => { setSelectedCampaign(c); setIsApproveModalOpen(true); }}
+                              className="  rounded-md px-3 py-1.5 w-full mt-6 text-sm  bg-[#38B6FF]  cursor-pointer"
+                              title="View"
+                            >
+                              View
+                              
+                            </motion.button>
                   </CardContent>
                 </Card>
               ))}

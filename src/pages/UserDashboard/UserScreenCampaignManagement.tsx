@@ -14,6 +14,7 @@ import {
   useGetMyselfAllCustomCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 
+import { motion } from 'framer-motion';
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "../AdminDashboard/DeleteCampaignModal";
 
@@ -217,14 +218,16 @@ export default function UserScreenCampaignManagement() {
                         <CommonStatus status={campaign.status} />
                       </td>
                       <td className="py-3 px-5">
-                        <button
+                        <motion.button
+                          whileHover={{ scale: 1.2 }}
+                          whileTap={{ scale: 0.95 }}
                           onClick={() => openApproveModal(campaign)}
-                          className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 bg-[#0F1A39] border border-[#11214D] text-[#38B6FF] hover:bg-[#11214D] transition"
+                          className="inline-flex items-center gap-2 rounded-md px-3 py-1.5  text-[#38B6FF]  cursor-pointer "
                           title="View"
                         >
                           <Eye className="w-4 h-4" />
-                          <span className="hidden lg:inline">View</span>
-                        </button>
+                         
+                        </motion.button>
                       </td>
                     </tr>
                   ))
@@ -255,7 +258,7 @@ export default function UserScreenCampaignManagement() {
                 <div className="space-y-3">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-[#E2E8F0] font-semibold text-sm">
+                      <h3 className="text-[#E2E8F0] font-semibold ">
                         {screen.screen_name}
                       </h3>
                       <p className="text-[#AEB9E1]/70 text-xs mt-1">{screen.location}</p>
@@ -286,7 +289,7 @@ export default function UserScreenCampaignManagement() {
 
                   <button
                     onClick={() => openApproveModal(campaign)}
-                    className="text-[#38B6FF] text-sm mt-2"
+                    className="bg-[#38B6FF] py-2 rounded-lg cursor-pointer w-full text-sm mt-2"
                   >
                     View Details
                   </button>
