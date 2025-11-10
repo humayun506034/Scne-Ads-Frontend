@@ -4,173 +4,202 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import { Eye } from "lucide-react";
-import { useState } from "react";
+import {
+  Eye,
+  CalendarDays,
+  CheckCircle,
+
+  ArrowUpCircle,
+} from "lucide-react";
+import { useMemo, useState } from "react";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
+import CommonSelect from "@/common/CommonSelect";
+import { Duration } from "@/lib/Data";
+import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import { toast } from "sonner";
 
 export default function AdminScreenCampaignManagement() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // replace date objects with year strings
+  const [startYear, setStartYear] = useState<string>("");
+  const [endYear, setEndYear] = useState<string>("");
+  const [dateFilter, setDateFilter] = useState<string | null>(null);
+  const [uploadedIds, setUploadedIds] = useState<string[]>([]);
+
+  const [markUploaded] = useMarkCustomCampaignUploadedMutation();
+
+  // current year ±2 for options
+  const yearOptions = useMemo(() => {
+    const now = new Date().getFullYear();
+    const start = now - 2;
+    const end = now + 2;
+
+    const arr: { label: string; value: string }[] = [];
+    for (let y = end; y >= start; y--)
+      arr.push({ label: String(y), value: String(y) });
+    return arr;
+  }, []);
+
+  // ensure "All" exists in Duration
+  const newDuration = useMemo(() => {
+    const d = [...Duration];
+    if (!d.find((x) => x.value === "all"))
+      d.push({ label: "All", value: "all" });
+    return d;
+  }, []);
+
+  // --- Formatting helper ---
+  const formatYearForApi = (year: string, kind: "start" | "end") => {
+    if (!year) return null;
+    if (kind === "start") return `${year}-01-01T00:00:00.000Z`;
+    return `${year}-12-31T23:59:59.999Z`;
+  };
+
+  // Build query params
+  const queryParams: Record<string, string> = {
+    page: currentPage.toString(),
+  };
+  const startDateIso = formatYearForApi(startYear, "start");
+  const endDateIso = formatYearForApi(endYear, "end");
+  if (startDateIso) queryParams.startDate = startDateIso;
+  if (endDateIso) queryParams.endDate = endDateIso;
+  if (dateFilter) queryParams.dateFilter = dateFilter;
+
+  const { data: customData, isLoading: isCustomLoading } =
+    useGetAllCustomCampaignQuery(queryParams);
+  const customCampaignData = customData?.data?.data || [];
+  const meta = customData?.data?.meta;
+  const TotalPages = meta?.totalPages || 1;
+
   // Modal States
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [dateFilter, setDateFilter] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const queryParams: Record<string, string> = {
-    page: currentPage.toString(),
-  };
-
-  if (startDate) {
-    queryParams.startDate = `${startDate}T00:00:00.000Z`;
-  }
-
-  if (endDate) {
-    queryParams.endDate = `${endDate}T00:00:00.000Z`;
-  }
-
-  if (dateFilter) {
-    queryParams.dateFilter = dateFilter;
-  }
-
-  const { data: customData, isLoading: isCustomLoading } =
-    useGetAllCustomCampaignQuery(queryParams);
-
-  const customCampaignData = customData?.data?.data || [];
-
-  const openApproveModal = (campaign: any) => {
-    setSelectedCampaign(campaign);
-    setIsApproveModalOpen(true);
-  };
 
   const closeApproveModal = () => {
     setIsApproveModalOpen(false);
     setSelectedCampaign(null);
   };
-
   const closeDeleteModal = () => {
     setIsDeleteModalOpen(false);
     setSelectedCampaign(null);
   };
 
-  const meta = customData?.data?.meta;
-  // console.log({ meta });
-  const TotalPages = meta?.totalPages || 1;
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(e.target.value);
-    setDateFilter(null);
-    setCurrentPage(1);
-  };
   const handleDateFilterClick = (filter: string) => {
     setDateFilter(filter);
-    setStartDate(null);
-    setEndDate(null);
+    setStartYear("");
+    setEndYear("");
     setCurrentPage(1);
   };
 
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.target.value);
-    setDateFilter(null);
-    setCurrentPage(1);
-  };
-
-  
   const handleClearFilters = () => {
-    setStartDate(null);
-    setEndDate(null);
+    setStartYear("");
+    setEndYear("");
     setDateFilter(null);
     setCurrentPage(1);
   };
+
+  const handleMarkUploaded = async (campaignId: string) => {
+    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
+    try {
+      await markUploaded(campaignId).unwrap();
+      setUploadedIds((prev) => [...prev, campaignId]);
+      toast.success("Marked as uploaded.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to mark as uploaded.");
+    }
+  };
+
   if (isCustomLoading) {
-    return <Loading />;
+    return (
+      <div className="min-h-screen w-full flex items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   return (
     <div className="p-6 space-y-6 md:mt-10">
       <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
-    All Screen Campaigns
-  </h2>
+        All Screen Campaigns
+      </h2>
 
+      {/* Filters UI */}
+      <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 p-4">
+        <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
+          {/* Start/End Year Select */}
+          <div className="flex flex-col md:flex-row gap-4 items-center w-full md:w-fit">
+            <div>
+              <label className="block text-xs text-slate-400 mb-1">
+                Select Start Year
+              </label>
+              <CommonSelect
+                Value={startYear || "Select Year"}
+                options={yearOptions}
+                setValue={(val) => {
+                  setStartYear(String(val));
+                  setDateFilter(null);
+                  setCurrentPage(1);
+                }}
+                Icon={CalendarDays}
+                className="bg-[#0F1A39] border border-[#11214D]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-400 mb-1">
+                Optional - Set End Year
+              </label>
+              <CommonSelect
+                Value={endYear || "Select Year"}
+                options={yearOptions}
+                setValue={(val) => {
+                  setEndYear(String(val));
+                  setDateFilter(null);
+                  setCurrentPage(1);
+                }}
+                Icon={CalendarDays}
+                className="bg-[#0F1A39] border border-[#11214D]"
+              />
+            </div>
+          </div>
 
-
-      <div className="flex flex-wrap items-center gap-4 mb-4">
-        {/* Dates Button */}
-        <div className="flex items-center gap-2 px-5 py-2 bg-[#11214D] text-white rounded-md">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-[#38B6FF]"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-            />
-          </svg>
-          <span className="text-sm font-medium">Dates</span>
-        </div>
-
-        {/* Start Date Input */}
-        <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
-          <span className="text-sm font-medium whitespace-nowrap">
-            Select Start Date
-          </span>
-          <input
-            type="date"
-            value={startDate || ""}
-            onChange={handleStartDateChange}
-            className="bg-transparent outline-none text-white placeholder:text-slate-400"
-          />
-          
-        </div>
-
-        {/* End Date Input */}
-        <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
-          <span className="text-sm font-medium whitespace-nowrap">
-            Optional - Set End Date
-          </span>
-          <input
-            type="date"
-            value={endDate || ""}
-            onChange={handleEndDateChange}
-            className="bg-transparent outline-none text-white placeholder:text-slate-400"
-          />
-         
-        </div>
-
-        {/* Predefined Date Filters */}
-        <div className="flex gap-2 flex-wrap">
-          {[
-            { label: "Today", value: "today" },
-            { label: "1D", value: "1d" },
-            { label: "7D", value: "7d" },
-            { label: "15D", value: "15d" },
-            { label: "1Mo", value: "30d" },
-          ].map(({ label, value }) => (
+          {/* Quick Presets + Clear */}
+          <div className="flex flex-wrap items-center gap-2 md:justify-end">
+            {newDuration.map(({ label, value }) => (
+              <button
+                key={value}
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition ${
+                  dateFilter === value
+                    ? "bg-[#38B6FF] text-black shadow-[0_0_18px_rgba(56,182,255,0.35)]"
+                    : "bg-[#0F1A39] text-white/90 border border-[#11214D] hover:bg-white/10"
+                }`}
+                onClick={() => handleDateFilterClick(value)}
+              >
+                {label}
+              </button>
+            ))}
             <button
-              key={value}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                dateFilter === value
-                  ? "bg-[#38B6FF] text-black"
-                  : "bg-[#11214D] text-white"
-              }`}
-              onClick={() => handleDateFilterClick(value)}
+              className="px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-rose-600/90 text-white hover:bg-rose-600 transition"
+              onClick={handleClearFilters}
             >
-              {label}
+              Clear
             </button>
-          ))}
+          </div>
 
-          {/* Clear Button */}
-          <button
-            className="px-4 py-2 rounded-full text-sm font-medium bg-red-600 text-white"
-            onClick={handleClearFilters}
-          >
-            Clear
-          </button>
+          {/* Active Filter Badge */}
+          {(startYear || endYear || dateFilter) && (
+            <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
+              <p className="opacity-70">Active filter :</p>
+              <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
+                {dateFilter
+                  ? `Preset – ${dateFilter}`
+                  : `${startYear || "—"} → ${endYear || "—"}`}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -183,6 +212,7 @@ export default function AdminScreenCampaignManagement() {
                 <th className="py-3 px-4">Total Screens</th>
                 <th className="py-3 px-4">Customer</th>
                 <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Content Upload Status</th>
                 <th className="py-3 px-4">Payment</th>
                 <th className="py-3 px-4">Budget</th>
                 <th className="py-3 px-4">Start Date</th>
@@ -205,6 +235,9 @@ export default function AdminScreenCampaignManagement() {
                     <CommonStatus status={campaign.status} />
                   </td>
                   <td className="py-3 px-4">
+                    {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                  </td>
+                  <td className="py-3 px-4">
                     {campaign.CustomPayment?.[0]?.status === "success"
                       ? "Paid"
                       : "Unpaid"}
@@ -221,8 +254,42 @@ export default function AdminScreenCampaignManagement() {
                   <td className="py-3 px-4 flex items-center gap-3">
                     <Eye
                       className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
-                      onClick={() => openApproveModal(campaign)}
+                      onClick={() => {
+                        setSelectedCampaign(campaign);
+                        setIsApproveModalOpen(true);
+                      }}
                     />
+
+                    <button
+                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "bg-green-500 text-white cursor-not-allowed"
+                          : "bg-blue-100 text-blue-500 hover:scale-125"
+                      }`}
+                      disabled={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      }
+                      title={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "Uploaded"
+                          : "Mark as uploaded"
+                      }
+                      onClick={() => {
+                        if (
+                          !campaign.isUploaded &&
+                          !uploadedIds.includes(campaign.id)
+                        ) {
+                          handleMarkUploaded(campaign.id);
+                        }
+                      }}
+                    >
+                      {uploadedIds.includes(campaign.id) ||
+                      campaign.isUploaded ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpCircle className="w-4 h-4 text-black" />
+                      )}
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -234,21 +301,27 @@ export default function AdminScreenCampaignManagement() {
       {/* Mobile Card View */}
       <div className="md:hidden space-y-4">
         {customCampaignData.map((campaign: any) => (
-          <Card key={campaign.id} className="bg-bg-dashboard border-[#11214D]">
+          <Card
+            key={campaign.id}
+            className="bg-bg-dashboard border-[#11214D]"
+          >
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex justify-between items-start">
                   <div>
-                     <h3 className="text-[#AEB9E1] mb-2 font-medium ">
-                    Total Screens :<span className="text-white"> {campaign.screens?.length ?? 0 }</span> 
-                    
+                    <h3 className="text-[#AEB9E1] mb-2 font-medium ">
+                      Total Screens :
+                      <span className="text-white">
+                        {" "}
+                        {campaign.screens?.length ?? 0}
+                      </span>
                     </h3>
                     <h3 className="text-[#AEB9E1] font-medium text-sm">
                       {campaign.customer?.first_name}{" "}
                       {campaign.customer?.last_name}
                     </h3>
-                   
-                    <p className="text-white  text-xs mt-1">
+
+                    <p className="text-white text-xs mt-1">
                       {campaign.customer?.email}
                     </p>
                   </div>
@@ -285,7 +358,10 @@ export default function AdminScreenCampaignManagement() {
                 </div>
 
                 <button
-                  onClick={() => openApproveModal(campaign)}
+                  onClick={() => {
+                    setSelectedCampaign(campaign);
+                    setIsApproveModalOpen(true);
+                  }}
                   className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
                 >
                   View Details
@@ -296,6 +372,7 @@ export default function AdminScreenCampaignManagement() {
         ))}
       </div>
 
+      {/* Pagination */}
       <div className="flex justify-end mt-4">
         <Pagination
           currentPage={currentPage}

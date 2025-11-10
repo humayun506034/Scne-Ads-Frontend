@@ -1,6 +1,7 @@
 import { useQueryState } from "nuqs";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import { ChartHeader } from "./CampaignPerformanceAnalytics";
 
 interface RevenueChartProps {
   revenueMeta: {
@@ -100,11 +101,12 @@ const RevenueChart: React.FC<RevenueChartProps> = ({ revenueMeta }) => {
   if (!isClient) return <div className="text-white p-6">Loading chart...</div>;
 
   return (
-    <div className="bg-[#0B1739] p-6 rounded-xl">
-      <h2 className="text-white text-xl mb-4">
-        Monthly Revenue for {chartType === "custom" ? "Custom" : "Bundle"}{" "}
-        Campaigns in {selectedYear}
-      </h2>
+    <div className="bg-[#0B1739] p-6 rounded-xl my-10">
+      <ChartHeader
+        title={`Monthly Revenue for ${
+          chartType === "custom" ? "Custom" : "Bundle"
+        } Campaigns in ${selectedYear}`}
+      />
       <Chart
         options={chartOptions}
         series={series}

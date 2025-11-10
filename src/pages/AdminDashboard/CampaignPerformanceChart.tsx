@@ -1,17 +1,13 @@
 import Chart from "react-apexcharts";
-import activeCampaign from "@/assets/AdminPanel/active-campaigns.png";
-import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
 import { ApexOptions } from "apexcharts";
 import { useQueryState } from "nuqs";
+import { ChartHeader } from "./CampaignPerformanceAnalytics";
 
 type Props = {
   campaignData: { month: string; active: number; completed: number }[];
 };
 
 const CampaignPerformanceChart = ({ campaignData }: Props) => {
-
-
-
   const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
     defaultValue: "custom",
     parse: (value: string) =>
@@ -26,7 +22,6 @@ const CampaignPerformanceChart = ({ campaignData }: Props) => {
       return isNaN(num) ? new Date().getFullYear() : num;
     },
   });
-
 
   const options: ApexOptions = {
     chart: {
@@ -55,37 +50,35 @@ const CampaignPerformanceChart = ({ campaignData }: Props) => {
     { name: "Completed", data: campaignData.map((d) => d.completed) },
   ];
 
-
-
   return (
-    <div>
-      <h3 className="text-title-color mb-2 text-lg font-medium">
-        Campaign Performance of {chartType} Campaign in {selectedYear}
-      </h3>
-      <div className="rounded-xl p-4 bg-[#0B1739]">
-        <Chart
-          options={options}
-          series={series}
-          type="bar"
-          height={350}
-        />
-        <div className="flex gap-4 mt-2">
-          <div className="flex items-center gap-2">
-            <img
-              src={activeCampaign}
-              alt=""
-            />
-            <span>Active</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <img
-              src={completedCampaign}
-              alt=""
-            />
-            <span>Completed</span>
-          </div>
+    <div className="rounded-xl p-6 bg-[#0B1739]">
+      <ChartHeader
+        title={`Campaign Performance for ${
+          chartType === "custom" ? "Custom" : "Bundle"
+        } Campaigns in ${selectedYear}`}
+      />
+      <Chart
+        options={options}
+        series={series}
+        type="bar"
+        height={350}
+      />
+      {/* <div className="flex gap-4 mt-4 justify-center">
+        <div className="flex items-center gap-2">
+          <img
+            src={activeCampaign}
+            alt="Active"
+          />
+          <span className="text-white">Active</span>
         </div>
-      </div>
+        <div className="flex items-center gap-2">
+          <img
+            src={completedCampaign}
+            alt="Completed"
+          />
+          <span className="text-white">Completed</span>
+        </div>
+      </div> */}
     </div>
   );
 };

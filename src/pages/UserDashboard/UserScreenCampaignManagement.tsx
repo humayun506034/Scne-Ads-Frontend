@@ -30,21 +30,25 @@ export default function UserScreenCampaignManagement() {
     const start = now - 2;
     const end = now + 2;
     const arr: { label: string; value: string }[] = [];
-    for (let y = end; y >= start; y--) arr.push({ label: String(y), value: String(y) });
+    for (let y = end; y >= start; y--)
+      arr.push({ label: String(y), value: String(y) });
     return arr;
   }, []);
 
   // ensure "All" exists (object compare safe)
   const newDuration = useMemo(() => {
     const d = [...Duration];
-    if (!d.find((x) => x.value === "all")) d.push({ label: "All", value: "all" });
+    if (!d.find((x) => x.value === "all"))
+      d.push({ label: "All", value: "all" });
     return d;
   }, []);
 
   // Format helper (same behavior as bundle)
   const formatYearForApi = (year: string, kind: "start" | "end") => {
     if (!year) return null;
-    return kind === "start" ? `${year}-01-01T00:00:00.000Z` : `${year}-12-31T23:59:59.999Z`;
+    return kind === "start"
+      ? `${year}-01-01T00:00:00.000Z`
+      : `${year}-12-31T23:59:59.999Z`;
   };
 
   // Build query params
@@ -55,7 +59,8 @@ export default function UserScreenCampaignManagement() {
   if (endDateIso) queryParams.endDate = endDateIso;
   if (dateFilter) queryParams.dateFilter = dateFilter;
 
-  const { data: customData, isLoading: isCustomLoading } = useGetMyselfAllCustomCampaignQuery(queryParams);
+  const { data: customData, isLoading: isCustomLoading } =
+    useGetMyselfAllCustomCampaignQuery(queryParams);
 
   const customCampaignData = customData?.data?.data || [];
   const meta = customData?.data?.meta;
@@ -105,7 +110,9 @@ export default function UserScreenCampaignManagement() {
           {/* Start/End Year selects */}
           <div className="md:col-span-4 md:space-y-0 space-y-2 md:flex flex-col md:flex-row w-full md:w-fit justify-start gap-4 items-center">
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Select Start Year</label>
+              <label className="block text-xs text-slate-400 mb-1">
+                Select Start Year
+              </label>
               <CommonSelect
                 Value={startYear || "Select Year"}
                 options={yearOptions}
@@ -120,7 +127,9 @@ export default function UserScreenCampaignManagement() {
             </div>
 
             <div>
-              <label className="block text-xs text-slate-400 mb-1">Optional – Set End Year</label>
+              <label className="block text-xs text-slate-400 mb-1">
+                Optional – Set End Year
+              </label>
               <CommonSelect
                 Value={endYear || "Select Year"}
                 options={yearOptions}
@@ -165,7 +174,9 @@ export default function UserScreenCampaignManagement() {
                 <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
                   <p className="opacity-70">Active filter :</p>
                   <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
-                    {dateFilter ? `Preset – ${dateFilter}` : `${startYear || "—"} → ${endYear || "—"}`}
+                    {dateFilter
+                      ? `Preset – ${dateFilter}`
+                      : `${startYear || "—"} → ${endYear || "—"}`}
                   </p>
                 </div>
               )}
@@ -196,6 +207,9 @@ export default function UserScreenCampaignManagement() {
                       <th className="py-3 px-5 text-left">Screen Name</th>
                       <th className="py-3 px-5 text-left">Location</th>
                       <th className="py-3 px-5 text-left">Size</th>
+                      <th className="py-3 px-5 text-left">
+                        Content Upload Status
+                      </th>
                       <th className="py-3 px-5 text-left">Resolution</th>
                       <th className="py-3 px-5 text-left">Price</th>
                       <th className="py-3 px-5 text-left">Availability</th>
@@ -207,39 +221,55 @@ export default function UserScreenCampaignManagement() {
                   <tbody className="divide-y divide-slate-800/40">
                     {customData?.data?.data?.length ? (
                       customCampaignData.flatMap((campaign: any) =>
-                        (campaign.screens || []).map((screen: any, idx: number) => (
-                          <tr
-                            key={`${campaign.id}-${screen.id}-${idx}`}
-                            className={`text-[#AEB9E1] transition-colors ${
-                              idx % 2 === 1 ? "bg-white/[0.02]" : ""
-                            } hover:bg-white/5`}
-                          >
-                            <td className="py-3 px-5">{screen.screen_name}</td>
-                            <td className="py-3 px-5">{screen.location}</td>
-                            <td className="py-3 px-5">{screen.screen_size}</td>
-                            <td className="py-3 px-5">{screen.resolution}</td>
-                            <td className="py-3 px-5">${screen.price}</td>
-                            <td className="py-3 px-5">{screen.availability}</td>
-                            <td className="py-3 px-5">
-                              <CommonStatus status={campaign.status} />
-                            </td>
-                            <td className="py-3 px-5">
-                              <motion.button
-                                whileHover={{ scale: 1.2 }}
-                                whileTap={{ scale: 0.95 }}
-                                onClick={() => openApproveModal(campaign)}
-                                className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-[#38B6FF] cursor-pointer"
-                                title="View"
-                              >
-                                <Eye className="w-4 h-4" />
-                              </motion.button>
-                            </td>
-                          </tr>
-                        ))
+                        (campaign.screens || []).map(
+                          (screen: any, idx: number) => (
+                            <tr
+                              key={`${campaign.id}-${screen.id}-${idx}`}
+                              className={`text-[#AEB9E1] transition-colors ${
+                                idx % 2 === 1 ? "bg-white/[0.02]" : ""
+                              } hover:bg-white/5`}
+                            >
+                              <td className="py-3 px-5">
+                                {screen.screen_name}
+                              </td>
+                              <td className="py-3 px-5">{screen.location}</td>
+                              <td className="py-3 px-5">
+                                {screen.screen_size}
+                              </td>
+                              <td className="py-3 px-5">
+                                {campaign.isUploaded
+                                  ? "Uploaded"
+                                  : "Not Uploaded"}
+                              </td>
+                              <td className="py-3 px-5">{screen.resolution}</td>
+                              <td className="py-3 px-5">${screen.price}</td>
+                              <td className="py-3 px-5">
+                                {screen.availability}
+                              </td>
+                              <td className="py-3 px-5">
+                                <CommonStatus status={campaign.status} />
+                              </td>
+                              <td className="py-3 px-5">
+                                <motion.button
+                                  whileHover={{ scale: 1.2 }}
+                                  whileTap={{ scale: 0.95 }}
+                                  onClick={() => openApproveModal(campaign)}
+                                  className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-[#38B6FF] cursor-pointer"
+                                  title="View"
+                                >
+                                  <Eye className="w-4 h-4" />
+                                </motion.button>
+                              </td>
+                            </tr>
+                          )
+                        )
                       )
                     ) : (
                       <tr>
-                        <td colSpan={8} className="py-10 px-5 text-center text-slate-400">
+                        <td
+                          colSpan={8}
+                          className="py-10 px-5 text-center text-slate-400"
+                        >
                           No campaigns found.
                         </td>
                       </tr>
@@ -255,44 +285,136 @@ export default function UserScreenCampaignManagement() {
             {customCampaignData.length ? (
               customCampaignData.flatMap((campaign: any) =>
                 (campaign.screens || []).map((screen: any, idx: number) => (
+                  // <Card
+                  //   key={`${campaign.id}-${screen.id}-${idx}`}
+                  //   className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
+                  // >
+                  //   <CardContent className="p-4">
+                  //     <div className="space-y-3">
+                  //       <div className="flex justify-between items-start">
+                  //         <div>
+                  //           <h3 className="text-[#E2E8F0] font-semibold">
+                  //             {screen.screen_name}
+                  //           </h3>
+                  //           <p className="text-[#AEB9E1]/70 text-xs mt-1">
+                  //             {screen.location}
+                  //           </p>
+                  //         </div>
+                  //         <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg.white/10 bg-white/10 text-white">
+                  //           {campaign.status}
+                  //         </span>
+                  //       </div>
+
+                  //       <div className="grid grid-cols-2 gap-3 text-xs">
+                  //         <div>
+                  //           <span className="text-[#AEB9E1]/50">Size:</span>
+                  //           <span className="text-[#AEB9E1] ml-1">
+                  //             {screen.screen_size}
+                  //           </span>
+                  //         </div>
+                  //         <div>
+                  //           <span className="text-[#AEB9E1]/50">
+                  //             Resolution:
+                  //           </span>
+                  //           <span className="text-[#AEB9E1] ml-1">
+                  //             {screen.resolution}
+                  //           </span>
+                  //         </div>
+                  //         <div>
+                  //           <span className="text-[#AEB9E1]/50">Price:</span>
+                  //           <span className="text-[#AEB9E1] ml-1">
+                  //             ${screen.price}
+                  //           </span>
+                  //         </div>
+                  //         <div>
+                  //           <span className="text-[#AEB9E1]/50">
+                  //             Availability:
+                  //           </span>
+                  //           <span className="text-[#AEB9E1] ml-1">
+                  //             {screen.availability}
+                  //           </span>
+                  //         </div>
+                  //       </div>
+
+                  //       <button
+                  //         onClick={() => openApproveModal(campaign)}
+                  //         className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-2"
+                  //       >
+                  //         View Details
+                  //       </button>
+                  //     </div>
+                  //   </CardContent>
+                  // </Card>
                   <Card
                     key={`${campaign.id}-${screen.id}-${idx}`}
-                    className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
+                    className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
                   >
                     <CardContent className="p-4">
                       <div className="space-y-3">
-                        <div className="flex justify-between items-start">
+                        {/* Header */}
+                        <div className="flex justify-between items-start flex-col sm:flex-row sm:items-center">
                           <div>
-                            <h3 className="text-[#E2E8F0] font-semibold">{screen.screen_name}</h3>
-                            <p className="text-[#AEB9E1]/70 text-xs mt-1">{screen.location}</p>
+                            <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base">
+                              {screen.screen_name}
+                            </h3>
+                            <p className="text-[#AEB9E1]/70 text-xs mt-1">
+                              {screen.location}
+                            </p>
                           </div>
-                          <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg.white/10 bg-white/10 text-white">
-                            {campaign.status}
-                          </span>
+                          <div className="mt-2 sm:mt-0 flex flex-col sm:flex-row sm:items-center gap-2">
+                            <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-white/10 text-white">
+                              {campaign.status}
+                            </span>
+                            <span
+                              className={`px-3 py-1 rounded-full text-[10px] font-semibold ${
+                                campaign.isUploaded
+                                  ? "bg-green-500/20 text-green-500"
+                                  : "bg-red-500/20 text-red-500"
+                              }`}
+                            >
+                              {campaign.isUploaded
+                                ? "Uploaded"
+                                : "Not Uploaded"}
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-3 text-xs">
+                        {/* Info grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                           <div>
                             <span className="text-[#AEB9E1]/50">Size:</span>
-                            <span className="text-[#AEB9E1] ml-1">{screen.screen_size}</span>
+                            <span className="text-[#AEB9E1] ml-1">
+                              {screen.screen_size}
+                            </span>
                           </div>
                           <div>
-                            <span className="text-[#AEB9E1]/50">Resolution:</span>
-                            <span className="text-[#AEB9E1] ml-1">{screen.resolution}</span>
+                            <span className="text-[#AEB9E1]/50">
+                              Resolution:
+                            </span>
+                            <span className="text-[#AEB9E1] ml-1">
+                              {screen.resolution}
+                            </span>
                           </div>
                           <div>
                             <span className="text-[#AEB9E1]/50">Price:</span>
-                            <span className="text-[#AEB9E1] ml-1">${(screen.price)}</span>
+                            <span className="text-[#AEB9E1] ml-1">
+                              ${screen.price}
+                            </span>
                           </div>
                           <div>
-                            <span className="text-[#AEB9E1]/50">Availability:</span>
-                            <span className="text-[#AEB9E1] ml-1">{screen.availability}</span>
+                            <span className="text-[#AEB9E1]/50">
+                              Availability:
+                            </span>
+                            <span className="text-[#AEB9E1] ml-1">
+                              {screen.availability}
+                            </span>
                           </div>
                         </div>
 
+                        {/* Button */}
                         <button
                           onClick={() => openApproveModal(campaign)}
-                          className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-2"
+                          className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-2 hover:opacity-90 transition"
                         >
                           View Details
                         </button>
@@ -310,14 +432,26 @@ export default function UserScreenCampaignManagement() {
 
           {/* Pagination */}
           <div className="flex justify-end mt-4">
-            <Pagination currentPage={currentPage} totalPages={TotalPages} onPageChange={setCurrentPage} />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={TotalPages}
+              onPageChange={setCurrentPage}
+            />
           </div>
         </>
       )}
 
       {/* Modals */}
-      <ScreenCampaignDetailsModal isOpen={isApproveModalOpen} onClose={closeApproveModal} campaign={selectedCampaign} />
-      <DeleteCampaignModal isOpen={isDeleteModalOpen} onClose={closeDeleteModal} campaign={selectedCampaign} />
+      <ScreenCampaignDetailsModal
+        isOpen={isApproveModalOpen}
+        onClose={closeApproveModal}
+        campaign={selectedCampaign}
+      />
+      <DeleteCampaignModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        campaign={selectedCampaign}
+      />
     </div>
   );
 }

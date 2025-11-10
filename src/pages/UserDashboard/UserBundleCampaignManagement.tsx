@@ -11,7 +11,7 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Duration } from "@/lib/Data";
 import { useGetMyselfAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
 
 export default function UserBundleCampaignManagement() {
@@ -29,14 +29,16 @@ export default function UserBundleCampaignManagement() {
     const end = now + 2;
 
     const arr: { label: string; value: string }[] = [];
-    for (let y = end; y >= start; y--) arr.push({ label: String(y), value: String(y) });
+    for (let y = end; y >= start; y--)
+      arr.push({ label: String(y), value: String(y) });
     return arr;
   }, []);
 
   // ensure "All" exists in Duration
   const newDuration = useMemo(() => {
     const d = [...Duration];
-    if (!d.find((x) => x.value === "all")) d.push({ label: "All", value: "all" });
+    if (!d.find((x) => x.value === "all"))
+      d.push({ label: "All", value: "all" });
     return d;
   }, []);
 
@@ -65,7 +67,10 @@ export default function UserBundleCampaignManagement() {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
 
-  const closeApproveModal = () => { setIsApproveModalOpen(false); setSelectedCampaign(null); };
+  const closeApproveModal = () => {
+    setIsApproveModalOpen(false);
+    setSelectedCampaign(null);
+  };
 
   const handleDateFilterClick = (filter: string) => {
     setDateFilter(filter);
@@ -93,29 +98,39 @@ export default function UserBundleCampaignManagement() {
           <div className="flex  flex-col md:flex-row  justify-between  gap-4 items-center">
             {/* Start Year */}
             <div className="md:col-span-4 md:space-y-0 space-y-2 md:flex flex-col md:flex-row w-full md:w-fit justify-start gap-4 items-center">
-             <div>
-               <label className="block text-xs text-slate-400 mb-1">Select Start Year</label>
-              <CommonSelect
-                Value={startYear || "Select Year"}
-                options={yearOptions}
-                setValue={(val) => { setStartYear(String(val)); setDateFilter(null); setCurrentPage(1); }}
-                Icon={CalendarDays}
-                className="bg-[#0F1A39] border border-[#11214D]"
-              />
-             </div>
-               <div className="">
-              <label className="block text-xs text-slate-400 mb-1">Optional – Set End Year</label>
-              <CommonSelect
-                Value={endYear || "Select Year"}
-                options={yearOptions}
-setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPage(1); }}
-                Icon={CalendarDays}
-                className="bg-[#0F1A39] border border-[#11214D]"
-              />
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">
+                  Select Start Year
+                </label>
+                <CommonSelect
+                  Value={startYear || "Select Year"}
+                  options={yearOptions}
+                  setValue={(val) => {
+                    setStartYear(String(val));
+                    setDateFilter(null);
+                    setCurrentPage(1);
+                  }}
+                  Icon={CalendarDays}
+                  className="bg-[#0F1A39] border border-[#11214D]"
+                />
+              </div>
+              <div className="">
+                <label className="block text-xs text-slate-400 mb-1">
+                  Optional - Set End Year
+                </label>
+                <CommonSelect
+                  Value={endYear || "Select Year"}
+                  options={yearOptions}
+                  setValue={(val) => {
+                    setEndYear(String(val));
+                    setDateFilter(null);
+                    setCurrentPage(1);
+                  }}
+                  Icon={CalendarDays}
+                  className="bg-[#0F1A39] border border-[#11214D]"
+                />
+              </div>
             </div>
-            </div>
-
-           
 
             {/* Quick Presets + Clear */}
             <div className="md:col-span-4">
@@ -142,25 +157,27 @@ setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPag
                 </button>
               </div>
 
-             <div className="flex justify-end">
-               {(startYear || endYear || dateFilter) && (
-                <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
-                  <p className="opacity-70">Active filter :</p>
-                  <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
-                    {dateFilter
-                      ? `Preset – ${dateFilter}`
-                      : `${startYear || "—"} → ${endYear || "—"}`}
-                  </p>
-                </div>
-              )}
-             </div>
+              <div className="flex justify-end">
+                {(startYear || endYear || dateFilter) && (
+                  <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
+                    <p className="opacity-70">Active filter :</p>
+                    <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
+                      {dateFilter
+                        ? `Preset – ${dateFilter}`
+                        : `${startYear || "—"} → ${endYear || "—"}`}
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* (The rest of your table/mobile UI remains unchanged) */}
         {isLoading ? (
-          <div className="flex items-center justify-center py-10 text-[#AEB9E1]"><Loading /></div>
+          <div className="flex items-center justify-center py-10 text-[#AEB9E1]">
+            <Loading />
+          </div>
         ) : (
           <>
             {/* Desktop Table */}
@@ -174,8 +191,12 @@ setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPag
                         <th className="py-3 px-5 text-left">Status</th>
                         <th className="py-3 px-5 text-left">IsUploaded</th>
                         <th className="py-3 px-5 text-left">Price</th>
-                        <th className="py-3 px-5 text-left whitespace-nowrap">Start Date</th>
-                        <th className="py-3 px-5 text-left whitespace-nowrap">End Date</th>
+                        <th className="py-3 px-5 text-left whitespace-nowrap">
+                          Start Date
+                        </th>
+                        <th className="py-3 px-5 text-left whitespace-nowrap">
+                          End Date
+                        </th>
                         <th className="py-3 px-5 text-left">Actions</th>
                       </tr>
                     </thead>
@@ -195,7 +216,10 @@ setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPag
                             {c?.isUploaded ? "Uploaded" : "Not Uploaded"}
                           </td>
                           <td className="py-3 px-5">
-                            ${c?.payment?.amount?.toLocaleString?.() ?? c?.payment?.amount ?? 0}
+                            $
+                            {c?.payment?.amount?.toLocaleString?.() ??
+                              c?.payment?.amount ??
+                              0}
                           </td>
                           <td className="py-3 px-5 whitespace-nowrap">
                             {new Date(c.startDate).toLocaleDateString()}
@@ -207,19 +231,24 @@ setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPag
                             <motion.button
                               whileHover={{ scale: 1.2 }}
                               whileTap={{ scale: 0.95 }}
-                              onClick={() => { setSelectedCampaign(c); setIsApproveModalOpen(true); }}
+                              onClick={() => {
+                                setSelectedCampaign(c);
+                                setIsApproveModalOpen(true);
+                              }}
                               className="  rounded-md px-3 py-1.5  text-[#38B6FF]  cursor-pointer"
                               title="View"
                             >
                               <Eye className="w-4 h-4" />
-                              
                             </motion.button>
                           </td>
                         </tr>
                       ))}
                       {campaigns.length === 0 && (
                         <tr>
-                          <td colSpan={7} className="py-10 px-5 text-center text-slate-400">
+                          <td
+                            colSpan={7}
+                            className="py-10 px-5 text-center text-slate-400"
+                          >
                             No campaigns found.
                           </td>
                         </tr>
@@ -234,49 +263,66 @@ setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPag
             <div className="md:hidden space-y-4">
               {campaigns.map((c: any) => (
                 <Card
-                  key={c.id}
-                  className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
-                >
-                  <CardContent className="p-4">
-                    <div className="flex items-start justify-between">
-                      <h3 className="text-[#E2E8F0] font-semibold text-sm leading-5 pr-2">
-                        {c.bundle?.bundle_name || "Unnamed Bundle"}
-                      </h3>
-                      <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
-                        {c.status}
-                      </span>
-                    </div>
+  key={c.id}
+  className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
+>
+  <CardContent className="p-4">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+      <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base leading-5">
+        {c.bundle?.bundle_name || "Unnamed Bundle"}
+      </h3>
+      <div className="flex gap-2">
+        <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
+          {c.status}
+        </span>
+        <span
+          className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide ${
+            c.isUploaded ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'
+          }`}
+        >
+          {c.isUploaded ? 'Uploaded' : 'Not Uploaded'}
+        </span>
+      </div>
+    </div>
 
-                    <div className="mt-3 h-px bg-white/5" />
+    {/* Divider */}
+    <div className="mt-3 h-px bg-white/5" />
 
-                    <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">Budget</span>
-                        <span className="font-medium">
-                          ${c?.payment?.amount?.toLocaleString?.() ?? c?.payment?.amount ?? 0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">Start</span>
-                        <span>{new Date(c.startDate).toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">End</span>
-                        <span>{new Date(c.endDate).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                     <motion.button
-                              whileHover={{ scale: 1.2 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => { setSelectedCampaign(c); setIsApproveModalOpen(true); }}
-                              className="  rounded-md px-3 py-1.5 w-full mt-6 text-sm  bg-title-color  cursor-pointer"
-                              title="View"
-                            >
-                              View
-                              
-                            </motion.button>
-                  </CardContent>
-                </Card>
+    {/* Info Grid */}
+    <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
+      <div className="flex items-center justify-between">
+        <span className="text-[#AEB9E1]/60">Budget</span>
+        <span className="font-medium">
+          ${c?.payment?.amount?.toLocaleString?.() ?? c?.payment?.amount ?? 0}
+        </span>
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="text-[#AEB9E1]/60">Start</span>
+        <span>{new Date(c.startDate).toLocaleDateString()}</span>
+      </div>
+      <div className="flex items-center justify-between">
+        <span className="text-[#AEB9E1]/60">End</span>
+        <span>{new Date(c.endDate).toLocaleDateString()}</span>
+      </div>
+    </div>
+
+    {/* View Button */}
+    <motion.button
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => {
+        setSelectedCampaign(c);
+        setIsApproveModalOpen(true);
+      }}
+      className="rounded-md px-3 py-1.5 w-full mt-6 text-sm bg-title-color cursor-pointer hover:opacity-90 transition"
+      title="View"
+    >
+      View
+    </motion.button>
+  </CardContent>
+</Card>
+
               ))}
             </div>
           </>
