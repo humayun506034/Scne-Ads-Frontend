@@ -52,7 +52,7 @@ export function UserDashboardNavbar() {
             );
           })}
           <motion.div>
-            {user?.role !== "admin" && <LiveChatSystem userName={userName} />}
+        <LiveChatSystem />
           </motion.div>
           <div className="flex items-center">
             <DropdownMenu>

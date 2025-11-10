@@ -30,7 +30,7 @@ export function LiveChatSystem() {
   const {
     messages,
     admins,
-    readyState,
+    // readyState,
     fetchHistory,
     sendChatMessage,
   } = useChatWebSocket();
@@ -47,10 +47,10 @@ export function LiveChatSystem() {
     }
   };
 
-  const handleViewMessages = () => {
-    setActiveTab("messages");
-    setCurrentView("messages");
-  };
+  // const handleViewMessages = () => {
+  //   setActiveTab("messages");
+  //   setCurrentView("messages");
+  // };
 
   const handleSelectConversation = (id: string) => {
     setSelectedConversationId(id);
