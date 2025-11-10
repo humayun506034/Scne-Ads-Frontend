@@ -42,7 +42,7 @@ const dispatch = useAppDispatch()
               </Link>
             </div>
 
-            <div className="hidden ml-40 lg:flex justify-center items-center space-x-8">
+            <div className="hidden ml-60 lg:flex justify-center items-center space-x-8">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -138,7 +138,7 @@ user?.role === 'admin' && (<Link
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex justify-center items-center space-x-4">
           {!user ? ( <div className=" flex gap-8 items-center"> 
           <motion.div
               initial={{ opacity: 0, scale: 0 }}
@@ -202,9 +202,9 @@ user?.role === 'admin' && (<Link
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -300, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="h-full flex flex-col"
+                  className="h-full flex justify-between flex-col"
                 >
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                  <div className="flex h-full items-center justify-between px-6 py-4 border-b border-gray-200">
                     <div className="flex items-center ">
                       <Link to={"/"}>
                         <div className="w-[124px] h-[56px]">
@@ -234,7 +234,7 @@ user?.role === 'admin' && (<Link
                       ))}
                     </div>
 
-                    <div className="px-6 mt-8 space-y-3">
+                    <div className="px-6  mt-6  justify-between flex  flex-col h-80 space-y-3">
                       <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -246,14 +246,15 @@ user?.role === 'admin' && (<Link
                         </Button>
                       </motion.div>
 
-                      <motion.div
+                    <div className="">
+                        <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.3 }}
                       >
                         <Button
                           variant="ghost"
-                          className="w-full border-gray-300 text-white py-3 rounded-full bg-transparent"
+                          className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] text-white border-none font-medium py-3 rounded-full"
                         >
                           <Link to="/login">Login</Link>
                         </Button>
@@ -264,10 +265,11 @@ user?.role === 'admin' && (<Link
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.3 }}
                       >
-                        <Button className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] text-white border-none font-medium py-3 rounded-full">
+                        <Button className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] mt-6 text-white border-none font-medium py-3 rounded-full">
                           Start Now
                         </Button>
                       </motion.div>
+                    </div>
                     </div>
                   </div>
 
