@@ -67,7 +67,7 @@ const dispatch = useAppDispatch()
                 </Link>
               ))}
 { 
-user?.role === 'admin' ? (<Link
+user?.role === 'admin' && (<Link
                   // key={link.label}
                   to={"/admin-dashboard"}
                   // onClick={() => handleTabClick(link.href)}
@@ -87,8 +87,10 @@ user?.role === 'admin' ? (<Link
                   >
                    Admin Dashboard
                   </motion.div>
-                </Link>):( <Link
-           
+                </Link>)
+}{
+  user?.role === 'customer' && (<Link
+                  // key={link.label}
                   to={"/user-dashboard"}
                   // onClick={() => handleTabClick(link.href)}
                   className={`text-base transition ease-in-out font-medium underline-animation 
