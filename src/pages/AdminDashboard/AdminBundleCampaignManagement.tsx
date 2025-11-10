@@ -1,90 +1,114 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 
+import { ArrowUpCircle, CalendarDays, CheckCircle, Eye } from "lucide-react";
+import { useMemo, useState } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, Eye } from "lucide-react";
-import { useState } from "react";
-
+import CommonSelect from "@/common/CommonSelect";
 import CommonStatus from "@/common/CommonStatus";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
+import { Duration } from "@/lib/Data";
 import { useGetAllBundleCampaignQuery } from "@/store/api/Campaign/campaignApi";
-
-import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import { useMarkBundleCampaignUploadedMutation } from "@/store/api/User/isUploaded";
 import BundleCampaignDetailsModal from "../../common/BundleCampaignDetailsModal";
+import { toast } from "sonner";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default function AdminBundleCampaignManagement() {
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [dateFilter, setDateFilter] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-
-  const queryParams: Record<string, string> = {
-    page: currentPage.toString(),
-  };
-
-  if (startDate) queryParams.startDate = `${startDate}T00:00:00.000Z`;
-  if (endDate) queryParams.endDate = `${endDate}T00:00:00.000Z`;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
-
-  const { data, isLoading } = useGetAllBundleCampaignQuery(queryParams);
-  const campaigns = data?.data?.data || [];
-  const meta = data?.data?.meta;
-  const TotalPages = meta?.totalPages || 1;
-
-  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
-  const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
-
-  const [markUploaded] = useMarkCustomCampaignUploadedMutation();
-  const [uploadedIds, setUploadedIds] = useState<string[]>([]); // Track uploaded campaigns
+  const [startYear, setStartYear] = useState<string>("");
+  const [endYear, setEndYear] = useState<string>("");
+  const [dateFilter, setDateFilter] = useState<string | null>(null);
 
   const openApproveModal = (campaign: any) => {
     setSelectedCampaign(campaign);
     setIsApproveModalOpen(true);
   };
 
+  // same year options as user page
+  const yearOptions = useMemo(() => {
+    const now = new Date().getFullYear();
+    const start = now - 2;
+    const end = now + 2;
+
+    const arr: { label: string; value: string }[] = [];
+    for (let y = end; y >= start; y--)
+      arr.push({ label: String(y), value: String(y) });
+    return arr;
+  }, []);
+
+  const newDuration = useMemo(() => {
+    const d = [...Duration];
+    if (!d.find((x) => x.value === "all"))
+      d.push({ label: "All", value: "all" });
+    return d;
+  }, []);
+
+  const formatYearForApi = (year: string, kind: "start" | "end") => {
+    if (!year) return null;
+    if (kind === "start") return `${year}-01-01T00:00:00.000Z`;
+    return `${year}-12-31T23:59:59.999Z`;
+  };
+
+  const queryParams: Record<string, string> = {
+    page: currentPage.toString(),
+  };
+
+  const startDateIso = formatYearForApi(startYear, "start");
+  const endDateIso = formatYearForApi(endYear, "end");
+  if (startDateIso) queryParams.startDate = startDateIso;
+  if (endDateIso) queryParams.endDate = endDateIso;
+  if (dateFilter) queryParams.dateFilter = dateFilter;
+
+  const { data, isLoading } = useGetAllBundleCampaignQuery(queryParams);
+  const campaigns = data?.data?.data || [];
+
+  const meta = data?.data?.meta;
+  const TotalPages = meta?.totalPages || 1;
+
+  const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+  const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
+  const [markUploaded] = useMarkBundleCampaignUploadedMutation();
+  const [uploadedIds, setUploadedIds] = useState<string[]>([]);
+
   const closeApproveModal = () => {
     setIsApproveModalOpen(false);
     setSelectedCampaign(null);
   };
 
-  const handleStartDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(e.target.value);
-    setDateFilter(null);
-    setCurrentPage(1);
-  };
-
-  const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.target.value);
-    setDateFilter(null);
-    setCurrentPage(1);
-  };
-
   const handleDateFilterClick = (filter: string) => {
     setDateFilter(filter);
-    setStartDate(null);
-    setEndDate(null);
+    setStartYear("");
+    setEndYear("");
     setCurrentPage(1);
   };
 
   const handleClearFilters = () => {
-    setStartDate(null);
-    setEndDate(null);
+    setStartYear("");
+    setEndYear("");
     setDateFilter(null);
     setCurrentPage(1);
   };
 
   const handleMarkUploaded = async (campaignId: string) => {
+    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
     try {
       await markUploaded(campaignId).unwrap();
       setUploadedIds((prev) => [...prev, campaignId]);
+      toast.success("Marked as uploaded.");
     } catch (err) {
       console.error(err);
-      alert("Failed to mark as uploaded.");
+      toast.error("Failed to mark as uploaded.");
     }
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading)
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </div>
+    );
 
   return (
     <div>
@@ -93,86 +117,88 @@ export default function AdminBundleCampaignManagement() {
           All Bundle Campaigns
         </h2>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-4 mb-4">
-          {/* Dates Button */}
-          <div className="flex items-center gap-2 px-5 py-2 bg-[#11214D] text-white rounded-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-[#38B6FF]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3M16 7V3M3 11h18M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-            <span className="text-sm font-medium">Dates</span>
-          </div>
+        {/* --- Filter Section copied from UserBundleCampaignManagement --- */}
+        <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 p-4">
+          <div className="flex flex-col md:flex-row justify-between gap-4 items-center">
+            {/* Start & End Year Selectors */}
+            <div className="md:col-span-4 md:space-y-0 space-y-2 md:flex flex-col md:flex-row w-full md:w-fit justify-start gap-4 items-center">
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">
+                  Select Start Year
+                </label>
+                <CommonSelect
+                  Value={startYear || "Select Year"}
+                  options={yearOptions}
+                  setValue={(val) => {
+                    setStartYear(String(val));
+                    setDateFilter(null);
+                    setCurrentPage(1);
+                  }}
+                  Icon={CalendarDays}
+                  className="bg-[#0F1A39] border border-[#11214D]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-400 mb-1">
+                  Optional - Set End Year
+                </label>
+                <CommonSelect
+                  Value={endYear || "Select Year"}
+                  options={yearOptions}
+                  setValue={(val) => {
+                    setEndYear(String(val));
+                    setDateFilter(null);
+                    setCurrentPage(1);
+                  }}
+                  Icon={CalendarDays}
+                  className="bg-[#0F1A39] border border-[#11214D]"
+                />
+              </div>
+            </div>
 
-          {/* Start Date */}
-          <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
-            <span className="text-sm font-medium whitespace-nowrap">
-              Select Start Date
-            </span>
-            <input
-              type="date"
-              value={startDate || ""}
-              onChange={handleStartDateChange}
-              className="bg-transparent outline-none text-white placeholder:text-slate-400"
-            />
-          </div>
+            {/* Duration Buttons + Clear */}
+            <div className="md:col-span-4">
+              <div className="flex flex-wrap items-center gap-2 md:justify-end">
+                {newDuration.map(({ label, value }) => (
+                  <button
+                    key={value}
+                    className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition
+                    ${
+                      dateFilter === value
+                        ? "bg-[#38B6FF] text-black shadow-[0_0_18px_rgba(56,182,255,0.35)]"
+                        : "bg-[#0F1A39] text-white/90 border border-[#11214D] hover:bg-white/10"
+                    }`}
+                    onClick={() => handleDateFilterClick(value)}
+                  >
+                    {label}
+                  </button>
+                ))}
+                <button
+                  className="px-4 py-2 rounded-full text-xs sm:text-sm font-semibold bg-rose-600/90 text-white hover:bg-rose-600 transition"
+                  onClick={handleClearFilters}
+                >
+                  Clear
+                </button>
+              </div>
 
-          {/* End Date */}
-          <div className="flex items-center gap-2 bg-[#11214D] px-4 py-2 rounded-md text-white">
-            <span className="text-sm font-medium whitespace-nowrap">
-              Optional - Set End Date
-            </span>
-            <input
-              type="date"
-              value={endDate || ""}
-              onChange={handleEndDateChange}
-              className="bg-transparent outline-none text-white placeholder:text-slate-400"
-            />
-          </div>
-
-          {/* Predefined Date Filters */}
-          <div className="flex gap-2 flex-wrap">
-            {[
-              { label: "Today", value: "today" },
-              { label: "1D", value: "1d" },
-              { label: "7D", value: "7d" },
-              { label: "15D", value: "15d" },
-              { label: "1Mo", value: "30d" },
-            ].map(({ label, value }) => (
-              <button
-                key={value}
-                className={`px-4 py-2 rounded-full text-sm font-medium transition ${
-                  dateFilter === value
-                    ? "bg-[#38B6FF] text-black"
-                    : "bg-[#11214D] text-white"
-                }`}
-                onClick={() => handleDateFilterClick(value)}
-              >
-                {label}
-              </button>
-            ))}
-
-            {/* Clear */}
-            <button
-              className="px-4 py-2 rounded-full text-sm font-medium bg-red-600 text-white"
-              onClick={handleClearFilters}
-            >
-              Clear
-            </button>
+              <div className="flex justify-end">
+                {(startYear || endYear || dateFilter) && (
+                  <div className="mt-4 flex justify-center items-center gap-2 text-xs text-title-color">
+                    <p className="opacity-70">Active filter :</p>
+                    <p className="inline-block px-2 py-1 rounded-md bg-white/5 border border-white/10">
+                      {dateFilter
+                        ? `Preset – ${dateFilter}`
+                        : `${startYear || "—"} → ${endYear || "—"}`}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+        {/* --- End Filter Section --- */}
 
-        {/* Desktop Table */}
+        {/* Desktop Table (unchanged) */}
         <div className="hidden md:block">
           <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
             <table className="min-w-full divide-y divide-slate-800/40">
@@ -181,12 +207,11 @@ export default function AdminBundleCampaignManagement() {
                   <th className="py-3 px-4">Bundle Name</th>
                   <th className="py-3 px-4">Customer</th>
                   <th className="py-3 px-4">Status</th>
-                   <th className="py-3 px-4">Is Uploaded</th>
+                  <th className="py-3 px-4">Content Upload Status</th>
                   <th className="py-3 px-4">Approved By</th>
                   <th className="py-3 px-4">Budget</th>
                   <th className="py-3 px-4">Start Date</th>
                   <th className="py-3 px-4">End Date</th>
-                  
                   <th className="py-3 px-4">Actions</th>
                 </tr>
               </thead>
@@ -196,37 +221,69 @@ export default function AdminBundleCampaignManagement() {
                     key={campaign.id}
                     className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
                   >
-                    <td className="py-3 px-4">{campaign?.bundle?.bundle_name}</td>
-                    <td className="py-3 px-4">{campaign.customer?.first_name} {campaign.customer?.last_name}</td>
-                    <td className="py-3 px-4"><CommonStatus status={campaign.status} /></td>
-                    <td className="py-3 px-4">{campaign.isUploaded ? "True" : "False"}</td>
+                    <td className="py-3 px-4">
+                      {campaign?.bundle?.bundle_name}
+                    </td>
+                    <td className="py-3 px-4">
+                      {campaign.customer?.first_name}{" "}
+                      {campaign.customer?.last_name}
+                    </td>
+                    <td className="py-3 px-4">
+                      <CommonStatus status={campaign.status} />
+                    </td>
+                    <td className="py-3 px-4">
+                      {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                    </td>
                     <td className="py-3 px-4">System Auto</td>
                     <td className="py-3 px-4">${campaign?.payment?.amount}</td>
-                    <td className="py-3 px-4">{new Date(campaign.startDate).toLocaleDateString()}</td>
-                    <td className="py-3 px-4">{new Date(campaign.endDate).toLocaleDateString()}</td>
-                     
+                    <td className="py-3 px-4">
+                      {new Date(campaign.startDate).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-4">
+                      {new Date(campaign.endDate).toLocaleDateString()}
+                    </td>
                     <td className="py-3 px-4 flex items-center gap-3">
                       <Eye
                         className="w-6 h-6 text-[#38B6FF] cursor-pointer hover:scale-125"
-                        onClick={() => openApproveModal(campaign)}
-                      />
-
-                      <CheckCircle
-                        className={`w-6 h-6 cursor-pointer ${
-                          uploadedIds.includes(campaign.id) || campaign.isUploaded
-                            ? "text-gray-500 cursor-not-allowed"
-                            : "text-green-500 hover:scale-125"
-                        }`}
                         onClick={() => {
-                          if (!campaign.isUploaded && !uploadedIds.includes(campaign.id)) {
-                            handleMarkUploaded(campaign.id);
-                          }
+                          setSelectedCampaign(campaign);
+                          setIsApproveModalOpen(true);
                         }}
                       />
 
-                      {/* {(uploadedIds.includes(campaign.id) || campaign.isUploaded) && (
-                        <span className="ml-2 text-green-400 text-sm font-medium">Uploaded</span>
-                      )} */}
+                      <button
+                        className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                          uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded
+                            ? "bg-green-500 text-white cursor-not-allowed"
+                            : "bg-blue-100 text-blue-500 hover:scale-125"
+                        }`}
+                        disabled={
+                          uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded
+                        }
+                        title={
+                          uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded
+                            ? "Uploaded"
+                            : "Mark as uploaded"
+                        }
+                        onClick={() => {
+                          if (
+                            !campaign.isUploaded &&
+                            !uploadedIds.includes(campaign.id)
+                          ) {
+                            handleMarkUploaded(campaign.id);
+                          }
+                        }}
+                      >
+                        {uploadedIds.includes(campaign.id) ||
+                        campaign.isUploaded ? (
+                          <CheckCircle className="w-4 h-4" />
+                        ) : (
+                          <ArrowUpCircle className="w-4 h-4 text-black" />
+                        )}
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -235,35 +292,71 @@ export default function AdminBundleCampaignManagement() {
           </div>
         </div>
 
-        {/* Mobile Card View */}
+        {/* Mobile view */}
         <div className="md:hidden space-y-4">
           {campaigns.map((campaign: any) => (
-            <Card key={campaign.id} className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]">
+            <Card
+              key={campaign.id}
+              className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]"
+            >
               <CardContent className="space-y-3">
-                <h2 className="text-lg font-bold text-white">{campaign?.bundle?.bundle_name}</h2>
-                <p className="text-sm text-[#AEB9E1]">Customer: {campaign.customer?.first_name} {campaign.customer?.last_name}</p>
-                <p className="text-sm text-[#AEB9E1]">Status: <CommonStatus status={campaign.status} /></p>
-                <p className="text-sm text-[#AEB9E1]">Start Date: {new Date(campaign.startDate).toLocaleDateString()}</p>
-                <p className="text-sm text-[#AEB9E1]">End Date: {new Date(campaign.endDate).toLocaleDateString()}</p>
+                <h2 className="text-lg font-bold text-white">
+                  {campaign?.bundle?.bundle_name}
+                </h2>
+                <p className="text-sm text-[#AEB9E1]">
+                  Customer: {campaign.customer?.first_name}{" "}
+                  {campaign.customer?.last_name}
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  Status: <CommonStatus status={campaign.status} />
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  Start Date:{" "}
+                  {new Date(campaign.startDate).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-[#AEB9E1]">
+                  End Date: {new Date(campaign.endDate).toLocaleDateString()}
+                </p>
                 <div className="flex gap-3 mt-2">
                   <Eye
                     className="w-6 h-6 text-[#38B6FF] cursor-pointer"
                     onClick={() => openApproveModal(campaign)}
                   />
-                  <CheckCircle
-                    className={`w-6 h-6 cursor-pointer ${
+                  <button
+                    className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
                       uploadedIds.includes(campaign.id) || campaign.isUploaded
-                        ? "text-gray-500 cursor-not-allowed"
-                        : "text-green-500"
+                        ? "bg-green-500 text-white cursor-not-allowed"
+                        : "bg-blue-100 text-blue-500 hover:scale-125"
                     }`}
+                    disabled={
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                    }
+                    title={
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                        ? "Uploaded"
+                        : "Mark as uploaded"
+                    }
                     onClick={() => {
-                      if (!campaign.isUploaded && !uploadedIds.includes(campaign.id)) {
+                      if (
+                        !campaign.isUploaded &&
+                        !uploadedIds.includes(campaign.id)
+                      ) {
                         handleMarkUploaded(campaign.id);
                       }
                     }}
-                  />
-                  {(uploadedIds.includes(campaign.id) || campaign.isUploaded) && (
-                    <span className="ml-2 text-green-400 text-sm font-medium">Uploaded</span>
+                  >
+                    {uploadedIds.includes(campaign.id) ||
+                    campaign.isUploaded ? (
+                      <CheckCircle className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpCircle className="w-4 h-4 text-black" />
+                    )}
+                  </button>
+                  {(uploadedIds.includes(campaign.id) ||
+                    campaign.isUploaded) && (
+                    <span className="ml-2 text-green-400 text-sm font-medium">
+                      Uploaded
+                    </span>
                   )}
                 </div>
               </CardContent>
@@ -272,12 +365,16 @@ export default function AdminBundleCampaignManagement() {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-center md:justify-end">
-          <Pagination currentPage={currentPage} totalPages={TotalPages} onPageChange={setCurrentPage} />
+        <div className="flex justify-center md:justify-end mt-4">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={TotalPages}
+            onPageChange={setCurrentPage}
+          />
         </div>
       </div>
 
-      {/* Campaign Details Modal */}
+      {/* Modal */}
       {isApproveModalOpen && (
         <BundleCampaignDetailsModal
           isOpen={isApproveModalOpen}
