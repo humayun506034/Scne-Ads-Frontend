@@ -3,6 +3,7 @@ import CampaignPerformanceChart from "./CampaignPerformanceChart";
 import RevenueChart from "./RevenueChart";
 import ScreenUptimeChart from "./ScreenUptimeChart";
 
+
 type Screen = {
   screen_name?: string;
   name?: string;
@@ -34,6 +35,8 @@ type Props = {
 const CampaignPerformanceAnalytics: React.FC<Props> = ({ campaigns, revenueMeta }) => {
   const [isClient, setIsClient] = useState(false);
   useEffect(() => setIsClient(true), []);
+
+
 
   // --- Monthly Campaigns ---
   const monthOrder = [
@@ -102,6 +105,7 @@ const CampaignPerformanceAnalytics: React.FC<Props> = ({ campaigns, revenueMeta 
   return (
     <div className="bg-[#081028] p-6 rounded-xl space-y-10">
       <CampaignPerformanceChart campaignData={campaignData} />
+      
       <RevenueChart
       revenueMeta={revenueMeta}
       />

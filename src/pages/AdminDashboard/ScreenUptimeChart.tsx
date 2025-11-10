@@ -1,4 +1,5 @@
 import { ApexOptions } from "apexcharts";
+import { useQueryState } from "nuqs";
 import Chart from "react-apexcharts";
 
 type Props = {
@@ -6,6 +7,20 @@ type Props = {
 };
 
 const ScreenUptimeChart = ({ uptimeData }: Props) => {
+  const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
+    defaultValue: "custom",
+    parse: (value: string) =>
+      value === "custom" || value === "bundle" ? value : "custom",
+  });
+
+  const [selectedYear] = useQueryState<number>("year", {
+    defaultValue: new Date().getFullYear(),
+    parse: (value: string) => {
+      const num = Number(value);
+      return isNaN(num) ? new Date().getFullYear() : num;
+    },
+  });
+
   const options: ApexOptions = {
     chart: {
       type: "bar",
@@ -14,37 +29,37 @@ const ScreenUptimeChart = ({ uptimeData }: Props) => {
       toolbar: { show: false },
     },
     theme: { mode: "dark" },
-    colors: ["#033579"],
+    colors: ["#38B6FF"],
     plotOptions: {
       bar: { horizontal: false, columnWidth: "40%", borderRadius: 5 },
     },
     xaxis: {
       categories: uptimeData.map((u) => u.screen),
-      labels: { style: { colors: "#64748b", fontSize: "12px" } },
+      labels: { style: { colors: "#ffffff", fontSize: "12px" } },
     },
     yaxis: {
       labels: {
         formatter: (v: number) => v + "%",
-        style: { colors: "#64748b", fontSize: "12px" },
+        style: { colors: "#ffffff", fontSize: "12px" },
       },
     },
-    tooltip: { theme: "dark" },
+    tooltip: {
+      theme: "dark",
+      y: {
+        formatter: (val: number) => val + "%",
+      },
+    },
   };
 
   const series = [{ name: "Uptime", data: uptimeData.map((u) => u.uptime) }];
 
   return (
     <div>
-      <h3 className="text-title-color mb-2 text-lg font-medium">
-        Screen Uptime
+      <h3 className="text-white mb-2 text-lg font-medium">
+        {chartType === "custom" ? "Custom" : "Bundle"} Screen Uptime ({selectedYear})
       </h3>
       <div className="rounded-xl p-4 bg-[#0B1739]">
-        <Chart
-          options={options}
-          series={series}
-          type="bar"
-          height={350}
-        />
+        <Chart options={options} series={series} type="bar" height={350} />
       </div>
     </div>
   );

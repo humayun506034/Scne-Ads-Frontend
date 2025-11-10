@@ -80,6 +80,7 @@ const AdminCampaignData: React.FC = () => {
       return isNaN(num) ? new Date().getFullYear() : num;
     },
   });
+  
   if (bundleLoading || screenLoading) return <Loading />;
 
   const BundleCampaigns = BundleResponse?.data?.data ?? [];

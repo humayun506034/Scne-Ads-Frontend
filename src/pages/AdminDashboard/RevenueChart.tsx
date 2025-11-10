@@ -1,3 +1,4 @@
+import { useQueryState } from "nuqs";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 
@@ -12,10 +13,37 @@ interface RevenueChartProps {
 
 const RevenueChart: React.FC<RevenueChartProps> = ({ revenueMeta }) => {
   const [isClient, setIsClient] = useState(false);
+
+  const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
+    defaultValue: "custom",
+    parse: (value: string) =>
+      value === "custom" || value === "bundle" ? value : "custom",
+  });
+
+  // Year query state
+  const [selectedYear] = useQueryState<number>("year", {
+    defaultValue: new Date().getFullYear(),
+    parse: (value: string) => {
+      const num = Number(value);
+      return isNaN(num) ? new Date().getFullYear() : num;
+    },
+  });
+
   useEffect(() => setIsClient(true), []);
 
   const monthOrder = [
-    "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ];
 
   // --- Prepare revenue data ---
@@ -38,12 +66,33 @@ const RevenueChart: React.FC<RevenueChartProps> = ({ revenueMeta }) => {
       zoom: { enabled: false },
       foreColor: "#fff",
     },
-    xaxis: { categories: monthOrder, title: { text: "Month" } },
+    xaxis: {
+      categories: monthOrder.map((m) => `${m} ${selectedYear}`),
+      title: { text: "Month" },
+    },
     yaxis: { title: { text: "Revenue ($)" } },
     plotOptions: { bar: { borderRadius: 6, horizontal: false } },
     dataLabels: { enabled: true },
     colors: ["#38B6FF"],
-    tooltip: { y: { formatter: (val: number) => `$${val.toLocaleString()}` } },
+    tooltip: {
+      enabled: true,
+      // remove theme to keep dark background
+      style: {
+        fontSize: "14px",
+        color: "#fff", // text color white for dark bg
+      },
+      fillSeriesColor: false,
+      y: {
+        formatter: (val: number) => `$${val.toLocaleString()}`,
+      },
+      marker: {
+        show: true,
+      },
+      onDatasetHover: {
+        highlightDataSeries: true,
+      },
+      theme: "dark", // optional, ensures dark background
+    },
   };
 
   const series = [{ name: "Revenue", data: revenueData }];
@@ -52,8 +101,16 @@ const RevenueChart: React.FC<RevenueChartProps> = ({ revenueMeta }) => {
 
   return (
     <div className="bg-[#0B1739] p-6 rounded-xl">
-      <h2 className="text-white text-xl mb-4">Monthly Revenue</h2>
-      <Chart options={chartOptions} series={series} type="bar" height={300} />
+      <h2 className="text-white text-xl mb-4">
+        Monthly Revenue for {chartType === "custom" ? "Custom" : "Bundle"}{" "}
+        Campaigns in {selectedYear}
+      </h2>
+      <Chart
+        options={chartOptions}
+        series={series}
+        type="bar"
+        height={300}
+      />
     </div>
   );
 };

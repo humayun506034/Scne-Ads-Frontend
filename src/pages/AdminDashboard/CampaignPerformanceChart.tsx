@@ -2,12 +2,32 @@ import Chart from "react-apexcharts";
 import activeCampaign from "@/assets/AdminPanel/active-campaigns.png";
 import completedCampaign from "@/assets/AdminPanel/completed-campaigns.png";
 import { ApexOptions } from "apexcharts";
+import { useQueryState } from "nuqs";
 
 type Props = {
   campaignData: { month: string; active: number; completed: number }[];
 };
 
 const CampaignPerformanceChart = ({ campaignData }: Props) => {
+
+
+
+  const [chartType] = useQueryState<"custom" | "bundle">("chartType", {
+    defaultValue: "custom",
+    parse: (value: string) =>
+      value === "custom" || value === "bundle" ? value : "custom",
+  });
+
+  // Year query state
+  const [selectedYear] = useQueryState<number>("year", {
+    defaultValue: new Date().getFullYear(),
+    parse: (value: string) => {
+      const num = Number(value);
+      return isNaN(num) ? new Date().getFullYear() : num;
+    },
+  });
+
+
   const options: ApexOptions = {
     chart: {
       type: "bar",
@@ -23,7 +43,7 @@ const CampaignPerformanceChart = ({ campaignData }: Props) => {
     dataLabels: { enabled: false },
     stroke: { show: true, width: 2, colors: ["transparent"] },
     xaxis: {
-      categories: campaignData.map((d) => d.month),
+      categories: campaignData.map((d) => ` ${d.month} ${selectedYear}`),
       labels: { style: { colors: "#64748b", fontSize: "12px" } },
     },
     yaxis: { labels: { style: { colors: "#64748b", fontSize: "12px" } } },
@@ -35,10 +55,12 @@ const CampaignPerformanceChart = ({ campaignData }: Props) => {
     { name: "Completed", data: campaignData.map((d) => d.completed) },
   ];
 
+
+
   return (
     <div>
       <h3 className="text-title-color mb-2 text-lg font-medium">
-        Campaign Performance
+        Campaign Performance of {chartType} Campaign in {selectedYear}
       </h3>
       <div className="rounded-xl p-4 bg-[#0B1739]">
         <Chart
