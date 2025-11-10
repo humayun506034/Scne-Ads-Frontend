@@ -98,7 +98,7 @@ export default function UserBundleCampaignManagement() {
               <CommonSelect
                 Value={startYear || "Select Year"}
                 options={yearOptions}
-                setValue={(val) => { setStartYear(val); setDateFilter(null); setCurrentPage(1); }}
+                setValue={(val) => { setStartYear(String(val)); setDateFilter(null); setCurrentPage(1); }}
                 Icon={CalendarDays}
                 className="bg-[#0F1A39] border border-[#11214D]"
               />
@@ -108,7 +108,7 @@ export default function UserBundleCampaignManagement() {
               <CommonSelect
                 Value={endYear || "Select Year"}
                 options={yearOptions}
-                setValue={(val) => { setEndYear(val); setDateFilter(null); setCurrentPage(1); }}
+setValue={(val) => { setEndYear(String(val)); setDateFilter(null); setCurrentPage(1); }}
                 Icon={CalendarDays}
                 className="bg-[#0F1A39] border border-[#11214D]"
               />
