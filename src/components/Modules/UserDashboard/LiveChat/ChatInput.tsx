@@ -28,7 +28,7 @@ export function MessageInput({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={placeholder}
-            className="pr-20 p-5 rounded-full border-2  border-gray-200"
+            className="pr-20 p-5 rounded-full border-2  border-gray-200 text-black"
           />{" "}
           <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
             <Button
