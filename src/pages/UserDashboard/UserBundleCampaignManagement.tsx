@@ -174,165 +174,173 @@ export default function UserBundleCampaignManagement() {
         </div>
 
         {/* (The rest of your table/mobile UI remains unchanged) */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-10 text-[#AEB9E1]">
-            <Loading />
-          </div>
-        ) : (
-          <>
-            {/* Desktop Table */}
-            <div className="hidden md:block">
-              <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full text-sm">
-                    <thead className="sticky top-0 z-10">
-                      <tr className="bg-[#0F1A39] text-[#38B6FF]">
-                        <th className="py-3 px-5 text-left">Bundle Name</th>
-                        <th className="py-3 px-5 text-left">Status</th>
-                        <th className="py-3 px-5 text-left">IsUploaded</th>
-                        <th className="py-3 px-5 text-left">Price</th>
-                        <th className="py-3 px-5 text-left whitespace-nowrap">
-                          Start Date
-                        </th>
-                        <th className="py-3 px-5 text-left whitespace-nowrap">
-                          End Date
-                        </th>
-                        <th className="py-3 px-5 text-left">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-800/40">
-                      {campaigns.map((c: any, idx: number) => (
-                        <tr
-                          key={c.id}
-                          className={`text-[#AEB9E1] transition-colors ${
-                            idx % 2 === 1 ? "bg-white/[0.02]" : ""
-                          } hover:bg-white/5`}
-                        >
-                          <td className="py-3 px-5">{c.bundle?.bundle_name}</td>
-                          <td className="py-3 px-5">
-                            <CommonStatus status={c.bundle?.status} />
-                          </td>
-                          <td className="py-3 px-5 text-white">
-                            {c?.isUploaded ? "Uploaded" : "Not Uploaded"}
-                          </td>
-                          <td className="py-3 px-5">
-                            $
-                            {c?.payment?.amount?.toLocaleString?.() ??
-                              c?.payment?.amount ??
-                              0}
-                          </td>
-                          <td className="py-3 px-5 whitespace-nowrap">
-                            {new Date(c.startDate).toLocaleDateString()}
-                          </td>
-                          <td className="py-3 px-5 whitespace-nowrap">
-                            {new Date(c.endDate).toLocaleDateString()}
-                          </td>
-                          <td className="py-3 px-5">
-                            <motion.button
-                              whileHover={{ scale: 1.2 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => {
-                                setSelectedCampaign(c);
-                                setIsApproveModalOpen(true);
-                              }}
-                              className="  rounded-md px-3 py-1.5  text-[#38B6FF]  cursor-pointer"
-                              title="View"
-                            >
-                              <Eye className="w-4 h-4" />
-                            </motion.button>
-                          </td>
-                        </tr>
-                      ))}
-                      {campaigns.length === 0 && (
-                        <tr>
-                          <td
-                            colSpan={7}
-                            className="py-10 px-5 text-center text-slate-400"
-                          >
-                            No campaigns found.
-                          </td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            {/* Mobile Cards */}
-            <div className="md:hidden space-y-4">
-              {campaigns.map((c: any) => (
-                <Card
-                  key={c.id}
-                  className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
-                >
-                  <CardContent className="p-4">
-                    {/* Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                      <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base leading-5">
-                        {c.bundle?.bundle_name || "Unnamed Bundle"}
-                      </h3>
-                      <div className="flex gap-2">
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
-                          {c.status}
-                        </span>
-                        <span
-                          className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide ${
-                            c.isUploaded
-                              ? "bg-green-500/20 text-green-500"
-                              : "bg-red-500/20 text-red-500"
-                          }`}
-                        >
-                          {c.isUploaded ? "Uploaded" : "Not Uploaded"}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="mt-3 h-px bg-white/5" />
-
-                    {/* Info Grid */}
-                    <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">Budget</span>
-                        <span className="font-medium">
+        {/* Static layout stays visible */}
+        <div className="hidden md:block">
+          <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full text-sm">
+                <thead className="sticky top-0 z-10">
+                  <tr className="bg-[#0F1A39] text-[#38B6FF]">
+                    <th className="py-3 px-5 text-left">Bundle Name</th>
+                    <th className="py-3 px-5 text-left">Status</th>
+                    <th className="py-3 px-5 text-left">IsUploaded</th>
+                    <th className="py-3 px-5 text-left">Price</th>
+                    <th className="py-3 px-5 text-left whitespace-nowrap">
+                      Start Date
+                    </th>
+                    <th className="py-3 px-5 text-left whitespace-nowrap">
+                      End Date
+                    </th>
+                    <th className="py-3 px-5 text-left">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/40">
+                  {isLoading ? (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="py-20 text-center"
+                      >
+                        <div className="flex items-center justify-center">
+                          <Loading />
+                        </div>
+                      </td>
+                    </tr>
+                  ) : campaigns.length > 0 ? (
+                    campaigns.map((c: any, idx: number) => (
+                      <tr
+                        key={c.id}
+                        className={`text-[#AEB9E1] transition-colors ${
+                          idx % 2 === 1 ? "bg-white/[0.02]" : ""
+                        } hover:bg-white/5`}
+                      >
+                        <td className="py-3 px-5">{c.bundle?.bundle_name}</td>
+                        <td className="py-3 px-5">
+                          <CommonStatus status={c.bundle?.status} />
+                        </td>
+                        <td className="py-3 px-5 text-white">
+                          {c?.isUploaded ? "Uploaded" : "Not Uploaded"}
+                        </td>
+                        <td className="py-3 px-5">
                           $
                           {c?.payment?.amount?.toLocaleString?.() ??
                             c?.payment?.amount ??
                             0}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">Start</span>
-                        <span>
+                        </td>
+                        <td className="py-3 px-5 whitespace-nowrap">
                           {new Date(c.startDate).toLocaleDateString()}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[#AEB9E1]/60">End</span>
-                        <span>{new Date(c.endDate).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-
-                    {/* View Button */}
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => {
-                        setSelectedCampaign(c);
-                        setIsApproveModalOpen(true);
-                      }}
-                      className="rounded-md px-3 py-1.5 w-full mt-6 text-sm bg-title-color cursor-pointer hover:opacity-90 transition"
-                      title="View"
-                    >
-                      View
-                    </motion.button>
-                  </CardContent>
-                </Card>
-              ))}
+                        </td>
+                        <td className="py-3 px-5 whitespace-nowrap">
+                          {new Date(c.endDate).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-5">
+                          <motion.button
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => {
+                              setSelectedCampaign(c);
+                              setIsApproveModalOpen(true);
+                            }}
+                            className="rounded-md px-3 py-1.5 text-[#38B6FF] cursor-pointer"
+                            title="View"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </motion.button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={7}
+                        className="py-10 px-5 text-center text-slate-400"
+                      >
+                        No campaigns found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-          </>
-        )}
+          </div>
+        </div>
+
+        {/* Mobile view */}
+        <div className="md:hidden space-y-4">
+          {isLoading ? (
+            <div className="flex items-center justify-center py-20">
+              <Loading />
+            </div>
+          ) : campaigns.length > 0 ? (
+            campaigns.map((c: any) => (
+              <Card
+                key={c.id}
+                className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
+              >
+                <CardContent className="p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base leading-5">
+                      {c.bundle?.bundle_name || "Unnamed Bundle"}
+                    </h3>
+                    <div className="flex gap-2">
+                      <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
+                        {c.status}
+                      </span>
+                      <span
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide ${
+                          c.isUploaded
+                            ? "bg-green-500/20 text-green-500"
+                            : "bg-red-500/20 text-red-500"
+                        }`}
+                      >
+                        {c.isUploaded ? "Uploaded" : "Not Uploaded"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 h-px bg-white/5" />
+
+                  <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#AEB9E1]/60">Budget</span>
+                      <span className="font-medium">
+                        $
+                        {c?.payment?.amount?.toLocaleString?.() ??
+                          c?.payment?.amount ??
+                          0}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#AEB9E1]/60">Start</span>
+                      <span>{new Date(c.startDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[#AEB9E1]/60">End</span>
+                      <span>{new Date(c.endDate).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      setSelectedCampaign(c);
+                      setIsApproveModalOpen(true);
+                    }}
+                    className="rounded-md px-3 py-1.5 w-full mt-6 text-sm bg-title-color cursor-pointer hover:opacity-90 transition"
+                    title="View"
+                  >
+                    View
+                  </motion.button>
+                </CardContent>
+              </Card>
+            ))
+          ) : (
+            <div className="text-center text-[#AEB9E1] py-10">
+              No campaigns found
+            </div>
+          )}
+        </div>
 
         {/* Pagination */}
         <div className="flex justify-end mt-4">

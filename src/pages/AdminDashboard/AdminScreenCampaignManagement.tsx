@@ -4,13 +4,7 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import {
-  Eye,
-  CalendarDays,
-  CheckCircle,
-
-  ArrowUpCircle,
-} from "lucide-react";
+import { Eye, CalendarDays, CheckCircle, ArrowUpCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
@@ -113,13 +107,13 @@ export default function AdminScreenCampaignManagement() {
     }
   };
 
-  if (isCustomLoading) {
-    return (
-      <div className="min-h-screen w-full flex items-center justify-center">
-        <Loading />
-      </div>
-    );
-  }
+  // if (isCustomLoading) {
+  //   return (
+  //     <div className="min-h-screen w-full flex items-center justify-center">
+  //       <Loading />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="p-6 space-y-6 md:mt-10">
@@ -204,173 +198,195 @@ export default function AdminScreenCampaignManagement() {
       </div>
 
       {/* Desktop Table View */}
-      <div className="hidden md:block">
-        <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
-          <table className="min-w-full divide-y divide-slate-800/40">
-            <thead>
-              <tr className="text-left text-[#38B6FF]">
-                <th className="py-3 px-4">Total Screens</th>
-                <th className="py-3 px-4">Customer</th>
-                <th className="py-3 px-4">Status</th>
-                <th className="py-3 px-4">Content Upload Status</th>
-                <th className="py-3 px-4">Payment</th>
-                <th className="py-3 px-4">Budget</th>
-                <th className="py-3 px-4">Start Date</th>
-                <th className="py-3 px-4">End Date</th>
-                <th className="py-3 px-4">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customCampaignData.map((campaign: any) => (
-                <tr
-                  key={campaign.id}
-                  className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
-                >
-                  <td className="py-3 px-4">{campaign.screens?.length ?? 0}</td>
-                  <td className="py-3 px-4">
-                    {campaign.customer?.first_name}{" "}
-                    {campaign.customer?.last_name}
-                  </td>
-                  <td className="py-3 px-4">
-                    <CommonStatus status={campaign.status} />
-                  </td>
-                  <td className="py-3 px-4">
-                    {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
-                  </td>
-                  <td className="py-3 px-4">
-                    {campaign.CustomPayment?.[0]?.status === "success"
-                      ? "Paid"
-                      : "Unpaid"}
-                  </td>
-                  <td className="py-3 px-4">
-                    ${campaign.CustomPayment?.[0]?.amount ?? 0}
-                  </td>
-                  <td className="py-3 px-4">
-                    {new Date(campaign.startDate).toLocaleDateString()}
-                  </td>
-                  <td className="py-3 px-4">
-                    {new Date(campaign.endDate).toLocaleDateString()}
-                  </td>
-                  <td className="py-3 px-4 flex items-center gap-3">
-                    <Eye
-                      className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
-                      onClick={() => {
-                        setSelectedCampaign(campaign);
-                        setIsApproveModalOpen(true);
-                      }}
-                    />
+     <div className="hidden md:block">
+  <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
+    <table className="min-w-full divide-y divide-slate-800/40">
+      <thead>
+        <tr className="text-left text-[#38B6FF]">
+          <th className="py-3 px-4">Total Screens</th>
+          <th className="py-3 px-4">Customer</th>
+          <th className="py-3 px-4">Status</th>
+          <th className="py-3 px-4">Content Upload Status</th>
+          <th className="py-3 px-4">Payment</th>
+          <th className="py-3 px-4">Budget</th>
+          <th className="py-3 px-4">Start Date</th>
+          <th className="py-3 px-4">End Date</th>
+          <th className="py-3 px-4">Actions</th>
+        </tr>
+      </thead>
 
-                    <button
-                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
-                        uploadedIds.includes(campaign.id) || campaign.isUploaded
-                          ? "bg-green-500 text-white cursor-not-allowed"
-                          : "bg-blue-100 text-blue-500 hover:scale-125"
-                      }`}
-                      disabled={
-                        uploadedIds.includes(campaign.id) || campaign.isUploaded
-                      }
-                      title={
-                        uploadedIds.includes(campaign.id) || campaign.isUploaded
-                          ? "Uploaded"
-                          : "Mark as uploaded"
-                      }
-                      onClick={() => {
-                        if (
-                          !campaign.isUploaded &&
-                          !uploadedIds.includes(campaign.id)
-                        ) {
-                          handleMarkUploaded(campaign.id);
-                        }
-                      }}
-                    >
-                      {uploadedIds.includes(campaign.id) ||
-                      campaign.isUploaded ? (
-                        <CheckCircle className="w-4 h-4" />
-                      ) : (
-                        <ArrowUpCircle className="w-4 h-4 text-black" />
-                      )}
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Mobile Card View */}
-      <div className="md:hidden space-y-4">
-        {customCampaignData.map((campaign: any) => (
-          <Card
-            key={campaign.id}
-            className="bg-bg-dashboard border-[#11214D]"
-          >
-            <CardContent className="p-4">
-              <div className="space-y-3">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-[#AEB9E1] mb-2 font-medium ">
-                      Total Screens :
-                      <span className="text-white">
-                        {" "}
-                        {campaign.screens?.length ?? 0}
-                      </span>
-                    </h3>
-                    <h3 className="text-[#AEB9E1] font-medium text-sm">
-                      {campaign.customer?.first_name}{" "}
-                      {campaign.customer?.last_name}
-                    </h3>
-
-                    <p className="text-white text-xs mt-1">
-                      {campaign.customer?.email}
-                    </p>
-                  </div>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-[#38B6FF]">
-                    {campaign.status}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3 text-xs">
-                  <div>
-                    <span className="text-[#AEB9E1]/50">Budget:</span>
-                    <span className="text-[#AEB9E1] ml-1">
-                      ${campaign.CustomPayment?.[0]?.amount ?? 0}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[#AEB9E1]/50">Payment:</span>
-                    <span className="text-[#AEB9E1] ml-1">
-                      {campaign.CustomPayment?.[0]?.status}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[#AEB9E1]/50">Start:</span>
-                    <span className="text-[#AEB9E1] ml-1">
-                      {new Date(campaign.startDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-[#AEB9E1]/50">End:</span>
-                    <span className="text-[#AEB9E1] ml-1">
-                      {new Date(campaign.endDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-
-                <button
+      <tbody>
+        {isCustomLoading ? (
+          <tr>
+            <td colSpan={9} className="py-20 text-center">
+              <div className="flex items-center justify-center">
+                <Loading />
+              </div>
+            </td>
+          </tr>
+        ) : customCampaignData.length > 0 ? (
+          customCampaignData.map((campaign: any) => (
+            <tr
+              key={campaign.id}
+              className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
+            >
+              <td className="py-3 px-4">{campaign.screens?.length ?? 0}</td>
+              <td className="py-3 px-4">
+                {campaign.customer?.first_name} {campaign.customer?.last_name}
+              </td>
+              <td className="py-3 px-4">
+                <CommonStatus status={campaign.status} />
+              </td>
+              <td className="py-3 px-4">
+                {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+              </td>
+              <td className="py-3 px-4">
+                {campaign.CustomPayment?.[0]?.status === "success"
+                  ? "Paid"
+                  : "Unpaid"}
+              </td>
+              <td className="py-3 px-4">
+                ${campaign.CustomPayment?.[0]?.amount ?? 0}
+              </td>
+              <td className="py-3 px-4">
+                {new Date(campaign.startDate).toLocaleDateString()}
+              </td>
+              <td className="py-3 px-4">
+                {new Date(campaign.endDate).toLocaleDateString()}
+              </td>
+              <td className="py-3 px-4 flex items-center gap-3">
+                <Eye
+                  className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
                   onClick={() => {
                     setSelectedCampaign(campaign);
                     setIsApproveModalOpen(true);
                   }}
-                  className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
+                />
+                <button
+                  className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      ? "bg-green-500 text-white cursor-not-allowed"
+                      : "bg-blue-100 text-blue-500 hover:scale-125"
+                  }`}
+                  disabled={
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                  }
+                  title={
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      ? "Uploaded"
+                      : "Mark as uploaded"
+                  }
+                  onClick={() => {
+                    if (
+                      !campaign.isUploaded &&
+                      !uploadedIds.includes(campaign.id)
+                    ) {
+                      handleMarkUploaded(campaign.id);
+                    }
+                  }}
                 >
-                  View Details
+                  {uploadedIds.includes(campaign.id) || campaign.isUploaded ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <ArrowUpCircle className="w-4 h-4 text-black" />
+                  )}
                 </button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan={9} className="py-10 text-center text-[#AEB9E1]">
+              No campaigns found
+            </td>
+          </tr>
+        )}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+      {/* Mobile Card View */}
+
+      {isCustomLoading ? (
+        <div className="min-h-screen w-full flex items-center justify-center">
+          <Loading />
+        </div>
+      ) : (
+        <div className="md:hidden space-y-4">
+          {customCampaignData.map((campaign: any) => (
+            <Card
+              key={campaign.id}
+              className="bg-bg-dashboard border-[#11214D]"
+            >
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="text-[#AEB9E1] mb-2 font-medium ">
+                        Total Screens :
+                        <span className="text-white">
+                          {" "}
+                          {campaign.screens?.length ?? 0}
+                        </span>
+                      </h3>
+                      <h3 className="text-[#AEB9E1] font-medium text-sm">
+                        {campaign.customer?.first_name}{" "}
+                        {campaign.customer?.last_name}
+                      </h3>
+
+                      <p className="text-white text-xs mt-1">
+                        {campaign.customer?.email}
+                      </p>
+                    </div>
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-800 text-[#38B6FF]">
+                      {campaign.status}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Budget:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        ${campaign.CustomPayment?.[0]?.amount ?? 0}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Payment:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {campaign.CustomPayment?.[0]?.status}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Start:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {new Date(campaign.startDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">End:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {new Date(campaign.endDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setSelectedCampaign(campaign);
+                      setIsApproveModalOpen(true);
+                    }}
+                    className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
+                  >
+                    View Details
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
       <div className="flex justify-end mt-4">

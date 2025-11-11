@@ -103,12 +103,12 @@ export default function AdminBundleCampaignManagement() {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loading />
-      </div>
-    );
+  // if (isLoading)
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <Loading />
+  //     </div>
+  //   );
 
   return (
     <div>
@@ -215,154 +215,185 @@ export default function AdminBundleCampaignManagement() {
                   <th className="py-3 px-4">Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {campaigns.map((campaign: any) => (
-                  <tr
-                    key={campaign.id}
-                    className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
-                  >
-                    <td className="py-3 px-4">
-                      {campaign?.bundle?.bundle_name}
-                    </td>
-                    <td className="py-3 px-4">
-                      {campaign.customer?.first_name}{" "}
-                      {campaign.customer?.last_name}
-                    </td>
-                    <td className="py-3 px-4">
-                      <CommonStatus status={campaign.status} />
-                    </td>
-                    <td className="py-3 px-4">
-                      {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
-                    </td>
-                    <td className="py-3 px-4">System Auto</td>
-                    <td className="py-3 px-4">${campaign?.payment?.amount}</td>
-                    <td className="py-3 px-4">
-                      {new Date(campaign.startDate).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4">
-                      {new Date(campaign.endDate).toLocaleDateString()}
-                    </td>
-                    <td className="py-3 px-4 flex items-center gap-3">
-                      <Eye
-                        className="w-6 h-6 text-[#38B6FF] cursor-pointer hover:scale-125"
-                        onClick={() => {
-                          setSelectedCampaign(campaign);
-                          setIsApproveModalOpen(true);
-                        }}
-                      />
 
-                      <button
-                        className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
-                          uploadedIds.includes(campaign.id) ||
-                          campaign.isUploaded
-                            ? "bg-green-500 text-white cursor-not-allowed"
-                            : "bg-blue-100 text-blue-500 hover:scale-125"
-                        }`}
-                        disabled={
-                          uploadedIds.includes(campaign.id) ||
-                          campaign.isUploaded
-                        }
-                        title={
-                          uploadedIds.includes(campaign.id) ||
-                          campaign.isUploaded
-                            ? "Uploaded"
-                            : "Mark as uploaded"
-                        }
-                        onClick={() => {
-                          if (
-                            !campaign.isUploaded &&
-                            !uploadedIds.includes(campaign.id)
-                          ) {
-                            handleMarkUploaded(campaign.id);
-                          }
-                        }}
-                      >
-                        {uploadedIds.includes(campaign.id) ||
-                        campaign.isUploaded ? (
-                          <CheckCircle className="w-4 h-4" />
-                        ) : (
-                          <ArrowUpCircle className="w-4 h-4 text-black" />
-                        )}
-                      </button>
+              <tbody>
+                {isLoading ? (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="py-20 text-center"
+                    >
+                      <div className="flex items-center justify-center">
+                        <Loading />
+                      </div>
                     </td>
                   </tr>
-                ))}
+                ) : campaigns.length > 0 ? (
+                  campaigns.map((campaign) => (
+                    <tr key={campaign.id}>
+                      <td className="py-3 px-4">
+                        {campaign.screens?.length ?? 0}
+                      </td>
+                      <td className="py-3 px-4">
+                        {campaign.customer?.first_name}{" "}
+                        {campaign.customer?.last_name}
+                      </td>
+                      <td className="py-3 px-4">
+                        <CommonStatus status={campaign.status} />
+                      </td>
+                      <td className="py-3 px-4">
+                        {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                      </td>
+                      <td className="py-3 px-4">
+                        {campaign.CustomPayment?.[0]?.status === "success"
+                          ? "Paid"
+                          : "Unpaid"}
+                      </td>
+                      <td className="py-3 px-4">
+                        ${campaign.CustomPayment?.[0]?.amount ?? 0}
+                      </td>
+                      <td className="py-3 px-4">
+                        {new Date(campaign.startDate).toLocaleDateString()}
+                      </td>
+                      <td className="py-3 px-4">
+                        {new Date(campaign.endDate).toLocaleDateString()}
+                      </td>
+                      <td className="py-3 px-4 flex items-center gap-3">
+                        <Eye
+                          className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
+                          onClick={() => {
+                            setSelectedCampaign(campaign);
+                            setIsApproveModalOpen(true);
+                          }}
+                        />
+                        <button
+                          className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                            uploadedIds.includes(campaign.id) ||
+                            campaign.isUploaded
+                              ? "bg-green-500 text-white cursor-not-allowed"
+                              : "bg-blue-100 text-blue-500 hover:scale-125"
+                          }`}
+                          disabled={
+                            uploadedIds.includes(campaign.id) ||
+                            campaign.isUploaded
+                          }
+                          title={
+                            uploadedIds.includes(campaign.id) ||
+                            campaign.isUploaded
+                              ? "Uploaded"
+                              : "Mark as uploaded"
+                          }
+                          onClick={() => {
+                            if (
+                              !campaign.isUploaded &&
+                              !uploadedIds.includes(campaign.id)
+                            ) {
+                              handleMarkUploaded(campaign.id);
+                            }
+                          }}
+                        >
+                          {uploadedIds.includes(campaign.id) ||
+                          campaign.isUploaded ? (
+                            <CheckCircle className="w-4 h-4" />
+                          ) : (
+                            <ArrowUpCircle className="w-4 h-4 text-black" />
+                          )}
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="py-10 text-center text-[#AEB9E1]"
+                    >
+                      No campaigns found
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
         {/* Mobile view */}
-        <div className="md:hidden space-y-4">
-          {campaigns.map((campaign: any) => (
-            <Card
-              key={campaign.id}
-              className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]"
-            >
-              <CardContent className="space-y-3">
-                <h2 className="text-lg font-bold text-white">
-                  {campaign?.bundle?.bundle_name}
-                </h2>
-                <p className="text-sm text-[#AEB9E1]">
-                  Customer: {campaign.customer?.first_name}{" "}
-                  {campaign.customer?.last_name}
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  Status: <CommonStatus status={campaign.status} />
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  Start Date:{" "}
-                  {new Date(campaign.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm text-[#AEB9E1]">
-                  End Date: {new Date(campaign.endDate).toLocaleDateString()}
-                </p>
-                <div className="flex gap-3 mt-2">
-                  <Eye
-                    className="w-6 h-6 text-[#38B6FF] cursor-pointer"
-                    onClick={() => openApproveModal(campaign)}
-                  />
-                  <button
-                    className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
-                      uploadedIds.includes(campaign.id) || campaign.isUploaded
-                        ? "bg-green-500 text-white cursor-not-allowed"
-                        : "bg-blue-100 text-blue-500 hover:scale-125"
-                    }`}
-                    disabled={
-                      uploadedIds.includes(campaign.id) || campaign.isUploaded
-                    }
-                    title={
-                      uploadedIds.includes(campaign.id) || campaign.isUploaded
-                        ? "Uploaded"
-                        : "Mark as uploaded"
-                    }
-                    onClick={() => {
-                      if (
-                        !campaign.isUploaded &&
-                        !uploadedIds.includes(campaign.id)
-                      ) {
-                        handleMarkUploaded(campaign.id);
+        {isLoading ? (
+          <div className="min-h-screen flex items-center justify-center">
+            <Loading />
+          </div>
+        ) : (
+          <div className="md:hidden space-y-4">
+            {campaigns.map((campaign: any) => (
+              <Card
+                key={campaign.id}
+                className="bg-bg-dashboard p-4 shadow-lg border border-[#11214D]"
+              >
+                <CardContent className="space-y-3">
+                  <h2 className="text-lg font-bold text-white">
+                    {campaign?.bundle?.bundle_name}
+                  </h2>
+                  <p className="text-sm text-[#AEB9E1]">
+                    Customer: {campaign.customer?.first_name}{" "}
+                    {campaign.customer?.last_name}
+                  </p>
+                  <p className="text-sm text-[#AEB9E1]">
+                    Status: <CommonStatus status={campaign.status} />
+                  </p>
+                  <p className="text-sm text-[#AEB9E1]">
+                    Start Date:{" "}
+                    {new Date(campaign.startDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm text-[#AEB9E1]">
+                    End Date: {new Date(campaign.endDate).toLocaleDateString()}
+                  </p>
+                  <div className="flex gap-3 mt-2">
+                    <Eye
+                      className="w-6 h-6 text-[#38B6FF] cursor-pointer"
+                      onClick={() => openApproveModal(campaign)}
+                    />
+                    <button
+                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "bg-green-500 text-white cursor-not-allowed"
+                          : "bg-blue-100 text-blue-500 hover:scale-125"
+                      }`}
+                      disabled={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
                       }
-                    }}
-                  >
-                    {uploadedIds.includes(campaign.id) ||
-                    campaign.isUploaded ? (
-                      <CheckCircle className="w-4 h-4" />
-                    ) : (
-                      <ArrowUpCircle className="w-4 h-4 text-black" />
+                      title={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "Uploaded"
+                          : "Mark as uploaded"
+                      }
+                      onClick={() => {
+                        if (
+                          !campaign.isUploaded &&
+                          !uploadedIds.includes(campaign.id)
+                        ) {
+                          handleMarkUploaded(campaign.id);
+                        }
+                      }}
+                    >
+                      {uploadedIds.includes(campaign.id) ||
+                      campaign.isUploaded ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpCircle className="w-4 h-4 text-black" />
+                      )}
+                    </button>
+                    {(uploadedIds.includes(campaign.id) ||
+                      campaign.isUploaded) && (
+                      <span className="ml-2 text-green-400 text-sm font-medium">
+                        Uploaded
+                      </span>
                     )}
-                  </button>
-                  {(uploadedIds.includes(campaign.id) ||
-                    campaign.isUploaded) && (
-                    <span className="ml-2 text-green-400 text-sm font-medium">
-                      Uploaded
-                    </span>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
         {/* Pagination */}
         <div className="flex justify-center md:justify-end mt-4">

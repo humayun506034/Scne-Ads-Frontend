@@ -94,11 +94,11 @@ const routes = createBrowserRouter([
       { path: "campaigns", element: <CampaignTablePage /> },
 
       { path: "bundle-campaigns", element: <UserBundleCampaignManagement /> },
+      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
 
       { path: "bundle-payments", element: <UserBundlePayments /> },
       { path: "screen-payments", element: <UserScreenPayments /> },
 
-      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
       { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
       { path: "userBillingInfo", element: <UserBillingInfo /> },
 
@@ -147,6 +147,7 @@ const routes = createBrowserRouter([
       },
       { path: "bundle-campaigns", element: <AdminBundleCampaignManagement /> },
       { path: "screen-campaigns", element: <AdminScreenCampaignManagement /> },
+      
       { path: "bundle-payments", element: <AllBundlePayments /> },
       { path: "screen-payments", element: <AllScreenPayments /> },
       {

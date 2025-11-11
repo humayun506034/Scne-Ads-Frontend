@@ -3,53 +3,75 @@ import CustomInput from "@/common/CommonDashboardInput";
 import DashboardTransparentButton from "@/common/DashboardTransparentButton";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ALLOWED_MIME } from "@/lib/Data";
 import { useMakeBundlePaymentMutation } from "@/store/api/Payment/paymentApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiCalendar, HiPhotograph, HiTrash, HiUpload, HiVideoCamera } from "react-icons/hi";
+import {
+  HiCalendar,
+  HiPhotograph,
+  HiTrash,
+  HiUpload,
+  HiVideoCamera,
+} from "react-icons/hi";
 import { toast } from "sonner";
 import { z } from "zod";
 import { options } from "../../NewCampaign/CampaignNameSection";
 
-
 const bundleSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  industry: z.string().min(1, "Industry is required"),
+  industry: z.string().default(options[0].value),
   startDate: z.date().refine((date) => !isNaN(date.getTime()), "Invalid date"),
   files: z.array(z.instanceof(File)).optional(),
 });
 
 type BundleForm = z.infer<typeof bundleSchema>;
 
-export default function PurchaseBundleDialog({ open, setOpen ,bundleId}) {
+export default function PurchaseBundleDialog({ open, setOpen, bundleId }) {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [fileErrors, setFileErrors] = useState<string[]>([]);
-  const { register, handleSubmit, formState: { errors }, setValue } = useForm<BundleForm>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm<BundleForm>({
     resolver: zodResolver(bundleSchema),
     defaultValues: {
-      industry: "",
+      industry: options[0].value,
       startDate: new Date(),
     },
   });
-  const [valueOption, setOptionValue] = useState("Arts and Entertainment");
-const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
+  const [valueOption, setOptionValue] = useState("Arts & Entertainment");
+
+  const [createBundlePayment, { isLoading }] = useMakeBundlePaymentMutation();
 
   const handleStartDateChange = (date: Date | undefined) => {
     if (date) {
       const start = new Date(date);
-      start.setHours(0, 0, 0, 0); 
+      start.setHours(0, 0, 0, 0);
       setDate(start);
 
       // Set the value in React Hook Form and trigger validation
       setValue("startDate", start, { shouldValidate: true });
     }
   };
-
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -66,11 +88,10 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
         setFileErrors(errorMessages);
       } else {
         setSelectedFiles([...selectedFiles, ...newFiles]);
-        setFileErrors([]); 
+        setFileErrors([]);
       }
     }
   };
-
 
   const handleRemoveFile = (fileToRemove: File) => {
     setSelectedFiles(selectedFiles.filter((file) => file !== fileToRemove));
@@ -78,38 +99,40 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
 
   const onSubmit = async (data: BundleForm) => {
     const id = toast.loading("Creating bundle payment...");
-   
+
     const formData = new FormData();
-    const  payload ={
+    const payload = {
       name: data.name,
       industry: data.industry,
       startDate: data.startDate.toISOString(),
       bundleId: bundleId,
       type: "bundle",
-   
-    }
+    };
     formData.append("data", JSON.stringify(payload));
- 
+
     selectedFiles.forEach((file) => formData.append("files", file));
 
     try {
       const res = await createBundlePayment(formData).unwrap();
-      console.log("✅ Bundle payment created:", res);
+
       // If backend returns a redirect URL, navigate
       if (res?.success) {
-        toast.success("Redirecting to payment...",{id});
-       
-        window.location.href =res?.data.session?.url;
+        toast.success("Redirecting to payment...", { id });
+
+        window.location.href = res?.data.session?.url;
       }
     } catch (e) {
-      toast.error("Failed to create bundle payment",{id})
+      toast.error("Failed to create bundle payment", { id });
       console.error("❌ Bundle payment failed:", e);
     }
   };
 
   return (
     <div>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+      >
         {/* Trigger is unused in controlled mode, but kept if needed elsewhere */}
         <DialogTrigger asChild>
           <Button className="w-full  bg-blue-500 hover:bg-blue-700">
@@ -124,7 +147,10 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
             </DialogTitle>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-5">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="mt-4 space-y-5"
+          >
             {/* Name Field */}
             <div className="bg-dashboard-card-bg ring-1 ring-white/10 rounded-xl p-4">
               <label className="text-white flex items-center gap-2 mb-2">
@@ -136,7 +162,9 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
                 isError={!!errors.name}
               />
               {errors.name && (
-                <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>
+                <p className="text-red-400 text-xs mt-1">
+                  {errors.name.message}
+                </p>
               )}
             </div>
 
@@ -144,11 +172,16 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
               <label className="text-white flex items-center gap-2 mb-2">
                 <HiPhotograph className="h-5 w-5 text-purple-300" /> Industry
               </label>
-        
-              <Select onValueChange={(value) => {
-                setOptionValue(value);
-                setValue("industry", value, { shouldValidate: true, shouldDirty: true });
-              }}>
+
+              <Select
+                onValueChange={(value) => {
+                  setOptionValue(value);
+                  setValue("industry", value, {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                }}
+              >
                 <SelectTrigger className="cursor-pointer text-base text-white border border-dashboard-border w-full rounded-md focus:ring-0 px-4 py-6">
                   <SelectValue placeholder={valueOption} />
                 </SelectTrigger>
@@ -165,15 +198,21 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
                 </SelectContent>
               </Select>
               {/* register hidden input so RHF tracks the select value */}
-              <input type="hidden" {...register("industry")} />
+              <input
+                type="hidden"
+                {...register("industry")}
+              />
               {errors.industry && (
-                <p className="text-red-400 text-xs mt-1">{errors.industry.message}</p>
+                <p className="text-red-400 text-xs mt-1">
+                  {errors.industry.message}
+                </p>
               )}
             </div>
-   {/* Start Date Picker - Native HTML Date Picker */}
-   <div className="bg-dashboard-card-bg ring-1 ring-white/10 rounded-xl p-4">
+            {/* Start Date Picker - Native HTML Date Picker */}
+            <div className="bg-dashboard-card-bg ring-1 ring-white/10 rounded-xl p-4">
               <label className="text-white flex items-center gap-2 mb-2">
-                <HiCalendar className="h-5 w-5 text-blue-300" /> Select Start Date
+                <HiCalendar className="h-5 w-5 text-blue-300" /> Select Start
+                Date
               </label>
               {/* <input
                 type="date"
@@ -186,7 +225,7 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
                 }}
                 className="w-full bg-dashboard-card-bg border-white/10 text-white border rounded-md p-2 focus:outline-none"
               /> */}
-                <Dialog >
+              <Dialog>
                 <DialogTrigger asChild>
                   <Button
                     variant="outline"
@@ -202,39 +241,43 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="bg-[#081028] flex justify-center items-center w-fit border-white/10 text-white p-2">
-                <Calendar
-                mode="single"
-             
-                selected={date}
-              
-                onSelect={handleStartDateChange}
-                classNames={{
-                  selected:
-                    "hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-white rounded-full",
-                  day: "text-white cursor-pointer",
-                  head_cell: "text-black p-4 m-2",
-                  nav_button_previous: "text-white",
-                  nav_button_next: "text-white",
-                  month: "text-white cursor-pointer",
-                  dropdown_year:
-                    "bg-[#081028] p-2 text-white hover:bg-[#1e293b] rounded-md",
-                  dropdown_month:
-                    "bg-[#081028] p-2 text-white hover:bg-[#1e293b] rounded-md",
-                }}
-              />
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={handleStartDateChange}
+                    classNames={{
+                      selected:
+                        "hover:bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] text-white rounded-full",
+                      day: "text-white cursor-pointer",
+                      head_cell: "text-black p-4 m-2",
+                      nav_button_previous: "text-white",
+                      nav_button_next: "text-white",
+                      month: "text-white cursor-pointer",
+                      dropdown_year:
+                        "bg-[#081028] p-2 text-white hover:bg-[#1e293b] rounded-md",
+                      dropdown_month:
+                        "bg-[#081028] p-2 text-white hover:bg-[#1e293b] rounded-md",
+                    }}
+                  />
                 </DialogContent>
               </Dialog>
               {/* ensure RHF tracks date */}
-              <input type="hidden" {...register("startDate")} />
+              <input
+                type="hidden"
+                {...register("startDate")}
+              />
               {errors.startDate && (
-                <p className="text-red-400 text-xs mt-1">{errors.startDate.message}</p>
+                <p className="text-red-400 text-xs mt-1">
+                  {errors.startDate.message}
+                </p>
               )}
             </div>
 
             {/* File Upload Section */}
             <div className="bg-dashboard-card-bg ring-1 ring-white/10 rounded-xl p-4">
               <label className="text-white flex items-center gap-2 mb-2">
-                <HiUpload className="h-5 w-5 text-emerald-300" /> Upload Your Media Contents (Images/Videos)
+                <HiUpload className="h-5 w-5 text-emerald-300" /> Upload Your
+                Media Contents (Images/Videos)
               </label>
               <label className="flex items-center justify-center gap-2 w-full mt-1 px-4 py-10 rounded-xl border border-dashed border-white/20 bg-bg-dashboard transition cursor-pointer">
                 <input
@@ -245,7 +288,9 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
                   className="hidden"
                 />
                 <HiUpload className="h-5 w-5 text-white" />
-                <span className="text-white/80">Click to upload or drag and drop</span>
+                <span className="text-white/80">
+                  Click to upload or drag and drop
+                </span>
               </label>
               {fileErrors.length > 0 && (
                 <div className="text-red-400 text-xs mt-2 space-y-1">
@@ -306,8 +351,14 @@ const  [ createBundlePayment , { isLoading }]=useMakeBundlePaymentMutation()
 
             {/* Submit Button */}
             <div className="pt-2 mx-auto w-full flex gap-4 flex-col-reverse md:flex-row justify-center md:justify-between items-center">
-              <DashboardTransparentButton title="Cancel" onClick={() => setOpen(false)} />
-              <CommonDashboardButton title="Confirm Purchase" disabled={isLoading} />
+              <DashboardTransparentButton
+                title="Cancel"
+                onClick={() => setOpen(false)}
+              />
+              <CommonDashboardButton
+                title="Confirm Purchase"
+                disabled={isLoading}
+              />
             </div>
           </form>
         </DialogContent>
