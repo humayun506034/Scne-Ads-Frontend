@@ -131,7 +131,10 @@ const AdminCampaignData: React.FC = () => {
   const availableYears: number[] = Array.from(
     new Set(
       filteredCampaigns
-        .map((c) => c.createdAt && new Date(c.createdAt).getFullYear())
+        .map(
+          (c: { createdAt: string | number | Date }) =>
+            c.createdAt && new Date(c.createdAt).getFullYear()
+        )
         .filter(Boolean)
     )
   )
@@ -139,7 +142,8 @@ const AdminCampaignData: React.FC = () => {
     .sort((a, b) => b - a);
 
   const filteredCampaignsByYear = filteredCampaigns.filter(
-    (c) => c.createdAt && new Date(c.createdAt).getFullYear() === selectedYear
+    (c: { createdAt: string | number | Date }) =>
+      c.createdAt && new Date(c.createdAt).getFullYear() === selectedYear
   );
 
   const filteredRevenueMeta = {
