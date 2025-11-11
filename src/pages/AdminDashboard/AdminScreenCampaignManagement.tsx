@@ -4,13 +4,7 @@ import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { Card, CardContent } from "@/components/ui/card";
 import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import {
-  Eye,
-  CalendarDays,
-  CheckCircle,
-
-  ArrowUpCircle,
-} from "lucide-react";
+import { Eye, CalendarDays, CheckCircle, ArrowUpCircle } from "lucide-react";
 import { useMemo, useState } from "react";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "./DeleteCampaignModal";
@@ -18,6 +12,15 @@ import CommonSelect from "@/common/CommonSelect";
 import { Duration } from "@/lib/Data";
 import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function AdminScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -78,6 +81,10 @@ export default function AdminScreenCampaignManagement() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
 
+  // Mark as Uploaded Modal State
+  const [markUploadModalOpen, setMarkUploadModalOpen] = useState(false);
+  const [campaignToMark, setCampaignToMark] = useState<any>(null);
+
   const closeApproveModal = () => {
     setIsApproveModalOpen(false);
     setSelectedCampaign(null);
@@ -102,7 +109,6 @@ export default function AdminScreenCampaignManagement() {
   };
 
   const handleMarkUploaded = async (campaignId: string) => {
-    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
     try {
       await markUploaded(campaignId).unwrap();
       setUploadedIds((prev) => [...prev, campaignId]);
@@ -279,7 +285,8 @@ export default function AdminScreenCampaignManagement() {
                           !campaign.isUploaded &&
                           !uploadedIds.includes(campaign.id)
                         ) {
-                          handleMarkUploaded(campaign.id);
+                          setCampaignToMark(campaign);
+                          setMarkUploadModalOpen(true);
                         }
                       }}
                     >
@@ -366,6 +373,36 @@ export default function AdminScreenCampaignManagement() {
                 >
                   View Details
                 </button>
+
+                {/* Mark as Uploaded for Mobile */}
+                <button
+                  className={`mt-2 w-full py-2 rounded-lg flex items-center justify-center gap-2 ${
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      ? "bg-green-500 text-white cursor-not-allowed"
+                      : "bg-blue-100 text-blue-500 hover:bg-blue-200"
+                  }`}
+                  disabled={
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                  }
+                  onClick={() => {
+                    if (
+                      !campaign.isUploaded &&
+                      !uploadedIds.includes(campaign.id)
+                    ) {
+                      setCampaignToMark(campaign);
+                      setMarkUploadModalOpen(true);
+                    }
+                  }}
+                >
+                  {uploadedIds.includes(campaign.id) || campaign.isUploaded ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <ArrowUpCircle className="w-4 h-4" />
+                  )}
+                  {uploadedIds.includes(campaign.id) || campaign.isUploaded
+                    ? "Uploaded"
+                    : "Mark as uploaded"}
+                </button>
               </div>
             </CardContent>
           </Card>
@@ -394,6 +431,48 @@ export default function AdminScreenCampaignManagement() {
         onClose={closeDeleteModal}
         campaign={selectedCampaign}
       />
+
+      {/* Mark as Uploaded Modal */}
+      <Dialog
+        open={markUploadModalOpen}
+        onOpenChange={setMarkUploadModalOpen}
+      >
+        <DialogContent className="bg-[#081028]">
+          <DialogHeader>
+            <DialogTitle>Confirm Upload</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to mark{" "}
+              <span className="font-semibold">
+                {campaignToMark?.customer?.first_name || "this campaign"}
+              </span>{" "}
+              as uploaded?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setMarkUploadModalOpen(false);
+                setCampaignToMark(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
+              onClick={async () => {
+                if (campaignToMark) {
+                  await handleMarkUploaded(campaignToMark.id);
+                  setMarkUploadModalOpen(false);
+                  setCampaignToMark(null);
+                }
+              }}
+            >
+              <CheckCircle className="w-4 h-4" /> Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

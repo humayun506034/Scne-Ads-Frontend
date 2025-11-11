@@ -68,7 +68,6 @@ export default function UserScreenCampaignManagement() {
   const meta = customData?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
-
   // Modals
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
