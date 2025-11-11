@@ -6,12 +6,9 @@ import AdminSpecialSection from "@/components/Modules/admin-dashboard/Home/Speci
 import { motion } from "framer-motion";
 
 const AdminDashboardHomePage = () => {
-
- 
   return (
     <div className="mb-20 mt-6  px-5 md:px-10">
-
-       <AdminDashboardHeader/>
+      <AdminDashboardHeader />
 
       <div className="mb-20  md:px-6">
         <motion.div

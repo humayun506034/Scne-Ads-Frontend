@@ -12,6 +12,15 @@ import CommonSelect from "@/common/CommonSelect";
 import { Duration } from "@/lib/Data";
 import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export default function AdminScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +68,7 @@ export default function AdminScreenCampaignManagement() {
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data: customData, isLoading: isCustomLoading } =
     useGetAllCustomCampaignQuery(queryParams);
@@ -71,6 +80,10 @@ export default function AdminScreenCampaignManagement() {
   const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState<any>(null);
+
+  // Mark as Uploaded Modal State
+  const [markUploadModalOpen, setMarkUploadModalOpen] = useState(false);
+  const [campaignToMark, setCampaignToMark] = useState<any>(null);
 
   const closeApproveModal = () => {
     setIsApproveModalOpen(false);
@@ -96,7 +109,6 @@ export default function AdminScreenCampaignManagement() {
   };
 
   const handleMarkUploaded = async (campaignId: string) => {
-    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
     try {
       await markUploaded(campaignId).unwrap();
       setUploadedIds((prev) => [...prev, campaignId]);
@@ -198,114 +210,100 @@ export default function AdminScreenCampaignManagement() {
       </div>
 
       {/* Desktop Table View */}
-     <div className="hidden md:block">
-  <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
-    <table className="min-w-full divide-y divide-slate-800/40">
-      <thead>
-        <tr className="text-left text-[#38B6FF]">
-          <th className="py-3 px-4">Total Screens</th>
-          <th className="py-3 px-4">Customer</th>
-          <th className="py-3 px-4">Status</th>
-          <th className="py-3 px-4">Content Upload Status</th>
-          <th className="py-3 px-4">Payment</th>
-          <th className="py-3 px-4">Budget</th>
-          <th className="py-3 px-4">Start Date</th>
-          <th className="py-3 px-4">End Date</th>
-          <th className="py-3 px-4">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {isCustomLoading ? (
-          <tr>
-            <td colSpan={9} className="py-20 text-center">
-              <div className="flex items-center justify-center">
-                <Loading />
-              </div>
-            </td>
-          </tr>
-        ) : customCampaignData.length > 0 ? (
-          customCampaignData.map((campaign: any) => (
-            <tr
-              key={campaign.id}
-              className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
-            >
-              <td className="py-3 px-4">{campaign.screens?.length ?? 0}</td>
-              <td className="py-3 px-4">
-                {campaign.customer?.first_name} {campaign.customer?.last_name}
-              </td>
-              <td className="py-3 px-4">
-                <CommonStatus status={campaign.status} />
-              </td>
-              <td className="py-3 px-4">
-                {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
-              </td>
-              <td className="py-3 px-4">
-                {campaign.CustomPayment?.[0]?.status === "success"
-                  ? "Paid"
-                  : "Unpaid"}
-              </td>
-              <td className="py-3 px-4">
-                ${campaign.CustomPayment?.[0]?.amount ?? 0}
-              </td>
-              <td className="py-3 px-4">
-                {new Date(campaign.startDate).toLocaleDateString()}
-              </td>
-              <td className="py-3 px-4">
-                {new Date(campaign.endDate).toLocaleDateString()}
-              </td>
-              <td className="py-3 px-4 flex items-center gap-3">
-                <Eye
-                  className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
-                  onClick={() => {
-                    setSelectedCampaign(campaign);
-                    setIsApproveModalOpen(true);
-                  }}
-                />
-                <button
-                  className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
-                    uploadedIds.includes(campaign.id) || campaign.isUploaded
-                      ? "bg-green-500 text-white cursor-not-allowed"
-                      : "bg-blue-100 text-blue-500 hover:scale-125"
-                  }`}
-                  disabled={
-                    uploadedIds.includes(campaign.id) || campaign.isUploaded
-                  }
-                  title={
-                    uploadedIds.includes(campaign.id) || campaign.isUploaded
-                      ? "Uploaded"
-                      : "Mark as uploaded"
-                  }
-                  onClick={() => {
-                    if (
-                      !campaign.isUploaded &&
-                      !uploadedIds.includes(campaign.id)
-                    ) {
-                      handleMarkUploaded(campaign.id);
-                    }
-                  }}
+      <div className="hidden md:block">
+        <div className="rounded-lg border border-[#11214D] bg-bg-dashboard">
+          <table className="min-w-full divide-y divide-slate-800/40">
+            <thead>
+              <tr className="text-left text-[#38B6FF]">
+                <th className="py-3 px-4">Total Screens</th>
+                <th className="py-3 px-4">Customer</th>
+                <th className="py-3 px-4">Status</th>
+                <th className="py-3 px-4">Content Upload Status</th>
+                <th className="py-3 px-4">Payment</th>
+                <th className="py-3 px-4">Budget</th>
+                <th className="py-3 px-4">Start Date</th>
+                <th className="py-3 px-4">End Date</th>
+                <th className="py-3 px-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {customCampaignData.map((campaign: any) => (
+                <tr
+                  key={campaign.id}
+                  className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
                 >
-                  {uploadedIds.includes(campaign.id) || campaign.isUploaded ? (
-                    <CheckCircle className="w-4 h-4" />
-                  ) : (
-                    <ArrowUpCircle className="w-4 h-4 text-black" />
-                  )}
-                </button>
-              </td>
-            </tr>
-          ))
-        ) : (
-          <tr>
-            <td colSpan={9} className="py-10 text-center text-[#AEB9E1]">
-              No campaigns found
-            </td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-  </div>
-</div>
+                  <td className="py-3 px-4">{campaign.screens?.length ?? 0}</td>
+                  <td className="py-3 px-4">
+                    {campaign.customer?.first_name}{" "}
+                    {campaign.customer?.last_name}
+                  </td>
+                  <td className="py-3 px-4">
+                    <CommonStatus status={campaign.status} />
+                  </td>
+                  <td className="py-3 px-4">
+                    {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                  </td>
+                  <td className="py-3 px-4">
+                    {campaign.CustomPayment?.[0]?.status === "success"
+                      ? "Paid"
+                      : "Unpaid"}
+                  </td>
+                  <td className="py-3 px-4">
+                    ${campaign.CustomPayment?.[0]?.amount ?? 0}
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(campaign.startDate).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4">
+                    {new Date(campaign.endDate).toLocaleDateString()}
+                  </td>
+                  <td className="py-3 px-4 flex items-center gap-3">
+                    <Eye
+                      className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125"
+                      onClick={() => {
+                        setSelectedCampaign(campaign);
+                        setIsApproveModalOpen(true);
+                      }}
+                    />
 
+                    <button
+                      className={`w-6 h-6 flex items-center justify-center rounded-full transition-transform cursor-pointer ${
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "bg-green-500 text-white cursor-not-allowed"
+                          : "bg-blue-100 text-blue-500 hover:scale-125"
+                      }`}
+                      disabled={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      }
+                      title={
+                        uploadedIds.includes(campaign.id) || campaign.isUploaded
+                          ? "Uploaded"
+                          : "Mark as uploaded"
+                      }
+                      onClick={() => {
+                        if (
+                          !campaign.isUploaded &&
+                          !uploadedIds.includes(campaign.id)
+                        ) {
+                          setCampaignToMark(campaign);
+                          setMarkUploadModalOpen(true);
+                        }
+                      }}
+                    >
+                      {uploadedIds.includes(campaign.id) ||
+                      campaign.isUploaded ? (
+                        <CheckCircle className="w-4 h-4" />
+                      ) : (
+                        <ArrowUpCircle className="w-4 h-4 text-black" />
+                      )}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Mobile Card View */}
 
@@ -372,21 +370,50 @@ export default function AdminScreenCampaignManagement() {
                     </div>
                   </div>
 
-                  <button
-                    onClick={() => {
-                      setSelectedCampaign(campaign);
-                      setIsApproveModalOpen(true);
-                    }}
-                    className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
-                  >
-                    View Details
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
+                <button
+                  onClick={() => {
+                    setSelectedCampaign(campaign);
+                    setIsApproveModalOpen(true);
+                  }}
+                  className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
+                >
+                  View Details
+                </button>
+
+                {/* Mark as Uploaded for Mobile */}
+                <button
+                  className={`mt-2 w-full py-2 rounded-lg flex items-center justify-center gap-2 ${
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      ? "bg-green-500 text-white cursor-not-allowed"
+                      : "bg-blue-100 text-blue-500 hover:bg-blue-200"
+                  }`}
+                  disabled={
+                    uploadedIds.includes(campaign.id) || campaign.isUploaded
+                  }
+                  onClick={() => {
+                    if (
+                      !campaign.isUploaded &&
+                      !uploadedIds.includes(campaign.id)
+                    ) {
+                      setCampaignToMark(campaign);
+                      setMarkUploadModalOpen(true);
+                    }
+                  }}
+                >
+                  {uploadedIds.includes(campaign.id) || campaign.isUploaded ? (
+                    <CheckCircle className="w-4 h-4" />
+                  ) : (
+                    <ArrowUpCircle className="w-4 h-4" />
+                  )}
+                  {uploadedIds.includes(campaign.id) || campaign.isUploaded
+                    ? "Uploaded"
+                    : "Mark as uploaded"}
+                </button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
       {/* Pagination */}
       <div className="flex justify-end mt-4">
@@ -410,6 +437,48 @@ export default function AdminScreenCampaignManagement() {
         onClose={closeDeleteModal}
         campaign={selectedCampaign}
       />
+
+      {/* Mark as Uploaded Modal */}
+      <Dialog
+        open={markUploadModalOpen}
+        onOpenChange={setMarkUploadModalOpen}
+      >
+        <DialogContent className="bg-[#081028]">
+          <DialogHeader>
+            <DialogTitle>Confirm Upload</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to mark{" "}
+              <span className="font-semibold">
+                {campaignToMark?.customer?.first_name || "this campaign"}
+              </span>{" "}
+              as uploaded?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setMarkUploadModalOpen(false);
+                setCampaignToMark(null);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-2"
+              onClick={async () => {
+                if (campaignToMark) {
+                  await handleMarkUploaded(campaignToMark.id);
+                  setMarkUploadModalOpen(false);
+                  setCampaignToMark(null);
+                }
+              }}
+            >
+              <CheckCircle className="w-4 h-4" /> Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

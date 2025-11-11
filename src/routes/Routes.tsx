@@ -97,8 +97,9 @@ const routes = createBrowserRouter([
       { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
 
       { path: "bundle-payments", element: <UserBundlePayments /> },
-      { path: "screen-payments", element: <UserScreenPayments /> },
+      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
 
+      { path: "screen-payments", element: <UserScreenPayments /> },
       { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
       { path: "userBillingInfo", element: <UserBillingInfo /> },
 

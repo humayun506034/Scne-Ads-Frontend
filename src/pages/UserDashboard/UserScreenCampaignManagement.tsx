@@ -53,16 +53,18 @@ export default function UserScreenCampaignManagement() {
 
   // Build query params
   const queryParams: Record<string, string> = { page: currentPage.toString() };
+  console.log("🚀 ~ UserScreenCampaignManagement ~ queryParams:", queryParams);
   const startDateIso = formatYearForApi(startYear, "start");
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data: customData, isLoading: isCustomLoading } =
     useGetMyselfAllCustomCampaignQuery(queryParams);
 
   const customCampaignData = customData?.data?.data || [];
+
   const meta = customData?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
