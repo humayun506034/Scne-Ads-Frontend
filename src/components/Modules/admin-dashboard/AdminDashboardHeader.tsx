@@ -13,6 +13,7 @@ import { ChevronDown, LogOut, User } from "lucide-react";
 import { useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { toast } from 'sonner';
+import { LiveChatSystem } from "../UserDashboard/LiveChat/LiveChatSystem";
 const AdminDashboardHeader = () => {
     const user = useAppSelector(selectCurrentUser);
       const dispatch = useDispatch();
@@ -28,6 +29,7 @@ const AdminDashboardHeader = () => {
             Hey, <span className="text-secondary-color">{user?.first_name } {user?.last_name}</span>
           </h1>
           <div className="flex items-center gap-3 sm:gap-4">
+            <LiveChatSystem />
             <div className="hidden sm:flex items-center gap-3 sm:gap-4">
             
        

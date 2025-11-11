@@ -20,17 +20,7 @@ const AddScreenModal: React.FC<AddScreenModalProps> = ({ onClose }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Add your screen creation logic here
-    console.log({
-      screenName,
-      screenSize,
-      description,
-      resolution,
-      location,
-      latitude,
-      longitude,
-      price,
-      file,
-    });
+    
     onClose(); // Close modal after submission
   };
 

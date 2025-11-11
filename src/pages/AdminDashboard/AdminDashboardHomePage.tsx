@@ -13,7 +13,7 @@ const AdminDashboardHomePage = () => {
 
        <AdminDashboardHeader/>
 
-      <div className="mb-20  md:px-6">
+      <div className="my-24  md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

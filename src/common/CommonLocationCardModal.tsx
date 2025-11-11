@@ -45,7 +45,7 @@ const CommonLocationCardModal = ({
   onToggleSelect,
   showButton = false,
 }: any) => {
-  console.log("🚀 ~ CommonLocationCardModal ~ location:", location)
+
   
  
 

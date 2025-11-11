@@ -1,14 +1,5 @@
 
-export const chatAgents: ChatAgent[] = [
-    {
-        id: "1",
-        name: "Danaj Agent ",
-        avatar: "/placeholder.svg?height=40&width=40",
-        status: "online",
-        role: "AI Agent",
-    },
-]
-// user.ts
+
 export type NotificationType = "chat_message"; // extend as you add types
 
 export interface Notification {
@@ -60,6 +51,22 @@ export interface FetchAdminsEvent extends WsEventBase<"fetch_admins"> {
   data: User[]; // server returns a list of admins
 }
 
+// Chat list types
+export interface ChatListItem {
+  counterpart: Pick<User, "id" | "first_name" | "last_name" | "image" | "role">;
+  lastMessage: {
+    id: string;
+    text: string;
+    createdAt: string;
+    from: string;
+    to: string;
+  };
+}
+
+export interface FetchChatListEvent extends WsEventBase<"fetch_chat_list"> {
+  data: ChatListItem[];
+}
+
 export interface ErrorEvent extends WsEventBase<"error"> {
   error: string;
   fullError?: unknown;
@@ -71,6 +78,7 @@ export type ServerEvent =
   | NewNotificationEvent
   | FetchHistoryEvent
   | FetchAdminsEvent
+  | FetchChatListEvent
   | ErrorEvent;
 
 export interface User {
@@ -107,6 +115,12 @@ export interface FetchHistoryCmd {
 
 export interface FetchAdminsCmd {
   type: "fetch_admins";
+  receiverId:string
+}
+
+export interface FetchChatListCmd {
+  type: "fetch_chatList";
+  receiverId?: string;
 }
 
 export interface NewMessageCmd {
@@ -116,37 +130,7 @@ export interface NewMessageCmd {
   // later: fileUrl?: string; fileType?: string;
 }
 
-export type ClientCommand = FetchHistoryCmd | FetchAdminsCmd | NewMessageCmd;
-
-export const chatConversations: ChatConversation[] = [
-    {
-        id: "1",
-        agentName: "Danaj Agent ",
-        agentAvatar: "/placeholder.svg?height=40&width=40",
-        lastMessage: "Did that answer your question?",
-        timestamp: new Date(Date.now() - 33 * 60 * 1000), // 33 minutes ago
-        unread: true,
-    },
-    {
-        id: "2",
-        agentName: "Danaj Agent ",
-        agentAvatar: "/placeholder.svg?height=40&width=40",
-        lastMessage: "Was that helpful",
-        timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000), // 6 days ago
-        unread: false,
-    },
-]
-
-export const chatMessages: ChatMessage[] = [
-    {
-        id: "1",
-        content: "Hey Zayed, what's going on?",
-        sender: "agent",
-        timestamp: new Date(),
-        agentName: "Danaj Agent ",
-        agentAvatar: "/placeholder.svg?height=32&width=32",
-    },
-]
+export type ClientCommand = FetchHistoryCmd | FetchAdminsCmd | FetchChatListCmd | NewMessageCmd;
 export interface ChatMessage {
     id: string
     content: string
