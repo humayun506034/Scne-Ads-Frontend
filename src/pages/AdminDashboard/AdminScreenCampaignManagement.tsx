@@ -370,52 +370,53 @@ export default function AdminScreenCampaignManagement() {
                     </div>
                   </div>
 
-                <button
-                  onClick={() => {
-                    setSelectedCampaign(campaign);
-                    setIsApproveModalOpen(true);
-                  }}
-                  className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
-                >
-                  View Details
-                </button>
+                  <button
+                    onClick={() => {
+                      setSelectedCampaign(campaign);
+                      setIsApproveModalOpen(true);
+                    }}
+                    className="bg-[#38B6FF] text-white px-4 py-2 rounded-lg text-sm font-medium mt-2"
+                  >
+                    View Details
+                  </button>
 
-                {/* Mark as Uploaded for Mobile */}
-                <button
-                  className={`mt-2 w-full py-2 rounded-lg flex items-center justify-center gap-2 ${
-                    uploadedIds.includes(campaign.id) || campaign.isUploaded
-                      ? "bg-green-500 text-white cursor-not-allowed"
-                      : "bg-blue-100 text-blue-500 hover:bg-blue-200"
-                  }`}
-                  disabled={
-                    uploadedIds.includes(campaign.id) || campaign.isUploaded
-                  }
-                  onClick={() => {
-                    if (
-                      !campaign.isUploaded &&
-                      !uploadedIds.includes(campaign.id)
-                    ) {
-                      setCampaignToMark(campaign);
-                      setMarkUploadModalOpen(true);
+                  {/* Mark as Uploaded for Mobile */}
+                  <button
+                    className={`mt-2 w-full py-2 rounded-lg flex items-center justify-center gap-2 ${
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
+                        ? "bg-green-500 text-white cursor-not-allowed"
+                        : "bg-blue-100 text-blue-500 hover:bg-blue-200"
+                    }`}
+                    disabled={
+                      uploadedIds.includes(campaign.id) || campaign.isUploaded
                     }
-                  }}
-                >
-                  {uploadedIds.includes(campaign.id) || campaign.isUploaded ? (
-                    <CheckCircle className="w-4 h-4" />
-                  ) : (
-                    <ArrowUpCircle className="w-4 h-4" />
-                  )}
-                  {uploadedIds.includes(campaign.id) || campaign.isUploaded
-                    ? "Uploaded"
-                    : "Mark as uploaded"}
-                </button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+                    onClick={() => {
+                      if (
+                        !campaign.isUploaded &&
+                        !uploadedIds.includes(campaign.id)
+                      ) {
+                        setCampaignToMark(campaign);
+                        setMarkUploadModalOpen(true);
+                      }
+                    }}
+                  >
+                    {uploadedIds.includes(campaign.id) ||
+                    campaign.isUploaded ? (
+                      <CheckCircle className="w-4 h-4" />
+                    ) : (
+                      <ArrowUpCircle className="w-4 h-4" />
+                    )}
+                    {uploadedIds.includes(campaign.id) || campaign.isUploaded
+                      ? "Uploaded"
+                      : "Mark as uploaded"}
+                  </button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
-      {/* Pagination */}
       <div className="flex justify-end mt-4">
         <Pagination
           currentPage={currentPage}
@@ -449,8 +450,8 @@ export default function AdminScreenCampaignManagement() {
             <DialogDescription>
               Are you sure you want to mark{" "}
               <span className="font-semibold">
-                {campaignToMark?.customer?.first_name || "this campaign"}
-              </span>{" "}
+                {campaignToMark?.bundle?.bundle_name}
+              </span>
               as uploaded?
             </DialogDescription>
           </DialogHeader>
