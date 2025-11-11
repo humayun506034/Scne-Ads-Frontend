@@ -46,7 +46,10 @@ export default function Footer() {
           <div className="w-full  lg:w-1/4 flex flex-col  lg:items-start">
             <Link to={"/"}>
               <div className="w-[200px] h-[90px]">
-                <img src={logo} alt="SCNE Ads Logo" />
+                <img
+                  src={logo}
+                  alt="SCNE Ads Logo"
+                />
               </div>
             </Link>
             <p className="text-sm leading-relaxed my-5  lg:text-left">
@@ -79,7 +82,6 @@ export default function Footer() {
           </div>
 
           <div className="flex md:gap-24 w-full text-nowrap  justify-between  lg:w-1/4 md:flex-1">
-            {" "}
             <div className="w-full    flex flex-col  lg:items-start">
               <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-3">

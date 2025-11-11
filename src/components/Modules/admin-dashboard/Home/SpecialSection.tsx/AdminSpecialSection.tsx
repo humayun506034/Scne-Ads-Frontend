@@ -13,11 +13,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import {
   useCreateBundleMutation,
   useGetAllBundleQuery,
@@ -56,7 +52,6 @@ export type Screen = {
   location?: string;
   price?: number;
   availability?: "available" | "unavailable";
-  
   imageUrls?: string[];
 };
 
@@ -77,9 +72,9 @@ const AdminSpecialSection = () => {
     resolver: zodResolver(BundleSchema),
     defaultValues: {
       title: "",
-      price: undefined,
-    
-      duration: undefined,
+      price: 0,
+      status: "ongoing",
+      duration: "7 Days",
     },
   });
   const [createBundle, { isLoading: isCreating }] = useCreateBundleMutation();
@@ -97,8 +92,6 @@ const AdminSpecialSection = () => {
     searchTerm: "",
     limit: 10000,
   });
-
-
 
   const allScreens: Screen[] = useMemo(() => {
     return data?.data?.data ?? [];
@@ -146,31 +139,30 @@ const AdminSpecialSection = () => {
       toast.error("Please select at least two screens for this bundle.");
       return;
     }
-const id = toast.loading("Adding bundle...");
+    const id = toast.loading("Adding bundle...");
     try {
       const dataJson = {
         bundle_name: String(form.title),
         price: Number(form.price),
         duration: form.duration,
-        status: 'ongoing',
+        status: "ongoing",
         screens: selected.map((id: string) => ({ screen_id: id })),
       };
 
-
       const fd = new FormData();
       fd.append("data", JSON.stringify(dataJson));
+
       fd.append("file", file);
 
       const res = await createBundle(fd).unwrap();
 
       if (res?.success) {
-        toast.success("Bundle added successfully!",{id});
+        toast.success("Bundle added successfully!", { id });
         reset();
         setFile(null);
         setSelected([]);
         setQuery("");
         setDuration("7 Days");
-       
         setOpen(false);
       } else {
         toast.error(res?.message || "Failed to add bundle.");
@@ -178,15 +170,14 @@ const id = toast.loading("Adding bundle...");
     } catch (error: any) {
       const message =
         error?.data?.message || error?.message || "Failed to add bundle.";
-      toast.error(message,{id});
+      toast.error(message, { id });
     }
   };
 
   return (
     <div className="mt-12 md:mt-20 relative">
       <h1 className="text-3xl md:mb-6 font-semibold text-center">
-        Bundle Campaigns 
-        
+        Bundle Campaigns
       </h1>
 
       {isLoadingBundle && (
@@ -197,303 +188,315 @@ const id = toast.loading("Adding bundle...");
 
       <Carousel className="w-full p-0 m-0">
         <CarouselContent className="p-0 m-0 gap-8">
-         
-             <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4">
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <div className="w-full min-h-[30dvh]  h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
-            <motion.div
-              whileTap={{ scale: 0.8 }}
-              whileHover={{ scale: 1.1 }}
-              className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center"
+          <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4">
+            <Dialog
+              open={open}
+              onOpenChange={setOpen}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
-                <path d="M18.4665 26.4165H0V18.4665H18.4665V0H26.4165V18.4665H44.883V26.4165H26.4165V44.883H18.4665V26.4165Z" fill="#033579" />
-              </svg>
-            </motion.div>
-          </div>
-        </DialogTrigger>
+              <DialogTrigger asChild>
+                <div className="w-full min-h-[30dvh]  h-full rounded-lg shadow-lg flex items-center justify-center cursor-pointer">
+                  <motion.div
+                    whileTap={{ scale: 0.8 }}
+                    whileHover={{ scale: 1.1 }}
+                    className="bg-secondary-color w-20 h-20 rounded-full flex items-center justify-center"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="45"
+                      height="45"
+                      viewBox="0 0 45 45"
+                      fill="none"
+                    >
+                      <path
+                        d="M18.4665 26.4165H0V18.4665H18.4665V0H26.4165V18.4665H44.883V26.4165H26.4165V44.883H18.4665V26.4165Z"
+                        fill="#033579"
+                      />
+                    </svg>
+                  </motion.div>
+                </div>
+              </DialogTrigger>
 
-                  <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh]">
-                    {/* <DialogHeader>
+              <DialogContent className="bg-[#081028] rounded-lg lg:p-10 lg:min-w-5xl mx-auto overflow-y-auto border-none max-h-[80vh]">
+                {/* <DialogHeader>
                       <DialogTitle className="text-2xl font-semibold text-white">
                         Add bundle
                       </DialogTitle>
                     </DialogHeader> */}
 
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                      {/* Title */}
-                      <div className="mb-4">
-                        <label>Title</label>
-                        <CustomInput
-                          register={register("title")}
-                          placeholder="Enter Title"
-                          isError={!!errors.title}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  {/* Title */}
+                  <div className="mb-4">
+                    <label>Title</label>
+                    <CustomInput
+                      register={register("title")}
+                      placeholder="Enter Title"
+                      isError={!!errors.title}
+                    />
+                    {errors.title && (
+                      <p className="text-red-400 text-xs mt-1">
+                        {errors.title.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mb-4">
+                    <label>Price</label>
+                    <CustomInput
+                      type="number"
+                      register={register("price")}
+                      placeholder="Enter Price"
+                      isError={!!errors.price}
+                    />
+                    {errors.price && (
+                      <p className="text-red-400 text-xs mt-1">
+                        {errors.price.message}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mb-4 w-full">
+                    <label className="">Duration</label>
+                    <CommonSelect
+                      className="w-full mt-2"
+                      Value={duration}
+                      setValue={(v) => {
+                        setDuration(v as BundleForm["duration"]);
+                        setValue("duration", v as BundleForm["duration"], {
+                          shouldValidate: true,
+                        });
+                      }}
+                      options={[
+                        { value: "7 Days", label: "7 Days" },
+                        { value: "15 Days", label: "15 Days" },
+                        { value: "30 Days", label: "30 Days" },
+                      ]}
+                    />
+                    {errors.duration && (
+                      <p className="text-red-400 text-xs mt-1">
+                        {errors.duration.message}
+                      </p>
+                    )}
+                  </div>
+                  {/* Screen picker */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between gap-3">
+                      <label className="block">
+                        Select Screens (Available)
+                      </label>
+                      <div className="text-xs text-white/60">
+                        {selected.length} selected
+                      </div>
+                    </div>
+                    {isLoadingBundle && (
+                      <div className="w-full h-[50px] flex justify-center items-center">
+                        <Loading />
+                      </div>
+                    )}
+
+                    {/* Search + actions */}
+                    <div className="mt-2 flex flex-col gap-2 md:flex-row md:items-center">
+                      <div className="flex items-center gap-2 bg-[#132C51] rounded-md px-3 py-2 w-full">
+                        <Search size={22} />
+                        <input
+                          value={query}
+                          onChange={(e) => setQuery(e.target.value)}
+                          placeholder="Search by name or location"
+                          className="bg-transparent outline-none py-2 flex-1 w-full "
                         />
-                        {errors.title && (
-                          <p className="text-red-400 text-xs mt-1">
-                            {errors.title.message}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="mb-4">
-                        <label>Price</label>
-                        <CustomInput
-                          type="number"
-                          register={register("price")}
-                          placeholder="Enter Price"
-                          isError={!!errors.price}
-                        />
-                        {errors.price && (
-                          <p className="text-red-400 text-xs mt-1">
-                            {errors.price.message}
-                          </p>
-                        )}
-                      </div>
-                    
-
-                      <div className="mb-4 w-full">
-                        <label className="">Duration</label>
-                        <CommonSelect
-                          className="w-full mt-2"
-                          Value={duration}
-                          setValue={(v) => {
-                            setDuration(v as BundleForm["duration"]);
-                            setValue("duration", v as BundleForm["duration"], {
-                              shouldValidate: true,
-                            });
-                          }}
-                          options={[
-                            { value: "7 Days", label: "7 Days" },
-                            { value: "15 Days", label: "15 Days" },
-                            { value: "30 Days", label: "30 Days" },
-                          ]}
-                        />
-                        {errors.duration && (
-                          <p className="text-red-400 text-xs mt-1">
-                            {errors.duration.message}
-                          </p>
-                        )}
-                      </div>
-                      {/* Screen picker */}
-                      <div className="mb-6">
-                        <div className="flex items-center justify-between gap-3">
-                          <label className="block">
-                            Select Screens (Available)
-                          </label>
-                          <div className="text-xs text-white/60">
-                            {selected.length} selected
-                          </div>
-                      
-                        </div>
-                        {isLoadingBundle && (
-                          <div className="w-full h-[50px] flex justify-center items-center">
-                            <Loading />
-                          </div>
-                        )}
-
-                        {/* Search + actions */}
-                        <div className="mt-2 flex flex-col gap-2 md:flex-row md:items-center">
-                          <div className="flex items-center gap-2 bg-[#132C51] rounded-md px-3 py-2 w-full">
-                            <Search size={22} />
-                            <input
-                              value={query}
-                              onChange={(e) => setQuery(e.target.value)}
-                              placeholder="Search by name or location"
-                              className="bg-transparent outline-none py-2 flex-1 w-full "
-                            />
-                            {query && (
-                              <motion.button
-                                whileTap={{ scale: 0.8 }}
-                                whileHover={{ scale: 1.1 }}
-                                type="button"
-                                onClick={() => setQuery("")}
-                                className="opacity-70 hover:opacity-100 cursor-pointer"
-                              >
-                                <X size={18} />
-                              </motion.button>
-                            )}
-                          </div>
-
-                          <div className="flex text-nowrap gap-2">
-                            <CommonCancelButton
-                              type="button"
-                              title="Select All Visible"
-                              onClick={selectAllVisible}
-                            ></CommonCancelButton>
-                            <CommonCancelButton
-                              title="Clear"
-                              type="button"
-                              onClick={clearAll}
-                            ></CommonCancelButton>
-                          </div>
-                        </div>
-
-                        {/* List */}
-                        <div className="mt-3 max-h-64 overflow-auto rounded-md  border-secondary-color border-dashed border p-2">
-                          {filteredScreens.length === 0 ? (
-                            <div className="text-center py-8 text-white/50">
-                              No screens found.
-                            </div>
-                          ) : (
-                            <ul className="divide-y gap-2 divide-white/5">
-                              {filteredScreens.map((s) => {
-                                const checked = selected.includes(s.id);
-                                return (
-                                  <li
-                                    key={s.id}
-                                    className="flex items-center gap-4 px-3  py-3  hover:bg-[#132C51] hover:text-white cursor-pointer"
-                                    onClick={() => toggleSelect(s.id)}
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      className="w-4 h-4 cursor-pointer 
-                                      "
-                                      checked={checked}
-                                      onChange={() => toggleSelect(s.id)}
-                                      onClick={(e) => e.stopPropagation()}
-                                    />
-                                    <div className="flex-1">
-                                      <div className="text-sm font-medium">
-                                        {s.screen_name}
-                                      </div>
-                                      <div className="text-xs text-white/60">
-                                        {s.location || "Unknown"} •{" "}
-                                        {s.screen_size || "N/A"}
-                                        {typeof s.price === "number"
-                                          ? ` • ৳${s.price}`
-                                          : ""}
-                                      </div>
-                                    </div>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          )}
-                        </div>
-
-                        {/* Selected chips */}
-                        {selected.length > 0 && (
-                          <div className="mt-4  flex flex-wrap gap-2">
-                            {selected
-                              .map((id) => allScreens.find((s) => s.id === id))
-                              .filter(Boolean)
-                              .map((s) => (
-                                <span
-                                  key={s!.id}
-                                  onClick={() => toggleSelect(s!.id)}
-                                  className="text-xs cursor-pointer bg-white/10 rounded-full px-4 py-2 flex items-center gap-1"
-                                >
-                                  {s!.screen_name}
-                                  <button
-                                    type="button"
-                                    className="hover:opacity-80"
-                                  >
-                                    <X size={14} />
-                                  </button>
-                                </span>
-                              ))}
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="mb-4">
-                        <label>Bundle Thumbnail</label>
-                        <div className="flex flex-col lg:flex-row items-start gap-4">
-                          <div className="w-full">
-                            {file ? (
-                              <img
-                                src={URL.createObjectURL(file)}
-                                alt="preview"
-                                className="w-full h-40 object-fill rounded-md mt-2"
-                              />
-                            ) : (
-                              <div className="w-full h-40 rounded-md mt-2 border border-white/10 grid place-content-center text-white/40">
-                                No image selected
-                              </div>
-                            )}
-                          </div>
-
-                          <div
-                            className="border-dashed bg-[#132C51] p-6 mt-2 rounded-md flex items-center justify-center cursor-pointer w-full h-40"
-                            onClick={handleClickUpload}
+                        {query && (
+                          <motion.button
+                            whileTap={{ scale: 0.8 }}
+                            whileHover={{ scale: 1.1 }}
+                            type="button"
+                            onClick={() => setQuery("")}
+                            className="opacity-70 hover:opacity-100 cursor-pointer"
                           >
-                            <input
-                              id="file-upload"
-                              type="file"
-                              accept="image/*"
-                              onChange={handleFileUpload}
-                              className="hidden w-full h-40"
-                            />
-                            <span className="text-sm md:text-base">
-                              {file ? (
-                                "Replace Image"
-                              ) : (
-                                <div className="flex flex-col items-center justify-center">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    width="54"
-                                    height="54"
-                                    viewBox="0 0 54 54"
-                                    fill="none"
-                                  >
-                                    <path
-                                      d="M47.25 33.75V42.75C47.25 43.9435 46.7759 45.0881 45.932 45.932C45.0881 46.7759 43.9435 47.25 42.75 47.25H11.25C10.0565 47.25 8.91193 46.7759 8.06802 45.932C7.22411 45.0881 6.75 43.9435 6.75 42.75V33.75M38.25 18L27 6.75M27 6.75L15.75 18M27 6.75V33.75"
-                                      stroke="white"
-                                      strokeWidth="2.5"
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                    />
-                                  </svg>
-                                </div>
-                              )}
-                            </span>
-                          </div>
-                        </div>
+                            <X size={18} />
+                          </motion.button>
+                        )}
                       </div>
 
-                      <div className="flex flex-col md:flex-row gap-4 mt-12 justify-end">
-                        <CommonDashboardButton
-                          disabled={isCreating}
-                          title={isCreating ? "Adding..." : "Add Bundle"}
-                          Icon={Plus}
-                        />
+                      <div className="flex text-nowrap gap-2">
                         <CommonCancelButton
-                          onClick={() => {
-                            reset();
-                            setFile(null);
-                            setSelected([]);
-                            setQuery("");
-                            setOpen(false);
-                          }}
-                          title="Cancel"
-                        />
+                          type="button"
+                          title="Select All Visible"
+                          onClick={selectAllVisible}
+                        ></CommonCancelButton>
+                        <CommonCancelButton
+                          title="Clear"
+                          type="button"
+                          onClick={clearAll}
+                        ></CommonCancelButton>
                       </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-                 </CarouselItem>
+                    </div>
 
-     {isLoadingBundle ? (
-      <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4 flex items-center justify-center">
-        <Loading />
-      </CarouselItem>
-    ) : bundle?.data?.data.length === 0 ? (
-      <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4 flex items-center justify-center text-white/60">
-        No bundles yet.
-      </CarouselItem>
-    ) : (
-      bundle?.data?.data.map((b:Bundle) => (
-        <CarouselItem
-          key={b.id}
-          className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4"
-        >
-          <AdminSpecialCard bundle={b} onUpdated={refetchBundles} />
-        </CarouselItem>
-      ))
-    )}
-       
+                    {/* List */}
+                    <div className="mt-3 max-h-64 overflow-auto rounded-md  border-secondary-color border-dashed border p-2">
+                      {filteredScreens.length === 0 ? (
+                        <div className="text-center py-8 text-white/50">
+                          No screens found.
+                        </div>
+                      ) : (
+                        <ul className="divide-y gap-2 divide-white/5">
+                          {filteredScreens.map((s) => {
+                            const checked = selected.includes(s.id);
+                            return (
+                              <li
+                                key={s.id}
+                                className="flex items-center gap-4 px-3  py-3  hover:bg-[#132C51] hover:text-white cursor-pointer"
+                                onClick={() => toggleSelect(s.id)}
+                              >
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4 cursor-pointer 
+                                      "
+                                  checked={checked}
+                                  onChange={() => toggleSelect(s.id)}
+                                  onClick={(e) => e.stopPropagation()}
+                                />
+                                <div className="flex-1">
+                                  <div className="text-sm font-medium">
+                                    {s.screen_name}
+                                  </div>
+                                  <div className="text-xs text-white/60">
+                                    {s.location || "Unknown"} •{" "}
+                                    {s.screen_size || "N/A"}
+                                    {typeof s.price === "number"
+                                      ? ` • ৳${s.price}`
+                                      : ""}
+                                  </div>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      )}
+                    </div>
+
+                    {/* Selected chips */}
+                    {selected.length > 0 && (
+                      <div className="mt-4  flex flex-wrap gap-2">
+                        {selected
+                          .map((id) => allScreens.find((s) => s.id === id))
+                          .filter(Boolean)
+                          .map((s) => (
+                            <span
+                              key={s!.id}
+                              onClick={() => toggleSelect(s!.id)}
+                              className="text-xs cursor-pointer bg-white/10 rounded-full px-4 py-2 flex items-center gap-1"
+                            >
+                              {s!.screen_name}
+                              <button
+                                type="button"
+                                className="hover:opacity-80"
+                              >
+                                <X size={14} />
+                              </button>
+                            </span>
+                          ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mb-4">
+                    <label>Bundle Thumbnail</label>
+                    <div className="flex flex-col lg:flex-row items-start gap-4">
+                      <div className="w-full">
+                        {file ? (
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt="preview"
+                            className="w-full h-40 object-fill rounded-md mt-2"
+                          />
+                        ) : (
+                          <div className="w-full h-40 rounded-md mt-2 border border-white/10 grid place-content-center text-white/40">
+                            No image selected
+                          </div>
+                        )}
+                      </div>
+
+                      <div
+                        className="border-dashed bg-[#132C51] p-6 mt-2 rounded-md flex items-center justify-center cursor-pointer w-full h-40"
+                        onClick={handleClickUpload}
+                      >
+                        <input
+                          id="file-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={handleFileUpload}
+                          className="hidden w-full h-40"
+                        />
+                        <span className="text-sm md:text-base">
+                          {file ? (
+                            "Replace Image"
+                          ) : (
+                            <div className="flex flex-col items-center justify-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="54"
+                                height="54"
+                                viewBox="0 0 54 54"
+                                fill="none"
+                              >
+                                <path
+                                  d="M47.25 33.75V42.75C47.25 43.9435 46.7759 45.0881 45.932 45.932C45.0881 46.7759 43.9435 47.25 42.75 47.25H11.25C10.0565 47.25 8.91193 46.7759 8.06802 45.932C7.22411 45.0881 6.75 43.9435 6.75 42.75V33.75M38.25 18L27 6.75M27 6.75L15.75 18M27 6.75V33.75"
+                                  stroke="white"
+                                  strokeWidth="2.5"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </div>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col md:flex-row gap-4 mt-12 justify-end">
+                    <CommonDashboardButton
+                      disabled={isCreating}
+                      title={isCreating ? "Adding..." : "Add Bundle"}
+                      Icon={Plus}
+                      type="submit"
+                    />
+                    <CommonCancelButton
+                      onClick={() => {
+                        reset();
+                        setFile(null);
+                        setSelected([]);
+                        setQuery("");
+                        setOpen(false);
+                      }}
+                      title="Cancel"
+                    />
+                  </div>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </CarouselItem>
+
+          {isLoadingBundle ? (
+            <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4 flex items-center justify-center">
+              <Loading />
+            </CarouselItem>
+          ) : bundle?.data?.data.length === 0 ? (
+            <CarouselItem className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4 flex items-center justify-center text-white/60">
+              No bundles yet.
+            </CarouselItem>
+          ) : (
+            bundle?.data?.data.map((b: Bundle) => (
+              <CarouselItem
+                key={b.id}
+                className="md:basis-1/2 lg:basis-1/2 xl:basis-1/4"
+              >
+                <AdminSpecialCard
+                  bundle={b}
+                  onUpdated={refetchBundles}
+                />
+              </CarouselItem>
+            ))
+          )}
         </CarouselContent>
 
         <div className="absolute top-1/2 left-10 -translate-y-1/2 z-10">

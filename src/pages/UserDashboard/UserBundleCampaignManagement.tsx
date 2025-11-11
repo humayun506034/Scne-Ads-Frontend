@@ -263,66 +263,72 @@ export default function UserBundleCampaignManagement() {
             <div className="md:hidden space-y-4">
               {campaigns.map((c: any) => (
                 <Card
-  key={c.id}
-  className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
->
-  <CardContent className="p-4">
-    {/* Header */}
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-      <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base leading-5">
-        {c.bundle?.bundle_name || "Unnamed Bundle"}
-      </h3>
-      <div className="flex gap-2">
-        <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
-          {c.status}
-        </span>
-        <span
-          className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide ${
-            c.isUploaded ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500'
-          }`}
-        >
-          {c.isUploaded ? 'Uploaded' : 'Not Uploaded'}
-        </span>
-      </div>
-    </div>
+                  key={c.id}
+                  className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
+                >
+                  <CardContent className="p-4">
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base leading-5">
+                        {c.bundle?.bundle_name || "Unnamed Bundle"}
+                      </h3>
+                      <div className="flex gap-2">
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide bg-white/10 text-white">
+                          {c.status}
+                        </span>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide ${
+                            c.isUploaded
+                              ? "bg-green-500/20 text-green-500"
+                              : "bg-red-500/20 text-red-500"
+                          }`}
+                        >
+                          {c.isUploaded ? "Uploaded" : "Not Uploaded"}
+                        </span>
+                      </div>
+                    </div>
 
-    {/* Divider */}
-    <div className="mt-3 h-px bg-white/5" />
+                    {/* Divider */}
+                    <div className="mt-3 h-px bg-white/5" />
 
-    {/* Info Grid */}
-    <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
-      <div className="flex items-center justify-between">
-        <span className="text-[#AEB9E1]/60">Budget</span>
-        <span className="font-medium">
-          ${c?.payment?.amount?.toLocaleString?.() ?? c?.payment?.amount ?? 0}
-        </span>
-      </div>
-      <div className="flex items-center justify-between">
-        <span className="text-[#AEB9E1]/60">Start</span>
-        <span>{new Date(c.startDate).toLocaleDateString()}</span>
-      </div>
-      <div className="flex items-center justify-between">
-        <span className="text-[#AEB9E1]/60">End</span>
-        <span>{new Date(c.endDate).toLocaleDateString()}</span>
-      </div>
-    </div>
+                    {/* Info Grid */}
+                    <div className="mt-3 grid grid-cols-1 gap-2 text-[13px] text-[#AEB9E1]">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#AEB9E1]/60">Budget</span>
+                        <span className="font-medium">
+                          $
+                          {c?.payment?.amount?.toLocaleString?.() ??
+                            c?.payment?.amount ??
+                            0}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#AEB9E1]/60">Start</span>
+                        <span>
+                          {new Date(c.startDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[#AEB9E1]/60">End</span>
+                        <span>{new Date(c.endDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
 
-    {/* View Button */}
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={() => {
-        setSelectedCampaign(c);
-        setIsApproveModalOpen(true);
-      }}
-      className="rounded-md px-3 py-1.5 w-full mt-6 text-sm bg-title-color cursor-pointer hover:opacity-90 transition"
-      title="View"
-    >
-      View
-    </motion.button>
-  </CardContent>
-</Card>
-
+                    {/* View Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setSelectedCampaign(c);
+                        setIsApproveModalOpen(true);
+                      }}
+                      className="rounded-md px-3 py-1.5 w-full mt-6 text-sm bg-title-color cursor-pointer hover:opacity-90 transition"
+                      title="View"
+                    >
+                      View
+                    </motion.button>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </>
