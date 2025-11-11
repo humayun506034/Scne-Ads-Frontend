@@ -118,7 +118,6 @@ export default function AdminLocationTabs() {
   };
 
   const onSubmit = async (formData: FieldValues) => {
-
     if (!selectedCoords) {
       toast.error("Please select a location on the map and confirm it.");
       return;
@@ -128,7 +127,7 @@ export default function AdminLocationTabs() {
       return;
     }
     const id = toast.loading("Creating screen...");
-    
+
     try {
       const payload = {
         screen_name: (formData as ScreenFormInputs).screen_name,
@@ -147,14 +146,13 @@ export default function AdminLocationTabs() {
       files.forEach((file) => multipart.append("files", file));
 
       const res = await createScreen(multipart).unwrap();
-      console.log("🚀 ~ onSubmit ~ res:", res)
 
       if (res.success) {
         toast.success("Screen created successfully", { id });
         reset();
         refetch();
-        topSalesRefetch();
-        favRefetch();
+        if (tab === "top") topSalesRefetch();
+        if (tab === "fav") favRefetch();
         setOpen(false);
         setSelectedCoords(null);
         setFiles([]);

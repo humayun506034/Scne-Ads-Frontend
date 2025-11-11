@@ -59,7 +59,7 @@ export default function AdminBundleCampaignManagement() {
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data, isLoading } = useGetAllBundleCampaignQuery(queryParams);
   const campaigns = data?.data?.data || [];
@@ -92,7 +92,6 @@ export default function AdminBundleCampaignManagement() {
   };
 
   const handleMarkUploaded = async (campaignId: string) => {
-    console.log("🚀 ~ handleMarkUploaded ~ campaignId:", campaignId);
     try {
       await markUploaded(campaignId).unwrap();
       setUploadedIds((prev) => [...prev, campaignId]);

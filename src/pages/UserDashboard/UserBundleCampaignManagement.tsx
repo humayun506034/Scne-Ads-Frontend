@@ -57,7 +57,7 @@ export default function UserBundleCampaignManagement() {
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data, isLoading } = useGetMyselfAllBundleCampaignQuery(queryParams);
   const campaigns = data?.data?.data || [];

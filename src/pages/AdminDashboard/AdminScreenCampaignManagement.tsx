@@ -65,7 +65,7 @@ export default function AdminScreenCampaignManagement() {
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data: customData, isLoading: isCustomLoading } =
     useGetAllCustomCampaignQuery(queryParams);
