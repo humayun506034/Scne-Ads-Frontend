@@ -43,7 +43,9 @@ export const useChatWebSocket = () => {
           const from = msg.data.sender?.first_name
             ? `${msg.data.sender.first_name} ${msg.data.sender.last_name ?? ""}`.trim()
             : "New message";
-          toast.success(`${from}: ${msg.data.text}`);
+          toast.success(`${from}: ${msg.data.text}`,{
+            position: "top-right",
+          });
         }
         break;
       }
