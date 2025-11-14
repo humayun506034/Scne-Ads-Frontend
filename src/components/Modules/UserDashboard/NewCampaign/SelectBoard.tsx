@@ -13,7 +13,7 @@ export function SelectBoard() {
       updatedItems.add(title);
     }
     setSelectedItem(updatedItems);
-    console.log(`Selected items: ${Array.from(updatedItems).join(", ")}`);
+    
   };
 
   const mapItems = [

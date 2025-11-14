@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import CommonHeader from "@/common/CommonHeader";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import { useMySelfScreenPaymentQuery } from "@/store/api/Payment/paymentApi";
@@ -30,13 +31,11 @@ const UserScreenPayments = () => {
     setSelectedPayment(null);
   };
 
-  if (isLoading) return <Loading />;
+ 
 
   return (
     <div className="p-6 space-y-6 text-white">
-      <h2 className="text-2xl font-bold border-b border-[#11214D] pb-2">
-        My Screen Payments
-      </h2>
+      <CommonHeader title="My Screen Payments" />
 
       {/* Table */}
       <div className="hidden md:block">
@@ -51,57 +50,64 @@ const UserScreenPayments = () => {
                 <th className="py-3 px-4">Actions</th>
               </tr>
             </thead>
-            <tbody>
-              {payments.map((payment: any) => (
-                <tr
-                  key={payment.id}
-                  className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
-                >
-                  {/* Screen Name */}
-                  <td className="py-3 px-4 flex items-center gap-3">
-                    {payment.screens?.[0] && (
-                      <img
-                        src={payment.screens[0].imageUrls?.[0]?.url}
-                        alt={payment.screens[0].screen_name}
-                        className="w-10 h-10 object-cover rounded"
-                      />
-                    )}
-                    <span>{payment.screens?.[0]?.screen_name}</span>
-                  </td>
+           <tbody>
+  {isLoading ? (
+    <tr>
+      <td colSpan={5}>
+        <div className="flex items-center justify-center py-24">
+          <Loading />
+        </div>
+      </td>
+    </tr>
+  ) : (
+    payments.map((payment: any) => (
+      <tr
+        key={payment.id}
+        className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
+      >
+        {/* ...your existing cells... */}
+        <td className="py-3 px-4 flex items-center gap-3">
+          {payment.screens?.[0] && (
+            <img
+              src={payment.screens[0].imageUrls?.[0]?.url}
+              alt={payment.screens[0].screen_name}
+              className="w-10 h-10 object-cover rounded"
+            />
+          )}
+          <span>{payment.screens?.[0]?.screen_name}</span>
+        </td>
 
-                  {/* Amount */}
-                  <td className="py-3 px-4">
-                    ${payment.screens?.[0]?.price || payment.amount}
-                  </td>
+        <td className="py-3 px-4">
+          ${payment.screens?.[0]?.price || payment.amount}
+        </td>
 
-                  {/* Status */}
-                  <td className="py-3 px-4 capitalize">
-                    <span
-                      className={`px-2 py-1 text-xs rounded-full ${
-                        payment.status === "success"
-                          ? "bg-green-600/20 text-green-400"
-                          : "bg-red-600/20 text-red-400"
-                      }`}
-                    >
-                      {payment.status}
-                    </span>
-                  </td>
+        <td className="py-3 px-4 capitalize">
+          <span
+            className={`px-2 py-1 text-xs rounded-full ${
+              payment.status === "success"
+                ? "bg-green-600/20 text-green-400"
+                : "bg-red-600/20 text-red-400"
+            }`}
+          >
+            {payment.status}
+          </span>
+        </td>
 
-                  {/* Date */}
-                  <td className="py-3 px-4">
-                    {new Date(payment.createdAt).toLocaleDateString()}
-                  </td>
+        <td className="py-3 px-4">
+          {new Date(payment.createdAt).toLocaleDateString()}
+        </td>
 
-                  {/* Actions */}
-                  <td className="py-3 px-4">
-                    <Eye
-                      className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125 transition-transform"
-                      onClick={() => openModal(payment)}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+        <td className="py-3 px-4">
+          <Eye
+            className="w-4 h-4 text-[#38B6FF] cursor-pointer hover:scale-125 transition-transform"
+            onClick={() => openModal(payment)}
+          />
+        </td>
+      </tr>
+    ))
+  )}
+</tbody>
+
           </table>
         </div>
       </div>

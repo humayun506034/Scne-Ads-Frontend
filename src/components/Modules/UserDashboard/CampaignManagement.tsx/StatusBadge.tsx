@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronLeft, ChevronRight, Copy, Table } from "lucide-react";
+import { ChevronLeft, ChevronRight, Table } from "lucide-react";
 import { useState } from "react";
 import { Campaign } from ".";
 import { StatusBadge } from "../Dashboard/RecentCampaigns/StatusBadge";
@@ -47,22 +47,13 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
   const handleSelectCampaign = (campaignId: string, checked: boolean) => {
     if (checked) {
       setSelectedCampaigns((prev) => [...prev, campaignId]);
-      console.log(
-        "Selected campaign:",
-        campaigns.find((c) => c.id === campaignId)?.name
-      );
+   
     } else {
       setSelectedCampaigns((prev) => prev.filter((id) => id !== campaignId));
     }
   };
 
-  const handleFinishSetup = (campaignName: string) => {
-    console.log("Finish Setup clicked for:", campaignName);
-  };
 
-  const handleClone = (campaignName: string) => {
-    console.log("Clone clicked for:", campaignName);
-  };
 
   const formatCurrency = (amount: number) => {
     return `$${amount.toFixed(2)}`;
@@ -155,26 +146,7 @@ export function CampaignTable({ campaigns }: CampaignTableProps) {
                     <div className="font-medium text-white">
                       {campaign.name}
                     </div>
-                    <div className="text-xs text-gray-400">
-                      6b5cde4f3098f5b04f20720fa3
-                    </div>
-                    <div className="flex items-center gap-2">
-                      {!campaign.setupComplete && (
-                        <button
-                          onClick={() => handleFinishSetup(campaign.name)}
-                          className="text-green-400 text-xs hover:text-green-300 transition-colors"
-                        >
-                          Finish Setup
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleClone(campaign.name)}
-                        className="text-gray-400 text-xs hover:text-gray-300 transition-colors flex items-center gap-1"
-                      >
-                        <Copy className="w-3 h-3" />
-                        Clone
-                      </button>
-                    </div>
+                 
                   </div>
                 </TableCell>
                 <TableCell>

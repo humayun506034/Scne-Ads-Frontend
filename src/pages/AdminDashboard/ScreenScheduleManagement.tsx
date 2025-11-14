@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import CommonHeader from "@/common/CommonHeader";
 import CommonModalForm, { Field } from "@/common/CommonModalForm";
 import CommonStatus from "@/common/CommonStatus";
 import ExtractErrorMessage from "@/common/ExtractErrorMessage";
@@ -58,7 +59,6 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
   try {
    
     const payload = { availability: data.Status };
-      console.log("Form Data before saving:", payload, screenId);
 
     
     const res = await changeScreenStatus({ id: screenId, payload }).unwrap();
@@ -82,11 +82,9 @@ const handleSave = async (data: React.SetStateAction<any>, screenId: string) => 
   };
 
   return (
-    <div className="p-4 min-h-[90dvh] sm:p-6 lg:py-16 lg:px-6 bg-bg-dashboard">
-      <div className="flex flex-col md:flex-row justify-between items-center">
-  <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
-    Screen Schedule Management
-  </h2>
+    <div className="p-6 min-h-[90dvh] md:mt-10  bg-bg-dashboard">
+      <div className="flex flex-col md:flex-row justify-between items-start">
+        <CommonHeader title="Screen Schedule Management" />
 
   <div className="relative mb-6 w-full max-w-lg">
     <input

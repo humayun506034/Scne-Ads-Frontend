@@ -177,13 +177,7 @@ const DynamicPricingManagement: React.FC = () => {
       )
     );
 
-  const handleSaveChanges = () => {
-    console.log("Saving changes...", {
-      tierPricing,
-      timePricing,
-      screenConfig,
-    });
-  };
+
 
   return (
     <motion.div
@@ -398,7 +392,7 @@ const DynamicPricingManagement: React.FC = () => {
         >
           <CommonDashboardButton
             title="Save Changes"
-            onClick={handleSaveChanges}
+       
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
           <CommonCancelButton title="Cancel" />

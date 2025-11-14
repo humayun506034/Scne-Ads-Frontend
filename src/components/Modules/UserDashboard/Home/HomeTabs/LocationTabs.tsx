@@ -108,7 +108,7 @@ export default function LocationTabs() {
       if (tab === "new") {
         if (newLoading) return;
         if (newError) {
-          console.error("New Arrivals API Error:", newError);
+       
           setData([]);
           return;
         }
@@ -172,24 +172,25 @@ export default function LocationTabs() {
 
 
       <TabsContent value={tab}>
-        <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+        
           {isLoadingFinal ? (
-            <div className="flex justify-center items-center min-h-[40dvh] "><Loading/></div>
+            <div className="flex justify-center w-full mx-auto  items-center min-h-[40dvh] "><Loading/></div>
           ) : data.length === 0 ? (
             <p className="text-white">No Data Found</p>
           ) : (
-            data.map((location) => (
+            <div className="grid gap-8 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">
+           { data.map((location) => (
               <CommonLocationCardModal
                 key={location.id}
                 showButton={false}
                 location={location}
                 bookmark={true}
-                // fav={fav}
-                // onToggleFav={toggleFav}
+               
               />
-            ))
+            ))}
+              </div>
           )}
-        </div>
+      
       </TabsContent>
     </Tabs>
   );

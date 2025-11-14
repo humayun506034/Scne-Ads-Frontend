@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import CommonModalForm, { Field } from "@/common/CommonModalForm";
+import React, { useState } from "react";
 
 interface AddTierModalProps {
   isOpen: boolean;
@@ -39,7 +39,7 @@ const AddNewTierModal: React.FC<AddTierModalProps> = ({ isOpen, onClose }) => {
 
   // Cancel handler
   const handleCancel = () => {
-    console.log("Cancelled");
+
     onClose();
   };
 

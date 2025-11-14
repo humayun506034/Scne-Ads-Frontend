@@ -26,17 +26,12 @@ export default function CampaignTable({ campaigns }: CampaignTableProps) {
   const handleSelectCampaign = (campaignId: string, checked: boolean) => {
     if (checked) {
       setSelectedCampaigns((prev) => [...prev, campaignId]);
-      console.log(
-        "Selected campaign:",
-        campaigns.find((c) => c.id === campaignId)?.name
-      );
+     
     } else {
       setSelectedCampaigns((prev) => prev.filter((id) => id !== campaignId));
     }
   };
-  const handleFinishSetup = (campaignName: string) => {
-    console.log("Finish Setup clicked for:", campaignName);
-  };
+
 
   const formatCurrency = (amount: number) => {
     return `$${amount.toFixed(2)}`;
@@ -150,7 +145,7 @@ export default function CampaignTable({ campaigns }: CampaignTableProps) {
                         <motion.button
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          onClick={() => handleFinishSetup(campaign.name)}
+                          
                           className="text-[#14CA74] cursor-pointer flex justify-center gap-2 items-center text-xs hover:text-green-300 transition-colors"
                         >
                           Finish Setup{" "}

@@ -12,6 +12,7 @@ import Pagination from "@/components/Pagination";
 import { Duration } from "@/lib/Data";
 import { useGetMyselfAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
 
+import CommonHeader from "@/common/CommonHeader";
 import { motion } from "framer-motion";
 import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
 import DeleteCampaignModal from "../AdminDashboard/DeleteCampaignModal";
@@ -53,7 +54,7 @@ export default function UserScreenCampaignManagement() {
 
   // Build query params
   const queryParams: Record<string, string> = { page: currentPage.toString() };
-  console.log("🚀 ~ UserScreenCampaignManagement ~ queryParams:", queryParams);
+
   const startDateIso = formatYearForApi(startYear, "start");
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
@@ -102,9 +103,7 @@ export default function UserScreenCampaignManagement() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-white mb-3 border-b border-[#11214D] pb-3">
-        Screen Campaigns
-      </h1>
+      <CommonHeader title="Screen Campaigns" />
 
       {/* Filters (mirrors Bundle Campaign UI) */}
       <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 p-4">

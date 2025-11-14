@@ -100,7 +100,7 @@ const CommonLocationCardModal = ({
         onOpenChange={(open) => setOpenDialog(open ? location.id : null)}
       >
         <DialogTrigger asChild>
-          <Card className="lg:w-full relative border-none h-[380px] xl:h-[350px] card mx-0 p-0 rounded-[30px] text-center transition-all duration-300 hover:shadow-[0px_0px_25px_0px_rgba(47,171,249,0.65)] bg-transparent cursor-pointer">
+          <Card className="lg:w-full relative border-none h-[380px] xl:h-[360px] card mx-0 p-0 rounded-[30px] text-center transition-all duration-300 hover:shadow-[0px_0px_25px_0px_rgba(47,171,249,0.65)] bg-transparent cursor-pointer">
             <CardContent className="flex flex-col overflow-hidden md:items-center p-0">
               <Carousel className="w-full ">
                 <CarouselContent className="p-0 ">
@@ -166,11 +166,11 @@ const CommonLocationCardModal = ({
                   <div className="flex justify-center md:items-center gap-2">
                     <MapPin className="h-4 w-4 text-white/90" />
                     <h3 className="text-white text-center text-base lg:text-xl font-semibold truncate">
-                      {location.location}g
+                      {location.location}
                     </h3>
                   </div>
                   <p className="text-white/80 text-sm  mt-2 line-clamp-2">
-                    {location.description || "-"}
+                    {location.description }
                   </p>
                 </div>
               </div>
@@ -204,7 +204,7 @@ const CommonLocationCardModal = ({
           </Card>
         </DialogTrigger>
         <DialogContent
-          className="rounded-2xl lg:p-6 w-full mx-auto max-w-xl overflow-y-auto max-h-[80vh] 
+          className="rounded-2xl lg:p-6  mx-auto !w-fit !max-w-[700px] overflow-y-auto max-h-[80vh] h-full
   bg-gradient-to-br from-[#0c142b] via-[#101a37] to-[#0b1325] border border-white/10 
   text-white shadow-[0_0_50px_rgba(56,189,248,0.35)]"
         >
@@ -245,7 +245,7 @@ const CommonLocationCardModal = ({
                 type="button"
                 className="absolute top-1/2 left-2 -translate-y-1/2 z-10
           h-10 w-10 rounded-full bg-white/10 text-white border border-white/20
-          backdrop-blur-md shadow-lg hover:bg-white/20 hover:scale-105 transition"
+          backdrop-blur-md shadow-lg cursor-pointer hover:bg-white/20 hover:scale-105 transition"
               >
                 <ChevronLeft className="h-6 w-6" />
               </CarouselPrevious>
@@ -254,7 +254,7 @@ const CommonLocationCardModal = ({
                 type="button"
                 className="absolute top-1/2 right-2 -translate-y-1/2 z-10
           h-10 w-10 rounded-full bg-white/10 text-white border border-white/20
-          backdrop-blur-md shadow-lg hover:bg-white/20 hover:scale-105 transition"
+          backdrop-blur-md shadow-lg cursor-pointer hover:bg-white/20 hover:scale-105 transition"
               >
                 <ChevronRight className="h-6 w-6" />
               </CarouselNext>
@@ -287,7 +287,7 @@ const CommonLocationCardModal = ({
               {/* Row 3 */}
               <div className="flex items-center gap-2">
                 <BadgeDollarSign className="text-yellow-400 h-4 w-4" />
-                <span>Price:</span> ${location.price || 0}
+                <span>Price (Per Day):</span> ${location.price || 0}
               </div>
               <div className="flex items-center gap-2">
                 <Info className="text-sky-400 h-4 w-4" />
@@ -324,7 +324,7 @@ const CommonLocationCardModal = ({
 
           {showButton && (
             <Link to="/user-dashboard/new-campaign">
-              <div className="mt-6 flex justify-start">
+              <div className="mt-6 flex justify-center md:justify-end">
                 <CommonDashboardButton title="Add Campaign" />
               </div>
             </Link>

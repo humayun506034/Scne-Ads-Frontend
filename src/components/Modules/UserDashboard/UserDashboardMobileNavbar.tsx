@@ -22,20 +22,24 @@ const UserDashboardMobileNavbar = ({ user }: any ) => {
 
   const sidebarItems = user === "admin" ? adminSidebarItems : userSidebarItems;
   return (
-    <div className="lg:hidden px-5 md:px-10 flex items-center  mt-4  border-border border-b-1 pb-4 justify-between gap-4 w-full">
-      <div className="flex h-12 px-6  lg:mt-8   lg:items-center  ">
+    <div className="lg:hidden px-4 md:px-10 flex items-center mt-4 border-border border-b-1 pb-4 justify-between gap-4 w-full">
+      <div className="flex h-12 px-2  lg:mt-8   lg:items-center  ">
         <div className="w-fit h-12   ">
           <Link to="/">
             <img src={logo} alt="logo" className="w-full h-full" />
           </Link>
         </div>
       </div>
-      <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-        <SheetTrigger asChild>
-          <Button size="icon" className="lg:hidden text-white ">
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SheetTrigger>
+      <div className="flex items-center gap-2">
+        {/* Live chat stays visible on mobile even when menu is closed */}
+        <LiveChatSystem />
+
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <Button size="icon" className="lg:hidden text-white ">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
         <SheetContent
           side="left"
           className="w-68 p-0 lg:hidden bg-bg-dashboard border-r border-[#283F81] overflow-y-auto"
@@ -110,9 +114,7 @@ const UserDashboardMobileNavbar = ({ user }: any ) => {
                   </>
                 );
               })}
-              <motion.div className="px-1 ">
-                <LiveChatSystem />
-              </motion.div>
+              {/* Live chat button moved to header to keep notifications visible */}
             </div>
 
             <div className="px-3 py-4">
@@ -139,7 +141,8 @@ const UserDashboardMobileNavbar = ({ user }: any ) => {
             </div>
           </div>
         </SheetContent>
-      </Sheet>
+        </Sheet>
+      </div>
     </div>
   );
 };

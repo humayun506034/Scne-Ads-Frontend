@@ -270,18 +270,21 @@ export function LiveChatSystem() {
         <button
           onClick={() => setIsOpen(true)}
           type="button"
-          className={` relative bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] z-50 text-white text-sm md:w-fit w-full py-3 md:px-4 md:py-3 rounded-lg md:rounded-full cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)]  flex   justify-center items-center gap-2 `}
+          className={`relative bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] z-[20] text-white text-sm md:w-fit w-full py-3 md:px-4 md:py-3 rounded-lg md:rounded-full cursor-pointer transition-all duration-300 hover:shadow-[0_0_32px_rgba(9,72,157,0.9)] flex px-2 justify-center items-center gap-2`}
         >
           <div className="relative">
             <Bell className="h-5 w-6" />
+            {notificationCount > 0 && (
+              <span
+                className={
+                  "pointer-events-none absolute -top-1 -right-1 md:-top-2 md:-right-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-[1px] rounded-full shadow-sm"
+                }
+              >
+                {notificationCount}
+              </span>
+            )}
           </div>
-          Live Chat
-          {notificationCount > 0 && (
-            <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
-              {notificationCount}
-            </span>
-          )}
-         
+          <p className="ml-1 text-sm md:text-base">Live Chat</p>
         </button>
       </motion.div>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>

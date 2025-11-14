@@ -1,8 +1,8 @@
-import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
-import { StatsCard } from "./StatsCard";
-import { useQueryState, parseAsString } from "nuqs";
 import CommonSelect from "@/common/CommonSelect";
+import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
 import { CalendarDays } from "lucide-react";
+import { parseAsString, useQueryState } from "nuqs";
+import { StatsCard } from "./StatsCard";
 
 type Props = {
   meta?: CampaignMeta;
@@ -33,12 +33,12 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
 
   return (
     <div className="w-full">
-      <h2 className="text-lg font-semibold">Summary Stats</h2>
-
-      <div className="p-6 mt-6 border-dashboard-border bg-dashboard-card-bg rounded-md border">
-        <div className="flex justify-between text-title-color mt-2 w-full">
-          <h1 className="text-2xl font-semibold">Stats</h1>
-          <div className="flex items-center gap-2 text-sm md:text-base">
+      <div className="p-4 sm:p-6 mt-6 border-dashboard-border bg-dashboard-card-bg rounded-2xl border">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between text-title-color mt-2 w-full">
+          <h1 className="text-xl sm:text-2xl font-semibold">
+            Stats for {period}
+          </h1>
+          <div className="flex items-center gap-2 text-sm md:text-base w-full sm:w-auto">
             <CommonSelect
               Value={period}
               setValue={setPeriod}
@@ -49,7 +49,7 @@ export const StatsSection = ({ meta, availableYears }: Props) => {
           </div>
         </div>
 
-        <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-10">
+        <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
           <StatsCard
             title="Total Campaigns"
             value={totalCampaign}

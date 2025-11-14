@@ -38,13 +38,13 @@ export function CampaignFilterTable({
   const selectedDays = ["Today", "1D", "7D", "1 Mo"];
   const handleStartDateChange = (date: Date | undefined) => {
     setStartDate(date);
-    console.log("Start Date:", date);
+
     setOpenStart(false);
   };
 
   const handleFinishDateChange = (date: Date | undefined) => {
     setFinishDate(date);
-    console.log("Finish Date:", date);
+  
     setOpenFinish(false);
   };
   return (

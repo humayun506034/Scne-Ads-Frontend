@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import Pagination from "@/components/Pagination";
 // import { useGetAllScreenQuery } from "@/store/api/Screen/screenApi";
 // import { useState } from "react";
@@ -340,15 +341,15 @@
 
 // export default AdminScreenManagement;
 
+import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
 import {
   useDeleteScreenMutation,
   useGetAllScreenQuery,
 } from "@/store/api/Screen/screenApi";
 import { useState } from "react";
-import Loading from "@/common/MapLoading";
-import AdminScreenDetails from "./AdminScreenDetails";
 import { toast } from "sonner";
+import AdminScreenDetails from "./AdminScreenDetails";
 
 // Confirm Delete Modal
 const ConfirmDeleteModal = ({
@@ -410,9 +411,7 @@ function AdminScreenManagement() {
     setSelectedScreen(screen);
     setIsModalOpen(true);
   };
-  const handleEdit = (screen: any) => {
-    console.log("[v0] Edit screen:", screen.id);
-  };
+
 
   const handleDelete = (screen: Screen) => {
     setScreenToDelete(screen); // Set the screen to be deleted
@@ -421,11 +420,11 @@ function AdminScreenManagement() {
 
   const confirmDelete = async () => {
     if (screenToDelete) {
-      console.log("[v0] Deleting screen:", screenToDelete.id);
+     
       // Replace with your actual delete logic here (API call)
       try {
-        const res = await deleteScreen(screenToDelete.id).unwrap();
-        console.log("🚀 ~ confirmDelete ~ res:", res);
+        await deleteScreen(screenToDelete.id).unwrap();
+      
         toast.success("Screen Deleted Successfully...", { duration: 1000 });
       } catch (error) {
         console.error("Error deleting screen:", error);
@@ -611,12 +610,7 @@ function AdminScreenManagement() {
                           >
                             View
                           </button>
-                          <button
-                            onClick={() => handleEdit(screen)}
-                            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded"
-                          >
-                            Edit
-                          </button>
+                         
                           <button
                             onClick={() => handleDelete(screen)}
                             className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"

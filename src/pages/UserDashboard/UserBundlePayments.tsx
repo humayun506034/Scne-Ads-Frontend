@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
-import { Eye } from "lucide-react";
-import { useMySelfBundlePaymentQuery } from "@/store/api/Payment/paymentApi";
+import CommonHeader from "@/common/CommonHeader";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
+import { useMySelfBundlePaymentQuery } from "@/store/api/Payment/paymentApi";
+import { Eye } from "lucide-react";
+import { useState } from "react";
 import UserBundlePaymentDetailsModal from "./UserBundlePaymentDetailsModal";
 
 const UserBundlePayments = () => {
@@ -29,13 +31,11 @@ const UserBundlePayments = () => {
     setIsDetailsModalOpen(false);
   };
 
-  if (isLoading) return <Loading />;
+
 
   return (
     <div className="p-6 space-y-6 text-white">
-      <h2 className="text-2xl font-bold border-b border-[#11214D] pb-2">
-        My Bundle Payments
-      </h2>
+     <CommonHeader title="My Bundle Payments" />
 
       {/* Desktop Table */}
       <div className="hidden md:block">
@@ -51,7 +51,16 @@ const UserBundlePayments = () => {
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment: any) => (
+              {isLoading ? (
+    <tr>
+      <td colSpan={5}>
+        <div className="flex items-center justify-center py-24">
+          <Loading />
+        </div>
+      </td>
+    </tr>
+  ) :(
+     payments.map((payment: any) => (
                 <tr
                   key={payment.id}
                   className="border-b border-slate-800/40 last:border-0 text-[#AEB9E1]"
@@ -95,7 +104,7 @@ const UserBundlePayments = () => {
                     />
                   </td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>

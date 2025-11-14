@@ -14,7 +14,7 @@ export function ConversationList({
   onSelectConversation,
   lastById,
 }: ConversationListProps) {
-  console.log("dYs? ~ ConversationList ~ conversations:", conversations);
+
 
   const formatTime = (iso?: string) => {
     if (!iso) return "";

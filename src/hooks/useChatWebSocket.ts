@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { useCallback, useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { toast } from "sonner";
@@ -136,6 +136,7 @@ export const useChatWebSocket = () => {
   const { sendMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: () => true,
     onMessage: handleMessage,
+    share: true,
   });
 
   // === Command senders ===
@@ -167,7 +168,7 @@ export const useChatWebSocket = () => {
 
   const sendChatMessage = (receiverId: string, text: string) => {
     const clean = (text ?? "").trim();
-    if (!clean) return;
+    if (!clean) return toast.error("Cannot send empty message",{ position: "top-right" });
     const payload: NewMessageCmd = { type: "new_message", receiverId, text: clean };
     setIsSending(true);
     sendCmd(payload);
@@ -185,39 +186,8 @@ export const useChatWebSocket = () => {
         },
       });
       const json = await res.json();
-      const raw = json.items ?? json.data ?? [];
-      const list: ChatListItem[] = raw.map((it: any) => ({
-        counterpart: {
-          id: it?.counterpart?.id ?? it?.user?.id ?? it?.from?.id,
-          first_name:
-            it?.counterpart?.first_name ??
-            it?.user?.first_name ??
-            it?.from?.first_name ??
-            "",
-          last_name:
-            it?.counterpart?.last_name ??
-            it?.user?.last_name ??
-            it?.from?.last_name ??
-            "",
-          image:
-            it?.counterpart?.image ?? it?.user?.image ?? it?.from?.image ?? null,
-          role:
-            it?.counterpart?.role ??
-            it?.user?.role ??
-            it?.from?.role ??
-            "customer",
-        },
-        lastMessage: {
-          id: it?.lastMessage?.id ?? it?.id,
-          text: it?.lastMessage?.text ?? it?.text ?? "",
-          createdAt:
-            it?.lastMessage?.createdAt ??
-            it?.createdAt ??
-            new Date().toISOString(),
-          from: it?.lastMessage?.from ?? it?.from ?? "",
-          to: it?.lastMessage?.to ?? it?.to ?? "",
-        },
-      }));
+      const list = json.items ??  [];
+     
       const sorted = list.sort(
         (a, b) =>
           new Date(b.lastMessage.createdAt).getTime() -

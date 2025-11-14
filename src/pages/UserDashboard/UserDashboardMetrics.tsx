@@ -1,15 +1,15 @@
+import CommonHeader from "@/common/CommonHeader";
+import Loading from "@/common/MapLoading";
+import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analytics/AnalyticsSection";
+import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard/BillboardMap/ResponsiveBillboard";
+import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
+import { StatsSection } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
 import {
   useGetCustomerBundlesQuery,
   useGetCustomerCustomsQuery,
 } from "@/store/api/analyticApi";
-import { UserDashboardNavbar } from "@/components/Modules/UserDashboard/UserDashboardNavbar";
-import { StatsSection } from "@/components/Modules/UserDashboard/Dashboard/Stats/StatsSection";
-import AnalyticsSection from "@/components/Modules/UserDashboard/Dashboard/Analytics/AnalyticsSection";
-import ResponsiveBillboardMap from "@/components/Modules/UserDashboard/Dashboard/BillboardMap/ResponsiveBillboard";
-import NewCampaignSection from "@/components/Modules/UserDashboard/Dashboard/NewCampaign/NewCampaign";
-import Loading from "@/common/MapLoading";
+import { motion } from 'framer-motion';
 import { parseAsString, useQueryState } from "nuqs";
-import { Button } from "@/components/ui/button";
 
 export interface ScreenImage {
   url: string;
@@ -49,6 +49,16 @@ export interface Customer {
   email: string;
 }
 
+export interface BundleDetails {
+  bundle_name?: string;
+  duration?: string;
+  price?: number;
+  slug?: string;
+  screens?: Screen[];
+  img_url?: string;
+  status?: string;
+}
+
 export interface Campaign {
   id: string;
   customerId: string;
@@ -63,6 +73,7 @@ export interface Campaign {
   customer: Customer;
   screens: Screen[];
   CustomPayment: CustomPayment[];
+  bundle?: BundleDetails;
 }
 
 export interface CampaignMeta {
@@ -166,52 +177,92 @@ const UserDashboardMetrics = () => {
     };
   }
 
-  return (
-    <div>
-      <div className="md:px-8">
-        <UserDashboardNavbar />
-      </div>
+  const viewModes = [
+    {
+      value: "bundle",
+      headline: "Bundle Placements",
+    
+    },
+    {
+      value: "custom",
+      headline: "Custom Placements",
+      
+    },
+  ] as const;
 
-      <div className="px-5 md:px-10">
-        <div className="flex justify-center items-start gap-4 mt-12 flex-col xl:flex-row w-full">
-          <div className="xl:w-[60%] w-full">
-            {filteredMeta && (
+  return (
+    <div className="mb-20">
+    
+
+      <div className="px-4  sm:px-6 md:px-10">
+      <div className="flex  my-20  flex-col md:flex-row  md:items-start md:justify-between gap-4">
+      
+
+        <div className="w-full md:w-[60%] space-y-4">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+            <div className="">
+              <p className="uppercase tracking-[0.4em] text-xs mb-2 text-title-color">
+                Analytics Dashboard
+              </p>
+              <CommonHeader title="Screen Intelligence" />
+              <p className="text-sm md:text-base text-gray-300 max-w-2xl">
+                Switch between bundle or custom programs to inspect live screen
+                performance.
+              </p>
+            </div>
+            
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 w-full">
+            {viewModes.map((mode) => {
+              const isActive = chartType === mode.value;
+              return (
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.95 }}
+                  key={mode.value}
+                  onClick={() => setChartType(mode.value)}
+                  className={`flex-1 min-w-0 gap-3 sm:gap-4 flex items-center justify-between sm:justify-center text-left cursor-pointer rounded-2xl border border-white/10 px-4 py-3 sm:px-6 h-auto transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-[#38B6FF] via-[#0c3d7c] to-[#091d3f] text-white shadow-[0_20px_45px_-20px_rgba(8,33,71,0.9)]"
+                      : "bg-[#0c1222] text-gray-300 hover:bg-[#111a31]"
+                  }`}
+                >
+                  <span className="block text-xs uppercase tracking-[0.3em] text-sky-200/80">
+                    {isActive ? "Active" : "View"}
+                  </span>
+                  <p className="text-base sm:text-lg font-semibold">{mode.headline}</p>
+                </motion.button>
+              );
+            })}
+          </div>
+           {filteredMeta && (
               <StatsSection
                 meta={filteredMeta}
                 availableYears={availableYears}
               />
             )}
-          </div>
-          <div className="xl:w-[40%] w-full">
-            <ResponsiveBillboardMap />
-          </div>
         </div>
-
-        <div className="flex gap-2 my-8">
-          {["Custom", "Bundle"].map((type) => (
-            <Button
-              key={type}
-              onClick={() => setChartType(type.toLowerCase())}
-              className={`cursor-pointer py-2 px-6 rounded-lg text-sm font-medium transition-colors duration-200 ease-in-out ${
-                chartType === type.toLowerCase()
-                  ? "bg-gradient-to-r from-[#38B6FF] to-[#09489D] text-white shadow-md"
-                  : "bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white"
-              }`}
-            >
-              {type}
-            </Button>
-          ))}
+<div className="w-full  md:w-[40%]">
+  <ResponsiveBillboardMap/>
+              </div> 
         </div>
-
         {filteredMeta && (
           <AnalyticsSection
             meta={filteredMeta}
             campaigns={filteredCampaigns}
+            viewType={chartType === "bundle" ? "bundle" : "custom"}
           />
         )}
 
-        <NewCampaignSection />
+        
       </div>
+        <div className="flex justify-center items-stretch gap-6 md:mt-8 flex-col xl:flex-row w-full">
+       
+           
+            <NewCampaignSection />
+        
+        </div>
     </div>
   );
 };

@@ -15,10 +15,10 @@ export interface ICampaign {
 
 export interface CampaignCardProps {
   campaign: ICampaign;
-  onContinueSetup: (campaignId: string) => void;
+
 }
 
-export function CampaignCard({ campaign, onContinueSetup }: CampaignCardProps) {
+export function CampaignCard({ campaign }: CampaignCardProps) {
   return (
     <div className="bg-dashboard-card-bg rounded-lg p-6 flex justify-between flex-col   transition-all duration-200">
       {/* Header with badges */}
@@ -80,7 +80,7 @@ export function CampaignCard({ campaign, onContinueSetup }: CampaignCardProps) {
         <DashboardTransparentButton
           title="Continue Setup"
           Icon={ChevronRight}
-          onClick={() => onContinueSetup(campaign.id)}
+         
         />
       </div>
     </div>

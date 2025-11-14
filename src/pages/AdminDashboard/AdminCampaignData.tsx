@@ -1,4 +1,6 @@
+import CommonSelect from "@/common/CommonSelect";
 import Loading from "@/common/MapLoading";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,12 +13,9 @@ import {
   useGetAllCustomCampaignQuery,
 } from "@/store/api/Campaign/campaignApi";
 import { useGetAllUserQuery } from "@/store/api/User/useApi";
-import AdminDashboardHeader from "@/components/Modules/admin-dashboard/AdminDashboardHeader";
 import { motion } from "framer-motion";
-import CampaignPerformanceAnalytics from "./CampaignPerformanceAnalytics";
-import { Button } from "@/components/ui/button";
-import CommonSelect from "@/common/CommonSelect";
 import { useQueryState } from "nuqs";
+import CampaignPerformanceAnalytics from "./CampaignPerformanceAnalytics";
 
 type MetricCardProps = {
   title: string;
@@ -162,7 +161,7 @@ const AdminCampaignData: React.FC = () => {
       className="min-h-screen bg-bg-dashboard lg:py-8"
     >
       <div className="px-4 md:px-8 lg:px-6 mx-auto">
-        <AdminDashboardHeader />
+      
 
         {/* Metrics Cards */}
         <motion.div

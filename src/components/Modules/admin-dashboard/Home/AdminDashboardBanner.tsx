@@ -193,18 +193,38 @@ const AdminDashboardBanner = () => {
       ) : (
         <Swiper
          key={`banners-${banners.length}-${wantIndex}`}
-          effect={"coverflow"}
-          grabCursor
-          centeredSlides
-          slidesPerView={1}
-        initialSlide={wantIndex} 
+           effect={"coverflow"}
+                 grabCursor={true}
+                 slidesPerView={1}
+                 initialSlide={wantIndex}
+                 centeredSlides={true}
+                 loop={true}
+               
+               
+               
+                 coverflowEffect={{
+                   rotate: 50,
+                   stretch: 50,
+                   depth: 50,
+                   modifier: 1,
+                   slideShadows: true,
+                 }}
+                 pagination={true}
+                 modules={[EffectCoverflow, Pagination]}
+                
+         
+         
+        
+     
+          
+       
         onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
           onSwiper={(swiper) => {
             swiperRef.current = swiper;      
             setActiveSlide(swiper?.realIndex ?? 0);
           }}
-          pagination
-          modules={[EffectCoverflow, Pagination]}
+        
+        
           breakpoints={{
             1280: { slidesPerView: 3, spaceBetween: 20 },
             768: { slidesPerView: 2 },

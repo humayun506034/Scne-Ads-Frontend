@@ -3,12 +3,14 @@ import { RecommendedVideosSection } from "./Recommended";
 
 export default function NewCampaignSection() {
   return (
-    <div className="flex flex-wrap xl:flex-nowrap lg:justify-center items-start w-full mt-20 gap-4 ">
-      <div className="xl:w-[60%] ">
+    <div className="flex  h-full  md:flex-row  lg:justify-center items-start flex-col  w-full mt-6 gap-4 ">
+      <div className=" w-full h-full xl:w-[60%]  ">
+        {/* */}
         <RecommendedVideosSection />
       </div>
 
-      <div className="xl:w-[40%] w-full space-y-4 ">
+      <div className=" w-full xl:w-[40%] h-full">
+        {/*  */}
         {/* <AvailableCreditSection /> */}
         <AddCampaignSection />
       </div>
