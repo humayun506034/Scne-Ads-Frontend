@@ -45,7 +45,9 @@ const DashboardBanner = () => {
           swiperRef.current = swiper;
         }}
         onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
-        onSlideChangeTransitionEnd={(swiper) => setActiveSlide(swiper.realIndex)}
+        onSlideChangeTransitionEnd={(swiper) =>
+          setActiveSlide(swiper.realIndex)
+        }
         coverflowEffect={{
           rotate: 50,
           stretch: 50,
@@ -73,7 +75,7 @@ const DashboardBanner = () => {
         {isLoading && (
           <SwiperSlide>
             <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
-              Loading banners...
+              No banners found...
             </div>
           </SwiperSlide>
         )}
@@ -81,7 +83,7 @@ const DashboardBanner = () => {
         {isError && (
           <SwiperSlide>
             <div className="w-full h-full flex items-center justify-center bg-red-100 text-red-500">
-              Failed to load banners
+              No banners found...
             </div>
           </SwiperSlide>
         )}
@@ -89,7 +91,10 @@ const DashboardBanner = () => {
         {!isLoading &&
           !isError &&
           bannerList.map((banner, index) => (
-            <SwiperSlide key={`banner-${banner.id || index}`} className="p-0 m-0">
+            <SwiperSlide
+              key={`banner-${banner.id || index}`}
+              className="p-0 m-0"
+            >
               <div className="relative bg-bg-dashboard w-full h-full">
                 <img
                   src={banner.img_url}
@@ -105,7 +110,10 @@ const DashboardBanner = () => {
                       className="w-24 h-24 mb-4 object-contain"
                     />
                     <Link to="/user-dashboard/new-campaign">
-                      <CommonDashboardButton title="New Campaign" Icon={Plus} />
+                      <CommonDashboardButton
+                        title="New Campaign"
+                        Icon={Plus}
+                      />
                     </Link>
                   </div>
                 )}

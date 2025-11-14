@@ -1,11 +1,21 @@
- 
-import { ClientCommand, FetchAdminsCmd, FetchChatListCmd, FetchHistoryCmd, Message, NewMessageCmd, ServerEvent, User, type ChatListItem } from "@/components/Modules/UserDashboard/LiveChat";
-import { useAppSelector } from "@/store/hooks";
-import { selectCurrentToken, selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCallback, useMemo, useRef, useState } from "react";
 import useWebSocket from "react-use-websocket";
 import { toast } from "sonner";
 
+import {
+  ChatListItem,
+  ClientCommand,
+  FetchHistoryCmd,
+  Message,
+  NewMessageCmd,
+  ServerEvent,
+  User,
+} from "@/components/Modules/UserDashboard/LiveChat";
+
+import { useGetAllAdminsQuery, useGetAllChatListsQuery } from "@/store/api/adminDashboard/adminApi";
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentToken, selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 
 export const useChatWebSocket = () => {
   const token = useAppSelector(selectCurrentToken);
@@ -17,109 +27,226 @@ export const useChatWebSocket = () => {
     return `${base}?token=${encodeURIComponent(token)}`;
   }, [token]);
 
+  const apiBase = useMemo(() => import.meta.env.VITE_BASE_URL as string, []);
+
   const [messages, setMessages] = useState<Message[]>([]);
-
   const [admins, setAdmins] = useState<User[]>([]);
-  const [notificationCount, setNotificationCount] = useState<number>(0);
   const [chatList, setChatList] = useState<ChatListItem[]>([]);
-  const lastFetchForRef = useRef<string | null>(null);
- 
+  const [notificationCount, setNotificationCount] = useState<number>(0);
+  const [isSending, setIsSending] = useState(false);
+  const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+  const [isLoadingMoreHistory, setIsLoadingMoreHistory] = useState(false);
+  const [hasMoreHistory, setHasMoreHistory] = useState(false);
+  const toastMutedRef = useRef(true);
 
-  const handleMessage = useCallback((ev: MessageEvent<string>) => {
-    let msg: ServerEvent;
-    try {
-      msg = JSON.parse(ev.data) as ServerEvent;
-    } catch (e) {
-      console.error("Invalid WS payload", e);
-      toast.error("Invalid WS payload");
-      return;
-    }
+  const nextHistoryCursorRef = useRef<{ id: string; createdAt: string } | null>(null);
+  const historyReceiverRef = useRef<string | null>(null);
+  const historyAppendingRef = useRef(false);
+  const historyLimitRef = useRef(50);
 
-    switch (msg.type) {
-      case "new_message": {
-        setMessages(prev => [...prev, msg.data]);
-        if (currentUser && msg.data.receiverId === currentUser.id) {
-          setNotificationCount((c) => c + 1);
-          const from = msg.data.sender?.first_name
-            ? `${msg.data.sender.first_name} ${msg.data.sender.last_name ?? ""}`.trim()
-            : "New message";
-          toast.success(`${from}: ${msg.data.text}`,{
-            position: "top-right",
-          });
+  // === RTK Query data ===
+  const { data: adminData } = useGetAllAdminsQuery(undefined);
+  const { data: chatListData } = useGetAllChatListsQuery({ limit: 20 });
+
+  // === Apply RTK data into state ===
+  useMemo(() => {
+    if (adminData?.items) setAdmins(adminData.items);
+    if (chatListData?.items) setChatList(chatListData.items);
+  }, [adminData, chatListData]);
+
+  // === WebSocket setup ===
+  const handleMessage = useCallback(
+    (ev: MessageEvent<string>) => {
+      let msg: ServerEvent;
+      try {
+        msg = JSON.parse(ev.data);
+      } catch {
+        toast.error("Invalid WS payload");
+        return;
+      }
+
+      switch (msg.type) {
+        case "new_message": {
+          if (!msg.data?.text || msg.data.text.trim().length === 0) {
+            break; // ignore blank messages
+          }
+          setMessages((prev) => [...prev, msg.data]);
+          if (currentUser && msg.data.receiverId === currentUser.id) {
+            setNotificationCount((c) => c + 1);
+            if (!toastMutedRef.current) {
+              const from =
+                (msg.data.sender?.first_name && `${msg.data.sender.first_name} ${msg.data.sender?.last_name ?? ""}`.trim()) ||
+                msg.data.sender?.last_name ||
+                "New message";
+              toast.success(`${from}: ${msg.data.text}`, { position: "top-right" });
+            }
+          }
+          break;
         }
-        break;
-      }
-      case "message_sent":
-        setMessages(prev => [...prev, msg.data]);
-        break;
 
-      case "fetch_history": {
-        setMessages(msg.data);
-        break;
-      }
-      case "fetch_admins":
-        setAdmins(msg.data);
-        break;
-      case "fetch_chat_list": {
-        // Sort by latest message time desc
-        const sorted = [...msg.data].sort((a, b) => new Date(b.lastMessage.createdAt).getTime() - new Date(a.lastMessage.createdAt).getTime());
-        
-        setChatList(sorted);
-        break;
-      }
-   
+        case "message_sent": {
+          if (msg.data?.text && msg.data.text.trim().length > 0) {
+            setMessages((prev) => [...prev, msg.data]);
+          }
+          setIsSending(false);
+          break;
+        }
 
-      case "new_notification":
-        setNotificationCount((c) => c + 1);
-        break;
+        case "fetch_history": {
+          const limit = historyLimitRef.current;
+          const itemsDesc = msg.data.filter((m) => m?.text && m.text.trim().length > 0);
+          const hasMore = itemsDesc.length > limit;
+          const pageDesc = hasMore ? itemsDesc.slice(0, limit) : itemsDesc;
+          const asc = [...pageDesc].sort(
+            (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
 
-      case "error":
-        toast.error(msg.error);
-        break;
-    }
-  }, [currentUser]);
+          if (historyAppendingRef.current) {
+            setMessages((prev) => {
+              const seen = new Set(prev.map((m) => m.id));
+              const toAdd = asc.filter((m) => !seen.has(m.id));
+              return [...toAdd, ...prev];
+            });
+            setIsLoadingMoreHistory(false);
+          } else {
+            setMessages(asc);
+            setIsHistoryLoading(false);
+          }
+
+          setHasMoreHistory(hasMore);
+          const earliest = asc[0];
+          nextHistoryCursorRef.current =
+            hasMore && earliest
+              ? { id: earliest.id, createdAt: earliest.createdAt }
+              : null;
+          historyAppendingRef.current = false;
+          break;
+        }
+
+        case "error":
+          toast.error(msg.error || "Chat error");
+          setIsSending(false);
+          setIsHistoryLoading(false);
+          break;
+      }
+    },
+    [currentUser]
+  );
 
   const { sendMessage, readyState } = useWebSocket(socketUrl, {
     shouldReconnect: () => true,
     onMessage: handleMessage,
   });
 
+  // === Command senders ===
   const sendCmd = (cmd: ClientCommand) => sendMessage(JSON.stringify(cmd));
 
-  const fetchHistory = (receiverId: string) => {
-    lastFetchForRef.current = receiverId;
-    const payload: FetchHistoryCmd = { type: "fetch_history", receiverId };
+  const fetchHistory = (receiverId: string, limit = 50) => {
+    historyReceiverRef.current = receiverId;
+    historyLimitRef.current = limit;
+    historyAppendingRef.current = false;
+    setIsHistoryLoading(true);
+    setIsLoadingMoreHistory(false);
+    setHasMoreHistory(false);
+    nextHistoryCursorRef.current = null;
+
+    const payload: FetchHistoryCmd = { type: "fetch_history", receiverId, limit };
+    sendCmd(payload);
+  };
+
+  const fetchMoreHistory = () => {
+    const receiverId = historyReceiverRef.current;
+    const cursor = nextHistoryCursorRef.current;
+    const limit = historyLimitRef.current;
+    if (!receiverId || !cursor) return;
+    historyAppendingRef.current = true;
+    setIsLoadingMoreHistory(true);
+    const payload: FetchHistoryCmd = { type: "fetch_history", receiverId, cursor, limit };
     sendCmd(payload);
   };
 
   const sendChatMessage = (receiverId: string, text: string) => {
-    const payload: NewMessageCmd = { type: "new_message", receiverId, text };
-    sendCmd(payload);
-  };
-const fetchAdmins = (receiverId: string,) => {
-  const payload: FetchAdminsCmd = { type: "fetch_admins" ,receiverId};
-  sendCmd(payload);
-}
-
-  const fetchChatList = (receiverId?: string) => {
-    const payload: FetchChatListCmd = { type: "fetch_chatList", receiverId };
+    const clean = (text ?? "").trim();
+    if (!clean) return;
+    const payload: NewMessageCmd = { type: "new_message", receiverId, text: clean };
+    setIsSending(true);
     sendCmd(payload);
   };
 
-  const resetNotifications = () => setNotificationCount(0);
-  const clearMessages = () => setMessages([]);
+  const fetchChatList = async (limit = 20, cursor?: string) => {
+    try {
+      const url = new URL(`${apiBase}/chat/getLists`);
+      url.searchParams.set("limit", String(limit));
+      if (cursor) url.searchParams.set("cursor", cursor);
+      const res = await fetch(url.toString(), {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      const json = await res.json();
+      const raw = json.items ?? json.data ?? [];
+      const list: ChatListItem[] = raw.map((it: any) => ({
+        counterpart: {
+          id: it?.counterpart?.id ?? it?.user?.id ?? it?.from?.id,
+          first_name:
+            it?.counterpart?.first_name ??
+            it?.user?.first_name ??
+            it?.from?.first_name ??
+            "",
+          last_name:
+            it?.counterpart?.last_name ??
+            it?.user?.last_name ??
+            it?.from?.last_name ??
+            "",
+          image:
+            it?.counterpart?.image ?? it?.user?.image ?? it?.from?.image ?? null,
+          role:
+            it?.counterpart?.role ??
+            it?.user?.role ??
+            it?.from?.role ??
+            "customer",
+        },
+        lastMessage: {
+          id: it?.lastMessage?.id ?? it?.id,
+          text: it?.lastMessage?.text ?? it?.text ?? "",
+          createdAt:
+            it?.lastMessage?.createdAt ??
+            it?.createdAt ??
+            new Date().toISOString(),
+          from: it?.lastMessage?.from ?? it?.from ?? "",
+          to: it?.lastMessage?.to ?? it?.to ?? "",
+        },
+      }));
+      const sorted = list.sort(
+        (a, b) =>
+          new Date(b.lastMessage.createdAt).getTime() -
+          new Date(a.lastMessage.createdAt).getTime()
+      );
+      setChatList(sorted);
+    } catch (err) {
+      console.error("Failed to fetch chat list", err);
+      toast.error("Failed to fetch chat list");
+    }
+  };
 
   return {
+    readyState,
     messages,
     admins,
-    readyState,
-    fetchHistory,
-    sendChatMessage,
-    fetchAdmins,
-    fetchChatList,
-    notificationCount,
-    resetNotifications,
-    clearMessages,
     chatList,
+    notificationCount,
+    isSending,
+    isHistoryLoading,
+    isLoadingMoreHistory,
+    hasMoreHistory,
+    fetchHistory,
+    fetchMoreHistory,
+    sendChatMessage,
+    fetchChatList,
+    setNotificationCount,
+    setNotificationsVisible: (visible: boolean) => {
+      toastMutedRef.current = !visible;
+    },
   };
 };

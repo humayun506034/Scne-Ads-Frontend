@@ -9,15 +9,11 @@ import { useGetFeaturedScreenQuery } from "@/store/api/Common/commonApi";
 import { ILocation } from "@/types/locations";
 
 export function FeaturedLocationsCarousel() {
-  const { data: locationData, isLoading
-  } = useGetFeaturedScreenQuery({});
+  const { data: locationData, isLoading } = useGetFeaturedScreenQuery({});
 
-
-
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>;
   return (
     <CommonWrapper>
-      
       <div className="xl:px-0 relative">
         <Carousel className="w-full">
           <CarouselContent className="flex md:gap-0  gap-12">
@@ -30,7 +26,6 @@ export function FeaturedLocationsCarousel() {
                   location={location}
                   showButton={true}
                 />
-
               </CarouselItem>
             ))}
           </CarouselContent>

@@ -10,22 +10,22 @@ import {
 import { useEffect, useState } from "react";
 
 export default function LocationTabs() {
-  const [fav, setFav] = useState<Set<string>>(new Set());
+  // const [fav, setFav] = useState<Set<string>>(new Set());
   const [tab, setTab] = useState("new");
   const [data, setData] = useState<any[]>([]);
 
-  function toggleFav(id: string) {
-    setFav((prev) =>
-      prev.has(id)
-        ? new Set([...prev].filter((favId) => favId !== id))
-        : new Set(prev).add(id)
-    );
-  }
+  // function toggleFav(id: string) {
+  //   setFav((prev) =>
+  //     prev.has(id)
+  //       ? new Set([...prev].filter((favId) => favId !== id))
+  //       : new Set(prev).add(id)
+  //   );
+  // }
 
   const TabName = [
     { tab: "new", label: "NEW ARRIVALS" },
     { tab: "top", label: "TOP SELLERS" },
-    { tab: "fav", label: "MY FAVOURITES SCREENS" },
+    // { tab: "fav", label: "MY FAVOURITES SCREENS" },
   ];
 
   // Queries
@@ -184,8 +184,8 @@ export default function LocationTabs() {
                 showButton={false}
                 location={location}
                 bookmark={true}
-                fav={fav}
-                onToggleFav={toggleFav}
+                // fav={fav}
+                // onToggleFav={toggleFav}
               />
             ))
           )}

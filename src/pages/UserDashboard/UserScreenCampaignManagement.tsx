@@ -53,16 +53,18 @@ export default function UserScreenCampaignManagement() {
 
   // Build query params
   const queryParams: Record<string, string> = { page: currentPage.toString() };
+  console.log("🚀 ~ UserScreenCampaignManagement ~ queryParams:", queryParams);
   const startDateIso = formatYearForApi(startYear, "start");
   const endDateIso = formatYearForApi(endYear, "end");
   if (startDateIso) queryParams.startDate = startDateIso;
   if (endDateIso) queryParams.endDate = endDateIso;
-  if (dateFilter) queryParams.dateFilter = dateFilter;
+  if (dateFilter) queryParams.dateFilter = `${dateFilter}d`;
 
   const { data: customData, isLoading: isCustomLoading } =
     useGetMyselfAllCustomCampaignQuery(queryParams);
 
   const customCampaignData = customData?.data?.data || [];
+
   const meta = customData?.data?.meta;
   const TotalPages = meta?.totalPages || 1;
 
@@ -186,260 +188,178 @@ export default function UserScreenCampaignManagement() {
       </div>
 
       {/* ===================== LOADING (centered for both desktop & mobile) ===================== */}
-      {isCustomLoading ? (
-        <div
-          role="status"
-          aria-live="polite"
-          aria-busy="true"
-          className="flex items-center justify-center min-h-[240px] sm:min-h-[320px] rounded-2xl border border-[#11214D] bg-[#0C1328]/40"
-        >
-          <Loading />
-        </div>
-      ) : (
-        <>
-          {/* Desktop Table */}
-          <div className="hidden md:block">
-            <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
-                  <thead className="sticky top-0 z-10">
-                    <tr className="bg-[#0F1A39] text-[#38B6FF]">
-                      <th className="py-3 px-5 text-left">Screen Name</th>
-                      <th className="py-3 px-5 text-left">Location</th>
-                      <th className="py-3 px-5 text-left">Size</th>
-                      <th className="py-3 px-5 text-left">
-                        Content Upload Status
-                      </th>
-                      <th className="py-3 px-5 text-left">Resolution</th>
-                      <th className="py-3 px-5 text-left">Price</th>
-                      <th className="py-3 px-5 text-left">Availability</th>
-                      <th className="py-3 px-5 text-left">Status</th>
-                      <th className="py-3 px-5 text-left">Actions</th>
-                    </tr>
-                  </thead>
-
-                  <tbody className="divide-y divide-slate-800/40">
-                    {customData?.data?.data?.length ? (
-                      customCampaignData.flatMap((campaign: any) =>
-                        (campaign.screens || []).map(
-                          (screen: any, idx: number) => (
-                            <tr
-                              key={`${campaign.id}-${screen.id}-${idx}`}
-                              className={`text-[#AEB9E1] transition-colors ${
-                                idx % 2 === 1 ? "bg-white/[0.02]" : ""
-                              } hover:bg-white/5`}
-                            >
-                              <td className="py-3 px-5">
-                                {screen.screen_name}
-                              </td>
-                              <td className="py-3 px-5">{screen.location}</td>
-                              <td className="py-3 px-5">
-                                {screen.screen_size}
-                              </td>
-                              <td className="py-3 px-5">
-                                {campaign.isUploaded
-                                  ? "Uploaded"
-                                  : "Not Uploaded"}
-                              </td>
-                              <td className="py-3 px-5">{screen.resolution}</td>
-                              <td className="py-3 px-5">${screen.price}</td>
-                              <td className="py-3 px-5">
-                                {screen.availability}
-                              </td>
-                              <td className="py-3 px-5">
-                                <CommonStatus status={campaign.status} />
-                              </td>
-                              <td className="py-3 px-5">
-                                <motion.button
-                                  whileHover={{ scale: 1.2 }}
-                                  whileTap={{ scale: 0.95 }}
-                                  onClick={() => openApproveModal(campaign)}
-                                  className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-[#38B6FF] cursor-pointer"
-                                  title="View"
-                                >
-                                  <Eye className="w-4 h-4" />
-                                </motion.button>
-                              </td>
-                            </tr>
-                          )
-                        )
-                      )
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={8}
-                          className="py-10 px-5 text-center text-slate-400"
-                        >
-                          No campaigns found.
+      {/* Desktop Table - static layout always visible */}
+      <div className="hidden md:block">
+        <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm">
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-[#0F1A39] text-[#38B6FF]">
+                  <th className="py-3 px-5 text-left">Screen Name</th>
+                  <th className="py-3 px-5 text-left">Location</th>
+                  <th className="py-3 px-5 text-left">Size</th>
+                  <th className="py-3 px-5 text-left">Content Upload Status</th>
+                  <th className="py-3 px-5 text-left">Resolution</th>
+                  <th className="py-3 px-5 text-left">Price</th>
+                  <th className="py-3 px-5 text-left">Availability</th>
+                  <th className="py-3 px-5 text-left">Status</th>
+                  <th className="py-3 px-5 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/40">
+                {isCustomLoading ? (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="py-20 text-center"
+                    >
+                      <div className="flex items-center justify-center">
+                        <Loading />
+                      </div>
+                    </td>
+                  </tr>
+                ) : customCampaignData.length ? (
+                  customCampaignData.flatMap((campaign: any) =>
+                    (campaign.screens || []).map((screen: any, idx: number) => (
+                      <tr
+                        key={`${campaign.id}-${screen.id}-${idx}`}
+                        className={`text-[#AEB9E1] transition-colors ${
+                          idx % 2 === 1 ? "bg-white/[0.02]" : ""
+                        } hover:bg-white/5`}
+                      >
+                        <td className="py-3 px-5">{screen.screen_name}</td>
+                        <td className="py-3 px-5">{screen.location}</td>
+                        <td className="py-3 px-5">{screen.screen_size}</td>
+                        <td className="py-3 px-5">
+                          {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                        </td>
+                        <td className="py-3 px-5">{screen.resolution}</td>
+                        <td className="py-3 px-5">${screen.price}</td>
+                        <td className="py-3 px-5">{screen.availability}</td>
+                        <td className="py-3 px-5">
+                          <CommonStatus status={campaign.status} />
+                        </td>
+                        <td className="py-3 px-5">
+                          <motion.button
+                            whileHover={{ scale: 1.2 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => openApproveModal(campaign)}
+                            className="inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-[#38B6FF] cursor-pointer"
+                            title="View"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </motion.button>
                         </td>
                       </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                    ))
+                  )
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={9}
+                      className="py-10 px-5 text-center text-slate-400"
+                    >
+                      No campaigns found.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+        </div>
+      </div>
 
-          {/* Mobile list */}
-          <div className="md:hidden space-y-4">
-            {customCampaignData.length ? (
-              customCampaignData.flatMap((campaign: any) =>
-                (campaign.screens || []).map((screen: any, idx: number) => (
-                  // <Card
-                  //   key={`${campaign.id}-${screen.id}-${idx}`}
-                  //   className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
-                  // >
-                  //   <CardContent className="p-4">
-                  //     <div className="space-y-3">
-                  //       <div className="flex justify-between items-start">
-                  //         <div>
-                  //           <h3 className="text-[#E2E8F0] font-semibold">
-                  //             {screen.screen_name}
-                  //           </h3>
-                  //           <p className="text-[#AEB9E1]/70 text-xs mt-1">
-                  //             {screen.location}
-                  //           </p>
-                  //         </div>
-                  //         <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg.white/10 bg-white/10 text-white">
-                  //           {campaign.status}
-                  //         </span>
-                  //       </div>
+      {/* Mobile cards - also static, loader inside */}
+      <div className="md:hidden space-y-4">
+        {isCustomLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loading />
+          </div>
+        ) : customCampaignData.length ? (
+          customCampaignData.flatMap((campaign: any) =>
+            (campaign.screens || []).map((screen: any, idx: number) => (
+              <Card
+                key={`${campaign.id}-${screen.id}-${idx}`}
+                className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)]"
+              >
+                <CardContent className="p-4">
+                  <div className="flex justify-between items-start flex-col sm:flex-row sm:items-center">
+                    <div>
+                      <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base">
+                        {screen.screen_name}
+                      </h3>
+                      <p className="text-[#AEB9E1]/70 text-xs mt-1">
+                        {screen.location}
+                      </p>
+                    </div>
+                    <div className="mt-2 sm:mt-0 flex gap-2">
+                      <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-white/10 text-white">
+                        {campaign.status}
+                      </span>
+                      <span
+                        className={`px-3 py-1 rounded-full text-[10px] font-semibold ${
+                          campaign.isUploaded
+                            ? "bg-green-500/20 text-green-500"
+                            : "bg-red-500/20 text-red-500"
+                        }`}
+                      >
+                        {campaign.isUploaded ? "Uploaded" : "Not Uploaded"}
+                      </span>
+                    </div>
+                  </div>
 
-                  //       <div className="grid grid-cols-2 gap-3 text-xs">
-                  //         <div>
-                  //           <span className="text-[#AEB9E1]/50">Size:</span>
-                  //           <span className="text-[#AEB9E1] ml-1">
-                  //             {screen.screen_size}
-                  //           </span>
-                  //         </div>
-                  //         <div>
-                  //           <span className="text-[#AEB9E1]/50">
-                  //             Resolution:
-                  //           </span>
-                  //           <span className="text-[#AEB9E1] ml-1">
-                  //             {screen.resolution}
-                  //           </span>
-                  //         </div>
-                  //         <div>
-                  //           <span className="text-[#AEB9E1]/50">Price:</span>
-                  //           <span className="text-[#AEB9E1] ml-1">
-                  //             ${screen.price}
-                  //           </span>
-                  //         </div>
-                  //         <div>
-                  //           <span className="text-[#AEB9E1]/50">
-                  //             Availability:
-                  //           </span>
-                  //           <span className="text-[#AEB9E1] ml-1">
-                  //             {screen.availability}
-                  //           </span>
-                  //         </div>
-                  //       </div>
+                  <div className="grid grid-cols-2 gap-3 text-xs mt-3">
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Size:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {screen.screen_size}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Resolution:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {screen.resolution}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Price:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        ${screen.price}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-[#AEB9E1]/50">Availability:</span>
+                      <span className="text-[#AEB9E1] ml-1">
+                        {screen.availability}
+                      </span>
+                    </div>
+                  </div>
 
-                  //       <button
-                  //         onClick={() => openApproveModal(campaign)}
-                  //         className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-2"
-                  //       >
-                  //         View Details
-                  //       </button>
-                  //     </div>
-                  //   </CardContent>
-                  // </Card>
-                  <Card
-                    key={`${campaign.id}-${screen.id}-${idx}`}
-                    className="bg-gradient-to-b from-[#0C1328] to-[#0A1023] border border-[#11214D] rounded-2xl shadow-[0_0_20px_rgba(34,197,244,0.08)] w-full sm:w-[48%] lg:w-[32%]"
+                  <button
+                    onClick={() => openApproveModal(campaign)}
+                    className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-3 hover:opacity-90 transition"
                   >
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        {/* Header */}
-                        <div className="flex justify-between items-start flex-col sm:flex-row sm:items-center">
-                          <div>
-                            <h3 className="text-[#E2E8F0] font-semibold text-sm sm:text-base">
-                              {screen.screen_name}
-                            </h3>
-                            <p className="text-[#AEB9E1]/70 text-xs mt-1">
-                              {screen.location}
-                            </p>
-                          </div>
-                          <div className="mt-2 sm:mt-0 flex flex-col sm:flex-row sm:items-center gap-2">
-                            <span className="px-3 py-1 rounded-full text-[10px] font-semibold bg-white/10 text-white">
-                              {campaign.status}
-                            </span>
-                            <span
-                              className={`px-3 py-1 rounded-full text-[10px] font-semibold ${
-                                campaign.isUploaded
-                                  ? "bg-green-500/20 text-green-500"
-                                  : "bg-red-500/20 text-red-500"
-                              }`}
-                            >
-                              {campaign.isUploaded
-                                ? "Uploaded"
-                                : "Not Uploaded"}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Info grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                          <div>
-                            <span className="text-[#AEB9E1]/50">Size:</span>
-                            <span className="text-[#AEB9E1] ml-1">
-                              {screen.screen_size}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[#AEB9E1]/50">
-                              Resolution:
-                            </span>
-                            <span className="text-[#AEB9E1] ml-1">
-                              {screen.resolution}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[#AEB9E1]/50">Price:</span>
-                            <span className="text-[#AEB9E1] ml-1">
-                              ${screen.price}
-                            </span>
-                          </div>
-                          <div>
-                            <span className="text-[#AEB9E1]/50">
-                              Availability:
-                            </span>
-                            <span className="text-[#AEB9E1] ml-1">
-                              {screen.availability}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* Button */}
-                        <button
-                          onClick={() => openApproveModal(campaign)}
-                          className="bg-title-color py-2 rounded-lg cursor-pointer w-full text-sm mt-2 hover:opacity-90 transition"
-                        >
-                          View Details
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))
-              )
-            ) : (
-              <div className="flex items-center justify.center justify-center py-12 text-slate-400">
-                No campaigns found.
-              </div>
-            )}
+                    View Details
+                  </button>
+                </CardContent>
+              </Card>
+            ))
+          )
+        ) : (
+          <div className="flex items-center justify-center py-12 text-slate-400">
+            No campaigns found.
           </div>
+        )}
+      </div>
 
-          {/* Pagination */}
-          <div className="flex justify-end mt-4">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={TotalPages}
-              onPageChange={setCurrentPage}
-            />
-          </div>
-        </>
-      )}
+      {/* Pagination */}
+      <div className="flex justify-end mt-4">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={TotalPages}
+          onPageChange={setCurrentPage}
+        />
+      </div>
 
       {/* Modals */}
       <ScreenCampaignDetailsModal

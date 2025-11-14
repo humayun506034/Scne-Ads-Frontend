@@ -48,6 +48,6 @@ const baseQueryWithRefreshToken = async (args: string | FetchArgs, api, extraOpt
 export const baseApi = createApi({
   reducerPath: 'baseApi',
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ['Screen', 'Banner', 'Bundle', 'User'],
+  tagTypes: ['Screen', 'Banner', 'Bundle', 'User','Admins','ChatLists'],
   endpoints: () => ({})
 });

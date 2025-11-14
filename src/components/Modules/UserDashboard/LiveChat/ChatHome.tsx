@@ -55,7 +55,7 @@ export function ChatHome({  userName, admins, onSelectAdmin }: ChatHomeProps) {
          {user?.role !== 'admin' && (
            <div className="flex-1 p-4 space-y-4">
         <div
-          onClick={() => onSelectAdmin?.("")}
+          onClick={() => onSelectAdmin?.(admins && admins.length > 0 ? admins[0].id : "")}
           className="bg-bg-dashboard text-white rounded-lg p-4 cursor-pointer hover:bg-[#202E58] transition-colors"
         >
           <div>
@@ -75,7 +75,7 @@ export function ChatHome({  userName, admins, onSelectAdmin }: ChatHomeProps) {
           </div>
         </div>
   <Button
-          onClick={() => onSelectAdmin?.("")}
+          onClick={() => onSelectAdmin?.(admins && admins.length > 0 ? admins[0].id : "")}
           className="w-full bg-bg-dashboard hover:bg-[#202E58] text-white cursor-pointer flex justify-start items-start rounded-lg p-4 h-auto"
         >
           <div className="  w-full text-start">

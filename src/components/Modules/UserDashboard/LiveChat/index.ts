@@ -111,6 +111,8 @@ export interface User {
 export interface FetchHistoryCmd {
   type: "fetch_history";
   receiverId: string;
+  cursor?: { id: string; createdAt: string };
+  limit?: number;
 }
 
 export interface FetchAdminsCmd {

@@ -15,7 +15,7 @@ export default function NewCampaignPage() {
   const campaign = useAppSelector((state) => {
     return state.campaign;
   });
-  
+
   const [publishCampaign, { isLoading }] = usePublishCampaignMutation();
 
   const handlePublish = async () => {
@@ -23,17 +23,24 @@ export default function NewCampaignPage() {
 
     // Validate campaign data using Zod
     try {
+      if (!startDate) {
+        toast.error("Please select a start date.");
+        return;
+      }
+      if (!endDate) {
+        toast.error("Please select the campaign duration.");
+        return;
+      }
+
       const validatedData = publishCampaignSchema.parse({
         name,
         screenIds,
-        startDate: startDate ,
-        endDate: endDate ,
+        startDate: startDate,
+        endDate: endDate,
         type: type || "custom",
         files,
       });
-  
 
-    
       try {
         const res = await publishCampaign({
           name: validatedData.name,
@@ -43,7 +50,6 @@ export default function NewCampaignPage() {
           type: validatedData.type,
           files: validatedData.files,
         }).unwrap();
-        
 
         if (res.data?.url) {
           toast.success("Campaign Published. Redirecting to payment page...");
@@ -56,23 +62,23 @@ export default function NewCampaignPage() {
         toast.error(err?.data?.message || "Publish failed!");
       }
     } catch (error) {
-    
+      console.log("🚀 ~ handlePublish ~ error:", error);
       if (error instanceof ZodError) {
         const errorMessages = error.errors.map((err) => {
           const field = err.path.join(".");
           // Format field names for better readability
-          const fieldName = field
-            .replace(/([A-Z])/g, " $1")
-            .replace(/^./, (str) => str.toUpperCase())
-            .trim() || "Field";
+          const fieldName =
+            field
+              .replace(/([A-Z])/g, " $1")
+              .replace(/^./, (str) => str.toUpperCase())
+              .trim() || "Field";
           return `${fieldName}: ${err.message}`;
         });
-        
-      
-        const firstError = errorMessages[0] || "Validation failed. Please check your input.";
+
+        const firstError =
+          errorMessages[0] || "Validation failed. Please check your input.";
         toast.error(firstError);
-        
-       
+
         if (errorMessages.length > 1) {
           console.error("All validation errors:", errorMessages);
         } else {
@@ -97,11 +103,12 @@ export default function NewCampaignPage() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.85 }}
-          disabled={isLoading}
+          disabled={isLoading }
           className={`mb-12 w-full ml-auto md:w-fit rounded-full py-2 md:py-3 px-16 text-xl font-medium transition-opacity cursor-pointer 
-            ${isLoading
-              ? "bg-gray-500 opacity-60 cursor-not-allowed"
-              : "bg-gradient-to-r from-[#38B6FF] to-[#09489D] hover:opacity-90"
+            ${
+              isLoading
+                ? "bg-gray-500 opacity-60 cursor-not-allowed"
+                : "bg-gradient-to-r from-[#38B6FF] to-[#09489D] hover:opacity-90"
             }`}
           onClick={handlePublish}
         >
