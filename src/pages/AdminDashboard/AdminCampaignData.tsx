@@ -40,9 +40,9 @@ const MetricCard: React.FC<MetricCardProps> = ({
     >
       <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-[#38B6FF]/40 to-[#09489D]/20" />
       <CardHeader className="pb-2 relative">
-        <CardTitle className="text-xl md:text-2xl font-semibold text-white tracking-tight flex items-center gap-2">
+        <CardTitle className="text-xl md:text-2xl font-medium text-white tracking-tight flex items-center gap-2">
           <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sky-200/90 backdrop-blur">
-            *
+            #
           </span>
           {title}
         </CardTitle>
@@ -51,7 +51,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="relative">
-        <div className="text-3xl md:text-4xl font-semibold text-white drop-shadow">
+        <div className="text-3xl md:text-4xl font-medium text-white drop-shadow">
           {value}
         </div>
       </CardContent>
@@ -166,7 +166,7 @@ const AdminCampaignData: React.FC = () => {
       transition={{ duration: 0.6 }}
       className="min-h-screen bg-gradient-to-b from-[#020617] via-[#050F2A] to-[#040B1A] lg:py-10"
     >
-      <div className="px-4 md:px-8 lg:px-6 mx-auto space-y-8">
+      <div className="px-6 mx-auto space-y-8">
         <div className="relative overflow-hidden rounded-[32px] border border-white/5 bg-white/5 px-6 py-8 md:px-10 md:py-12 backdrop-blur-2xl shadow-[0_30px_90px_-40px_rgba(0,0,0,0.95)]">
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute -top-10 right-0 h-32 w-32 bg-[#38B6FF]/30 blur-3xl" />
@@ -174,24 +174,24 @@ const AdminCampaignData: React.FC = () => {
           </div>
           <div className="relative flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div className="space-y-3 text-white">
-              <p className="text-sm uppercase tracking-[0.4em] text-white/70">
+              <p className="text-sm uppercase tracking-[0.4em] text-title-color">
                 Control Center
               </p>
-              <h1 className="text-3xl md:text-4xl font-semibold leading-tight">
+              <h1 className="text-3xl md:text-4xl font-medium leading-tight">
                 Campaign Intelligence for Admins
               </h1>
-              <p className="text-base text-white/70 max-w-2xl">
-                Monitor bundles and custom screens with a cinematic glass UI,
+              <p className="text-base text-title-color max-w-2xl">
+                Monitor bundles and custom screens 
                 filter yearly performance, and switch seamlessly between program
                 types without losing context.
               </p>
             </div>
-            <div className="rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-right text-white shadow-inner backdrop-blur">
-              <p className="text-sm uppercase tracking-[0.3em] text-white/60">
+            <div className="rounded-3xl space-y-1 border border-white/10 bg-white/5 px-6 py-4 text-right text-white shadow-inner backdrop-blur">
+              <p className="text-sm uppercase tracking-[0.3em] text-title-color">
                 Active Year
               </p>
-              <p className="text-3xl font-semibold">{selectedYear}</p>
-              <p className="text-xs text-white/60">Campaign overview</p>
+              <p className="text-3xl font-medium">{selectedYear}</p>
+              <p className="text-xs text-title-color">Campaign overview</p>
             </div>
           </div>
         </div>
@@ -212,12 +212,12 @@ const AdminCampaignData: React.FC = () => {
         </motion.div>
 
         {/* Chart Type Heading */}
-        <div className="px-4 md:px-8 lg:px-10">
+        <div className=" ">
           <div className="flex flex-col gap-2">
-            <h2 className="text-lg md:text-xl font-semibold text-white tracking-tight">
+            <h2 className="text-lg md:text-4xl font-medium text-white tracking-tight">
               Select Campaign Type
             </h2>
-            <p className="text-sm text-white/60">
+            <p className="text-sm text-title-color">
               Toggle between datasets and fine tune the time horizon to refresh
               the analytics canvas.
             </p>
@@ -243,19 +243,21 @@ const AdminCampaignData: React.FC = () => {
                 whileHover={{ scale: chartType === type.toLowerCase() ? 1 : 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                <Button
+                <motion.button
+                whileTap={{scale:0.8}}
+                whileHover={{scale:1.02}}
                   onClick={() =>
                     setChartType(type.toLowerCase() as "custom" | "bundle")
                   }
                   title={description}
-                  className={`relative overflow-hidden py-3 px-6 rounded-2xl text-sm font-medium transition-all duration-200 ease-in-out cursor-pointer border ${
+                  className={`relative overflow-hidden py-3 px-8 rounded-xl text-sm font-medium transition-all duration-200 ease-in-out cursor-pointer  ${
                     chartType === type.toLowerCase()
-                      ? "border-transparent bg-gradient-to-r from-[#38B6FF] via-[#0c3d7c] to-[#091d3f] text-white shadow-[0_20px_45px_-20px_rgba(8,33,71,0.9)]"
-                      : "border-white/10 bg-white/5 text-white/70 hover:text-white"
+                      ? "bg-gradient-to-r from-[#38B6FF] via-[#0c3d7c] to-[#091d3f] text-white shadow-[0_20px_45px_-20px_rgba(8,33,71,0.9)]"
+                      : "bg-[#0c1222] border border-dashboard-border text-gray-300 hover:bg-[#111a31]"
                   }`}
                 >
                   <span className="relative z-10">{type}</span>
-                </Button>
+                </motion.button>
               </motion.div>
             ))}
           </div>

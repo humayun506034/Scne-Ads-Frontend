@@ -19,7 +19,7 @@ import {
 import { setUser } from "@/store/Slices/AuthSlice/authSlice";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, ArrowRight, Copy, Eye, EyeOff, Info } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -33,8 +33,22 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
+const BACKEND_DEMO_URL = "https://danaj242-backend.onrender.com/api";
+
+const demoCredentials = {
+  admin: {
+    email: "admin@scneads.com",
+    password: "123456",
+  },
+  customer: {
+    email: "jagafo8068@dwakm.com",
+    password: "123456",
+  },
+};
+
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [showDemoDetails, setShowDemoDetails] = useState(false);
 
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [showResetModal, setShowResetModal] = useState(false);
@@ -91,6 +105,17 @@ const Login = () => {
     }
   };
 
+  const backendUrl = import.meta.env.VITE_BASE_URL;
+  const showDemoTooltip = backendUrl === BACKEND_DEMO_URL;
+  const handleCopy = async (value: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      toast.success("Copied to clipboard");
+    } catch {
+      toast.error("Failed to copy");
+    }
+  };
+
   return (
     <div className="min-h-screen relative">
       {/* Navbar */}
@@ -130,8 +155,104 @@ const Login = () => {
               transition={{ duration: 0.8 }}
               className="mb-20"
             >
-              <h1 className="text-5xl md:text-7xl font-medium text-white mb-5 leading-none">
-                Hi
+              <h1 className="text-5xl flex  relative justify-between md:text-7xl font-medium text-white mb-5 leading-none">
+                <p>Hi</p> <div>
+                    {showDemoTooltip && (
+                      <div className="flex justify-between items-center mb-3">
+                        <button
+                          type="button"
+                          onClick={() => setShowDemoDetails((prev) => !prev)}
+                          aria-expanded={showDemoDetails}
+                          className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-xs md:text-sm text-white/80 transition hover:text-white hover:border-white/40"
+                        >
+                          <Info className="h-4 w-4" />
+                          {showDemoDetails ? "Hide demo credentials" : "View demo credentials"}
+                        </button>
+                      </div>
+                    )}
+                    {showDemoTooltip && showDemoDetails && (
+                      <div className="absolute bottom-4 right-0 z-10 w-full sm:w-[320px] translate-y-[100%]">
+                        <div className="rounded-2xl border border-white/15 bg-white/10 px-4 py-4 backdrop-blur-lg text-white shadow-[0_20px_45px_-30px_rgba(8,33,71,0.9)]">
+                          <p className="text-[10px] uppercase tracking-[0.4em] text-white/70 mb-2">
+                            Demo Access ( Contained Info So that you dont need to do Anything )
+                          </p>
+                          <div className="space-y-3 text-sm">
+                            <div className="space-y-1">
+                              <p className="font-semibold text-white/90">Admin</p>
+                              <div className="flex items-center justify-between gap-3 text-white/80">
+                                <p className="break-all">
+                                  Email:{" "}
+                                  <span className="font-medium text-white">
+                                    {demoCredentials.admin.email}
+                                  </span>
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(demoCredentials.admin.email)}
+                                  className="text-xs inline-flex items-center gap-1 text-white/60 hover:text-white"
+                                >
+                                  <Copy className="h-3.5 w-3.5" /> Copy
+                                </button>
+                              </div>
+                              <div className="flex items-center justify-between gap-3 text-white/80">
+                                <p>
+                                  Password:{" "}
+                                  <span className="font-medium text-white">
+                                    {demoCredentials.admin.password}
+                                  </span>
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(demoCredentials.admin.password)}
+                                  className="text-xs inline-flex items-center gap-1 text-white/60 hover:text-white"
+                                >
+                                  <Copy className="h-3.5 w-3.5" /> Copy
+                                </button>
+                              </div>
+                            </div>
+                            <div className="space-y-1 border-t border-white/10 pt-2">
+                              <p className="font-semibold text-white/90">Customer</p>
+                              <div className="flex items-center justify-between gap-3 text-white/80">
+                                <p className="break-all">
+                                  Email:{" "}
+                                  <span className="font-medium text-white">
+                                    {demoCredentials.customer.email}
+                                  </span>
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() => handleCopy(demoCredentials.customer.email)}
+                                  className="text-xs inline-flex items-center gap-1 text-white/60 hover:text-white"
+                                >
+                                  <Copy className="h-3.5 w-3.5" /> Copy
+                                </button>
+                              </div>
+                              <div className="flex items-center justify-between gap-3 text-white/80">
+                                <p>
+                                  Password:{" "}
+                                  <span className="font-medium text-white">
+                                    {demoCredentials.customer.password}
+                                  </span>
+                                </p>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleCopy(demoCredentials.customer.password)
+                                  }
+                                  className="text-xs inline-flex items-center gap-1 text-white/60 hover:text-white"
+                                >
+                                  <Copy className="h-3.5 w-3.5" /> Copy
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-end pr-6">
+                          <span className="h-3 w-3 rotate-45 border-r border-b border-white/20 bg-white/10"></span>
+                        </div>
+                      </div>
+                    )}
+                </div>
               </h1>
               <div className="space-y-1">
                 <p className="text-white text-base md:text-xl font-medium">
@@ -230,7 +351,8 @@ const Login = () => {
                   >
                     Forget Password ?
                   </Button>
-                  <div className="w-full flex-1">
+                  <div className="w-full flex-1 relative">
+                  
                     <CommonLoginButton
                       isInView={true}
                       title={isLoggingIn ? "Logging in..." : "Log In"}
