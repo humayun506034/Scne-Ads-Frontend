@@ -195,7 +195,7 @@ const UserDashboardMetrics = () => {
     
 
       <div className="px-4  sm:px-6 md:px-10">
-      <div className="flex  my-20  flex-col md:flex-row  md:items-start md:justify-between gap-4">
+      <div className="flex my-6 md:my-20  flex-col md:flex-row  md:items-start md:justify-between gap-4">
       
 
         <div className="w-full md:w-[60%] space-y-4">
@@ -243,7 +243,7 @@ const UserDashboardMetrics = () => {
               />
             )}
         </div>
-<div className="w-full  md:w-[40%]">
+<div className="w-full mt-10 md:mt-0  md:w-[40%]">
   <ResponsiveBillboardMap/>
               </div> 
         </div>

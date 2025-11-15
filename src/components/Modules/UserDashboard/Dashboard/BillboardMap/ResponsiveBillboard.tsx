@@ -1,12 +1,12 @@
 import { IScreen } from "@/components/Modules/admin-dashboard/Home/HomeTabs/AdminLocationCard";
 import { useGetAllScreenQuery } from "@/store/api/Screen/screenApi";
 import { MapPin } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import {  useMemo, useState } from "react";
 import BillboardWorldMap from "./BillboardWorldMap";
-import MobileBillboardMap from "./MobileBillboard";
+// import MobileBillboardMap from "./MobileBillboard";
 
 export default function ResponsiveBillboardMap() {
-  const [isMobile, setIsMobile] = useState(false);
+  // const [isMobile, setIsMobile] = useState(false);
   const { data } = useGetAllScreenQuery({ limit: 100000, page: "1" });
   const [viewMode, setViewMode] = useState<"map" | "list">("map");
   const screens = useMemo<IScreen[]>(
@@ -14,34 +14,34 @@ export default function ResponsiveBillboardMap() {
     [data?.data?.data]
   );
 
-  useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+  // useEffect(() => {
+  //   const checkIsMobile = () => {
+  //     setIsMobile(window.innerWidth < 768);
+  //   };
 
-    checkIsMobile();
-    window.addEventListener("resize", checkIsMobile);
+  //   checkIsMobile();
+  //   window.addEventListener("resize", checkIsMobile);
 
-    return () => window.removeEventListener("resize", checkIsMobile);
-  }, []);
+  //   return () => window.removeEventListener("resize", checkIsMobile);
+  // }, []);
 
-  if (isMobile) {
-    return <MobileBillboardMap data={data} />;
-  }
+  // if (isMobile) {
+  //   return <MobileBillboardMap data={data} />;
+  // }
 
   return (
     <div className="w-full ">
-      <div className="flex items-center  mb-4  justify-between">
+      <div className="flex flex-col md:flex-row items-center  mb-4  justify-between">
         <h2 className="text-white text-lg  font-medium ">
           Map of ad plays - Drag to pan
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex mt-4 md:mt-0 items-center gap-2">
           <button
             onClick={() => setViewMode("map")}
             className={`px-2 py-1 cursor-pointer rounded-lg text-sm ${
               viewMode === "map"
                 ? "bg-gradient-to-r from-[#38B6FF] px-6 py-3 text-lg font-medium via-[#0c3d7c] to-[#091d3f] text-white shadow-[0_20px_45px_-20px_rgba(8,33,71,0.9)]"
-                : "bg-[#0c1222] text-gray-300  px-6 py-3 hover:bg-[#111a31]"
+                : "bg-[#0c1222] border border-dashboard-border text-gray-300  px-6 py-3 hover:bg-[#111a31]"
             }`
           
         
@@ -54,7 +54,7 @@ export default function ResponsiveBillboardMap() {
             className={`px-2 py-1 cursor-pointer rounded-lg text-sm ${
                viewMode === "list"
                 ? "bg-gradient-to-r from-[#38B6FF] px-6 py-3 text-lg font-medium via-[#0c3d7c] to-[#091d3f] text-white shadow-[0_20px_45px_-20px_rgba(8,33,71,0.9)]"
-                : "bg-[#0c1222] text-gray-300  px-6 py-3 hover:bg-[#111a31]"
+                : "bg-[#0c1222]  border border-dashboard-border text-gray-300  px-6 py-3 hover:bg-[#111a31]"
             }`}
           >
             List View
@@ -89,7 +89,7 @@ export function ScreenListPanel({ screens }: { screens: IScreen[] }) {
           <p className="text-xs uppercase mb-2 tracking-[0.3em] text-sky-200/70">
             List View
           </p>
-          <h3 className="text-xl sm:text-2xl font-semibold">
+          <h3 className="text-xl sm:text-2xl font-medium">
             High-performing Screens
           </h3>
           <p className="text-sm text-title-color mb-2">
@@ -110,9 +110,9 @@ export function ScreenListPanel({ screens }: { screens: IScreen[] }) {
           return (
             <div
               key={screen.id}
-              className="flex gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-white/0 p-4 backdrop-blur-xl"
+              className="flex flex-col md:flex-row gap-4 rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-white/0 p-4 backdrop-blur-xl"
             >
-              <div className="h-20 w-20 rounded-2xl overflow-hidden bg-white/10 flex-shrink-0">
+              <div className="h-40 md:h-20 w-full md:w-20 rounded-2xl overflow-hidden bg-white/10 flex-shrink-0">
                 {heroImage ? (
                   <img
                     src={heroImage}
@@ -126,7 +126,7 @@ export function ScreenListPanel({ screens }: { screens: IScreen[] }) {
               <div className="flex-1">
                 <div className="flex flex-col gap-2  sm:flex-row sm:items-start sm:justify-between ">
                   <div className="space-y-1">
-                    <p className="text-lg font-semibold text-white">
+                    <p className="md:text-lg font-medium text-white">
                       {screen.screen_name}
                     </p>
                     <p className="flex items-center gap-1 text-sm text-title-color">
