@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CalendarDays, Eye } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import CommonHeader from "@/common/CommonHeader";
 import CommonSelect from "@/common/CommonSelect";
 import CommonStatus from "@/common/CommonStatus";
 import Loading from "@/common/MapLoading";
@@ -89,9 +90,7 @@ export default function UserBundleCampaignManagement() {
   return (
     <div className="">
       <div className="p-6 space-y-6">
-        <h1 className="text-2xl font-bold text-white mb-3 border-b border-[#11214D] pb-3">
-          Bundle Campaigns
-        </h1>
+      <CommonHeader title="Bundle Campaigns" />
 
         {/* Filters UI (using CommonSelect) */}
         <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 p-4">

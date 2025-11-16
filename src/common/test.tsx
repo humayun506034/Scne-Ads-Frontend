@@ -6,12 +6,12 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
 import { Circle } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { useAddFavouriteScreenMutation } from "@/store/api/Screen/screenApi";
 
 export interface ILocation {
   id: string;
@@ -47,7 +47,7 @@ const Test = ({
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) => {
   const [openDialog, setOpenDialog] = useState<string | null>(null);
-  const [loadingFav, setLoadingFav] = useState(false);
+
   const [addFavouriteScreen] = useAddFavouriteScreenMutation();
 
   const handleBookmark = async (e: React.MouseEvent, id: string) => {
@@ -57,12 +57,12 @@ const Test = ({
       // Remove locally only
       onToggleFav?.(id);
       toast.error("Item removed from favorites!");
-      console.log(loadingFav)
+  
       return;
     }
 
     try {
-      setLoadingFav(true);
+ 
       // Only send screenId in the POST body
       await addFavouriteScreen({ screenId: id }).unwrap();
       onToggleFav?.(id);
@@ -71,9 +71,7 @@ const Test = ({
     } catch (err: any) {
       console.error("Add favourite failed:", err);
       toast.error(err?.data?.message || "Failed to add to favorites.");
-    } finally {
-      setLoadingFav(false);
-    }
+    } 
   };
 
   const getBadgeColors = (category?: "new" | "fav" | "top") => {

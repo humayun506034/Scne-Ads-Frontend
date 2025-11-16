@@ -1,56 +1,50 @@
 import { Button } from "@/components/ui/button";
+import { useAppSelector } from "@/store/hooks";
+import { selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
+import { motion } from 'framer-motion';
 import { ChevronRight } from "lucide-react";
-import p1 from "../../../../assets/Dashboard/person1.png";
-import p2 from "../../../../assets/Dashboard/person2.png";
+ 
+import type { User } from ".";
 import p3 from "../../../../assets/Dashboard/person3.png";
 import logo from "../../../../assets/logo.png";
-interface ChatHomeProps {
-  userName: string;
 
-  onStartChat: () => void;
-  onViewMessages: () => void;
+interface ChatHomeProps {
+
+  userName: string;
+  admins?: User[];
+  onSelectAdmin?: (id: string) => void;
 }
 
-export function ChatHome({
-  userName,
-
-  onStartChat,
-  onViewMessages,
-}: ChatHomeProps) {
+export function ChatHome({  userName, admins, onSelectAdmin }: ChatHomeProps) {
+  const user = useAppSelector(selectCurrentUser);
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
       <div className="bg-bg-dashboard text-white p-4 relative">
-        {/* <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="absolute top-4 right-4 text-white hover:bg-white/10 h-8 w-8"
-        >
-          <X className="h-4 w-4" />
-        </Button> */}
-
         <div className="flex items-center justify-between mb-4 mr-10">
           <div className=" rounded-full w-fit h-[60px] p-2">
             <img src={logo} alt="logo" className="w-full h-full" />
           </div>
-          <div className="flex -space-x-2">
-            <img
-              src={p1}
-              alt="Agent 1"
-              className="w-10 h-10 rounded-full border-2 border-white"
-            />
-            <img
-              src={p2}
-              alt="Agent 2"
-              className="w-10 h-10 rounded-full border-2 border-white"
-            />
-            <img
-              src={p3}
-              alt="Agent 3"
-              className="w-10 h-10 rounded-full border-2 border-white"
-            />
-          </div>
+          {user?.role !== 'admin' && (
+            <div className="flex gap-1">
+              {admins?.slice(0, 3).map((a) => (
+                <motion.button
+                  whileHover={{ scale: 1.2 }}
+                  key={a.id}
+                  type="button"
+                  onClick={() => onSelectAdmin?.(a.id)}
+                  className="w-10 h-10 rounded-full border-2  overflow-hidden cursor-pointer "
+                  title={`${a.first_name} ${a.last_name}`}
+                >
+                  <img
+                    src={a.image || p3}
+                    alt={`${a.first_name} ${a.last_name}`}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div>
@@ -58,38 +52,55 @@ export function ChatHome({
           <p className="text-title-color">Need a hand (or two) ?</p>
         </div>
       </div>
-
-      {/* Content */}
-      <div className="flex-1 p-4 space-y-4">
+         {user?.role !== 'admin' && (
+           <div className="flex-1 p-4 space-y-4">
         <div
-          onClick={onViewMessages}
+          onClick={() => onSelectAdmin?.(admins && admins.length > 0 ? admins[0].id : "")}
           className="bg-bg-dashboard text-white rounded-lg p-4 cursor-pointer hover:bg-[#202E58] transition-colors"
         >
           <div>
-            <h3 className="font-medium mb-2">Recent message</h3>
+            <h3 className="font-medium mb-2">Have Any Queries ?</h3>
             <div className="flex items-center gap-4">
               <div className="w-fit h-10  rounded-full flex items-center justify-center">
                 <img src={logo} alt="logo" className="w-full h-full" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-title-color">Was that helpful</p>
+                <p className="text-sm text-title-color">Click on the  Icons to Chat</p>
                 <p className="text-xs text-white mt-2">
-                  Danaj Admin 1 • 6d ago
+                 Admins Are Here to Help! 
                 </p>
               </div>
               <ChevronRight className="h-5 w-5 text-white" />
             </div>
           </div>
         </div>
-
-        <Button
-          onClick={onStartChat}
+  <Button
+          onClick={() => onSelectAdmin?.(admins && admins.length > 0 ? admins[0].id : "")}
           className="w-full bg-bg-dashboard hover:bg-[#202E58] text-white cursor-pointer flex justify-start items-start rounded-lg p-4 h-auto"
         >
           <div className="  w-full text-start">
             <h3 className="font-medium">Ask a question</h3>
             <div className="flex w-full justify-between items-center mt-2">
-              <p className="text-sm text-title-color">Danaj • 6d ago</p>
+                <div className="flex gap-1">
+            {
+              admins?.map((a) => (
+                <motion.button
+                  whileHover={{ scale: 1.2 }}
+                  key={a.id}
+                  type="button"
+                  onClick={() => onSelectAdmin?.(a.id)}
+                  className="w-10 h-10 rounded-full border-2  overflow-hidden cursor-pointer "
+                  title={`${a.first_name} ${a.last_name}`}
+                >
+                  <img
+                    src={a.image || p3}
+                    alt={`${a.first_name} ${a.last_name}`}
+                    className="w-full h-full object-cover"
+                  />
+                </motion.button>
+              ))
+            }
+          </div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
@@ -105,7 +116,32 @@ export function ChatHome({
             </div>
           </div>
         </Button>
-      </div>
+        </div>
+         )}
+         {
+            user?.role === 'admin' && ( <div
+          
+          className="bg-bg-dashboard text-white  mt-6 mx-2 p-4 rounded-lg flex items-center gap-4  hover:bg-[#202E58] transition-colors"
+        >
+          <div>
+            <h3 className="font-medium mb-2">Users are in thirst of help</h3>
+            <div className="flex items-center gap-4">
+              <div className="w-fit h-10  rounded-full flex items-center justify-center">
+                <img src={logo} alt="logo" className="w-full h-full" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm text-title-color">Guide our users to the right path</p>
+                <p className="text-xs text-white mt-2">
+                  Assist Users with Their Queries! 
+                </p>
+              </div>
+             
+            </div>
+          </div>
+        </div>)
+         }
+   
     </div>
+   
   );
 }

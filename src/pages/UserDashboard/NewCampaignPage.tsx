@@ -62,7 +62,7 @@ export default function NewCampaignPage() {
         toast.error(err?.data?.message || "Publish failed!");
       }
     } catch (error) {
-      console.log("🚀 ~ handlePublish ~ error:", error);
+
       if (error instanceof ZodError) {
         const errorMessages = error.errors.map((err) => {
           const field = err.path.join(".");

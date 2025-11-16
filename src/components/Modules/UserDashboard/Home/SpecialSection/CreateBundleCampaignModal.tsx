@@ -124,8 +124,8 @@ const CreateBundleCampaignModal: React.FC<Props> = ({
   //     fileCounter++;
   //   });
 
-  //   console.log("Submitting Campaign Data:", campaignData);
-  // //   alert("Campaign Created! Check console for submitted data.");
+  // 
+  // //   alert("Campaign Created! Check  for submitted data.");
   // //   onClose();
   // };
 
@@ -157,11 +157,10 @@ const CreateBundleCampaignModal: React.FC<Props> = ({
 
     try {
       const res = await makeBundlePayment(form).unwrap();
-      console.log("🚀 ~ onSubmit ~ res:", res);
+     
       toast.dismiss(loadingToastId);
 
-      console.log("Response data:", res.data);
-      console.log("Session URL:", res.data?.session?.url);
+    
 
       if (res.success && res.data?.session?.url) {
         toast.success("Redirecting to payment...");

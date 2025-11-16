@@ -45,32 +45,29 @@ export function BudgetSection() {
 
   const handleBudgetTypeChange = (type: "hourly" | "daily") => {
     setBudgetState((prev) => ({ ...prev, budgetType: type }));
-    console.log("Budget type changed:", type);
+
   };
 
   const handleBudgetAmountChange = (amount: number) => {
     setBudgetState((prev) => ({ ...prev, budgetAmount: amount }));
-    console.log("Budget amount changed:", amount);
+   
   };
 
   const handleSpendLimitToggle = (enabled: boolean) => {
     setBudgetState((prev) => ({ ...prev, hasSpendLimit: enabled }));
-    console.log("Spend limit toggled:", enabled);
+   
   };
 
   const handleSpendLimitChange = (amount: number) => {
     setBudgetState((prev) => ({ ...prev, spendLimitAmount: amount }));
-    console.log("Spend limit amount changed:", amount);
+   
   };
 
   const handlePaymentMethodChange = (methodId: string) => {
     setBudgetState((prev) => ({ ...prev, selectedPaymentMethod: methodId }));
-    console.log("Payment method changed:", methodId);
+  
   };
 
-  const handlePreviewCampaign = () => {
-    console.log("Campaign preview requested with budget state:", budgetState);
-  };
 
   return (
     <div className=" my-20 mb-80">
@@ -117,7 +114,7 @@ export function BudgetSection() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.85 }}
-            onClick={handlePreviewCampaign}
+            
             className="w-full md:w-fit mt-6 md:mt-0 mx-auto rounded-full bg-gradient-to-r to-[#38B6FF] from-[#09489D] py-4 px-8 font-medium hover:opacity-90 cursor-pointer transition-opacity "
           >
             Preview Campaign

@@ -100,9 +100,9 @@ const AdminBasicInfo: React.FC = () => {
     }
 
     try {
-      const response = await updateProfile(formDataToSend).unwrap();
+      await updateProfile(formDataToSend).unwrap();
       toast.success("Profile updated successfully!");
-      console.log("Update response:", response);
+      
     } catch (err: any) {
       const errorMessage = err?.data?.message || "Failed to update profile";
       toast.error(errorMessage);

@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Badge } from "@/components/ui/badge";
 import { ILocation } from "@/types/locations";
-import { motion } from "framer-motion";
 import { divIcon } from "leaflet";
-import { Eye, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Marker, Popup } from "react-leaflet";
-import { toast } from "sonner";
 
 
 const getMarkerIcon = (status: ILocation["status"]) => {
@@ -56,22 +55,20 @@ const getStatusBadgeStyle = (status: ILocation["status"]) => {
 };
 
 interface BillboardMarkerProps {
-  location: ILocation;
-  onViewCampaigns?: (location: ILocation) => void;
+  location: any;
+ 
 }
 
 export function BillboardMarker({
   location,
-  onViewCampaigns,
+  
 }: BillboardMarkerProps) {
-  const handleViewCampaigns = () => {
-    toast.success("View campaigns for: " + location.title);
-  };
 
+  
   return (
     <Marker
-      position={[location.lat, location.lng]}
-      icon={getMarkerIcon(location.status)}
+        position={[Number(location?.lat) || 0, Number(location?.lng) || 0]}
+      icon={getMarkerIcon((location?.status as ILocation["status"]) || "active")}
     >
       <Popup closeButton={true}>
         <div className=" space-y-1">
@@ -87,7 +84,7 @@ export function BillboardMarker({
 
           <div className="">
             <div className="flex justify-between items-start">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-2xl font-semibold text-gray-900">
                 {location.title}
               </h3>
               <Badge
@@ -111,23 +108,22 @@ export function BillboardMarker({
 
           <div className="flex items-center justify-between text-xs">
             <span className="font-semibold text-gray-900">
-              <strong>{location.campaigns}</strong> active campaigns
+              <strong>{location.price}</strong> cost per play
             </span>
           </div>
 
           <div className="pt-1">
-            <motion.button
+            {/* <motion.button
               whileTap={{ scale: 0.95 }}
               onClick={() => {
-                onViewCampaigns?.(location);
-                handleViewCampaigns();
+              
               }}
               whileHover={{ scale: 1.05 }}
               className="w-full h-10 bg-[linear-gradient(291deg,_#38B6FF_-45.64%,_#09489D_69.04%)] cursor-pointer  text-white text-sm rounded-lg flex items-center justify-center gap-2"
             >
               <Eye className="w-4 h-4" />
               View Campaigns
-            </motion.button>
+            </motion.button> */}
           </div>
         </div>
       </Popup>

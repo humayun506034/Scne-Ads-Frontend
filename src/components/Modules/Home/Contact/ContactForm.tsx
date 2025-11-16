@@ -1,10 +1,10 @@
 import CommonHomeInput from "@/common/CommonHomeInput";
+import { useGetInTouchMutation } from "@/store/api/Common/commonApi";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import img from "../../../../assets/Home/rocket.png";
-import { useGetInTouchMutation } from "@/store/api/Common/commonApi";
 import { toast } from "sonner";
 import { z } from "zod";
+import img from "../../../../assets/Home/rocket.png";
 
 // Zod schema
 const contactFormSchema = z.object({
@@ -66,9 +66,8 @@ const ContactForm = () => {
 
     // If valid, submit
     try {
-      const result = await getInTouch(formData).unwrap();
+     await getInTouch(formData).unwrap();
       toast.success("Message sent successfully!");
-      console.log("Form submitted successfully:", result);
 
       setFormData({
         firstName: "",

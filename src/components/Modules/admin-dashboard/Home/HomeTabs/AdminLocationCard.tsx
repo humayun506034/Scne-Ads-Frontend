@@ -218,7 +218,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
           id: location.id!,
           payload: fd,
         }).unwrap();
-        console.log("📤 Images uploaded:", resImg);
+      
         if (resImg.success) {
           toast.success("Images uploaded", { id: imgToast });
         }
@@ -243,7 +243,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
 
   return (
     <div className="w-full ">
-      <Card className="lg:w-full relative  border-none h-[400px]  card mx-0 p-0 rounded-[30px] transition-all duration-300 hover:shadow-[0px_0px_20px_0px_rgba(47,171,249,0.90)]  bg-transparent ">
+      <Card className="lg:w-full relative  border-none h-[440px]  card mx-0 p-0 rounded-[30px] transition-all duration-300 hover:shadow-[0px_0px_20px_0px_rgba(47,171,249,0.90)]  bg-transparent ">
         <CardContent className="flex flex-col overflow-hidden items-center  p-0">
           <Carousel className="w-full relative">
             <CarouselContent className="p-0 ">
@@ -311,7 +311,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
             {displayDescription}
           </p>
 
-          <div className="text-sm space-y-2 px-6">
+          <div className="text-sm absolute bottom-4 space-y-2 px-6">
             <p className="my-4 text-lg">Price: {location.price} $</p>
           </div>
 
@@ -521,7 +521,7 @@ const AdminLocationCard = ({ location }: LocationCardProps) => {
                 </div>
 
                 <div className="mb-4">
-                  <label>Cost Per Play</label>
+                  <label>Cost Per Day (in $) </label>
                   <CustomInput
                     type="number"
                     {...register("price")}

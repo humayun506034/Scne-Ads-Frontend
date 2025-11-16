@@ -4,7 +4,7 @@ export default function LiveChatDemo() {
   return (
     <div>
       {/* Live Chat System */}
-      <LiveChatSystem userName="Danaj" />
+      <LiveChatSystem  />
     </div>
   );
 }

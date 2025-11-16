@@ -15,7 +15,7 @@ export default function Footer() {
   const [email, setEmail] = useState("");
 
   const handleSubscribe = () => {
-    console.log("Subscribe with email:", email);
+  
     // Handle newsletter subscription
     setEmail("");
   };

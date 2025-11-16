@@ -52,7 +52,7 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
   };
   // Cancel handler
   const handleCancel = () => {
-    console.log("Cancelled");
+
     onClose();
   };
 

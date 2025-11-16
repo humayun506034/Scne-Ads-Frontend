@@ -1,62 +1,74 @@
-import { formatDistanceToNow } from "date-fns";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChevronRight } from "lucide-react";
-import { ChatConversation } from ".";
+import type { User } from ".";
 import p3 from "../../../../assets/Dashboard/person3.png";
+
 interface ConversationListProps {
-  conversations: ChatConversation[];
+  conversations: User[];
   onSelectConversation: (conversationId: string) => void;
+  lastById?: Record<string, { text: string; createdAt: string; fromMe: boolean }>;
 }
 
 export function ConversationList({
   conversations,
   onSelectConversation,
+  lastById,
 }: ConversationListProps) {
+
+
+  const formatTime = (iso?: string) => {
+    if (!iso) return "";
+    const d = new Date(iso);
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    return sameDay
+      ? d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+      : d.toLocaleDateString();
+  };
+
   return (
     <div className="flex-1  overflow-y-auto">
-      {conversations.map((conversation) => (
-        <div
-          key={conversation.id}
-          onClick={() => onSelectConversation(conversation.id)}
-          className="flex items-center gap-4 p-4  cursor-pointer"
-        >
-          <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-            <img
-              src={p3}
-              alt={conversation.agentName}
-              className="w-12 h-12 rounded-full"
-            />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
-              <h4
-                className={`font-medium text-gray-900 truncate ${
-                  conversation.unread ? "font-semibold" : ""
-                }`}
-              >
-                {conversation.agentName}{" "}
-                {conversation.unread && <span className="text-red-500">*</span>}
-              </h4>
-              <span
-                className={`text-xs text-gray-500 flex-shrink-0 ${
-                  conversation.unread ? "font-semibold" : ""
-                }`}
-              >
-                {formatDistanceToNow(conversation.timestamp, {
-                  addSuffix: true,
-                })}
-              </span>
+      {conversations?.length > 0 ? (
+        conversations.map((conversation) => (
+          <div
+            key={conversation.id}
+            onClick={() => onSelectConversation(conversation.id)}
+            className="flex items-center gap-4 p-4  cursor-pointer"
+          >
+            {/** avatar */}
+            <div className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+              <img
+                src={conversation.image || p3}
+                alt={`${conversation.first_name} ${conversation.last_name}`}
+                className="w-12 h-12 rounded-full"
+              />
             </div>
-            <p
-              className={`text-sm text-gray-600 truncate mt-1 ${
-                conversation.unread ? "font-semibold" : ""
-              }`}
-            >
-              {conversation.lastMessage}
-            </p>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h4 className={`font-medium text-gray-900 truncate`}>
+                  {`${conversation.first_name} ${conversation.last_name}`}
+                </h4>
+                <span className="text-[11px] text-gray-500 flex-shrink-0 ml-2">
+                  {formatTime(
+                    lastById?.[conversation.id]?.createdAt ||
+                      (conversation as any)?.updatedAt ||
+                      (conversation as any)?.createdAt
+                  )}
+                </span>
+              </div>
+              <p className={`text-sm text-gray-600 truncate mt-1`}>
+                {lastById?.[conversation.id]
+                  ? `${lastById[conversation.id].fromMe ? "You: " : ""}${lastById[conversation.id].text}`
+                  : conversation.role}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 text-title-color flex-shrink-0" />
           </div>
-          <ChevronRight className="h-4 w-4 text-title-color flex-shrink-0" />
-        </div>
-      ))}
+        ))
+      ) : (
+        <p className="text-center text-gray-500 p-4">No conversations available.</p>
+      )}
     </div>
   );
 }
+

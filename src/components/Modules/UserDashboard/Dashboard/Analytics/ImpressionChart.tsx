@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { CampaignMeta } from "@/pages/UserDashboard/UserDashboardMetrics";
+import { parseAsString, useQueryState } from "nuqs";
+import React, { useEffect, useState } from "react";
 import { MetricCard } from "./MetricCard";
-import { useQueryState, parseAsString } from "nuqs";
 
 const Chart = React.lazy(() => import("react-apexcharts"));
 
@@ -95,7 +95,7 @@ export function SpendImpressionsChart({ meta }: Props) {
   }
 
   return (
-    <div className="bg-[#0B1739] rounded-l-xl rounded-r-xl xl:rounded-r-none p-6 border border-[#343B4F]">
+    <div className="bg-[#0B1739] rounded-2xl p-6 border border-[#343B4F]">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-6 gap-4">
         <MetricCard
           title="Total Cost"

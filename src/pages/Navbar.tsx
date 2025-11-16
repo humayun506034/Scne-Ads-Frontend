@@ -2,27 +2,32 @@ import logo from "@/assets/logo.png";
 import CommonWrapper from "@/common/CommonWrapper";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { logout, selectCurrentUser } from "@/store/Slices/AuthSlice/authSlice";
 import { motion } from "framer-motion";
 import { MapPin, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const navigationLinks = [
   { label: "Home", href: "/" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "Billboards", href: "/billboards" },
+  // { label: "Pricing", href: "/pricing" },
+  // { label: "Billboards", href: "/billboards" },
   { label: "Help Centre", href: "/help" },
-  { label: "User Dashboard", href: "/user-dashboard" },
-  { label: "Admin Dashboard", href: "/admin-dashboard" },
+  // { label: "Map of the Boards", href: "/mapOfBoard" },
+  // { label: "User Dashboard", href: "/user-dashboard" },
+  // { label: "Admin Dashboard", href: "/admin-dashboard" },
 ];
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("/");
-
+const user = useAppSelector(selectCurrentUser)
   const handleTabClick = (href: string) => {
     setActiveTab(href); // Update active tab
   };
+const dispatch = useAppDispatch()
 
   return (
     <nav className="w-full fixed top-0 lg:bg-transparent lg:relative bg-[var(--primary-bg-color)] lg:shadow-none shadow-lg z-50">
@@ -37,7 +42,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            <div className="hidden lg:flex items-center space-x-8">
+            <div className="hidden ml-60 lg:flex justify-center items-center space-x-8">
               {navigationLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -61,6 +66,51 @@ export default function Navbar() {
                   </motion.div>
                 </Link>
               ))}
+{ 
+user?.role === 'admin' && (<Link
+                  // key={link.label}
+                  to={"/admin-dashboard"}
+                  // onClick={() => handleTabClick(link.href)}
+                  className={`text-base transition ease-in-out font-medium underline-animation 
+                    
+                  hover:underline-animation`}
+
+                  // ${
+                  //   activeTab === link.href ? "text-[#38B6FF]" : "text-white"
+                  // }
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileTap={{ scale: 0.8 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                   Admin Dashboard
+                  </motion.div>
+                </Link>)
+}{
+  user?.role === 'customer' && (<Link
+                  // key={link.label}
+                  to={"/user-dashboard"}
+                  // onClick={() => handleTabClick(link.href)}
+                  className={`text-base transition ease-in-out font-medium underline-animation 
+                    
+                  hover:underline-animation`}
+
+                  // ${
+                  //   activeTab === link.href ? "text-[#38B6FF]" : "text-white"
+                  // }
+                >
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    whileTap={{ scale: 0.8 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    User Dashboard
+                  </motion.div>
+                </Link>)
+}
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -88,30 +138,52 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex justify-center items-center space-x-4">
+          {!user ? ( <div className=" flex gap-8 items-center"> 
+          <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileTap={{ scale: 0.8 }}
+              whileHover={{ scale: 1.1 }}
+            >
+              <button
+                
+                className="text-base transition ease-in-out font-medium underline-animation 
+                    
+                  hover:underline-animation"
+              >
+                <Link to="/login">Login</Link> </button>
+               </motion.div> 
             <motion.div
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              whileTap={{ scale: 0.8 }}
+              whileHover={{ scale: 1.1 }}
+            >
+              <Link to='/signup'>
+              <Button className="bg-white cursor-pointer text-[#38B6FF] border-none font-medium px-6 py-3 rounded-full">
+                
+            Start Now
+          
+              </Button></Link>
+            </motion.div> </div>):(  <motion.div
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               whileTap={{ scale: 0.8 }}
               whileHover={{ scale: 1.1 }}
             >
               <Button
+              onClick={()=>{
+                toast.success("Logout Successful")
+                dispatch(logout())
+              }}
                 variant="ghost"
-                className="text-white text-base cursor-pointer font-medium px-4 py-2 rounded-full"
+                className="bg-white cursor-pointer text-[#38B6FF] border-none font-medium px-6 py-3 rounded-full"
               >
-                <Link to="/login">Login</Link>
+              Logout
               </Button>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileTap={{ scale: 0.8 }}
-              whileHover={{ scale: 1.1 }}
-            >
-              <Button className="bg-white cursor-pointer text-[#38B6FF] border-none font-medium px-6 py-3 rounded-full">
-                Start Now
-              </Button>
-            </motion.div>
+            </motion.div>)}
+          
           </div>
 
           <div className="lg:hidden">
@@ -130,9 +202,9 @@ export default function Navbar() {
                   animate={{ x: 0, opacity: 1 }}
                   exit={{ x: -300, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="h-full flex flex-col"
+                  className="h-full flex justify-between flex-col"
                 >
-                  <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                  <div className="flex h-full items-center justify-between px-6 py-4 border-b border-gray-200">
                     <div className="flex items-center ">
                       <Link to={"/"}>
                         <div className="w-[124px] h-[56px]">
@@ -162,7 +234,7 @@ export default function Navbar() {
                       ))}
                     </div>
 
-                    <div className="px-6 mt-8 space-y-3">
+                    <div className="px-6  mt-6  justify-between flex  flex-col h-80 space-y-3">
                       <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
@@ -174,14 +246,15 @@ export default function Navbar() {
                         </Button>
                       </motion.div>
 
-                      <motion.div
+                    <div className="">
+                        <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.5, duration: 0.3 }}
                       >
                         <Button
                           variant="ghost"
-                          className="w-full border-gray-300 text-white py-3 rounded-full bg-transparent"
+                          className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] text-white border-none font-medium py-3 rounded-full"
                         >
                           <Link to="/login">Login</Link>
                         </Button>
@@ -192,10 +265,11 @@ export default function Navbar() {
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.6, duration: 0.3 }}
                       >
-                        <Button className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] text-white border-none font-medium py-3 rounded-full">
+                        <Button className="w-full bg-[#38B6FF] hover:bg-[#2DA5EF] mt-6 text-white border-none font-medium py-3 rounded-full">
                           Start Now
                         </Button>
                       </motion.div>
+                    </div>
                     </div>
                   </div>
 

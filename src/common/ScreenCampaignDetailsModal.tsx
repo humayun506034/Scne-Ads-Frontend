@@ -180,12 +180,10 @@ export default function ScreenCampaignDetailsModal({
           {/* Screens Section */}
 
           {/* Content Section */}
-          <section className="w-full mx-auto ">
-            <h3 className="text-xl font-semibold text-[#38B6FF] mb-4 ">
-              Content ({contentUrls?.length || 0})
-            </h3>
-
-            <div className="flex justify-end my-3">
+          <section className="w-full  gap-4">
+            <div className="  flex flex-col md:flex-row justify-between items-center font-semibold ]  ">
+<p className="text-xl text-[#38B6FF">              Content ({contentUrls?.length || 0}) </p>
+              <div className="flex justify-end my-3">
               {" "}
               <button
                 className={` px-4 py-2 rounded-lg font-medium text-right transition-colors ${
@@ -204,6 +202,9 @@ export default function ScreenCampaignDetailsModal({
                   : "Your Content has Not Uploaded by Admin"}
               </button>
             </div>
+            </div>
+
+            
 
             {contentUrls?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -1,26 +1,27 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import CommonHeader from "@/common/CommonHeader";
+import CommonSelect from "@/common/CommonSelect";
 import CommonStatus from "@/common/CommonStatus";
 import Loading from "@/common/MapLoading";
 import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
-import { Eye, CalendarDays, CheckCircle, ArrowUpCircle } from "lucide-react";
-import { useMemo, useState } from "react";
-import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
-import DeleteCampaignModal from "./DeleteCampaignModal";
-import CommonSelect from "@/common/CommonSelect";
-import { Duration } from "@/lib/Data";
-import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
-import { toast } from "sonner";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Duration } from "@/lib/Data";
+import { useGetAllCustomCampaignQuery } from "@/store/api/Campaign/campaignApi";
+import { useMarkCustomCampaignUploadedMutation } from "@/store/api/User/isUploaded";
+import { ArrowUpCircle, CalendarDays, CheckCircle, Eye } from "lucide-react";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import ScreenCampaignDetailsModal from "../../common/ScreenCampaignDetailsModal";
+import DeleteCampaignModal from "./DeleteCampaignModal";
 
 export default function AdminScreenCampaignManagement() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,9 +130,7 @@ export default function AdminScreenCampaignManagement() {
 
   return (
     <div className="p-6 space-y-6 md:mt-10">
-      <h2 className="text-xl sm:text-2xl lg:text-4xl font-medium text-[#AEB9E1] mb-6 lg:mb-8 relative">
-        All Screen Campaigns
-      </h2>
+      <CommonHeader title="Screen Campaign Management" />
 
       {/* Filters UI */}
       <div className="rounded-2xl border border-[#11214D] bg-[#0C1328]/40 p-4">

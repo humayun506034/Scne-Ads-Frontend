@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import UserPanelNavbar from "./UserPanelNavbar";
-import CommonInputField from "@/common/CommonInputField";
-import { Pencil } from "lucide-react";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonInputField from "@/common/CommonInputField";
 import {
   useGetSingleUserQuery,
   useUpdateProfileMutation,
 } from "@/store/api/User/useApi";
+import { Pencil } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import UserPanelNavbar from "./UserPanelNavbar";
 
 const UserPanel: React.FC = () => {
   const { data: userData, isLoading, error } = useGetSingleUserQuery({});
@@ -101,9 +101,9 @@ const UserPanel: React.FC = () => {
     }
 
     try {
-      const response = await updateProfile(formDataToSend).unwrap();
+    await updateProfile(formDataToSend).unwrap();
       toast.success("Profile updated successfully!");
-      console.log("Update response:", response);
+  
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const errorMessage = err?.data?.message || "Failed to update profile";

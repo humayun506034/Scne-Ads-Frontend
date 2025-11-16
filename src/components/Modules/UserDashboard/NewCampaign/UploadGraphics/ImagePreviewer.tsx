@@ -1,6 +1,5 @@
 import type React from "react";
 
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { LocationTemplate } from ".";
@@ -33,10 +32,7 @@ export function LocationTemplateCard({
     }
   };
 
-  const handleDownloadTemplate = () => {
-    // Simulate template download
-    console.log(`Downloading template for ${template.name}`);
-  };
+
 
   return (
     <Card className=" border-[#203265] p-8 rounded-xl flex justify-between flex-col md:flex-row">
@@ -48,13 +44,7 @@ export function LocationTemplateCard({
           <p className="text-title-color text-sm md:text-base">
             Screen Size {template.screenSize}
           </p>
-          <Button
-            variant="link"
-            className="text-[#1CA9FB] cursor-pointer hover:text-cyan-300 text-base p-0 h-auto mt-2"
-            onClick={handleDownloadTemplate}
-          >
-            Download Template
-          </Button>
+          
         </div>
       </div>
 

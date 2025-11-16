@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import logo from "@/assets/logo.png";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,7 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import logo from "@/assets/logo.png";
 import { useSignupMutation } from "@/store/Slices/AuthSlice/authApi";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -25,10 +25,10 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
 import OtpVerificationModal from "@/pages/OtpVerificationModal";
 import type { IRegisterInput } from "@/types/auth";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
 
 const signupSchema = z.object({
   firstName: z.string().min(2, "First Name must be at least 2 characters"),
@@ -156,7 +156,7 @@ const Signup = () => {
 
     try {
       const res = await signup(formData).unwrap();
-      console.log("Signup success:", res);
+
       toast.success(res.message || "Account created successfully!");
       if (res.success && res.data && res.data.is_verified === false) {
         setOtpEmail(res.data.email);
