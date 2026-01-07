@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import CommonCancelButton from "@/common/CommonCancelButton";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
-import ManageSectionModal from "./ManageSectionModal";
-import AddNewTierModal from "./AddNewTierModal";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
 import AddCustomTimeBlockModal from "./AddCustomTimeBlockModal";
 import AddNewScreenModal from "./AddNewScreenModal";
-import CommonCancelButton from "@/common/CommonCancelButton";
+import AddNewTierModal from "./AddNewTierModal";
+import ManageSectionModal from "./ManageSectionModal";
 
 // Dropdown Component
 const CustomDropdown = ({ value, onChange, options, className = "" }) => {
@@ -177,13 +177,7 @@ const DynamicPricingManagement: React.FC = () => {
       )
     );
 
-  const handleSaveChanges = () => {
-    console.log("Saving changes...", {
-      tierPricing,
-      timePricing,
-      screenConfig,
-    });
-  };
+
 
   return (
     <motion.div
@@ -398,7 +392,7 @@ const DynamicPricingManagement: React.FC = () => {
         >
           <CommonDashboardButton
             title="Save Changes"
-            onClick={handleSaveChanges}
+       
             className="px-4 py-2 hover:bg-blue-700 text-white text-sm rounded"
           />
           <CommonCancelButton title="Cancel" />

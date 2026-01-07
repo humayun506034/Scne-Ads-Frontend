@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CommonModalForm, { Field } from "@/common/CommonModalForm";
+import React, { useState } from "react";
 
 interface AddNewScreenProps {
   onClose: () => void;
@@ -9,6 +10,7 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
   const [formData, setFormData] = useState({
     screenName: "",
     location: "",
+    description: "",
     baseCpp: "",
     assignedTier: "",
   });
@@ -20,7 +22,8 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
       label: "Screen Name",
       placeholder: "New City Display",
       required: true,
-    },{
+    },
+    {
       name: "location",
       type: "input",
       label: "Location",
@@ -49,7 +52,7 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
   };
   // Cancel handler
   const handleCancel = () => {
-    console.log("Cancelled");
+
     onClose();
   };
 
@@ -62,7 +65,8 @@ const AddNewScreenModal: React.FC<AddNewScreenProps> = ({ onClose }) => {
       fields={fields}
       onSave={handleSave}
       onCancel={handleCancel}
-      saveButtonText="Add Screen"/>
+      saveButtonText="Add screen"
+    />
   );
 };
 

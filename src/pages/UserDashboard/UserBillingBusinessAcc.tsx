@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import UserPanelNavbar from "./UserPanelNavbar";
-import { Link } from "react-router-dom";
-import { getNames } from "country-list";
-import CommonInputField from "@/common/CommonInputField";
-import { ChevronDown } from "lucide-react";
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import CommonInputField from "@/common/CommonInputField";
+import { getNames } from "country-list";
+import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import UserPanelNavbar from "./UserPanelNavbar";
 const UserPanel: React.FC = () => {
   const [formData, setFormData] = useState({
     firstName: "",
@@ -22,7 +22,7 @@ const UserPanel: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+
   };
   return (
     <div className=" bg-bg-dashboard ">

@@ -2,11 +2,7 @@ import { recentCampaignsData } from ".";
 import { CampaignCard } from "./CampaignCard";
 
 export function RecentCampaignsSection() {
-  const handleContinueSetup = (campaignId: string) => {
-    console.log("Continue setup for campaign:", campaignId);
-    // Add your navigation logic here
-  };
-
+ 
   return (
     <div className="w-full my-20">
       {/* Header Section */}
@@ -24,7 +20,7 @@ export function RecentCampaignsSection() {
           <CampaignCard
             key={campaign.id}
             campaign={campaign}
-            onContinueSetup={handleContinueSetup}
+          
           />
         ))}
       </div>

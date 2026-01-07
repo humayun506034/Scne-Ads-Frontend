@@ -19,7 +19,7 @@ export function ChatHeader({
   showBackButton = false,
 }: ChatHeaderProps) {
   return (
-    <div className="flex items-center justify-between p-4 border-b  bg-bg-dashboard">
+    <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b bg-bg-dashboard">
       <div className="flex items-center gap-3">
         {showBackButton && (
           <motion.button
@@ -28,12 +28,12 @@ export function ChatHeader({
             onClick={onBack}
             className="h-8 w-8 cursor-pointer"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" /> 
           </motion.button>
         )}
         <div className="w-10 h-10 rounded-full flex items-center justify-center">
           <img
-            src={img || agentAvatar}
+            src={agentAvatar || img}
             alt={agentName}
             className="w-10 h-10 rounded-full"
           />

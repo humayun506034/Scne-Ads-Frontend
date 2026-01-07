@@ -1,13 +1,10 @@
-import img from '../../../../../assets/Dashboard/board1.jpg'
 export interface UploadedFile {
     id: string
     name: string
     fileType: string
-    dimensions: string
-    type: "landscape" | "portrait" | "square"
-    compatible: boolean
+
     url: string
-    uploadedAt: Date
+    // uploadedAt: Date
 }
 
 export interface LocationTemplate {
@@ -27,18 +24,7 @@ export interface BulkUploadStatus {
     progress?: number
 }
 
-export const mockUploadedFiles: UploadedFile[] = [
-    {
-        id: "1",
-        name: "landscape-image.jpg",
-        fileType: "PNG",
-        dimensions: "1048 x 581 Landscape",
-        type: "landscape",
-        compatible: false,
-        url: img,
-        uploadedAt: new Date(),
-    },
-]
+
 
 export const locationTemplates: LocationTemplate[] = [
     {

@@ -1,36 +1,53 @@
 import CommonDashboardButton from "@/common/CommonDashBoardButton";
+import { useGetAllBannersQuery } from "@/store/api/bannerApi";
 import { Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import type { Swiper as SwiperType } from "swiper";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
-import img1 from "../../../../assets/Dashboard/board1.jpg";
-import img2 from "../../../../assets/Dashboard/board2.jpg";
-import img3 from "../../../../assets/Dashboard/board3.jpg";
-import img4 from "../../../../assets/Dashboard/board4.jpg";
-import img5 from "../../../../assets/Dashboard/board5.jpg";
 import logo from "../../../../assets/logo.png";
-
-export const slidesData = [
-  { img: img1, alt: "Billboard 1" },
-  { img: img2, alt: "Billboard 2" },
-  { img: img3, alt: "Billboard 3" },
-  { img: img4, alt: "Billboard 4" },
-  { img: img5, alt: "Billboard 5" },
-];
 
 const DashboardBanner = () => {
   const [activeSlide, setActiveSlide] = useState(1);
+  const swiperRef = useRef<SwiperType | null>(null);
+  const { data, isLoading, isError } = useGetAllBannersQuery({ limit: 1000 });
+
+  const wantIndex = data?.data && data.data.length > 1 ? 1 : 0;
+
+  const bannerList = data?.data || [];
+
+  // Update swiper to show 2nd image (index 1) at center after data loads
+  useEffect(() => {
+    if (!isLoading && !isError && bannerList.length > 0 && swiperRef.current) {
+      // Use setTimeout to ensure swiper is fully initialized with all slides
+      const timer = setTimeout(() => {
+        if (swiperRef.current) {
+          swiperRef.current.update();
+          // Slide to the desired index - the onSlideChangeTransitionEnd callback will update activeSlide
+          swiperRef.current.slideTo(wantIndex, 300);
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading, isError, bannerList.length, wantIndex]);
 
   return (
     <div className="mt-20 w-full">
       <Swiper
         effect={"coverflow"}
         grabCursor={true}
-        centeredSlides={true}
         slidesPerView={1}
-        initialSlide={1}
+        initialSlide={wantIndex}
+        centeredSlides={true}
+        loop={true}
+        onSwiper={(swiper) => {
+          swiperRef.current = swiper;
+        }}
         onSlideChange={(swiper) => setActiveSlide(swiper.realIndex)}
+        onSlideChangeTransitionEnd={(swiper) =>
+          setActiveSlide(swiper.realIndex)
+        }
         coverflowEffect={{
           rotate: 50,
           stretch: 50,
@@ -52,32 +69,57 @@ const DashboardBanner = () => {
             slidesPerView: 1,
           },
         }}
-        className="mySwiper w-full  h-[250px] mx-0 p-0"
+        className="mySwiper w-full h-[250px] mx-0 p-0"
       >
-        {slidesData.map((slide, index) => (
-          <SwiperSlide key={index} className="p-0 m-0">
-            <div className="relative w-full h-full">
-              <img
-                src={slide.img}
-                alt={slide.alt}
-                className="object-cover w-full h-full"
-              />
-
-              {activeSlide === index && (
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black/50 to-black/80 flex flex-col justify-center items-center">
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="w-24 h-24 mb-4 object-contain"
-                  />
-                  <Link to="/user-dashboard/new-campaign">
-                    <CommonDashboardButton title="New Campaign" Icon={Plus} />
-                  </Link>
-                </div>
-              )}
+        {/* Show loading placeholder or fallback if needed */}
+        {isLoading && (
+          <SwiperSlide>
+            <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
+              No banners found...
             </div>
           </SwiperSlide>
-        ))}
+        )}
+
+        {isError && (
+          <SwiperSlide>
+            <div className="w-full h-full flex items-center justify-center bg-red-100 text-red-500">
+              No banners found...
+            </div>
+          </SwiperSlide>
+        )}
+
+        {!isLoading &&
+          !isError &&
+          bannerList.map((banner, index) => (
+            <SwiperSlide
+              key={`banner-${banner.id || index}`}
+              className="p-0 m-0"
+            >
+              <div className="relative bg-bg-dashboard w-full h-full">
+                <img
+                  src={banner.img_url}
+                  alt={`Banner ${index + 1}`}
+                  className="object-cover w-full h-full"
+                />
+
+                {activeSlide === index && (
+                  <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-black/50 to-black/80 flex flex-col justify-center items-center">
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      className="w-24 h-24 mb-4 object-contain"
+                    />
+                    <Link to="/user-dashboard/new-campaign">
+                      <CommonDashboardButton
+                        title="New Campaign"
+                        Icon={Plus}
+                      />
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </SwiperSlide>
+          ))}
       </Swiper>
     </div>
   );

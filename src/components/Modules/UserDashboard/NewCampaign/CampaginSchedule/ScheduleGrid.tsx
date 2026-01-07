@@ -32,10 +32,10 @@ const daysToShow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 interface ScheduleGridProps {
   selectedDay: string;
-  onTimeSelect: (selectedTime: string) => void;
+ 
 }
 
-const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
+const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay }) => {
   const [schedule, setSchedule] = useState<{ [key: string]: string[] }>({
     Sun: [],
     Mon: [],
@@ -56,7 +56,7 @@ const ScheduleGrid: FC<ScheduleGridProps> = ({ selectedDay, onTimeSelect }) => {
       newSchedule[day] = [...selectedTimes, time];
     }
     setSchedule(newSchedule);
-    onTimeSelect(`${day}: ${time}`);
+
   };
 
   const handleDeleteSlot = (slotId: string) => {

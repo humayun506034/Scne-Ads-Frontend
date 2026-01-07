@@ -1,15 +1,25 @@
 import CommonHomeInput from "@/common/CommonHomeInput";
+import { useGetInTouchMutation } from "@/store/api/Common/commonApi";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
 import img from "../../../../assets/Home/rocket.png";
-interface ContactFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  message: string;
-}
+
+// Zod schema
+const contactFormSchema = z.object({
+  firstName: z.string().min(3, "First name must be at least 3 characters"),
+  lastName: z.string().min(2, "Last name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().min(10, "Phone number must be at least 10 digits"),
+  message: z.string().min(5, "Message must be at least 5 characters"),
+});
+
+type ContactFormData = z.infer<typeof contactFormSchema>;
+
 const ContactForm = () => {
+  const [getInTouch, { isLoading }] = useGetInTouchMutation();
+
   const [formData, setFormData] = useState<ContactFormData>({
     firstName: "",
     lastName: "",
@@ -18,31 +28,69 @@ const ContactForm = () => {
     message: "",
   });
 
+  // Store errors per field
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof ContactFormData, string>>
+  >({});
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void => {
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
+
+    // Clear error on change
+    setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+
+    // Validate form
+    const validation = contactFormSchema.safeParse(formData);
+    if (!validation.success) {
+      // Map Zod errors to our state
+      const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
+      validation.error.errors.forEach((err) => {
+        const fieldName = err.path[0] as keyof ContactFormData;
+        if (!fieldErrors[fieldName]) {
+          fieldErrors[fieldName] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    // If valid, submit
+    try {
+     await getInTouch(formData).unwrap();
+      toast.success("Message sent successfully!");
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
+      setErrors({});
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Failed to send message. Please try again.");
+    }
   };
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 50 }}
       whileInView={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.8, delay: 0.2 }}
       viewport={{ once: true }}
-      className="space-y-8 p-9 rounded-[30px] lg:col-span-5 h-fit bg-transparent  "
-      style={{
-        borderRadius: "15px",
-        background: "rgba(56, 182, 255, 0.12)",
-      }}
+      className="space-y-8 p-9 rounded-[30px] lg:col-span-5 h-fit bg-transparent"
+      style={{ borderRadius: "15px", background: "rgba(56, 182, 255, 0.12)" }}
     >
       <div className="space-y-4">
         <h3 className="text-lg md:text-3xl font-semibold text-white">
@@ -54,7 +102,10 @@ const ContactForm = () => {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6 md:space-y-10">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6 md:space-y-10"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <CommonHomeInput
@@ -63,15 +114,21 @@ const ContactForm = () => {
               value={formData.firstName}
               onChange={handleInputChange}
             />
+            {errors.firstName && (
+              <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>
+            )}
           </div>
+
           <div>
             <CommonHomeInput
-              type="text"
               name="lastName"
               placeholder="Last Name"
               value={formData.lastName}
               onChange={handleInputChange}
             />
+            {errors.lastName && (
+              <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>
+            )}
           </div>
         </div>
 
@@ -83,6 +140,9 @@ const ContactForm = () => {
             value={formData.email}
             onChange={handleInputChange}
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
         <div>
@@ -93,6 +153,9 @@ const ContactForm = () => {
             value={formData.phone}
             onChange={handleInputChange}
           />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+          )}
         </div>
 
         <div>
@@ -104,20 +167,29 @@ const ContactForm = () => {
             onChange={handleInputChange}
             rows={12}
           />
+          {errors.message && (
+            <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+          )}
         </div>
 
-        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
           <button
             type="submit"
-            className="w-full bg-[#47B5FF] hover:bg-[#3BA3E8] text-white font-medium py-4 rounded-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(71,181,255,0.5)] flex items-center cursor-pointer justify-center gap-2 text-base"
+            disabled={isLoading}
+            className="w-full bg-[#47B5FF] hover:bg-[#3BA3E8] text-white font-medium py-4 rounded-md transition-all duration-300 hover:shadow-[0_0_30px_rgba(71,181,255,0.5)] flex items-center justify-center gap-2 text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Send it to the moon
-            <img
-              src={img}
-              alt="rocket"
-              style={{ mixBlendMode: "screen" }}
-              className="w-[25px]  h-3"
-            />
+            {isLoading ? "Sending..." : "Send it to the moon"}
+            {!isLoading && (
+              <img
+                src={img}
+                alt="rocket"
+                style={{ mixBlendMode: "screen" }}
+                className="w-[25px] h-3"
+              />
+            )}
           </button>
         </motion.div>
       </form>

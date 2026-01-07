@@ -5,7 +5,7 @@ export interface CardProps {
   bundleTitle: string;
   bundleIcon: string;
   image: string;
-  description: string[];
+  description?: string[];
   price: string;
   id: string;
 }
@@ -20,7 +20,7 @@ const SpecialCard = ({
 }: CardProps) => {
   return (
     <motion.div
-      className="rounded-lg m-6 cursor-pointer h-[300px] xl:h-[280px]  w-full  overflow-hidden flex flex-col"
+      className="rounded-lg p-4 md:p-0 mt-4  cursor-pointer h-[300px] xl:h-[280px]  w-full  overflow-hidden flex flex-col"
       whileHover={{ scale: 1.04 }}
       whileTap={{ scale: 0.98 }}
     >
@@ -45,7 +45,7 @@ const SpecialCard = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-white/80 text-xs ml-4">
-              {description.map((desc, index) => (
+              {description?.map((desc, index) => (
                 <span key={index}>✔ {desc}</span>
               ))}
             </div>

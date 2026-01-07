@@ -8,9 +8,7 @@ export function CampaignSchedule() {
     setSelectedDay(newDay);
   };
 
-  const handleTimeSelect = (selectedTime: string) => {
-    console.log(`Selected Time: ${selectedTime}`);
-  };
+
 
   return (
     <div className=" ">
@@ -38,7 +36,7 @@ export function CampaignSchedule() {
 
         <ScheduleGrid
           selectedDay={selectedDay}
-          onTimeSelect={handleTimeSelect}
+         
         />
       </div>
     </div>

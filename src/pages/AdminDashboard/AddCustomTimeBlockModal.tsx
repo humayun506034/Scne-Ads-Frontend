@@ -46,7 +46,7 @@ const AddCustomTimeBlockModal: React.FC<AddCustomTimeBlockModalProps> = ({
   };
   // Cancel handler
   const handleCancel = () => {
-    console.log("Cancelled");
+   
     onClose();
   };
   return (

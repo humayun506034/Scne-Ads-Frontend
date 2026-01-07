@@ -10,7 +10,6 @@ import Signup from "@/pages/Signup";
 import { AdminDashboardLayout } from "@/Layout/AdminLayout";
 import AdminBasicInfo from "@/pages/AdminDashboard/AdminBasicInfo";
 import AdminCampaignData from "@/pages/AdminDashboard/AdminCampaignData";
-import AdminCampaignManagement from "@/pages/AdminDashboard/AdminCampaignsManagement";
 
 import AdminChangePassword from "@/pages/AdminDashboard/AdminChangePassword";
 import AdminDashboardHomePage from "@/pages/AdminDashboard/AdminDashboardHomePage";
@@ -29,10 +28,19 @@ import UserInvoice from "@/pages/UserDashboard/UserInvoice";
 import UserPanel from "@/pages/UserDashboard/UserPanel";
 import UserPaymentMethod from "@/pages/UserDashboard/UserPaymentMethod";
 
-import CampaignPerformanceAnalytics from "@/pages/AdminDashboard/CampaignPerformanceAnalytics";
-import DynamicPricingManagement from "@/pages/AdminDashboard/DynamicPricingManagement";
+import AdminBundleCampaignManagement from "@/pages/AdminDashboard/AdminBundleCampaignManagement";
+import AdminScreenCampaignManagement from "@/pages/AdminDashboard/AdminScreenCampaignManagement";
+import AllBundlePayments from "@/pages/AdminDashboard/AllBundlePayments";
+import AllScreenPayments from "@/pages/AdminDashboard/AllScreenPayments";
 import ScreenScheduleManagement from "@/pages/AdminDashboard/ScreenScheduleManagement";
+import Billboard from "@/pages/Billboard";
+import PaymentSuccess from "@/pages/PaymentSuccess";
+import ProtectedRoute from "@/pages/ProtectedRoutes";
 import CostEstimator from "@/pages/UserDashboard/CostEstimator";
+import UserBundleCampaignManagement from "@/pages/UserDashboard/UserBundleCampaignManagement";
+import UserBundlePayments from "@/pages/UserDashboard/UserBundlePayments";
+import UserScreenCampaignManagement from "@/pages/UserDashboard/UserScreenCampaignManagement";
+import UserScreenPayments from "@/pages/UserDashboard/UserScreenPayments";
 
 const routes = createBrowserRouter([
   {
@@ -46,8 +54,24 @@ const routes = createBrowserRouter([
     ],
   },
   {
+    path: "billboards",
+    element: <Billboard />,
+  },
+  {
+    path: "payment-success/:paymentId",
+    element: <PaymentSuccess status="success" />,
+  },
+  {
+    path: "payment-failed/:paymentId",
+    element: <PaymentSuccess status="failed" />,
+  },
+  {
     path: "/user-dashboard",
-    element: <UserDashboardLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["customer"]}>
+        <UserDashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -68,6 +92,14 @@ const routes = createBrowserRouter([
       },
       { path: "change-password", element: <UserChangePassword /> },
       { path: "campaigns", element: <CampaignTablePage /> },
+
+      { path: "bundle-campaigns", element: <UserBundleCampaignManagement /> },
+      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
+
+      { path: "bundle-payments", element: <UserBundlePayments /> },
+      { path: "screen-campaigns", element: <UserScreenCampaignManagement /> },
+
+      { path: "screen-payments", element: <UserScreenPayments /> },
       { path: "userBillingPersonalAcc", element: <UserBillingPersonalAcc /> },
       { path: "userBillingInfo", element: <UserBillingInfo /> },
 
@@ -94,7 +126,11 @@ const routes = createBrowserRouter([
   },
   {
     path: "/admin-dashboard",
-    element: <AdminDashboardLayout />,
+    element: (
+      <ProtectedRoute allowedRoles={["admin"]}>
+        <AdminDashboardLayout />
+      </ProtectedRoute>
+    ),
     children: [
       {
         index: true,
@@ -110,18 +146,18 @@ const routes = createBrowserRouter([
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },
-      { path: "campaigns", element: <AdminCampaignManagement /> },
+      { path: "bundle-campaigns", element: <AdminBundleCampaignManagement /> },
+      { path: "screen-campaigns", element: <AdminScreenCampaignManagement /> },
+      
+      { path: "bundle-payments", element: <AllBundlePayments /> },
+      { path: "screen-payments", element: <AllScreenPayments /> },
       {
         path: "adminCampaignData",
         element: <AdminCampaignData />,
       },
-      {
-        path: "adminAnalytics",
-        element: <CampaignPerformanceAnalytics />,
-      },
-      { path: "campaigns", element: <AdminCampaignManagement /> },
+
       { path: "screen-scheduling", element: <ScreenScheduleManagement /> },
-      { path: "pricing-management", element: <DynamicPricingManagement /> },
+      // { path: "pricing-management", element: <DynamicPricingManagement /> },
     ],
   },
   {

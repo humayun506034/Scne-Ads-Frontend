@@ -1,19 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Paperclip, Send, Smile } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
 import { useState } from "react";
 
-export function MessageInput({
+export default function ChatInput({
   onSendMessage,
   placeholder = "Ask a question...",
+  isSending = false,
 }: {
   onSendMessage: (msg: string) => void;
   placeholder?: string;
+  isSending?: boolean;
 }) {
   const [message, setMessage] = useState("");
+  const [isComposing, setIsComposing] = useState(false);
+
+
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (isComposing) return;
     const text = message.trim();
     if (!text) return;
     onSendMessage(text);
@@ -28,34 +34,32 @@ export function MessageInput({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={placeholder}
-            className="pr-20 p-5 rounded-full border-2  border-gray-200"
+            className="pr-20 p-5 text-black rounded-full border-1 border-title-color  focus:ring-title-color"
+            disabled={isSending}
+            onCompositionStart={() => setIsComposing(true)}
+            onCompositionEnd={() => setIsComposing(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                const text = message.trim();
+                if (isComposing || !text) {
+                  e.preventDefault();
+                }
+              }
+            }}
           />{" "}
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-bg-dashboard "
-            >
-              <Smile className="h-4 w-4" />
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className="h-8 w-8 text-bg-dashboard "
-            >
-              <Paperclip className="h-4 w-4" />
-            </Button>
-          </div>
+    
         </div>
         <Button
           type="submit"
           size="icon"
-          className="h-10 w-10 rounded-full cursor-pointer bg-bg-dashboard "
-          disabled={!message.trim()}
-        >
-          <Send className="h-4 w-4" />
+          className="h-10 w-10 rounded-full  bg-bg-dashboard cursor-pointer"
+          disabled={!message.trim() || isSending || isComposing}
+          >
+          {isSending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Send className="h-4 w-4" />
+          )}
         </Button>
       </form>
     </div>
