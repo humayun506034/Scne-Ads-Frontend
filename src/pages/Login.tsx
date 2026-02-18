@@ -33,11 +33,11 @@ const loginSchema = z.object({
 
 type LoginFormInputs = z.infer<typeof loginSchema>;
 
-const BACKEND_DEMO_URL = "https://danaj242-backend.onrender.com/api";
+const BACKEND_DEMO_URL = "https://scne-ads-backend.onrender.com/api";
 
 const demoCredentials = {
   admin: {
-    email: "admin@scneads.com",
+    email: "humayun506034@gmail.com",
     password: "123456",
   },
   customer: {

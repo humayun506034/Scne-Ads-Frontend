@@ -11,7 +11,7 @@ import { ChevronUp, LogOut, User } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function NewCampaignFooter() {
-  const userName = "Danaj";
+  const userName = "Scne Ads";
   const CampaignSummary = {
     credit: "5 dollar",
     progress: 75,
