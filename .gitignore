@@ -9,18 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
-dist-ssr
-*.local
-.continue/pip install git-filter-repo
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.vercel
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
 config.bat
